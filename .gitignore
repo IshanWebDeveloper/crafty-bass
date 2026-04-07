@@ -1,5 +1,9 @@
 node_modules
 .turbo
+.nx/cache
+.nx/workspace-data
 apps/*/.next
 apps/*/.turbo
 apps/*/dist
+.env
+.env.*
