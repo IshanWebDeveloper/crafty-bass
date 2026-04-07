@@ -1,0 +1,5 @@
+node_modules
+.turbo
+apps/*/.next
+apps/*/.turbo
+apps/*/dist
