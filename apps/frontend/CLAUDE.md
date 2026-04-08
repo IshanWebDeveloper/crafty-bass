@@ -10,6 +10,14 @@ Scope:
 - App Router (Next.js)
 - Tailwind CSS v4 + global CSS variables
 
+Companion implementation plan:
+
+- apps/frontend/FIGMA_DESIGN_PLAN.md
+
+Audit date:
+
+- 2026-04-08
+
 ## 0. Current Baseline Snapshot
 
 - UI surface is currently minimal and scaffold-level.
@@ -86,6 +94,7 @@ Scope:
 
 - Next.js App Router using React Server Components by default.
 - Composition currently happens directly in page.tsx.
+- Alias import path `@/*` is available via tsconfig path mapping for `src/*`.
 
 Example pattern in page-level JSX:
 
@@ -118,19 +127,21 @@ export default function Home() {
 
 ### UI framework
 
-- Next.js + React
+- Next.js 16.2.2 + React 19.2.4
 
 ### Styling stack
 
 - Tailwind CSS v4 through @tailwindcss/postcss plugin.
 - Global CSS in app/globals.css.
 - Utility classes in JSX.
+- Current body fallback font is system stack via `Arial, Helvetica, sans-serif` in globals.css.
 
 ### Build system and bundler
 
 - Nx monorepo orchestration at root.
 - Frontend tasks are run via nx run-commands.
 - Next.js build/dev/start commands run inside apps/frontend.
+- Next.js handles the app bundling pipeline; no custom webpack/vite/turbo config file is present.
 
 Example task wiring:
 
@@ -142,6 +153,22 @@ Example task wiring:
       "cwd": "apps/frontend",
       "command": "pnpm build"
     }
+  }
+}
+```
+
+Current tooling evidence:
+
+```json
+{
+  "dependencies": {
+    "next": "16.2.2",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4",
+    "@tailwindcss/postcss": "^4"
   }
 }
 ```
@@ -179,6 +206,14 @@ import Image from "next/image";
 
 - No explicit CDN/assetPrefix/remote image domain config is present in next.config.ts.
 
+Evidence:
+
+```ts
+const nextConfig: NextConfig = {
+  distDir: "dist",
+};
+```
+
 ### Rules for Figma integration
 
 1. Export static design assets into apps/frontend/public with descriptive names.
@@ -193,6 +228,7 @@ import Image from "next/image";
 
 - No dedicated icon package/folder exists.
 - Current icons are plain SVG files in public (next.svg, vercel.svg, etc).
+- Current files: file.svg, globe.svg, window.svg, vercel.svg, next.svg.
 
 ### Current import/usage style
 
@@ -225,6 +261,7 @@ import Image from "next/image";
 ### Responsive implementation
 
 - Tailwind responsive prefixes are used (sm, md).
+- No breakpoint token map or design-breakpoint contract file exists yet.
 
 Example:
 
@@ -283,6 +320,24 @@ When implementing Figma designs through MCP:
 6. Keep accessibility in scope: semantic HTML, alt text, keyboard focus visibility.
 7. Validate visual parity in both light and dark contexts due current token system.
 
+Operational workflow for every Figma handoff:
+
+1. Retrieve Figma node context.
+2. Identify token gaps and update globals.css before component coding.
+3. Build primitive component in `src/components/ui` first.
+4. Compose feature component in `src/features`.
+5. Wire route usage in `src/app`.
+6. Validate keyboard and screen-size behavior.
+7. Only then proceed to next handoff node.
+
+Definition of done for a Figma-derived component:
+
+- Uses semantic token(s) instead of arbitrary literal values.
+- Avoids introducing CSS-in-JS or a second styling system.
+- Keeps server/client boundaries explicit.
+- Uses optimized assets and meaningful alt text.
+- Keeps route files orchestration-focused.
+
 ---
 
 ## File Index Used For This Analysis
@@ -298,3 +353,4 @@ When implementing Figma designs through MCP:
 - apps/frontend/README.md
 - nx.json
 - package.json
+- apps/frontend/FIGMA_DESIGN_PLAN.md
