@@ -25,7 +25,8 @@ yarn-error.log*
 agents/
 .DS_Store
 *.pem
-
+.husky/
+.vscode/
 # Local env files
 .env
 .env.*
