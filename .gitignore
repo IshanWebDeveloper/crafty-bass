@@ -7,3 +7,4 @@ apps/*/.turbo
 apps/*/dist
 .env
 .env.*
+apps/backend/src/generated
