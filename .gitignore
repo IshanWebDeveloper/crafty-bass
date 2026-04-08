@@ -27,6 +27,8 @@ agents/
 *.pem
 .husky/
 .vscode/
+
+
 # Local env files
 .env
 .env.*
@@ -39,3 +41,4 @@ apps/*/.next
 apps/*/.turbo
 apps/*/dist
 apps/backend/src/generated
+docs/
