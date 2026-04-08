@@ -1,5 +1,38 @@
+# Dependencies
+node_modules
+.pnp
+.pnpm-store
+.pnp.js
+
+# Build Outputs
+.next/
+out/
+build
+dist
+
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Misc
+.tmp/
+*.html
+.DS_Store
+*.pem
+.husky/
+.vscode/
+# Local env files
+.env
+.env.*
+
 node_modules
 .turbo
+.nx/cache
+.nx/workspace-data
 apps/*/.next
 apps/*/.turbo
 apps/*/dist
+apps/backend/src/generated
