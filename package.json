@@ -17,19 +17,19 @@
     "stripe:listen": "stripe listen --forward-to http://localhost:3005/api/v1/payments/webhook"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
     "@nx/devkit": "20.8.4",
     "@nx/eslint-plugin": "^20.8.4",
     "@nx/next": "20.8.4",
     "@nx/node": "20.8.4",
     "@nx/playwright": "20.8.4",
     "@playwright/test": "^1.59.1",
-    "@commitlint/cli": "^20.4.2",
-    "@commitlint/config-conventional": "^20.4.2",
+    "eslint-plugin-playwright": "^1.8.3",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
-    "prettier": "^3.7.4",
-    "eslint-plugin-playwright": "^1.8.3",
-    "nx": "^20.8.4"
+    "nx": "^20.8.4",
+    "prettier": "^3.7.4"
   },
   "dependencies": {
     "next": "~15.2.9",
