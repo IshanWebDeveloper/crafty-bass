@@ -1,14 +1,66 @@
 {
-    "name": "crafty-bass",
-    "private": true,
-    "packageManager": "pnpm@10.28.2",
-    "scripts": {
-        "build": "turbo run build",
-        "dev": "turbo run dev",
-        "lint": "turbo run lint",
-        "test": "turbo run test"
+  "name": "crafty-bass",
+  "private": true,
+  "packageManager": "pnpm@10.28.2",
+  "scripts": {
+    "build": "nx run-many -t build --all",
+    "dev": "nx run-many -t dev --projects=frontend,backend --parallel=2",
+    "lint": "nx run-many -t lint --all",
+    "lint:staged": "lint-staged",
+    "lint:commit": "commitlint --edit",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "test": "nx run-many -t test --all",
+    "affected:build": "nx affected -t build",
+    "affected:lint": "nx affected -t lint",
+    "affected:test": "nx affected -t test",
+    "prepare": "husky",
+    "stripe:listen": "stripe listen --forward-to http://localhost:3005/api/v1/payments/webhook"
+  },
+  "devDependencies": {
+    "@nx/devkit": "20.8.4",
+    "@nx/eslint-plugin": "^20.8.4",
+    "@nx/next": "20.8.4",
+    "@nx/node": "20.8.4",
+    "@nx/playwright": "20.8.4",
+    "@playwright/test": "^1.59.1",
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.7.4",
+    "eslint-plugin-playwright": "^1.8.3",
+    "nx": "^20.8.4"
+  },
+  "dependencies": {
+    "next": "~15.2.9",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs,json,md,css,scss,yml,yaml}": "prettier --write --ignore-unknown"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "node-fetch": "^2.7.0 || ^3.3.2"
+      }
     },
-    "devDependencies": {
-        "turbo": "^2.8.12"
-    }
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "@scarf/scarf"
+    ],
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@prisma/client",
+      "@prisma/engines",
+      "@swc/core",
+      "better-sqlite3",
+      "esbuild",
+      "msgpackr-extract",
+      "nx",
+      "prisma",
+      "sharp",
+      "unrs-resolver"
+    ]
+  }
 }
