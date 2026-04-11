@@ -36,7 +36,7 @@ jobs:
         run: pnpm prisma:check:generated
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, windows]
     needs: prisma-generated-check
     steps:
       - name: Checkout
@@ -66,13 +66,15 @@ jobs:
         run: python -m venv apps/ai-service/.venv
 
       - name: Install ai-service Python dependencies
-        run: apps/ai-service/.venv/bin/python -m pip install -e "./apps/ai-service[dev]"
+        run: |
+          .\apps\ai-service\.venv\Scripts\python.exe -m pip install --upgrade pip
+          .\apps\ai-service\.venv\Scripts\python.exe -m pip install -e ".\apps\ai-service[dev]"
 
       - name: Build workspace
         run: pnpm build
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, windows]
     needs: prisma-generated-check
     steps:
       - name: Checkout
@@ -102,7 +104,9 @@ jobs:
         run: python -m venv apps/ai-service/.venv
 
       - name: Install ai-service Python dependencies
-        run: apps/ai-service/.venv/bin/python -m pip install -e "./apps/ai-service[dev]"
+        run: |
+          .\apps\ai-service\.venv\Scripts\python.exe -m pip install --upgrade pip
+          .\apps\ai-service\.venv\Scripts\python.exe -m pip install -e ".\apps\ai-service[dev]"
 
       - name: Test workspace
         run: pnpm test
