@@ -15,6 +15,10 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Crafty Bass",
@@ -36,6 +40,7 @@ export default function RootLayout({
         geistMono.variable,
         "font-sans",
         geist.variable,
+        inter.variable,
       )}
       suppressHydrationWarning
     >
