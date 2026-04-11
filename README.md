@@ -1,11 +1,12 @@
 # Crafty Bass
 
-Crafty Bass is an Nx monorepo containing a Next.js frontend and a NestJS backend.
+Crafty Bass is an Nx monorepo containing a Next.js frontend, a NestJS backend, and a Python FastAPI AI service for local LangChain and LangGraph workflows.
 
 ## Monorepo Structure
 
 - `apps/frontend` - Next.js web app
 - `apps/backend` - NestJS API + Prisma
+- `apps/ai-service` - FastAPI + LangChain + LangGraph + Ollama
 
 ## Tech Stack
 
@@ -13,11 +14,14 @@ Crafty Bass is an Nx monorepo containing a Next.js frontend and a NestJS backend
 - Package manager: pnpm
 - Frontend: Next.js + React + TypeScript
 - Backend: NestJS + Prisma + PostgreSQL
+- AI service: FastAPI + LangChain + LangGraph + Ollama
 
 ## Prerequisites
 
 - Node.js 20+
 - pnpm 10+
+- Python 3.10+ for `apps/ai-service`
+- Ollama for local model inference
 
 ## Getting Started
 
@@ -59,17 +63,28 @@ pnpm test
 pnpm format
 ```
 
+These commands now include `apps/ai-service`, so make sure its `.venv` has been created before running the workspace-wide build, lint, or test targets.
+
 ### Run apps individually
 
 ```bash
 pnpm nx run frontend:dev
 pnpm nx run backend:dev
+pnpm nx run ai-service:dev
+```
+
+### Run the AI service through the root shortcut
+
+```bash
+pnpm dev:ai
 ```
 
 ### Backend Prisma scripts
 
 ```bash
 pnpm --filter backend prisma:generate
+pnpm prisma:generate:all
+pnpm prisma:check:generated
 pnpm --filter backend prisma:migrate:dev
 pnpm --filter backend prisma:migrate:reset
 pnpm --filter backend prisma:migrate:dev:test
@@ -84,8 +99,10 @@ pnpm stripe:listen
 ## Notes
 
 - Backend defaults to port `3005` (configurable via `PORT`).
+- AI service defaults to port `8006` and reads local config from `apps/ai-service/.env`.
 - CORS defaults to `http://localhost:3000` when `CORS_ORIGINS` is not set.
 - Backend Prisma scripts expect environment files such as `.env` and `.env.test` in `apps/backend`.
+- AI service expects a local virtual environment at `apps/ai-service/.venv` for Nx targets such as `ai-service:dev`.
 - Common local-only artifacts are gitignored, including `node_modules`, `dist`, `.next`, `.turbo`, `.nx/cache`, and `apps/backend/src/generated`.
 
 ## Implementation Roadmap
