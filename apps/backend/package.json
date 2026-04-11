@@ -9,7 +9,7 @@
     "auth:generate": "better-auth generate --config src/auth.ts --output prisma/schema.prisma --yes",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "prisma:generate": "dotenv -e .env -- prisma generate",
+    "prisma:generate": "dotenv -e .env -- prisma generate && node ../../scripts/prisma/update-generated-prisma-stamp.mjs",
     "prisma:migrate:dev:test": "dotenv -e .env.test -- prisma migrate dev --skip-seed",
     "prisma:migrate:reset": "dotenv -e .env -- prisma migrate reset",
     "prisma:migrate:dev": "dotenv -e .env -- prisma migrate dev",

@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prisma-generated-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check generated Prisma types are up to date
+        run: pnpm prisma:check:generated
+
+  build:
+    runs-on: ubuntu-latest
+    needs: prisma-generated-check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Setup Python for ai-service targets
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create ai-service virtual environment
+        run: python -m venv apps/ai-service/.venv
+
+      - name: Install ai-service Python dependencies
+        run: apps/ai-service/.venv/bin/python -m pip install -e "./apps/ai-service[dev]"
+
+      - name: Build workspace
+        run: pnpm build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: prisma-generated-check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Setup Python for ai-service targets
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create ai-service virtual environment
+        run: python -m venv apps/ai-service/.venv
+
+      - name: Install ai-service Python dependencies
+        run: apps/ai-service/.venv/bin/python -m pip install -e "./apps/ai-service[dev]"
+
+      - name: Test workspace
+        run: pnpm test

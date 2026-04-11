@@ -3,6 +3,11 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
+generator sharedTypesClient {
+  provider = "prisma-client"
+  output   = "../../../shared-types/src/generated/prisma"
+}
+
 // generator dbml {
 //   provider = "prisma-dbml-generator"
 //   output   = "../dbml"
