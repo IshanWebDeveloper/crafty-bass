@@ -1,0 +1,48 @@
+{
+  "name": "ai-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "root": "apps/ai-service",
+  "sourceRoot": "apps/ai-service/app",
+  "projectType": "application",
+  "tags": ["type:app", "scope:ai"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": "if (Test-Path .venv\\Scripts\\python.exe) { .\\.venv\\Scripts\\python.exe -m compileall app } else { Write-Error 'Missing apps/ai-service/.venv. Create the virtual environment and install the app dependencies first.' }"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": "if (Test-Path .venv\\Scripts\\python.exe) { .\\.venv\\Scripts\\python.exe -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8006 } else { Write-Error 'Missing apps/ai-service/.venv. Create the virtual environment and install the app dependencies first.' }"
+      },
+      "cache": false
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": "if (Test-Path .venv\\Scripts\\python.exe) { .\\.venv\\Scripts\\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8006 } else { Write-Error 'Missing apps/ai-service/.venv. Create the virtual environment and install the app dependencies first.' }"
+      },
+      "cache": false
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": "if (Test-Path .venv\\Scripts\\python.exe) { .\\.venv\\Scripts\\python.exe -m ruff check app tests } else { Write-Error 'Missing apps/ai-service/.venv. Create the virtual environment and install the app dependencies first.' }"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": "if (Test-Path .venv\\Scripts\\python.exe) { .\\.venv\\Scripts\\python.exe -m pytest } else { Write-Error 'Missing apps/ai-service/.venv. Create the virtual environment and install the app dependencies first.' }"
+      },
+      "outputs": ["{projectRoot}/.pytest_cache/**"]
+    }
+  }
+}
