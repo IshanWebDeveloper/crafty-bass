@@ -10,12 +10,17 @@ class TaxonomyOption(BaseModel):
     category_slug: str | None = None
 
 
+def _empty_taxonomy_option() -> list[TaxonomyOption]:
+    return [TaxonomyOption(slug="", name="")]
+
+
 class JobClassificationRequest(BaseModel):
     title: str = Field(min_length=1)
     description: str = Field(min_length=1)
     language: Literal["EN", "SI", "TA"] = "EN"
     categories: list[TaxonomyOption] = Field(min_length=1)
-    skills: list[TaxonomyOption] = Field(default_factory=list)
+    skills: list[TaxonomyOption] = Field(
+        default_factory=_empty_taxonomy_option)
 
 
 class JobClassificationDraft(BaseModel):
