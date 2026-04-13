@@ -4,7 +4,7 @@
   "packageManager": "pnpm@10.28.2",
   "scripts": {
     "build": "nx run-many -t build --all",
-    "dev": "nx run-many -t dev --projects=frontend,backend --parallel=2",
+    "dev": "nx run-many -t dev --projects=frontend,backend,ai-service --parallel=3",
     "dev:ai": "nx run ai-service:dev",
     "lint": "nx run-many -t lint --all",
     "lint:staged": "lint-staged",
