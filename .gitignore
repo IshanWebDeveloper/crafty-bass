@@ -49,9 +49,10 @@ apps/*/app/__pycache__
 apps/*/tests/__pycache__
 apps/backend/src/generated
 docs/
-_pycache__/
+_pycache__
 *.pyc
 *.pyo
+crafty_bass_ai_service.egg-info/
 
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
