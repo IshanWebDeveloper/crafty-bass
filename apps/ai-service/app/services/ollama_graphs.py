@@ -5,8 +5,7 @@ from typing import Any, cast
 
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
-from langchain_ollama import ChatOllama
-from langchain_openai import ChatOpenAI
+from app.core.client import get_llm
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from pydantic import ValidationError
@@ -74,8 +73,10 @@ class OllamaGraphService:
             "categories": request.categories,
             "skills": request.skills,
         }
+        # Run the graph synchronously (no streaming) so we receive the final
+        # compiled state with `parsed` and `raw_response` set by nodes.
         result = cast(ClassificationState,
-                      self.classification_graph.invoke(state, stream_mode="messages"))
+                      self.classification_graph.invoke(state))
         normalized = self._normalize_classification(
             draft=result.get("parsed", JobClassificationDraft(
                 category_slug=None,
@@ -142,20 +143,14 @@ class OllamaGraphService:
             include_raw=True,
         )
         taxonomy_prompt = state.get("taxonomy_prompt", "")
-        prompt = (
-            "Classify the home-services job request into exactly one of the provided "
-            "categories when possible. Suggest up to five skills from the provided skills list.\n\n"
-            f"Language: {state['language']}\n"
-            f"Job title: {state['title']}\n"
-            f"Job description: {state['description']}\n\n"
-            f"{taxonomy_prompt}\n"
-            "Return JSON only with this exact shape:\n"
-            '{'
-            '"category_slug": "string or null", '
-            '"skill_slugs": ["skill-slug"], '
-            '"confidence": 0.0, '
-            '"reasoning_summary": "short explanation"'
-            '}'
+        # Use centralized prompt template
+        from app.core.prompts import classification_template
+
+        prompt = classification_template.format(
+            language=state["language"],
+            title=state["title"],
+            description=state["description"],
+            taxonomy_prompt=taxonomy_prompt,
         )
         response = cast(
             dict[str, Any],
@@ -214,25 +209,8 @@ class OllamaGraphService:
         return {"parsed": parsed}
 
     def _build_llm(self, temperature: float) -> BaseChatModel:
-        if self.settings.llm_provider == "openai":
-            return ChatOpenAI(
-                model=self.settings.openai_model,
-                api_key=self.settings.openai_api_key,
-                base_url=self.settings.openai_base_url,
-                temperature=temperature,
-            )
-        if self.settings.llm_provider == "github":
-            return ChatOpenAI(
-                model=self.settings.github_model_name,
-                api_key=self.settings.github_token,
-                base_url=self.settings.github_inference_endpoint,
-                temperature=temperature,
-            )
-        return ChatOllama(
-            model=self.settings.ollama_model,
-            base_url=self.settings.ollama_base_url,
-            temperature=temperature,
-        )
+        # Use centralized LLM factory which selects provider based on Settings
+        return get_llm(temperature=temperature)
 
     def _active_model(self) -> str:
         if self.settings.llm_provider == "openai":
