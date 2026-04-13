@@ -1,12 +1,14 @@
 from __future__ import annotations
-
 import json
 from functools import lru_cache
 from typing import Any, cast
 
+from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
-from langgraph.graph import END, START, StateGraph  # type: ignore
+from langchain_openai import ChatOpenAI
+from langgraph.graph import END, START, StateGraph
+from langgraph.graph.state import CompiledStateGraph
 from pydantic import ValidationError
 from typing_extensions import NotRequired, TypedDict
 
@@ -41,15 +43,16 @@ class ClassificationState(TypedDict):
 class OllamaGraphService:
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
-        self.chat_graph: Any = self._build_chat_graph()
-        self.classification_graph: Any = self._build_classification_graph()
+        self.chat_graph = self._build_chat_graph()
+        self.classification_graph = self._build_classification_graph()
 
     def service_info(self) -> ServiceInfo:
         return ServiceInfo(
             service=self.settings.app_name,
             environment=self.settings.app_env,
-            ollama_base_url=self.settings.ollama_base_url,
-            ollama_model=self.settings.ollama_model,
+            llm_provider=self.settings.llm_provider,
+            model=self._active_model(),
+            base_url=self._active_base_url(),
         )
 
     def run_chat(self, request: ChatRequest) -> ChatResponse:
@@ -57,9 +60,11 @@ class OllamaGraphService:
             "system_prompt": request.system_prompt,
             "user_message": request.message,
             "temperature": request.temperature or self.settings.ollama_temperature,
+
         }
-        result = cast(dict[str, Any], self.chat_graph.invoke(state))
-        return ChatResponse(model=self.settings.ollama_model, response=result["response"])
+        # FIX: Cast the result to ChatState to satisfy the type checker
+        result = cast(ChatState, self.chat_graph.invoke(state))
+        return ChatResponse(model=self._active_model(), response=result.get("response", ""))
 
     def classify_job(self, request: JobClassificationRequest) -> JobClassificationResponse:
         state: ClassificationState = {
@@ -69,28 +74,34 @@ class OllamaGraphService:
             "categories": request.categories,
             "skills": request.skills,
         }
-        result = cast(dict[str, Any], self.classification_graph.invoke(state))
+        result = cast(ClassificationState,
+                      self.classification_graph.invoke(state, stream_mode="messages"))
         normalized = self._normalize_classification(
-            draft=cast(JobClassificationDraft, result["parsed"]),
+            draft=result.get("parsed", JobClassificationDraft(
+                category_slug=None,
+                skill_slugs=[],
+                confidence=0.0,
+                reasoning_summary="No classification provided by the model.",
+            )),
             categories=request.categories,
             skills=request.skills,
         )
         return JobClassificationResponse(
-            model=self.settings.ollama_model,
+            model=self._active_model(),
             normalized_title=request.title.strip(),
-            raw_response=result["raw_response"],
+            raw_response=result.get("raw_response", ""),
             **normalized.model_dump(),
         )
 
-    def _build_chat_graph(self) -> Any:
-        builder: Any = StateGraph(ChatState)
+    def _build_chat_graph(self) -> CompiledStateGraph[ChatState]:
+        builder = StateGraph(ChatState)
         builder.add_node("call_model", self._chat_with_model)
         builder.add_edge(START, "call_model")
         builder.add_edge("call_model", END)
         return builder.compile()
 
-    def _build_classification_graph(self) -> Any:
-        builder: Any = StateGraph(ClassificationState)
+    def _build_classification_graph(self) -> CompiledStateGraph[ClassificationState]:
+        builder = StateGraph(ClassificationState)
         builder.add_node("prepare_taxonomy", self._prepare_taxonomy_prompt)
         builder.add_node("call_model", self._classify_with_model)
         builder.add_node("parse_response", self._parse_classification_response)
@@ -124,8 +135,12 @@ class OllamaGraphService:
         )
         return {"taxonomy_prompt": taxonomy_prompt}
 
-    def _classify_with_model(self, state: ClassificationState) -> dict[str, str]:
+    def _classify_with_model(self, state: ClassificationState) -> dict[str, Any]:
         llm = self._build_llm(self.settings.ollama_temperature)
+        structured_llm = llm.with_structured_output(
+            JobClassificationDraft,
+            include_raw=True,
+        )
         taxonomy_prompt = state.get("taxonomy_prompt", "")
         prompt = (
             "Classify the home-services job request into exactly one of the provided "
@@ -142,23 +157,48 @@ class OllamaGraphService:
             '"reasoning_summary": "short explanation"'
             '}'
         )
-        response = llm.invoke(
-            [
-                SystemMessage(
-                    content=(
-                        "You are a reliable classifier for the Crafty Bass marketplace. "
-                        "Never invent category or skill slugs that were not provided."
-                    )
-                ),
-                HumanMessage(content=prompt),
-            ]
+        response = cast(
+            dict[str, Any],
+            structured_llm.invoke(
+                [
+                    SystemMessage(
+                        content=(
+                            "You are a reliable classifier for the Crafty Bass marketplace. "
+                            "Never invent category or skill slugs that were not provided."
+                        )
+                    ),
+                    HumanMessage(content=prompt),
+                ]
+            ),
         )
-        return {"raw_response": self._message_to_text(response)}
+
+        parsed = response.get("parsed")
+        if not isinstance(parsed, JobClassificationDraft):
+            parsed = JobClassificationDraft(
+                category_slug=None,
+                skill_slugs=[],
+                confidence=0.0,
+                reasoning_summary="The model response could not be parsed into the expected schema.",
+            )
+
+        raw_message = response.get("raw")
+        raw_response = (
+            self._message_to_text(raw_message)
+            if isinstance(raw_message, BaseMessage)
+            else json.dumps(parsed.model_dump())
+        )
+        return {
+            "raw_response": raw_response,
+            "parsed": parsed,
+        }
 
     def _parse_classification_response(
         self,
         state: ClassificationState,
     ) -> dict[str, JobClassificationDraft]:
+        if "parsed" in state:
+            return {"parsed": state["parsed"]}
+
         payload = self._extract_json_block(state.get("raw_response", ""))
         try:
             parsed = JobClassificationDraft.model_validate_json(payload)
@@ -173,12 +213,40 @@ class OllamaGraphService:
             )
         return {"parsed": parsed}
 
-    def _build_llm(self, temperature: float) -> ChatOllama:
+    def _build_llm(self, temperature: float) -> BaseChatModel:
+        if self.settings.llm_provider == "openai":
+            return ChatOpenAI(
+                model=self.settings.openai_model,
+                api_key=self.settings.openai_api_key,
+                base_url=self.settings.openai_base_url,
+                temperature=temperature,
+            )
+        if self.settings.llm_provider == "github":
+            return ChatOpenAI(
+                model=self.settings.github_model_name,
+                api_key=self.settings.github_token,
+                base_url=self.settings.github_inference_endpoint,
+                temperature=temperature,
+            )
         return ChatOllama(
             model=self.settings.ollama_model,
             base_url=self.settings.ollama_base_url,
             temperature=temperature,
         )
+
+    def _active_model(self) -> str:
+        if self.settings.llm_provider == "openai":
+            return self.settings.openai_model
+        if self.settings.llm_provider == "github":
+            return self.settings.github_model_name
+        return self.settings.ollama_model
+
+    def _active_base_url(self) -> str | None:
+        if self.settings.llm_provider == "openai":
+            return self.settings.openai_base_url
+        if self.settings.llm_provider == "github":
+            return self.settings.github_inference_endpoint
+        return self.settings.ollama_base_url
 
     def _normalize_classification(
         self,

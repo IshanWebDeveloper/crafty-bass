@@ -20,5 +20,6 @@ class ChatResponse(BaseModel):
 class ServiceInfo(BaseModel):
     service: str
     environment: str
-    ollama_base_url: str
-    ollama_model: str
+    llm_provider: str
+    model: str
+    base_url: str | None = None
