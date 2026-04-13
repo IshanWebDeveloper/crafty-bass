@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr | None = None
     github_token: SecretStr | None = None
     github_inference_endpoint: str = "https://models.github.ai/inference"
-    github_model_name: str = "openai/gpt-4o"
+    github_model_name: str = "openai/gpt-4o-mini"
     openai_model: str = "gpt-4o-mini"
     openai_base_url: str | None = None
     ollama_temperature: float = Field(default=0.2, ge=0.0, le=1.0)
