@@ -45,6 +45,9 @@ apps/*/__pycache__
 apps/*/app/__pycache__
 apps/*/tests/__pycache__
 apps/backend/src/generated
+_pycache__/
+*.pyc
+*.pyo
 
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
