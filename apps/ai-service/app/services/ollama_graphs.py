@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import json
 from functools import lru_cache
-from typing_extensions import TypedDict
+from typing import Any, cast
 
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
-from langgraph.graph import END, START, StateGraph
+from langgraph.graph import END, START, StateGraph  # type: ignore
 from pydantic import ValidationError
+from typing_extensions import NotRequired, TypedDict
 
 from app.core.config import Settings, get_settings
 from app.schemas.chat import ChatRequest, ChatResponse, ServiceInfo
@@ -23,7 +24,7 @@ class ChatState(TypedDict):
     system_prompt: str
     user_message: str
     temperature: float
-    response: str
+    response: NotRequired[str]
 
 
 class ClassificationState(TypedDict):
@@ -32,16 +33,16 @@ class ClassificationState(TypedDict):
     language: str
     categories: list[TaxonomyOption]
     skills: list[TaxonomyOption]
-    taxonomy_prompt: str
-    raw_response: str
-    parsed: JobClassificationDraft
+    taxonomy_prompt: NotRequired[str]
+    raw_response: NotRequired[str]
+    parsed: NotRequired[JobClassificationDraft]
 
 
 class OllamaGraphService:
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
-        self.chat_graph = self._build_chat_graph()
-        self.classification_graph = self._build_classification_graph()
+        self.chat_graph: Any = self._build_chat_graph()
+        self.classification_graph: Any = self._build_classification_graph()
 
     def service_info(self) -> ServiceInfo:
         return ServiceInfo(
@@ -52,27 +53,25 @@ class OllamaGraphService:
         )
 
     def run_chat(self, request: ChatRequest) -> ChatResponse:
-        result = self.chat_graph.invoke(
-            {
-                "system_prompt": request.system_prompt,
-                "user_message": request.message,
-                "temperature": request.temperature or self.settings.ollama_temperature,
-            }
-        )
+        state: ChatState = {
+            "system_prompt": request.system_prompt,
+            "user_message": request.message,
+            "temperature": request.temperature or self.settings.ollama_temperature,
+        }
+        result = cast(dict[str, Any], self.chat_graph.invoke(state))
         return ChatResponse(model=self.settings.ollama_model, response=result["response"])
 
     def classify_job(self, request: JobClassificationRequest) -> JobClassificationResponse:
-        result = self.classification_graph.invoke(
-            {
-                "title": request.title,
-                "description": request.description,
-                "language": request.language,
-                "categories": request.categories,
-                "skills": request.skills,
-            }
-        )
+        state: ClassificationState = {
+            "title": request.title,
+            "description": request.description,
+            "language": request.language,
+            "categories": request.categories,
+            "skills": request.skills,
+        }
+        result = cast(dict[str, Any], self.classification_graph.invoke(state))
         normalized = self._normalize_classification(
-            draft=result["parsed"],
+            draft=cast(JobClassificationDraft, result["parsed"]),
             categories=request.categories,
             skills=request.skills,
         )
@@ -83,15 +82,15 @@ class OllamaGraphService:
             **normalized.model_dump(),
         )
 
-    def _build_chat_graph(self):
-        builder = StateGraph(ChatState)
+    def _build_chat_graph(self) -> Any:
+        builder: Any = StateGraph(ChatState)
         builder.add_node("call_model", self._chat_with_model)
         builder.add_edge(START, "call_model")
         builder.add_edge("call_model", END)
         return builder.compile()
 
-    def _build_classification_graph(self):
-        builder = StateGraph(ClassificationState)
+    def _build_classification_graph(self) -> Any:
+        builder: Any = StateGraph(ClassificationState)
         builder.add_node("prepare_taxonomy", self._prepare_taxonomy_prompt)
         builder.add_node("call_model", self._classify_with_model)
         builder.add_node("parse_response", self._parse_classification_response)
@@ -113,7 +112,10 @@ class OllamaGraphService:
 
     def _prepare_taxonomy_prompt(self, state: ClassificationState) -> dict[str, str]:
         categories = self._format_taxonomy_lines(state["categories"])
-        skills = self._format_taxonomy_lines(state["skills"], include_parent=True) or "- None provided"
+        skills = (
+            self._format_taxonomy_lines(state["skills"], include_parent=True)
+            or "- None provided"
+        )
         taxonomy_prompt = (
             "Available service categories:\n"
             f"{categories}\n\n"
@@ -124,13 +126,14 @@ class OllamaGraphService:
 
     def _classify_with_model(self, state: ClassificationState) -> dict[str, str]:
         llm = self._build_llm(self.settings.ollama_temperature)
+        taxonomy_prompt = state.get("taxonomy_prompt", "")
         prompt = (
             "Classify the home-services job request into exactly one of the provided "
             "categories when possible. Suggest up to five skills from the provided skills list.\n\n"
             f"Language: {state['language']}\n"
             f"Job title: {state['title']}\n"
             f"Job description: {state['description']}\n\n"
-            f"{state['taxonomy_prompt']}\n"
+            f"{taxonomy_prompt}\n"
             "Return JSON only with this exact shape:\n"
             '{'
             '"category_slug": "string or null", '
@@ -152,8 +155,11 @@ class OllamaGraphService:
         )
         return {"raw_response": self._message_to_text(response)}
 
-    def _parse_classification_response(self, state: ClassificationState) -> dict[str, JobClassificationDraft]:
-        payload = self._extract_json_block(state["raw_response"])
+    def _parse_classification_response(
+        self,
+        state: ClassificationState,
+    ) -> dict[str, JobClassificationDraft]:
+        payload = self._extract_json_block(state.get("raw_response", ""))
         try:
             parsed = JobClassificationDraft.model_validate_json(payload)
         except ValidationError:
@@ -161,7 +167,9 @@ class OllamaGraphService:
                 category_slug=None,
                 skill_slugs=[],
                 confidence=0.0,
-                reasoning_summary="The model response could not be parsed into the expected schema.",
+                reasoning_summary=(
+                    "The model response could not be parsed into the expected schema."
+                ),
             )
         return {"parsed": parsed}
 
@@ -205,18 +213,21 @@ class OllamaGraphService:
 
     @staticmethod
     def _message_to_text(message: BaseMessage) -> str:
-        content = message.content
-        if isinstance(content, str):
-            return content.strip()
-        if isinstance(content, list):
-            chunks = []
-            for item in content:
-                if isinstance(item, dict) and "text" in item:
-                    chunks.append(str(item["text"]))
-                else:
-                    chunks.append(str(item))
-            return "\n".join(chunk.strip() for chunk in chunks if chunk).strip()
-        return str(content).strip()
+        raw_content: object = message.content  # type: ignore
+        if isinstance(raw_content, str):
+            return raw_content.strip()
+
+        content = cast(list[str | dict[str, Any]], raw_content)
+
+        chunks: list[str] = []
+        for item in content:
+            if isinstance(item, dict):
+                text = item.get("text")
+                chunks.append(str(text) if text is not None else str(item))
+                continue
+            chunks.append(str(item))
+
+        return "\n".join(chunk.strip() for chunk in chunks if chunk).strip()
 
     @staticmethod
     def _format_taxonomy_lines(
@@ -254,7 +265,7 @@ class OllamaGraphService:
                     "reasoning_summary": "The model did not return a JSON object.",
                 }
             )
-        return cleaned[start : end + 1]
+        return cleaned[start: end + 1]
 
 
 @lru_cache
