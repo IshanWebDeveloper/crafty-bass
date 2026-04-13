@@ -6,6 +6,7 @@
     "build": "nx run-many -t build --all",
     "dev": "nx run-many -t dev --projects=frontend,backend,ai-service --parallel=3",
     "dev:ai": "nx run ai-service:dev",
+    "dev:ai:uvicorn": "uvicorn --app-dir apps/ai-service app.main:app --reload --host 127.0.0.1 --port 8006",
     "lint": "nx run-many -t lint --all",
     "lint:staged": "lint-staged",
     "lint:commit": "commitlint --edit",
