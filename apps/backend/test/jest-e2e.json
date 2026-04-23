@@ -5,5 +5,12 @@
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "transformIgnorePatterns": [
+    "/node_modules/(?!(@thallesp/nestjs-better-auth|better-auth)/)"
+  ],
+  "moduleNameMapper": {
+    "^(\\.\\.?/.*)\\.js$": "$1",
+    "^better-auth/(.*)$": "<rootDir>/../node_modules/better-auth/dist/$1"
   }
 }

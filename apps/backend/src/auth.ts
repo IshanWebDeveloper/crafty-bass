@@ -1,5 +1,4 @@
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from './generated/prisma/client.js';
+import { PrismaClient } from '@prisma/client';
 import { APIError, betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin, openAPI, bearer } from 'better-auth/plugins';
@@ -14,15 +13,7 @@ import Stripe from 'stripe';
 import { Resend } from 'resend';
 import { EmailValidationService } from './common/services/email-validation.service.js';
 
-const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-  throw new Error('DATABASE_URL is required to initialize PrismaClient');
-}
-
-const prisma = new PrismaClient({
-  adapter: new PrismaPg({ connectionString }),
-});
+const prisma = new PrismaClient();
 
 const defaultPort = process.env.PORT ?? '3005';
 const baseURL =
@@ -37,7 +28,7 @@ const emailValidationService = new EmailValidationService();
 const resendApiKey = process.env.RESEND_API_KEY;
 const resend = resendApiKey ? new Resend(resendApiKey) : undefined;
 const emailFrom =
-  process.env.RESEND_FROM_EMAIL ?? 'Crafty-Bass <onboarding@resend.dev>';
+  process.env.RESEND_FROM_EMAIL ?? 'StreetGadgets <onboarding@resend.dev>';
 
 // Only initialise Stripe if keys are configured
 const stripeClient = stripeSecretKey ? new Stripe(stripeSecretKey) : undefined;
@@ -150,7 +141,7 @@ export const auth = betterAuth({
       await resend.emails.send({
         to: user.email,
         from: emailFrom,
-        subject: 'Reset Your Password — Crafty-Bass',
+        subject: 'Reset Your Password — StreetGadgets',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Password Reset Request</h2>
@@ -188,7 +179,7 @@ export const auth = betterAuth({
       await resend.emails.send({
         to: user.email,
         from: emailFrom,
-        subject: 'Verify Your Email — Crafty-Bass',
+        subject: 'Verify Your Email — StreetGadgets',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Verify your email address</h2>
