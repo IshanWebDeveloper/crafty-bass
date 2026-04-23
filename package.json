@@ -77,14 +77,8 @@
     ],
     "onlyBuiltDependencies": [
       "@nestjs/core",
-      "@prisma/client",
-      "@prisma/engines",
-      "@swc/core",
-      "better-sqlite3",
-      "esbuild",
-      "msgpackr-extract",
+      "@scarf/scarf",
       "nx",
-      "prisma",
       "sharp",
       "unrs-resolver"
     ]
