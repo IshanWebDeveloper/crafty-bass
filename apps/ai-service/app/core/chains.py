@@ -55,8 +55,6 @@ def run_chat(request: ChatRequest) -> ChatResponse:
         settings.openai_model
         if settings.llm_provider == "openai"
         else settings.github_model_name
-        if settings.llm_provider == "github"
-        else settings.ollama_model
     )
     return ChatResponse(model=model, response=text)
 
@@ -124,7 +122,7 @@ def run_classification(request: JobClassificationRequest) -> JobClassificationRe
     raw_response: str = _message_to_text(
         raw_message) or json.dumps(response["raw"], default=str)
 
-    # Normalize classification (same logic as OllamaGraphService._normalize_classification)
+    # Normalize classification (same logic as LlmGraphService normalization)
     allowed_categories = {item.slug for item in request.categories}
     skills_by_slug = {item.slug: item for item in request.skills}
 
@@ -148,8 +146,6 @@ def run_classification(request: JobClassificationRequest) -> JobClassificationRe
         settings.openai_model
         if settings.llm_provider == "openai"
         else settings.github_model_name
-        if settings.llm_provider == "github"
-        else settings.ollama_model
     )
 
     return JobClassificationResponse(

@@ -1,12 +1,12 @@
 # Crafty Bass AI Service
 
-Python FastAPI application for running local LangChain and LangGraph workflows against an Ollama model inside this Nx monorepo.
+Python FastAPI application for running LangChain and LangGraph workflows against either GitHub Models or the OpenAI Platform inside this Nx monorepo.
 
 ## What It Includes
 
 - `POST /api/v1/assistant/chat` for local chat completions
 - `POST /api/v1/assistant/classify-job` for Crafty Bass job classification
-- `GET /api/v1/assistant/info` to inspect the configured Ollama model
+- `GET /api/v1/assistant/info` to inspect the configured LLM provider and model
 - `GET /api/v1/health` for a lightweight readiness check
 
 ## Local Setup
@@ -25,20 +25,16 @@ Python FastAPI application for running local LangChain and LangGraph workflows a
    .\.venv\Scripts\python.exe -m pip install -e .[dev]
    ```
 
-3. Copy the environment file and adjust the Ollama settings if needed:
+3. Copy the environment file and set credentials for your chosen provider:
 
    ```powershell
    Copy-Item .env.example .env
    ```
 
-4. Ensure Ollama is running locally and that the configured model has been pulled:
+   - `LLM_PROVIDER=github`: set `GITHUB_TOKEN` and optionally `GITHUB_MODEL_NAME`.
+   - `LLM_PROVIDER=openai`: set `OPENAI_API_KEY` and optionally `OPENAI_MODEL` / `OPENAI_BASE_URL`.
 
-   ```powershell
-   ollama serve
-   ollama pull llama3.1:8b
-   ```
-
-5. Start the app through Nx from the workspace root:
+4. Start the app through Nx from the workspace root:
 
    ```powershell
    pnpm nx run ai-service:dev
@@ -46,7 +42,7 @@ Python FastAPI application for running local LangChain and LangGraph workflows a
 
 ## Example Requests
 
-Chat with the local model:
+Chat with the configured model:
 
 ```powershell
 Invoke-RestMethod -Method Post `

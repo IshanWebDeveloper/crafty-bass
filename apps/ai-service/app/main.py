@@ -1,18 +1,14 @@
-from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.router import api_router
 from app.core.config import get_settings
+from app.core.exceptions import register_exception_handlers
+from app.core.lifespan import lifespan
+from app.core.logging import configure_logging
 
 settings = get_settings()
-
-
-@asynccontextmanager
-async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-    yield
+configure_logging()
 
 
 app = FastAPI(
@@ -32,6 +28,7 @@ app.add_middleware(
 )
 
 app.include_router(api_router, prefix=settings.api_v1_str)
+register_exception_handlers(app)
 
 
 @app.get("/", tags=["meta"])

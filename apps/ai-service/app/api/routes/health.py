@@ -1,15 +1,3 @@
-from fastapi import APIRouter
+from app.api.v1.routes.health import router
 
-from app.core.config import get_settings
-
-router = APIRouter(tags=["health"])
-settings = get_settings()
-
-
-@router.get("/health")
-async def healthcheck() -> dict[str, str]:
-    return {
-        "status": "ok",
-        "service": settings.app_name,
-        "environment": settings.app_env,
-    }
+__all__ = ["router"]
