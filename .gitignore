@@ -52,3 +52,4 @@ crafty_bass_ai_service.egg-info/
 
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+*.tsbuildinfo*

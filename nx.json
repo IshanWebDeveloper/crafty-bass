@@ -18,7 +18,8 @@
     "sharedGlobals": [
       "{workspaceRoot}/package.json",
       "{workspaceRoot}/pnpm-workspace.yaml",
-      "{workspaceRoot}/nx.json"
+      "{workspaceRoot}/nx.json",
+      "{workspaceRoot}/tsconfig.base.json"
     ]
   },
   "targetDefaults": {

@@ -9,11 +9,11 @@ const workspaceRoot = resolve(here, '..', '..');
 const schemaPath = resolve(workspaceRoot, 'apps/backend/prisma/schema.prisma');
 const generatedBrowserPath = resolve(
   workspaceRoot,
-  'shared-types/src/generated/prisma/browser.ts',
+  'packages/shared-types/src/generated/prisma/browser.ts',
 );
 const stampPath = resolve(
   workspaceRoot,
-  'shared-types/src/generated/prisma/.schema-hash.json',
+  'packages/shared-types/src/generated/prisma/.schema-hash.json',
 );
 
 const fail = (message) => {
@@ -23,7 +23,7 @@ const fail = (message) => {
 
 await access(generatedBrowserPath).catch(() => {
   fail(
-    'Missing shared Prisma output at shared-types/src/generated/prisma/browser.ts. Run `pnpm prisma:generate:all`.',
+    'Missing shared Prisma output at packages/shared-types/src/generated/prisma/browser.ts. Run `pnpm prisma:generate:all`.',
   );
 });
 
@@ -41,7 +41,7 @@ try {
 
 if (stamp?.schemaSha256 !== currentHash) {
   fail(
-    'Prisma generated types are stale for shared-types. Run `pnpm prisma:generate:all` and commit generated changes.',
+    'Prisma generated types are stale for @repo/shared-types. Run `pnpm prisma:generate:all` and commit generated changes.',
   );
 }
 

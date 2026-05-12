@@ -1,5 +1,12 @@
 generator client {
-  provider = "prisma-client"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+generator sharedTypesClient {
+  provider = "prisma-client-js"
+  output   = "../../../packages/shared-types/src/generated/prisma"
 }
 
 // generator dbml {
@@ -9,6 +16,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {

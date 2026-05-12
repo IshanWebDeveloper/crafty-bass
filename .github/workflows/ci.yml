@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -35,12 +37,14 @@ jobs:
       - name: Check generated Prisma types are up to date
         run: pnpm prisma:check:generated
 
-  build:
+  affected:
     runs-on: [self-hosted, windows]
     needs: prisma-generated-check
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -70,43 +74,11 @@ jobs:
           .\apps\ai-service\.venv\Scripts\python.exe -m pip install --upgrade pip
           .\apps\ai-service\.venv\Scripts\python.exe -m pip install -e ".\apps\ai-service[dev]"
 
-      - name: Build workspace
-        run: pnpm build
+      - name: Lint affected projects
+        run: pnpm affected:lint
 
-  test:
-    runs-on: [self-hosted, windows]
-    needs: prisma-generated-check
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Test affected projects
+        run: pnpm affected:test
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.28.2
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - name: Setup Python for ai-service targets
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Create ai-service virtual environment
-        run: python -m venv apps/ai-service/.venv
-
-      - name: Install ai-service Python dependencies
-        run: |
-          .\apps\ai-service\.venv\Scripts\python.exe -m pip install --upgrade pip
-          .\apps\ai-service\.venv\Scripts\python.exe -m pip install -e ".\apps\ai-service[dev]"
-
-      - name: Test workspace
-        run: pnpm test
+      - name: Build affected projects
+        run: pnpm affected:build

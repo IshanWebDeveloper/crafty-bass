@@ -8,7 +8,7 @@ const workspaceRoot = resolve(here, '..', '..');
 const schemaPath = resolve(workspaceRoot, 'apps/backend/prisma/schema.prisma');
 const stampPath = resolve(
   workspaceRoot,
-  'shared-types/src/generated/prisma/.schema-hash.json',
+  'packages/shared-types/src/generated/prisma/.schema-hash.json',
 );
 
 const schema = await readFile(schemaPath, 'utf8');

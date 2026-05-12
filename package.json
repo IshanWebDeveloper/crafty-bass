@@ -4,7 +4,8 @@
   "packageManager": "pnpm@10.28.2",
   "scripts": {
     "build": "nx run-many -t build --all",
-    "dev": "nx run-many -t dev --projects=frontend,backend,ai-service --parallel=3",
+    "dev": "nx run-many -t dev --projects=frontend,admin,backend,ai-service --parallel=4",
+    "dev:admin": "nx run admin:dev",
     "dev:ai": "nx run ai-service:dev",
     "dev:ai:uvicorn": "uvicorn --app-dir apps/ai-service app.main:app --reload --host 127.0.0.1 --port 8006",
     "lint": "nx run-many -t lint --all",
@@ -12,7 +13,7 @@
     "lint:commit": "commitlint --edit",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "test": "nx run-many -t test --all",
-    "prisma:generate:all": "pnpm --filter backend prisma:generate",
+    "prisma:generate:all": "pnpm --filter backend prisma:generate && node scripts/prisma/update-generated-prisma-stamp.mjs",
     "prisma:check:generated": "node scripts/prisma/check-generated-prisma-stamp.mjs",
     "affected:build": "nx affected -t build",
     "affected:lint": "nx affected -t lint",
@@ -34,6 +35,8 @@
     "@nx/vite": "20.8.4",
     "@nx/web": "20.8.4",
     "@playwright/test": "^1.59.1",
+    "@repo/eslint-config": "workspace:^",
+    "@repo/prettier-config": "workspace:^",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
@@ -58,9 +61,9 @@
     "vitest": "^3.0.0"
   },
   "dependencies": {
-    "next": "~15.2.9",
-    "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs,json,md,css,scss,yml,yaml}": "prettier --write --ignore-unknown"
