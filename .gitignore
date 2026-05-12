@@ -53,6 +53,7 @@ _pycache__
 *.pyc
 *.pyo
 crafty_bass_ai_service.egg-info/
+.playwright-mcp
 
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
