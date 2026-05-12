@@ -1,43 +1,30 @@
-from typing import Optional
-
-from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
 
 from app.core.config import get_settings
 
 
-def get_llm(model: Optional[str] = None, temperature: Optional[float] = None):
-    """Create and return an LLM instance based on `Settings`.
-
-    - If `LLM_PROVIDER` is `openai` or `github`, returns `ChatOpenAI`.
-    - Otherwise returns `ChatOllama`.
-    """
+def get_llm(model: str | None = None, temperature: float | None = None) -> ChatOpenAI:
+    """Create and return the configured chat client for GitHub or OpenAI."""
     settings = get_settings()
-    if temperature is None:
-        temperature = settings.ollama_temperature
-
     provider = settings.llm_provider
+    selected_temperature = temperature if temperature is not None else settings.llm_temperature
+
     if provider == "openai":
         model_name = model or settings.openai_model
+        api_key = settings.openai_api_key
         return ChatOpenAI(
             model=model_name,
-            api_key=settings.openai_api_key,
+            api_key=api_key,
             base_url=settings.openai_base_url,
-            temperature=temperature,
+            temperature=selected_temperature,
         )
 
-    if provider == "github":
-        model_name = model or settings.github_model_name
-
-        # GitHub inference models may not support custom temperature values.
-        # Omit the temperature parameter to avoid BadRequestError from the
-        # provider when a non-default temperature is supplied.
-        return ChatOpenAI(
-            model=model_name,
-            api_key=settings.github_token,
-            base_url=settings.github_inference_endpoint,
-        )
-
-    # Default: Ollama
-    model_name = model or settings.ollama_model
-    return ChatOllama(model=model_name, base_url=settings.ollama_base_url, temperature=temperature)
+    model_name = model or settings.github_model_name
+    api_key = settings.github_token
+    # GitHub Models compatibility can vary by model for temperature support.
+    # We intentionally omit temperature to avoid provider-side BadRequest errors.
+    return ChatOpenAI(
+        model=model_name,
+        api_key=api_key,
+        base_url=settings.github_inference_endpoint,
+    )
