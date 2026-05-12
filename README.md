@@ -5,8 +5,13 @@ Crafty Bass is an Nx monorepo containing a Next.js frontend, a NestJS backend, a
 ## Monorepo Structure
 
 - `apps/frontend` - Next.js web app
+- `apps/admin` - Next.js admin app
 - `apps/backend` - NestJS API + Prisma
 - `apps/ai-service` - FastAPI + LangChain + LangGraph + Ollama
+- `packages/ui` - Shared shadcn UI primitives
+- `packages/shared-types` - Shared browser-safe Prisma types
+- `packages/validation` - Shared Zod schemas
+- `packages/eslint-config` and `packages/prettier-config` - Shared tooling configs
 
 ## Tech Stack
 
@@ -40,6 +45,7 @@ Crafty Bass is an Nx monorepo containing a Next.js frontend, a NestJS backend, a
 3. Open the apps:
 
 - Frontend: http://localhost:3000
+- Admin: http://localhost:3001
 - Backend: http://localhost:3005
 - Swagger API docs: http://localhost:3005/api
 
@@ -69,6 +75,7 @@ These commands now include `apps/ai-service`, so make sure its `.venv` has been 
 
 ```bash
 pnpm nx run frontend:dev
+pnpm nx run admin:dev
 pnpm nx run backend:dev
 pnpm nx run ai-service:dev
 ```

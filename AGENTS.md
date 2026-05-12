@@ -11,12 +11,16 @@ This is the repo-wide, tool-agnostic guide for agents and contributors working i
 
 ## Repository Map
 
-- `apps/frontend` - Next.js App Router frontend using React 19, Tailwind CSS v4, shadcn-style primitives, `next-themes`, and shared browser-safe Prisma types.
+- `apps/frontend` - Next.js App Router frontend using React 19, Tailwind CSS v4, shared `@repo/ui` shadcn primitives, `next-themes`, and shared browser-safe Prisma types.
+- `apps/admin` - Next.js App Router admin workspace using shared UI/config packages.
 - `apps/backend` - NestJS 11 API using Prisma, PostgreSQL, better-auth, BullMQ, Stripe, and Zod-based validation.
 - `apps/ai-service` - FastAPI service using LangChain/LangGraph with `github` or `openai` as the configured LLM provider.
-- `shared-types/` - Workspace package exposing generated Prisma browser types from `shared-types/src/generated/prisma/`.
+- `packages/shared-types/` - Workspace package exposing generated Prisma browser types from `packages/shared-types/src/generated/prisma/`.
+- `packages/ui/` - Shared shadcn-style React primitives consumed by frontend apps.
+- `packages/validation/` - Shared Zod schemas.
+- `packages/eslint-config/` and `packages/prettier-config/` - Shared repo tooling config packages.
 
-`pnpm-workspace.yaml` includes `apps/*` and `packages/*`. The current shared package lives at the repo root as `shared-types/`.
+`pnpm-workspace.yaml` includes `apps/*` and `packages/*`.
 
 ## Current Product Reality
 
@@ -57,7 +61,7 @@ Ports:
 ## Safe Editing Rules
 
 - Do not commit `.env` files. Use checked-in examples as references only.
-- Do not hand-edit generated Prisma shared types under `shared-types/src/generated/prisma/`.
+- Do not hand-edit generated Prisma shared types under `packages/shared-types/src/generated/prisma/`.
 - If `apps/backend/prisma/schema.prisma` changes, run `pnpm prisma:generate:all` and include the generated shared-type changes and schema hash.
 - Keep backend TypeScript relative imports using the existing `.js` suffix style.
 - Keep validation patterns aligned with the app: NestJS DTOs use `nestjs-zod`; the AI service uses Pydantic/FastAPI patterns.

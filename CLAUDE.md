@@ -23,7 +23,7 @@ Nx + pnpm monorepo with three apps:
 - `apps/frontend` — Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui
 - `apps/backend` — NestJS 11 + Prisma (PostgreSQL) + better-auth + BullMQ + Stripe
 - `apps/ai-service` — Python FastAPI + LangChain/LangGraph (LLM provider is `github` or `openai`)
-- `shared-types/` — workspace package exposing Prisma-generated browser types via `shared-types/src/generated/prisma/`
+- `packages/shared-types/` — workspace package exposing Prisma-generated browser types via `packages/shared-types/src/generated/prisma/`
 
 `pnpm-workspace.yaml` includes `apps/*` and `packages/*` (no `packages/` exists yet — `shared-types` is at the root).
 
@@ -51,10 +51,10 @@ Most scripts are in `apps/backend/package.json`. The two that matter at the work
 
 ```bash
 pnpm prisma:generate:all       # generates Prisma client + shared-types browser output
-pnpm prisma:check:generated    # CI guard: verifies shared-types/.../prisma/.schema-hash.json matches schema SHA
+pnpm prisma:check:generated    # CI guard: verifies packages/shared-types/.../prisma/.schema-hash.json matches schema SHA
 ```
 
-If you change `schema.prisma`, you must run `prisma:generate:all` and commit the updated hash stamp under `shared-types/src/generated/prisma/`, or the `prisma-generated-check` CI job will fail.
+If you change `schema.prisma`, you must run `prisma:generate:all` and commit the updated hash stamp under `packages/shared-types/src/generated/prisma/`, or the `prisma-generated-check` CI job will fail.
 
 ### Backend tests
 
@@ -129,7 +129,7 @@ Quick orientation: path alias `@/*` → `src/*`. Theming via `next-themes` + `Th
 
 ### Shared types
 
-`shared-types/src/generated/prisma/browser.ts` is the browser-safe Prisma output consumed by the frontend. The SHA stamp at `shared-types/src/generated/prisma/.schema-hash.json` is checked in CI — never edit it by hand; regenerate with `pnpm prisma:generate:all`.
+`packages/shared-types/src/generated/prisma/browser.ts` is the browser-safe Prisma output consumed by the frontend. The SHA stamp at `packages/shared-types/src/generated/prisma/.schema-hash.json` is checked in CI — never edit it by hand; regenerate with `pnpm prisma:generate:all`.
 
 ## CI
 
