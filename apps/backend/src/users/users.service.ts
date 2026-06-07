@@ -11,6 +11,9 @@ import type { UpdateProfileDto, UserListQueryDto } from './dto/index.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import { RecommendationsService } from '../recommendations/recommendations.service.js';
 import { PromotionsService } from '../promotions/promotions.service.js';
+import { S3Service } from '../admin/s3.service.js';
+
+const GDPR_EXPORT_DOWNLOAD_TTL_SECONDS = 15 * 60;
 
 @Injectable()
 export class UsersService {
@@ -19,6 +22,7 @@ export class UsersService {
     @InjectQueue('gdpr-export') private readonly gdprExportQueue: Queue,
     private readonly recommendationsService: RecommendationsService,
     private readonly promotionsService: PromotionsService,
+    private readonly s3Service: S3Service,
   ) {}
 
   async getProfile(userId: string) {
@@ -196,6 +200,42 @@ export class UsersService {
       jobId: job.id,
       message:
         'Your data export has been queued. You will receive a notification when it is ready to download.',
+    };
+  }
+
+  async getLatestExportDownloadUrl(userId: string): Promise<{
+    downloadUrl: string;
+    fileKey: string;
+    expiresInSeconds: number;
+  }> {
+    // The prefix is derived from the authenticated session, not from any
+    // request param, so a caller cannot widen the search to another user's
+    // exports.
+    const prefix = `gdpr-exports/${userId}-`;
+    const keys = await this.s3Service.listObjectKeysWithPrefix(prefix);
+
+    if (keys.length === 0) {
+      throw new NotFoundException('No data export available for this account');
+    }
+
+    // Keys are suffixed with `${Date.now()}.zip`; lexicographic descending sort
+    // surfaces the most recent export.
+    const latestKey = [...keys].sort().reverse()[0];
+
+    if (!latestKey) {
+      throw new NotFoundException('No data export available for this account');
+    }
+
+    const downloadUrl = await this.s3Service.getPresignedDownloadUrl(
+      latestKey,
+      GDPR_EXPORT_DOWNLOAD_TTL_SECONDS,
+      'crafty-bass-data-export.zip',
+    );
+
+    return {
+      downloadUrl,
+      fileKey: latestKey,
+      expiresInSeconds: GDPR_EXPORT_DOWNLOAD_TTL_SECONDS,
     };
   }
 
