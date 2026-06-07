@@ -9,12 +9,15 @@ from langchain_core.messages import BaseMessage
 
 from app.core.config import Settings, get_settings
 from app.domain.classification.normalizer import normalize_classification
+from app.graphs.batch_classification.graph import build_batch_classification_graph
+from app.graphs.batch_classification.state import BatchClassificationState
 from app.graphs.chat.graph import build_chat_graph
 from app.graphs.chat.nodes import call_model_node
 from app.graphs.chat.state import ChatState
 from app.graphs.classification.graph import build_classification_graph
 from app.graphs.classification.nodes import (
     classify_with_model_node,
+    confidence_gate_node,
     parse_classification_response_node,
     prepare_taxonomy_prompt_node,
 )
@@ -23,6 +26,8 @@ from app.infrastructure.llm.factory import get_llm
 from app.infrastructure.prompts.classification import classification_template
 from app.schemas.chat import ChatRequest, ChatResponse, ServiceInfo
 from app.schemas.classification import (
+    JobClassificationBatchRequest,
+    JobClassificationBatchResponse,
     JobClassificationDraft,
     JobClassificationRequest,
     JobClassificationResponse,
@@ -37,6 +42,13 @@ class LlmGraphService:
             self._prepare_taxonomy_prompt,
             self._classify_with_model,
             self._parse_classification_response,
+            confidence_gate_node,
+        )
+        # Inject the single-job classifier into the batch graph so workers
+        # share one well-tested classification pipeline (including the retry
+        # policy and Command-driven topology from steps A and C).
+        self.batch_classification_graph = build_batch_classification_graph(
+            self.classify_job,
         )
 
     def service_info(self) -> ServiceInfo:
@@ -131,6 +143,21 @@ class LlmGraphService:
             **normalized.model_dump(),
         )
 
+    def classify_jobs_batch(
+        self, request: JobClassificationBatchRequest
+    ) -> JobClassificationBatchResponse:
+        state: BatchClassificationState = {
+            "items": request.items,
+            "categories": request.categories,
+            "skills": request.skills,
+            "results": [],
+        }
+        result = cast(
+            BatchClassificationState,
+            self.batch_classification_graph.invoke(state),
+        )
+        return JobClassificationBatchResponse(results=result["results"])
+
     def _chat_with_model(self, state: ChatState) -> dict[str, str]:
         return call_model_node(
             state,
@@ -141,7 +168,8 @@ class LlmGraphService:
     def _prepare_taxonomy_prompt(self, state: ClassificationState) -> dict[str, str]:
         return prepare_taxonomy_prompt_node(state)
 
-    def _classify_with_model(self, state: ClassificationState) -> dict[str, Any]:
+    def _classify_with_model(self, state: ClassificationState) -> Any:
+        # Returns langgraph.types.Command — Command(update=..., goto=...).
         return classify_with_model_node(
             state,
             llm_builder=self._build_llm,
