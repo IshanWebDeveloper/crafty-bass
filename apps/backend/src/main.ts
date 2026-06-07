@@ -63,8 +63,11 @@ async function bootstrap() {
   app.use(compression());
 
   // CORS
+  const corsOrigins = process.env.CORS_ORIGINS?.split(',')
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0) ?? ['http://localhost:3000'];
   app.enableCors({
-    origin: process.env.CORS_ORIGINS?.split(',') ?? ['http://localhost:3000'],
+    origin: corsOrigins,
     credentials: true,
   });
 
