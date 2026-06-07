@@ -5,6 +5,7 @@ import {
   PutObjectCommand,
   GetObjectCommand,
   DeleteObjectCommand,
+  ListObjectsV2Command,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
@@ -21,14 +22,39 @@ export class S3Service {
   private readonly cacheSafetyWindowMs = 15_000;
 
   constructor(private readonly config: ConfigService) {
-    this.bucketName =
-      this.config.get<string>('AWS_BUCKET_NAME') || 'test-bucket';
+    const isProduction =
+      (this.config.get<string>('NODE_ENV') ?? process.env.NODE_ENV) ===
+      'production';
 
-    const region = this.config.get<string>('AWS_REGION') || 'us-east-1';
-    const accessKeyId =
-      this.config.get<string>('AWS_ACCESS_KEY_ID') || 'dummy-key';
-    const secretAccessKey =
-      this.config.get<string>('AWS_SECRET_ACCESS_KEY') || 'dummy-secret';
+    const bucketName = this.config.get<string>('AWS_BUCKET_NAME');
+    const region = this.config.get<string>('AWS_REGION');
+    const accessKeyId = this.config.get<string>('AWS_ACCESS_KEY_ID');
+    const secretAccessKey = this.config.get<string>('AWS_SECRET_ACCESS_KEY');
+
+    if (isProduction) {
+      const missing = [
+        ['AWS_BUCKET_NAME', bucketName],
+        ['AWS_REGION', region],
+        ['AWS_ACCESS_KEY_ID', accessKeyId],
+        ['AWS_SECRET_ACCESS_KEY', secretAccessKey],
+      ]
+        .filter(([, value]) => !value)
+        .map(([name]) => name);
+
+      if (missing.length > 0) {
+        throw new Error(
+          `S3Service refusing to start in production with missing AWS env vars: ${missing.join(
+            ', ',
+          )}`,
+        );
+      }
+    }
+
+    this.bucketName = bucketName || 'test-bucket';
+    const resolvedRegion = region || 'us-east-1';
+    const resolvedAccessKeyId = accessKeyId || 'dummy-key';
+    const resolvedSecretAccessKey = secretAccessKey || 'dummy-secret';
+
     const configuredExpiry = Number(
       this.config.get<string>('AWS_PRESIGNED_URL_EXPIRES_IN') ?? '3600',
     );
@@ -38,15 +64,14 @@ export class S3Service {
         : 3600;
 
     this.logger.log(
-      `Initialized S3Service: Bucket=${this.bucketName}, Region=${region}, HasKey=${accessKeyId !== 'dummy-key'}`,
+      `Initialized S3Service: Bucket=${this.bucketName}, Region=${resolvedRegion}, HasKey=${resolvedAccessKeyId !== 'dummy-key'}`,
     );
 
-    // In a real application, you'd want these to throw if missing, but we'll fallback for dev
     this.s3Client = new S3Client({
-      region,
+      region: resolvedRegion,
       credentials: {
-        accessKeyId,
-        secretAccessKey,
+        accessKeyId: resolvedAccessKeyId,
+        secretAccessKey: resolvedSecretAccessKey,
       },
     });
   }
@@ -166,6 +191,24 @@ export class S3Service {
       );
       return keyOrUrl;
     }
+  }
+
+  /**
+   * Lists object keys under a prefix. Callers should derive the prefix from
+   * server-side state (e.g. an authenticated user id) — never from raw user
+   * input — so the result set cannot be widened by a malicious caller.
+   */
+  async listObjectKeysWithPrefix(prefix: string): Promise<string[]> {
+    const command = new ListObjectsV2Command({
+      Bucket: this.bucketName,
+      Prefix: prefix,
+    });
+
+    const response = await this.s3Client.send(command);
+    const contents = response.Contents ?? [];
+    return contents
+      .map((entry) => entry.Key)
+      .filter((key): key is string => typeof key === 'string');
   }
 
   async deleteObject(key: string): Promise<void> {

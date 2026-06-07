@@ -47,6 +47,15 @@ export class UsersController {
     return this.usersService.exportData(userId);
   }
 
+  @Get('me/gdpr-exports/latest/download-url')
+  @ApiOperation({
+    summary:
+      'Mint a short-lived presigned URL for the most recent GDPR data export',
+  })
+  getLatestExportDownloadUrl(@CurrentUser('id') userId: string) {
+    return this.usersService.getLatestExportDownloadUrl(userId);
+  }
+
   @Delete('me')
   @ApiOperation({ summary: 'Schedule the current user account for deletion' })
   scheduleDeletion(@CurrentUser('id') userId: string) {
