@@ -40,6 +40,13 @@ jobs:
   affected:
     runs-on: [self-hosted, windows]
     needs: prisma-generated-check
+    # Self-hosted runners must not execute untrusted PR code (lifecycle scripts
+    # in `pnpm install` and `pip install -e .` would run on our infrastructure).
+    # Skip the job for PRs originating from forks; only same-repo PRs, pushes to
+    # main, and manual dispatch are allowed to reach the runner.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - name: Checkout
         uses: actions/checkout@v4
