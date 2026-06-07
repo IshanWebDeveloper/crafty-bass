@@ -1,3 +1,4 @@
+import logging
 import os
 import jwt
 from jwt import PyJWKClient
@@ -9,17 +10,37 @@ from typing import cast
 
 from typing_extensions import NotRequired, TypedDict
 
-bearer_scheme = HTTPBearer()
+logger = logging.getLogger(__name__)
 
-BETTER_AUTH_URL = os.environ["BETTER_AUTH_URL"]  # e.g. http://api:3001
-JWKS_URL = f"{BETTER_AUTH_URL}/api/auth/jwks"
+bearer_scheme = HTTPBearer()
 
 
 @lru_cache(maxsize=1)
 def get_jwks_client() -> PyJWKClient:
-    # JWKS is cached — public key rarely changes
+    better_auth_url = os.environ["BETTER_AUTH_URL"]
+    return PyJWKClient(f"{better_auth_url}/api/auth/jwks")
 
-    return PyJWKClient(JWKS_URL)
+
+@lru_cache(maxsize=1)
+def _expected_audience() -> str:
+    audience = os.environ.get("JWT_AUDIENCE")
+    if not audience:
+        raise RuntimeError(
+            "JWT_AUDIENCE must be set so tokens minted for other services "
+            "cannot be replayed against the AI service.",
+        )
+    return audience
+
+
+@lru_cache(maxsize=1)
+def _expected_issuer() -> str:
+    issuer = os.environ.get("JWT_ISSUER")
+    if not issuer:
+        raise RuntimeError(
+            "JWT_ISSUER must be set (typically the BETTER_AUTH_URL of the "
+            "auth server) so tokens from foreign issuers are rejected.",
+        )
+    return issuer
 
 
 class TokenPayload(BaseModel):
@@ -45,9 +66,15 @@ def verify_token(
             jwt.decode(
                 credentials.credentials,
                 signing_key.key,
-                # accept any asymmetric alg
                 algorithms=["EdDSA", "ES256", "RS256"],
-                options={"verify_exp": True},
+                audience=_expected_audience(),
+                issuer=_expected_issuer(),
+                options={
+                    "verify_exp": True,
+                    "verify_aud": True,
+                    "verify_iss": True,
+                    "require": ["exp", "aud", "iss", "sub"],
+                },
             ),
         )
         return TokenPayload(sub=payload["sub"], email=payload.get("email"))
@@ -56,5 +83,6 @@ def verify_token(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired") from exc
     except Exception as exc:
+        logger.warning("Token verification failed: %s", exc)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token") from exc

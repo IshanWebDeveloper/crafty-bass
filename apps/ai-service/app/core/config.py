@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "Crafty Bass AI Servicesssss"
+    app_name: str = "Crafty Bass AI Service"
     app_env: str = "development"
     api_v1_str: str = "/api/v1"
     host: str = "127.0.0.1"
@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     openai_base_url: str | None = None
     github_token: SecretStr | None = None
     github_inference_endpoint: str = "https://models.github.ai/inference"
-    github_model_name: str = "openai/gpt-4o-min"
+    github_model_name: str = "openai/gpt-4o-mini"
     llm_temperature: float = Field(default=0.2, ge=0.0, le=1.0)
 
     model_config = SettingsConfigDict(

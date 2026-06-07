@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { APIError, betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { admin, openAPI, bearer } from 'better-auth/plugins';
+import { admin, openAPI, bearer, jwt } from 'better-auth/plugins';
 import {
   ac,
   admin as adminRole,
@@ -12,6 +12,7 @@ import { stripe } from '@better-auth/stripe';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
 import { EmailValidationService } from './common/services/email-validation.service.js';
+import { escapeHtml } from './common/utils/escape-html.util.js';
 
 const prisma = new PrismaClient();
 
@@ -51,6 +52,9 @@ const adminSessionExpiresIn = parseSeconds(
 
 const PRIVACY_POLICY_VERSION = '2026-03-31';
 
+const jwtIssuer = process.env.JWT_ISSUER ?? baseURL;
+const jwtAudience = process.env.JWT_AUDIENCE ?? 'ai-service';
+
 const plugins = [
   admin({
     ac,
@@ -63,6 +67,12 @@ const plugins = [
   }),
   openAPI(),
   bearer(),
+  jwt({
+    jwt: {
+      issuer: jwtIssuer,
+      audience: jwtAudience,
+    },
+  }),
   ...(stripeClient && stripeWebhookSecret
     ? [
         stripe({
@@ -137,7 +147,9 @@ export const auth = betterAuth({
         );
         return;
       }
-      const resetLink = `${frontendURL}/reset-password?token=${token}`;
+      const resetLink = `${frontendURL}/reset-password?token=${encodeURIComponent(token)}`;
+      const safeName = escapeHtml(user.name);
+      const safeResetLink = escapeHtml(resetLink);
       await resend.emails.send({
         to: user.email,
         from: emailFrom,
@@ -145,10 +157,10 @@ export const auth = betterAuth({
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Password Reset Request</h2>
-            <p>Hi ${user.name},</p>
+            <p>Hi ${safeName},</p>
             <p>We received a request to reset your password. Click the button below to choose a new one:</p>
             <p style="text-align: center; margin: 32px 0;">
-              <a href="${resetLink}" style="background-color: #0f172a; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+              <a href="${safeResetLink}" style="background-color: #0f172a; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
                 Reset Password
               </a>
             </p>
@@ -169,13 +181,15 @@ export const auth = betterAuth({
         );
         return;
       }
-      const verificationLink = `${frontendURL}/verify-email?token=${token}`;
+      const verificationLink = `${frontendURL}/verify-email?token=${encodeURIComponent(token)}`;
       // Log the URL in development for easy local testing
       if (process.env.NODE_ENV !== 'production') {
         console.log(
           `[DEV] Verification URL for ${user.email}: ${verificationLink}`,
         );
       }
+      const safeName = escapeHtml(user.name);
+      const safeVerificationLink = escapeHtml(verificationLink);
       await resend.emails.send({
         to: user.email,
         from: emailFrom,
@@ -183,10 +197,10 @@ export const auth = betterAuth({
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Verify your email address</h2>
-            <p>Hi ${user.name},</p>
+            <p>Hi ${safeName},</p>
             <p>Thanks for creating an account! Please click the button below to verify your email address:</p>
             <p style="text-align: center; margin: 32px 0;">
-              <a href="${verificationLink}" style="background-color: #0f172a; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+              <a href="${safeVerificationLink}" style="background-color: #0f172a; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
                 Verify Email
               </a>
             </p>
@@ -300,8 +314,10 @@ export const auth = betterAuth({
     },
   },
   advanced: {
-    disableCSRFCheck: process.env.NODE_ENV !== 'production', // Disable CSRF check in development for Postman testing
-    // Ensure cookies are secure in production and provide sensible defaults
+    // Fail safe: CSRF is enforced unless `DISABLE_CSRF_CHECK=true` is explicitly
+    // set. Prior behaviour keyed off NODE_ENV, which silently disabled CSRF
+    // anywhere NODE_ENV was unset (a common production misconfiguration).
+    disableCSRFCheck: process.env.DISABLE_CSRF_CHECK === 'true',
     useSecureCookies: process.env.NODE_ENV === 'production',
     defaultCookieAttributes: {
       // Lax is a sensible default; set to 'none' if you need cross-site cookies in production
