@@ -1,7 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { RecommendationsService } from './recommendations.service.js';
-import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 
 @ApiTags('Recommendations')
 @ApiBearerAuth()
@@ -11,9 +10,11 @@ export class RecommendationsController {
     private readonly recommendationsService: RecommendationsService,
   ) {}
 
-  @Get()
-  @ApiOperation({ summary: 'Get personalized product recommendations' })
-  getRecommendations(@CurrentUser('id') userId: string) {
-    return this.recommendationsService.getRecommendations(userId);
+  // TODO(Phase C): design the marketplace recommendation surface. For now this
+  // exposes the precomputed tradesman recommendations for a job.
+  @Get('jobs/:jobId')
+  @ApiOperation({ summary: 'Get recommended tradesmen for a job' })
+  getJobRecommendations(@Param('jobId') jobId: string) {
+    return this.recommendationsService.getJobRecommendations(jobId);
   }
 }
