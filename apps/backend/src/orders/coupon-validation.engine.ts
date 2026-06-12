@@ -4,7 +4,7 @@ import type {
   CouponDiscountType,
   Prisma,
   PrismaClient,
-} from '@prisma/client';
+} from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 
 interface CouponValidationOptions {

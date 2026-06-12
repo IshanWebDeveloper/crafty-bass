@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import type { OrderStatus, Prisma } from '@prisma/client';
+import type { OrderStatus, Prisma } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import { Observable, filter, map, fromEvent } from 'rxjs';

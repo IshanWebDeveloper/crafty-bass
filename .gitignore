@@ -48,6 +48,7 @@ apps/*/__pycache__
 apps/*/app/__pycache__
 apps/*/tests/__pycache__
 apps/backend/src/generated
+packages/db/src/generated
 docs/
 _pycache__
 *.pyc

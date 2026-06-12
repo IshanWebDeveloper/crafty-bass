@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { generateSlug } from '../common/utils/slug.util.js';
 

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import type { Role } from '@prisma/client';
+import type { Role } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import type { UpdateProfileDto, UserListQueryDto } from './dto/index.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';

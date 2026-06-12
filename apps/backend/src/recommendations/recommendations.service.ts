@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { S3Service } from '../admin/s3.service.js';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@repo/db';
 
 type RecommendationProduct = Prisma.ProductGetPayload<{
   include: {

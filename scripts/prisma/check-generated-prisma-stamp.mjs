@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const workspaceRoot = resolve(here, '..', '..');
 
-const schemaPath = resolve(workspaceRoot, 'apps/backend/prisma/schema.prisma');
+const schemaPath = resolve(workspaceRoot, 'packages/db/prisma/schema.prisma');
 const generatedBrowserPath = resolve(
   workspaceRoot,
   'packages/shared-types/src/generated/prisma/browser.ts',

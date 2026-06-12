@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const workspaceRoot = resolve(here, '..', '..');
-const schemaPath = resolve(workspaceRoot, 'apps/backend/prisma/schema.prisma');
+const schemaPath = resolve(workspaceRoot, 'packages/db/prisma/schema.prisma');
 const stampPath = resolve(
   workspaceRoot,
   'packages/shared-types/src/generated/prisma/.schema-hash.json',
@@ -20,7 +20,7 @@ await writeFile(
   stampPath,
   JSON.stringify(
     {
-      schemaPath: 'apps/backend/prisma/schema.prisma',
+      schemaPath: 'packages/db/prisma/schema.prisma',
       schemaSha256,
       generatedAt: new Date().toISOString(),
     },

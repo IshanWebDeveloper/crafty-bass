@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import type { Prisma, Role } from '@prisma/client';
+import type { Prisma, Role } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 
 interface EvaluatePromotionDiscountInput {

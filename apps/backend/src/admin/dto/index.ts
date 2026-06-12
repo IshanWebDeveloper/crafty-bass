@@ -1,6 +1,6 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { PromotionRuleType, PromotionType, Role } from '@prisma/client';
+import { PromotionRuleType, PromotionType, Role } from '@repo/db';
 
 const IsoDateStringSchema = z
   .string()

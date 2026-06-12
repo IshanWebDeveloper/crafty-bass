@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@repo/db": ["packages/db/src/index.ts"],
       "@repo/shared-types": ["packages/shared-types/src/index.ts"],
       "@repo/validation": ["packages/validation/src/index.ts"],
       "@repo/ui": ["packages/ui/src/index.ts"],
