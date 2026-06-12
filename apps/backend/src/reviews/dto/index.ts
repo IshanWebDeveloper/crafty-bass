@@ -19,8 +19,7 @@ const ReviewQuerySchema = z.object({
 export class ReviewQueryDto extends createZodDto(ReviewQuerySchema) {}
 
 const AdminReviewQuerySchema = ReviewQuerySchema.extend({
-  productId: z.string().uuid().optional(),
-  userId: z.string().min(1).optional(),
+  revieweeId: z.string().min(1).optional(),
   rating: z.coerce.number().int().min(1).max(5).optional(),
 });
 
