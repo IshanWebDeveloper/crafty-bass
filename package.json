@@ -13,7 +13,7 @@
     "lint:commit": "commitlint --edit",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "test": "nx run-many -t test --all",
-    "prisma:generate:all": "pnpm --filter backend prisma:generate && node scripts/prisma/update-generated-prisma-stamp.mjs",
+    "prisma:generate:all": "pnpm --filter @repo/db db:generate && node scripts/prisma/update-generated-prisma-stamp.mjs",
     "prisma:check:generated": "node scripts/prisma/check-generated-prisma-stamp.mjs",
     "affected:build": "nx affected -t build",
     "affected:lint": "nx affected -t lint",

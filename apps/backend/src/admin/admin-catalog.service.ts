@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '@repo/db';
 import { parse } from 'csv-parse/sync';
 import { z } from 'zod';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';

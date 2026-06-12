@@ -3,7 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@repo/db';
 import { S3Service } from '../admin/s3.service.js';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';

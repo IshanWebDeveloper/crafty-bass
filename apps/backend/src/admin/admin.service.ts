@@ -12,7 +12,7 @@ import {
   type PromotionRuleType,
   type PromotionType,
   type Role,
-} from '@prisma/client';
+} from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import type { DateRangeQueryDto, AuditLogQueryDto } from './dto/index.js';

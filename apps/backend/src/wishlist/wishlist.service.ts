@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@repo/db';
 import { S3Service } from '../admin/s3.service.js';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 

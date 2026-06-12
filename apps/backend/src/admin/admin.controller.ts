@@ -21,7 +21,7 @@ import {
   CreatePromotionDto,
   UpdatePromotionDto,
 } from './dto/index.js';
-import { Role } from '@prisma/client';
+import { Role } from '@repo/db';
 
 @ApiTags('Admin')
 @ApiBearerAuth()

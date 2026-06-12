@@ -4,7 +4,7 @@ import {
   ConflictException,
   ForbiddenException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import { OrdersService } from '../orders/orders.service.js';

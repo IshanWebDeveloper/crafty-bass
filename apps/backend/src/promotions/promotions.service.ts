@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import type { Promotion, PromotionType } from '@prisma/client';
+import { Prisma } from '@repo/db';
+import type { Promotion, PromotionType } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 
 interface PromotionResolutionResult {
