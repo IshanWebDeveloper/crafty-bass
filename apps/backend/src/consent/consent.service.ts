@@ -31,6 +31,9 @@ export class ConsentService {
     options?: GrantConsentOptions,
   ) {
     const grantedAt = options?.grantedAt ?? new Date().toISOString();
+    // The marketplace UserConsent model requires a consentVersion and no longer
+    // carries ipAddress/consentPayload columns (dropped in the schema migration).
+    const consentVersion = options?.consentVersion ?? '1.0';
 
     return this.prisma.userConsent.upsert({
       where: {
@@ -41,25 +44,13 @@ export class ConsentService {
         consentType,
         granted: true,
         grantedAt,
-        ipAddress: options?.ipAddress,
-        consentVersion: options?.consentVersion,
-        consentPayload: {
-          toJSON() {
-            return options?.consentPayload ?? {};
-          },
-        },
+        consentVersion,
       },
       update: {
         granted: true,
         grantedAt,
         revokedAt: null,
-        ipAddress: options?.ipAddress,
-        consentVersion: options?.consentVersion,
-        consentPayload: {
-          toJSON() {
-            return options?.consentPayload ?? {};
-          },
-        },
+        consentVersion,
       },
     });
   }

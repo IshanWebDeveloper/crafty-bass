@@ -12,9 +12,9 @@ export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    const categories = await this.prisma.category.findMany({
+    const categories = await this.prisma.serviceCategory.findMany({
       include: { children: true },
-      orderBy: { name: 'asc' },
+      orderBy: { nameEn: 'asc' },
     });
 
     // Build tree from flat list
@@ -34,12 +34,11 @@ export class CategoriesService {
   }
 
   async findBySlug(slug: string) {
-    const category = await this.prisma.category.findUnique({
+    const category = await this.prisma.serviceCategory.findUnique({
       where: { slug },
       include: {
         parent: true,
         children: true,
-        products: { where: { isActive: true }, take: 10 },
       },
     });
 
@@ -53,7 +52,7 @@ export class CategoriesService {
   async create(dto: CreateCategoryDto) {
     const slug = generateSlug(dto.name);
 
-    const existing = await this.prisma.category.findUnique({
+    const existing = await this.prisma.serviceCategory.findUnique({
       where: { slug },
     });
     if (existing) {
@@ -61,7 +60,7 @@ export class CategoriesService {
     }
 
     if (dto.parentId) {
-      const parent = await this.prisma.category.findUnique({
+      const parent = await this.prisma.serviceCategory.findUnique({
         where: { id: dto.parentId },
       });
       if (!parent) {
@@ -69,9 +68,9 @@ export class CategoriesService {
       }
     }
 
-    return this.prisma.category.create({
+    return this.prisma.serviceCategory.create({
       data: {
-        name: dto.name,
+        nameEn: dto.name,
         slug,
         parentId: dto.parentId ?? null,
       },
@@ -79,7 +78,7 @@ export class CategoriesService {
   }
 
   async update(id: string, dto: UpdateCategoryDto) {
-    const category = await this.prisma.category.findUnique({
+    const category = await this.prisma.serviceCategory.findUnique({
       where: { id },
     });
     if (!category) {
@@ -89,10 +88,10 @@ export class CategoriesService {
     const data: Record<string, unknown> = {};
 
     if (dto.name !== undefined) {
-      data.name = dto.name;
+      data.nameEn = dto.name;
       data.slug = generateSlug(dto.name);
 
-      const existing = await this.prisma.category.findUnique({
+      const existing = await this.prisma.serviceCategory.findUnique({
         where: { slug: data.slug as string },
       });
       if (existing && existing.id !== id) {
@@ -107,13 +106,13 @@ export class CategoriesService {
       data.parentId = dto.parentId;
     }
 
-    return this.prisma.category.update({ where: { id }, data });
+    return this.prisma.serviceCategory.update({ where: { id }, data });
   }
 
   async remove(id: string) {
-    const category = await this.prisma.category.findUnique({
+    const category = await this.prisma.serviceCategory.findUnique({
       where: { id },
-      include: { _count: { select: { children: true, products: true } } },
+      include: { _count: { select: { children: true, jobs: true } } },
     });
 
     if (!category) {
@@ -126,10 +125,10 @@ export class CategoriesService {
       );
     }
 
-    if (category._count.products > 0) {
-      throw new ConflictException('Cannot delete category with products');
+    if (category._count.jobs > 0) {
+      throw new ConflictException('Cannot delete category with linked jobs');
     }
 
-    return this.prisma.category.delete({ where: { id } });
+    return this.prisma.serviceCategory.delete({ where: { id } });
   }
 }
