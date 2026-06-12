@@ -6,11 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The Prisma schema (`apps/backend/prisma/schema.prisma`) has been rewritten for a **tradesman/homeowner marketplace** (models: `User`, `HomeownerProfile`, `TradesmanProfile`, `ServiceCategory`, `Skill`, `Job`, `Quote`, `Review`, `Conversation`, `Message`, `JobRecommendation`, `Report`; enums for `Role`, `UserType`, `JobStatus`, etc.).
 
-But `apps/backend/src/` still contains the **previous e-commerce modules** (`products/`, `cart/`, `orders/`, `payments/`, `wishlist/`, `promotions/`, `tax-rates/`, `reviews/`, `support/`). README's Phase 1 explicitly calls for rewiring modules around the new Prisma models. The Prisma schema and the README roadmap are authoritative for the domain; the legacy backend modules are scaffolding to replace.
+But `apps/backend/src/` is a **mix**: legacy e-commerce modules slated for deletion (`cart/`, `wishlist/`, `tax-rates/`, `promotions/`, `orders/`, `products/`, `payments/`, `support/`, `notifications/`) alongside modules kept or being rewritten for the marketplace (`users/`, `categories/`, `reviews/`, `recommendations/`, `consent/`, `legal/`, `admin/`). The authoritative inventory and sequencing live in **`apps/backend/LEGACY_SWEEP_PLAN.md`** (Phase A untangle the wiring → Phase B delete leaf modules → Phase C build out `profiles/`, `jobs/`, `quotes/`, `conversations/`, `messages/`, `reports/`). The Prisma schema, README roadmap, and that sweep plan are authoritative for the domain; the legacy backend modules are scaffolding to replace.
 
 ### Where the docs/code lie about the product
 
-Three places still describe a different product than the current target — don't trust them when inferring intent:
+Three places still describe a different product than the current target — don't trust them when inferring intent (the sweep plan's Phase D tracks fixing all three):
 
 - `apps/backend/src/auth-access.ts` — RBAC statements (`product`, `category`, `cart`, `order`, `coupon`, `payments`, `review`, `ticket`, `user`) and roles (`customer`, `support`, `admin`) are built for the old e-commerce domain. Will need rewriting alongside the schema migration.
 - `apps/backend/src/main.ts` — Swagger title is still "StreetGadgetz E-Commerce API".
@@ -23,9 +23,15 @@ Nx + pnpm monorepo with three apps:
 - `apps/frontend` — Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui
 - `apps/backend` — NestJS 11 + Prisma (PostgreSQL) + better-auth + BullMQ + Stripe
 - `apps/ai-service` — Python FastAPI + LangChain/LangGraph (LLM provider is `github` or `openai`)
-- `packages/shared-types/` — workspace package exposing Prisma-generated browser types via `packages/shared-types/src/generated/prisma/`
 
-`pnpm-workspace.yaml` includes `apps/*` and `packages/*` (no `packages/` exists yet — `shared-types` is at the root).
+…and five workspace packages under `packages/`, all scoped `@repo/*`:
+
+- `@repo/shared-types` — Prisma-generated browser types (`packages/shared-types/src/generated/prisma/`), consumed by both frontend and backend
+- `@repo/ui` — shared shadcn/ui primitives plus `cn`, `ThemeProvider`, `mode-toggle` (consumed by the frontend)
+- `@repo/validation` — shared Zod schemas
+- `@repo/eslint-config`, `@repo/prettier-config` — shared lint/format config
+
+`pnpm-workspace.yaml` includes `apps/*` and `packages/*`. (The `feat/monorepo-restrucuture` work moved `shared-types` into `packages/` and added the four other packages — older notes that say "`packages/` doesn't exist yet" are stale.)
 
 ## Common commands
 
@@ -116,20 +122,20 @@ Two frontend-only docs at `apps/frontend/`:
 
 Read both before touching frontend code. This root file deliberately does not duplicate them.
 
-Quick orientation: path alias `@/*` → `src/*`. Theming via `next-themes` + `ThemeProvider` (`src/components/theme-provider.tsx`). Tokens live in `src/app/globals.css` as CSS custom properties plus `@theme inline` aliases for Tailwind v4.
+Quick orientation: path alias `@/*` → `src/*`. Shared UI primitives now live in the `@repo/ui` package, **not** in local `src/components/` — import them from there (e.g. `import { Button, cn, ThemeProvider } from '@repo/ui'`). Theming via `next-themes` + `ThemeProvider` (now exported from `@repo/ui`; the old `src/components/theme-provider.tsx` is gone). Tokens live in `src/app/globals.css` as CSS custom properties plus `@theme inline` aliases for Tailwind v4.
 
 ### AI service (FastAPI + LangGraph)
 
 - Entry: `apps/ai-service/app/main.py`. Routes mounted under `settings.api_v1_str` (`/api/v1`).
 - Layered layout: `api/v1/routes/` → `services/` → `graphs/<name>/{graph,nodes,state}.py` → `infrastructure/llm/` and `infrastructure/prompts/`. Domain logic (e.g. `domain/classification/`) is separate from graph wiring.
 - Settings (`app/core/config.py`) load from `apps/ai-service/.env` via pydantic-settings. `LLM_PROVIDER` selects `github` or `openai`; the post-init validator enforces that the matching API key is set.
-- Endpoints: `POST /api/v1/assistant/chat`, `POST /api/v1/assistant/classify-job`, `GET /api/v1/assistant/info`, `GET /api/v1/health`.
+- Endpoints: `POST /api/v1/assistant/chat`, `POST /api/v1/assistant/chat/stream`, `POST /api/v1/assistant/classify-job`, `POST /api/v1/assistant/classify-jobs/batch`, `GET /api/v1/assistant/info`, `GET /api/v1/health`.
 - JWT verification helpers live in `app/api/deps/auth.py` and `app/core/auth.py` (PyJWT).
 - Pytest specs under `apps/ai-service/tests/`. `pyproject.toml` sets `asyncio_mode = "auto"`.
 
 ### Shared types
 
-`packages/shared-types/src/generated/prisma/browser.ts` is the browser-safe Prisma output consumed by the frontend. The SHA stamp at `packages/shared-types/src/generated/prisma/.schema-hash.json` is checked in CI — never edit it by hand; regenerate with `pnpm prisma:generate:all`.
+`packages/shared-types/src/generated/prisma/browser.ts` is the browser-safe Prisma output, published as `@repo/shared-types` and consumed by both frontend and backend. The SHA stamp at `packages/shared-types/src/generated/prisma/.schema-hash.json` is checked in CI — never edit it by hand; regenerate with `pnpm prisma:generate:all`.
 
 ## CI
 
