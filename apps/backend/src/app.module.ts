@@ -21,17 +21,8 @@ import { AppService } from './app.service.js';
 // Feature modules
 import { UsersModule } from './users/users.module.js';
 import { CategoriesModule } from './categories/categories.module.js';
-import { ProductsModule } from './products/products.module.js';
-import { CartModule } from './cart/cart.module.js';
-import { OrdersModule } from './orders/orders.module.js';
-import { PaymentsModule } from './payments/payments.module.js';
 import { ReviewsModule } from './reviews/reviews.module.js';
-import { WishlistModule } from './wishlist/wishlist.module.js';
-import { SupportModule } from './support/support.module.js';
-import { NotificationsModule } from './notifications/notifications.module.js';
 import { AdminModule } from './admin/admin.module.js';
-import { PromotionsModule } from './promotions/promotions.module.js';
-import { TaxRatesModule } from './tax-rates/tax-rates.module.js';
 import { RecommendationsModule } from './recommendations/recommendations.module.js';
 import { ConsentModule } from './consent/consent.module.js';
 import { LegalModule } from './legal/legal.module.js';
@@ -113,17 +104,8 @@ import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
     // Feature modules
     UsersModule,
     CategoriesModule,
-    ProductsModule,
-    CartModule,
-    OrdersModule,
-    PaymentsModule,
     ReviewsModule,
-    WishlistModule,
-    SupportModule,
-    NotificationsModule,
     AdminModule,
-    PromotionsModule,
-    TaxRatesModule,
     RecommendationsModule,
     ConsentModule,
     LegalModule,
