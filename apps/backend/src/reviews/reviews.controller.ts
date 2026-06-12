@@ -23,25 +23,22 @@ import {
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
-  @Post('products/:productId/reviews')
+  @Post('jobs/:jobId/reviews')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Submit a product review' })
+  @ApiOperation({ summary: 'Submit a review for a job counterparty' })
   create(
     @CurrentUser('id') userId: string,
-    @Param('productId') productId: string,
+    @Param('jobId') jobId: string,
     @Body() dto: CreateReviewDto,
   ) {
-    return this.reviewsService.create(userId, productId, dto);
+    return this.reviewsService.create(userId, jobId, dto);
   }
 
   @Public()
-  @Get('products/:productId/reviews')
-  @ApiOperation({ summary: 'List reviews for a product' })
-  findByProduct(
-    @Param('productId') productId: string,
-    @Query() query: ReviewQueryDto,
-  ) {
-    return this.reviewsService.findByProduct(productId, query);
+  @Get('jobs/:jobId/reviews')
+  @ApiOperation({ summary: 'List public reviews for a job' })
+  findForJob(@Param('jobId') jobId: string, @Query() query: ReviewQueryDto) {
+    return this.reviewsService.findForJob(jobId, query);
   }
 
   @Patch('reviews/:id')
