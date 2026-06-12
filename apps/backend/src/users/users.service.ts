@@ -9,8 +9,6 @@ import type { Role } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import type { UpdateProfileDto, UserListQueryDto } from './dto/index.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
-import { RecommendationsService } from '../recommendations/recommendations.service.js';
-import { PromotionsService } from '../promotions/promotions.service.js';
 import { S3Service } from '../admin/s3.service.js';
 
 const GDPR_EXPORT_DOWNLOAD_TTL_SECONDS = 15 * 60;
@@ -20,8 +18,6 @@ export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     @InjectQueue('gdpr-export') private readonly gdprExportQueue: Queue,
-    private readonly recommendationsService: RecommendationsService,
-    private readonly promotionsService: PromotionsService,
     private readonly s3Service: S3Service,
   ) {}
 
@@ -51,87 +47,46 @@ export class UsersService {
       data: {
         ...(dto.name !== undefined && { name: dto.name }),
         ...(dto.phone !== undefined && { phone: dto.phone }),
-        ...(dto.shippingAddress !== undefined && {
-          shippingAddress: dto.shippingAddress,
-        }),
-        ...(dto.paymentPreferences !== undefined && {
-          paymentPreferences: dto.paymentPreferences,
-        }),
       },
     });
   }
 
   async getDashboard(userId: string) {
+    // Marketplace dashboard: a user's posted jobs (as homeowner), assigned jobs
+    // (as tradesman), and the reviews they have received. Replaces the legacy
+    // order/wishlist dashboard.
+    const ACTIVE_JOB_STATUSES = ['OPEN', 'ASSIGNED', 'IN_PROGRESS'] as const;
+
     const [
-      recentOrders,
-      wishlistData,
-      totalOrders,
-      pendingOrders,
-      totalSpent,
-      recommendations,
-      activePromotions,
+      recentPostedJobs,
+      totalPostedJobs,
+      activePostedJobs,
+      assignedJobs,
+      reviewsReceived,
     ] = await Promise.all([
-      this.prisma.order.findMany({
-        where: { userId },
+      this.prisma.job.findMany({
+        where: { homeownerId: userId },
         orderBy: { createdAt: 'desc' },
         take: 5,
-        include: {
-          items: {
-            include: {
-              variant: {
-                include: { product: { select: { name: true, slug: true } } },
-              },
-            },
-          },
+        include: { category: { select: { nameEn: true, slug: true } } },
+      }),
+      this.prisma.job.count({ where: { homeownerId: userId } }),
+      this.prisma.job.count({
+        where: {
+          homeownerId: userId,
+          status: { in: [...ACTIVE_JOB_STATUSES] },
         },
       }),
-      this.prisma.wishlist.findUnique({
-        where: { userId },
-        include: {
-          items: {
-            take: 4,
-            orderBy: { createdAt: 'desc' },
-            include: {
-              product: {
-                select: {
-                  id: true,
-                  name: true,
-                  slug: true,
-                  basePrice: true,
-                  brand: true,
-                  images: { take: 1, orderBy: { position: 'asc' } },
-                  variants: {
-                    select: { stock: true },
-                    take: 1,
-                  },
-                },
-              },
-            },
-          },
-          _count: { select: { items: true } },
-        },
-      }),
-      this.prisma.order.count({ where: { userId } }),
-      this.prisma.order.count({
-        where: { userId, status: { in: ['PENDING', 'AWAITING_PAYMENT'] } },
-      }),
-      this.prisma.order.aggregate({
-        where: { userId },
-        _sum: { totalAmount: true },
-      }),
-      this.recommendationsService.getRecommendations(userId),
-      this.promotionsService.getActivePromotions(),
+      this.prisma.job.count({ where: { assignedTradesmanId: userId } }),
+      this.prisma.review.count({ where: { revieweeId: userId } }),
     ]);
 
     return {
-      recentOrders,
-      wishlistItems: wishlistData?.items ?? [],
-      wishlistCount: wishlistData?._count?.items ?? 0,
-      totalOrders,
-      pendingOrders,
-      totalSpent: totalSpent._sum.totalAmount ?? 0,
-      recommendations,
-      activePromotions,
+      recentPostedJobs,
+      totalPostedJobs,
+      activePostedJobs,
+      assignedJobs,
+      reviewsReceived,
     };
   }
 
