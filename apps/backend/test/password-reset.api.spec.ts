@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, createDbAdapter } from '@repo/db';
 
 test.describe('Backend API: Password Reset Flow', () => {
   let prisma: PrismaClient;
@@ -9,7 +9,7 @@ test.describe('Backend API: Password Reset Flow', () => {
 
   test.beforeAll(async () => {
     // We connect to the real dev DB used by the running backend
-    prisma = new PrismaClient();
+    prisma = new PrismaClient({ adapter: createDbAdapter() });
 
     // Clean up previous test users if any
     await prisma.user.deleteMany({

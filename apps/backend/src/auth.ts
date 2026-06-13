@@ -1,4 +1,4 @@
-import { PrismaClient } from '@repo/db';
+import { prisma } from '@repo/db';
 import { APIError, betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin, openAPI, bearer, jwt } from 'better-auth/plugins';
@@ -13,8 +13,6 @@ import Stripe from 'stripe';
 import { Resend } from 'resend';
 import { EmailValidationService } from './common/services/email-validation.service.js';
 import { escapeHtml } from './common/utils/escape-html.util.js';
-
-const prisma = new PrismaClient();
 
 const defaultPort = process.env.PORT ?? '3005';
 const baseURL =

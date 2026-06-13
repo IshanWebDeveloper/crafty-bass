@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, createDbAdapter } from '@repo/db';
 
 import { vi, describe, it, expect, beforeAll, afterAll } from 'vitest';
 
@@ -38,7 +38,7 @@ describe('Authentication Flow (e2e)', () => {
       exclude: ['api/auth/{*path}'],
     });
 
-    prisma = new PrismaClient();
+    prisma = new PrismaClient({ adapter: createDbAdapter() });
     await app.init();
   });
 
