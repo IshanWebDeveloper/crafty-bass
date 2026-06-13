@@ -498,3 +498,31 @@ model Report {
   @@index([targetType, targetId])
   @@index([assigneeId])
 }
+
+enum WebhookEventStatus {
+  RECEIVED
+  ACCEPTED
+  IGNORED
+  PROCESSED
+  FAILED
+  REJECTED
+}
+
+// Audit trail for inbound third-party webhooks. A row is created on entry
+// (RECEIVED) and mark()-ed before each return, including on rejection, so the
+// admin surface has a complete record. Wired into the marketplace Stripe Connect
+// payout webhook when that is built (Phase C).
+model WebhookEvent {
+  id          String             @id @default(cuid())
+  source      String
+  eventType   String
+  status      WebhookEventStatus @default(RECEIVED)
+  signature   String?
+  payload     Json
+  error       String?            @db.Text
+  createdAt   DateTime           @default(now())
+  processedAt DateTime?
+
+  @@index([source, status])
+  @@index([createdAt])
+}

@@ -29,6 +29,7 @@ import { RecommendationsModule } from './recommendations/recommendations.module.
 import { ConsentModule } from './consent/consent.module.js';
 import { LegalModule } from './legal/legal.module.js';
 import { HealthModule } from './health/health.module.js';
+import { WebhooksModule } from './webhooks/webhooks.module.js';
 import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
 
 @Module({
@@ -125,6 +126,7 @@ import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
     ConsentModule,
     LegalModule,
     HealthModule,
+    WebhooksModule,
   ],
   controllers: [AppController],
   providers: [
