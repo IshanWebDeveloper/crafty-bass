@@ -2,15 +2,14 @@ import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import { writeFileSync } from 'node:fs';
-import type { Application, NextFunction, Request, Response } from 'express';
+import type { Application, Request } from 'express';
 import { cleanupOpenApiDoc } from 'nestjs-zod';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
-import { LoggerMiddleware } from './common/middleware/logger.middleware.js';
+import { Logger } from 'nestjs-pino';
 import { toNodeHandler } from 'better-auth/node';
 import { auth } from '@repo/auth';
-import { ConsoleLogger } from '@nestjs/common';
 
 const AUTH_ATTEMPT_PATH_PREFIXES = [
   '/sign-in',
@@ -36,20 +35,11 @@ function formatError(err: unknown): string {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     rawBody: true,
-    logger: new ConsoleLogger({
-      prefix: 'backend',
-      ['logLevels']: ['error', 'warn', 'debug', 'log'],
-      colors: true,
-      json: true,
-      forceConsole: true,
-      timestamp: true,
-    }),
+    bufferLogs: true,
   });
-  const loggerMiddleware = new LoggerMiddleware();
-
-  app.use((req: Request, res: Response, next: NextFunction) =>
-    loggerMiddleware.use(req, res, next),
-  );
+  // Route Nest's logger through pino (request logging handled by pino-http in
+  // LoggerModule), replacing the previous ConsoleLogger + LoggerMiddleware.
+  app.useLogger(app.get(Logger));
 
   // Security headers
   app.use(
@@ -73,7 +63,7 @@ async function bootstrap() {
 
   // Global API prefix
   app.setGlobalPrefix('api/v1', {
-    exclude: ['api/auth/{*path}'],
+    exclude: ['api/auth/{*path}', 'health'],
   });
 
   // Mount better-auth for Express 5 compatibility since @thallesp/nestjs-better-auth doesn't use the correct wildcard yet

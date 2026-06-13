@@ -6,9 +6,11 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bullmq';
+import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 
 import { auth } from '@repo/auth';
+import { loadEnv } from './config/env.js';
 import { PrismaModule } from './common/prisma/prisma.module.js';
 import { PermissionsGuard } from './common/guards/permissions.guard.js';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter.js';
@@ -26,12 +28,25 @@ import { AdminModule } from './admin/admin.module.js';
 import { RecommendationsModule } from './recommendations/recommendations.module.js';
 import { ConsentModule } from './consent/consent.module.js';
 import { LegalModule } from './legal/legal.module.js';
+import { HealthModule } from './health/health.module.js';
 import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
 
 @Module({
   imports: [
-    // Global config
-    ConfigModule.forRoot({ isGlobal: true }),
+    // Global config — Zod-validated env at boot (fails fast on missing/invalid)
+    ConfigModule.forRoot({ isGlobal: true, validate: loadEnv }),
+
+    // Structured logging (pino). pino-http logs requests; redacts auth headers.
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+        transport:
+          process.env.NODE_ENV !== 'production'
+            ? { target: 'pino-pretty', options: { singleLine: true } }
+            : undefined,
+        redact: ['req.headers.authorization', 'req.headers.cookie'],
+      },
+    }),
 
     // Event Emitter
     EventEmitterModule.forRoot(),
@@ -109,6 +124,7 @@ import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
     RecommendationsModule,
     ConsentModule,
     LegalModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [
