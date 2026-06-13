@@ -374,6 +374,18 @@ exports.Prisma.ReportScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.WebhookEventScalarFieldEnum = {
+  id: 'id',
+  source: 'source',
+  eventType: 'eventType',
+  status: 'status',
+  signature: 'signature',
+  payload: 'payload',
+  error: 'error',
+  createdAt: 'createdAt',
+  processedAt: 'processedAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -381,6 +393,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull,
 };
 
@@ -468,6 +484,15 @@ exports.ReportStatus = exports.$Enums.ReportStatus = {
   DISMISSED: 'DISMISSED',
 };
 
+exports.WebhookEventStatus = exports.$Enums.WebhookEventStatus = {
+  RECEIVED: 'RECEIVED',
+  ACCEPTED: 'ACCEPTED',
+  IGNORED: 'IGNORED',
+  PROCESSED: 'PROCESSED',
+  FAILED: 'FAILED',
+  REJECTED: 'REJECTED',
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
@@ -488,6 +513,7 @@ exports.Prisma.ModelName = {
   Review: 'Review',
   JobRecommendation: 'JobRecommendation',
   Report: 'Report',
+  WebhookEvent: 'WebhookEvent',
 };
 
 /**
