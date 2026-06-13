@@ -8,7 +8,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bullmq';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 
-import { auth } from './auth.js';
+import { auth } from '@repo/auth';
 import { PrismaModule } from './common/prisma/prisma.module.js';
 import { PermissionsGuard } from './common/guards/permissions.guard.js';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter.js';

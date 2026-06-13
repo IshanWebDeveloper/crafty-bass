@@ -7,12 +7,15 @@ import {
   admin as adminRole,
   customer as customerRole,
   support as supportRole,
-} from './auth-access.js';
+} from './access.js';
+// Re-export the access-control statements so the backend RBAC types import them
+// from @repo/auth alongside the auth instance.
+export { statements } from './access.js';
 import { stripe } from '@better-auth/stripe';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
-import { EmailValidationService } from './common/services/email-validation.service.js';
-import { escapeHtml } from './common/utils/escape-html.util.js';
+import { hasValidMxRecords } from './email-validation.js';
+import { escapeHtml } from './escape-html.js';
 
 const defaultPort = process.env.PORT ?? '3005';
 const baseURL =
@@ -21,7 +24,6 @@ const secret = process.env.BETTER_AUTH_SECRET;
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-const emailValidationService = new EmailValidationService();
 
 // Configure Resend if API key is available
 const resendApiKey = process.env.RESEND_API_KEY;
@@ -269,7 +271,7 @@ export const auth = betterAuth({
             context?.path !== '/sign-up/email' ||
             typeof user.email !== 'string' ||
             process.env.NODE_ENV === 'test' ||
-            (await emailValidationService.hasValidMxRecords(user.email))
+            (await hasValidMxRecords(user.email))
           ) {
             return;
           }

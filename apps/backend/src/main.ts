@@ -9,7 +9,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
 import { LoggerMiddleware } from './common/middleware/logger.middleware.js';
 import { toNodeHandler } from 'better-auth/node';
-import { auth } from './auth.js';
+import { auth } from '@repo/auth';
 import { ConsoleLogger } from '@nestjs/common';
 
 const AUTH_ATTEMPT_PATH_PREFIXES = [

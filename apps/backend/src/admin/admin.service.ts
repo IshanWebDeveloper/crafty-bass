@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { type Role } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
-import { auth } from '../auth.js';
+import { auth } from '@repo/auth';
 import { AuthService } from '@thallesp/nestjs-better-auth';
 
 type CreateUserInput = {
