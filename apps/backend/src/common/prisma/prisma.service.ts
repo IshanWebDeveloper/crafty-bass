@@ -4,7 +4,7 @@ import {
   OnModuleInit,
   OnModuleDestroy,
 } from '@nestjs/common';
-import { PrismaClient } from '@repo/db';
+import { PrismaClient, createDbAdapter } from '@repo/db';
 
 @Injectable()
 export class PrismaService
@@ -15,6 +15,7 @@ export class PrismaService
 
   constructor() {
     super({
+      adapter: createDbAdapter(),
       log: [
         { emit: 'event', level: 'query' },
         { emit: 'stdout', level: 'warn' },
