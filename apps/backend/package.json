@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
+  "type": "module",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
@@ -13,13 +14,12 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/main.js",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" --fix",
-    "test": "dotenv -e .env.test -- jest",
-    "test:watch": "dotenv -e .env.test -- jest --watch",
-    "test:cov": "dotenv -e .env.test -- jest --coverage",
-    "test:debug": "dotenv -e .env.test -- node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "dotenv -e .env.test -- jest --config ./test/jest-e2e.json"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest",
+    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest --watch",
+    "test:cov": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest --coverage",
+    "test:e2e": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.999.0",
@@ -82,6 +82,7 @@
     "@types/sanitize-html": "^2.16.0",
     "@types/supertest": "^6.0.2",
     "@vitest/coverage-v8": "4.0.18",
+    "cross-env": "^10.1.0",
     "@repo/eslint-config": "workspace:^",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9.18.0",
@@ -113,8 +114,16 @@
     ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
     },
     "moduleNameMapper": {
       "^(\\.\\.?/.*)\\.js$": "$1"
