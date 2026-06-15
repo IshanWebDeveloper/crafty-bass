@@ -6,6 +6,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bullmq';
+import { CacheModule } from '@nestjs/cache-manager';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 
@@ -85,6 +86,10 @@ import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
 
     // Database
     PrismaModule,
+
+    // Caching — in-memory global cache (CacheInterceptor needs CACHE_MANAGER).
+    // TODO: restore Redis-backed registerAsync (below) once Redis is wired for dev.
+    CacheModule.register({ isGlobal: true }),
 
     // Caching (Upstash-compatible with TLS)
     // CacheModule.registerAsync({
