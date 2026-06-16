@@ -124,6 +124,18 @@ Read both before touching frontend code. This root file deliberately does not du
 
 Quick orientation: path alias `@/*` → `src/*`. Shared UI primitives now live in the `@repo/ui` package, **not** in local `src/components/` — import them from there (e.g. `import { Button, cn, ThemeProvider } from '@repo/ui'`). Theming via `next-themes` + `ThemeProvider` (now exported from `@repo/ui`; the old `src/components/theme-provider.tsx` is gone). Tokens live in `src/app/globals.css` as CSS custom properties plus `@theme inline` aliases for Tailwind v4.
 
+`@repo/ui` is consumed **from source** — its `package.json` `exports` point at `./src/*` (not `dist`), so editing a primitive in `packages/ui/src/` is picked up by the frontend's HMR with no rebuild. `@repo/ui` primitives wrap **`@base-ui/react`** (not Radix). With base-ui, compose a custom element into a trigger/slot via the **`render` prop**, never by nesting — e.g. `<DropdownMenuTrigger render={<Button … />} />`. Nesting (`<DropdownMenuTrigger><Button/></DropdownMenuTrigger>`) renders two `<button>`s and throws a "`<button>` cannot be a descendant of `<button>`" hydration error (this is exactly what bit `mode-toggle.tsx`).
+
+#### Debugging dev-server errors with the Next.js DevTools MCP
+
+Next.js 16 exposes an MCP endpoint per running dev server. To diagnose runtime/build/hydration errors, prefer this over guessing or scraping logs:
+
+1. `init` (next-devtools) — required first call per session.
+2. `nextjs_index` — discovers running servers. Frontend is `3000`; when 3000 is taken (e.g. frontend already running) the **admin** app comes up on `3001`.
+3. `nextjs_call` with `toolName: "get_errors"` (port `3000`/`3001`) — returns source-mapped runtime + build errors. `get_errors` reports per **browser session**, so a page must be open; if it says "No browser sessions connected", load the page first. Other tools: `get_logs`, `get_routes`, `get_page_metadata`, `get_project_metadata`.
+4. Fix in source (for `@repo/ui` issues, edit `packages/ui/src/` — HMR applies it live).
+5. Verify with `browser_eval`: `start` → `navigate` to the page → `console_messages { errorsOnly: true }`, then re-run `get_errors` to confirm zero. `browser_eval` writes a `.playwright-mcp/` artifact dir — delete it when done.
+
 ### AI service (FastAPI + LangGraph)
 
 - Entry: `apps/ai-service/app/main.py`. Routes mounted under `settings.api_v1_str` (`/api/v1`).
