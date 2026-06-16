@@ -1,5 +1,6 @@
 import { buttonVariants, cn } from '@repo/ui';
 import Link from 'next/link';
+import type { Locale } from '@/i18n/config';
 
 const services = [
   { label: 'Kitchen tap leak', meta: '28 plumbers nearby', highlighted: true },
@@ -8,7 +9,7 @@ const services = [
   { label: 'Bathroom tiling', meta: '33 matches', highlighted: false },
 ];
 
-export function JobSearchPanel() {
+export function JobSearchPanel({ locale }: { locale: Locale }) {
   return (
     <div className="w-full rounded-lg border border-border bg-card p-8 shadow-[0px_1px_2px_0px_rgba(9,9,10,0.06)]">
       <h2 className="text-2xl font-bold tracking-tight text-foreground">
@@ -37,7 +38,7 @@ export function JobSearchPanel() {
         ))}
       </ul>
       <Link
-        href="/trades"
+        href={`/${locale}/trades`}
         className={cn(
           buttonVariants({ size: 'lg' }),
           'mt-6 h-11 w-full rounded-md text-sm',

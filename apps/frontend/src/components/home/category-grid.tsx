@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { Locale } from '@/i18n/config';
 
 const categories = [
   {
@@ -27,14 +28,14 @@ const categories = [
   },
 ];
 
-export function CategoryGrid() {
+export function CategoryGrid({ locale }: { locale: Locale }) {
   return (
     <section className="mx-auto max-w-7xl px-6 pb-20 lg:px-14">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {categories.map((category) => (
           <Link
             key={category.title}
-            href={category.href}
+            href={`/${locale}${category.href}`}
             className="group flex flex-col rounded-xl border border-border bg-card p-6 shadow-[0px_10px_30px_-14px_rgba(18,25,22,0.1)] transition-colors hover:border-foreground/20"
           >
             <h3 className="text-xl font-semibold text-foreground">
