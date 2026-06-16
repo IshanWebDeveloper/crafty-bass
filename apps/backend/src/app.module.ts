@@ -25,6 +25,7 @@ import { AppService } from './app.service.js';
 import { UsersModule } from './users/users.module.js';
 import { CategoriesModule } from './categories/categories.module.js';
 import { ProfilesModule } from './profiles/profiles.module.js';
+import { JobsModule } from './jobs/jobs.module.js';
 import { ReviewsModule } from './reviews/reviews.module.js';
 import { AdminModule } from './admin/admin.module.js';
 import { RecommendationsModule } from './recommendations/recommendations.module.js';
@@ -127,6 +128,7 @@ import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
     UsersModule,
     CategoriesModule,
     ProfilesModule,
+    JobsModule,
     ReviewsModule,
     AdminModule,
     RecommendationsModule,
