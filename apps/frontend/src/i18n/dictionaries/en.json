@@ -1,0 +1,22 @@
+{
+  "header": {
+    "findTrades": "Find trades",
+    "postJob": "Post a job",
+    "quotes": "Quotes",
+    "messages": "Messages",
+    "signIn": "Sign in",
+    "getStarted": "Get started"
+  },
+  "hero": {
+    "badge": "Verified local trades",
+    "title": "Book trusted tradespeople without the quote chaos.",
+    "subtitle": "Post a job, compare transparent quotes, chat securely, and approve work with homeowner protections built in.",
+    "postJob": "Post a job",
+    "browseTrades": "Browse trades",
+    "stats": {
+      "activeTrades": "active trades",
+      "avgResponse": "avg. response",
+      "verifiedReviews": "verified reviews"
+    }
+  }
+}
