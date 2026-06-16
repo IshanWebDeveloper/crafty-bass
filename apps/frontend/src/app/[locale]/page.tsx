@@ -17,7 +17,7 @@ export default async function Home({
       <SiteHeader locale={locale} dict={dict} />
       <main className="flex-1">
         <HeroSection locale={locale} dict={dict} />
-        <CategoryGrid locale={locale} />
+        <CategoryGrid locale={locale} dict={dict} />
       </main>
     </div>
   );
