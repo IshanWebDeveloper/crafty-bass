@@ -7,9 +7,9 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "noImplicitOverride": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "types": ["node"]
   },
-  "files": [],
-  "include": [],
-  "references": [{ "path": "./tsconfig.lib.json" }]
+  "include": ["src/**/*.ts", "prisma.config.ts"]
 }

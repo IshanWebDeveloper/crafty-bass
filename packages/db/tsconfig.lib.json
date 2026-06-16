@@ -5,6 +5,7 @@
     "moduleResolution": "nodenext",
     "outDir": "dist",
     "rootDir": "src",
+    "noEmit": false,
     "declaration": true,
     "skipLibCheck": true,
     "types": ["node"]
