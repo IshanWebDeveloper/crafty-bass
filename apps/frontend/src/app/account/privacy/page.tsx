@@ -7,9 +7,6 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPage() {
-  const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3005/api/v1';
-
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-6 py-16">
       <header className="flex flex-col gap-2">
@@ -21,7 +18,7 @@ export default function PrivacyPage() {
           retained for 24 hours and then deleted automatically.
         </p>
       </header>
-      <PrivacyActions apiBaseUrl={apiBaseUrl} />
+      <PrivacyActions />
     </main>
   );
 }

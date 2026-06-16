@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@repo/ui';
+import { apiFetch, ApiError } from '@/lib/api';
 
 type Status =
   | { kind: 'idle' }
@@ -9,11 +10,7 @@ type Status =
   | { kind: 'success'; message: string }
   | { kind: 'error'; message: string };
 
-type Props = {
-  apiBaseUrl: string;
-};
-
-export function PrivacyActions({ apiBaseUrl }: Props) {
+export function PrivacyActions() {
   const [requestStatus, setRequestStatus] = useState<Status>({ kind: 'idle' });
   const [downloadStatus, setDownloadStatus] = useState<Status>({
     kind: 'idle',
@@ -22,13 +19,7 @@ export function PrivacyActions({ apiBaseUrl }: Props) {
   async function requestExport() {
     setRequestStatus({ kind: 'pending', message: 'Queuing export…' });
     try {
-      const response = await fetch(`${apiBaseUrl}/users/me/export`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
+      await apiFetch('/users/me/export');
       setRequestStatus({
         kind: 'success',
         message:
@@ -49,22 +40,9 @@ export function PrivacyActions({ apiBaseUrl }: Props) {
       message: 'Requesting download link…',
     });
     try {
-      const response = await fetch(
-        `${apiBaseUrl}/users/me/gdpr-exports/latest/download-url`,
-        { method: 'GET', credentials: 'include' },
+      const data = await apiFetch<{ downloadUrl?: unknown }>(
+        '/users/me/gdpr-exports/latest/download-url',
       );
-      if (response.status === 404) {
-        setDownloadStatus({
-          kind: 'error',
-          message:
-            'No export is ready yet. Request one above and wait for the email.',
-        });
-        return;
-      }
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-      const data = (await response.json()) as { downloadUrl?: unknown };
       if (typeof data.downloadUrl !== 'string') {
         throw new Error('Server returned an invalid download URL');
       }
@@ -75,6 +53,14 @@ export function PrivacyActions({ apiBaseUrl }: Props) {
       });
       window.location.href = data.downloadUrl;
     } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        setDownloadStatus({
+          kind: 'error',
+          message:
+            'No export is ready yet. Request one above and wait for the email.',
+        });
+        return;
+      }
       setDownloadStatus({
         kind: 'error',
         message:
