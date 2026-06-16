@@ -54,7 +54,7 @@ export function HeroSection({
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="rounded-xl border border-border bg-card p-5 shadow-[0px_10px_30px_-14px_rgba(18,25,22,0.1)]"
+              className="rounded-xl border border-border bg-card p-5 shadow-card"
             >
               <dt className="sr-only">{stat.label}</dt>
               <dd>

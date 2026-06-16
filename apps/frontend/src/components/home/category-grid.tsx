@@ -36,7 +36,7 @@ export function CategoryGrid({ locale }: { locale: Locale }) {
           <Link
             key={category.title}
             href={`/${locale}${category.href}`}
-            className="group flex flex-col rounded-xl border border-border bg-card p-6 shadow-[0px_10px_30px_-14px_rgba(18,25,22,0.1)] transition-colors hover:border-foreground/20"
+            className="group flex flex-col rounded-xl border border-border bg-card p-6 shadow-card transition-colors hover:border-foreground/20"
           >
             <h3 className="text-xl font-semibold text-foreground">
               {category.title}

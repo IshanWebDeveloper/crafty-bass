@@ -11,7 +11,7 @@ const services = [
 
 export function JobSearchPanel({ locale }: { locale: Locale }) {
   return (
-    <div className="w-full rounded-lg border border-border bg-card p-8 shadow-[0px_1px_2px_0px_rgba(9,9,10,0.06)]">
+    <div className="w-full rounded-lg border border-border bg-card p-8 shadow-soft">
       <h2 className="text-2xl font-bold tracking-tight text-foreground">
         What needs fixing?
       </h2>
