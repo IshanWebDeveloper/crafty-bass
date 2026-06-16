@@ -1,4 +1,17 @@
 import { Checkbox, ModeToggle, Button } from '@repo/ui';
+import { AppSidebar } from '@repo/ui/components/app-sidebar';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+} from '@repo/ui/components/ui/breadcrumb';
+import { Separator } from '@repo/ui/components/ui/separator';
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@repo/ui/components/ui/sidebar';
 
 const stats = [
   { label: 'Open reports', value: '12' },
@@ -8,44 +21,57 @@ const stats = [
 
 export default function AdminHome() {
   return (
-    <main className="min-h-screen bg-background">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Crafty Bass</p>
-            <h1 className="text-2xl font-semibold">Admin</h1>
-          </div>
-          <ModeToggle />
-        </div>
-      </header>
-      <section className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8">
-        <div className="grid gap-4 md:grid-cols-3">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-lg border border-border p-4"
-            >
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
-              <p className="mt-2 text-3xl font-semibold">{stat.value}</p>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex w-full items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-vertical:h-4 data-vertical:self-auto"
+            />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Overview</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+            <div className="ml-auto">
+              <ModeToggle />
             </div>
-          ))}
-        </div>
-        <div className="rounded-lg border border-border p-4">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-lg font-medium">Review queue</h2>
-              <p className="text-sm text-muted-foreground">
-                Triage reports, profile checks, and marketplace quality tasks.
-              </p>
-            </div>
-            <Button>Open queue</Button>
           </div>
-          <label className="mt-6 flex items-center gap-2 text-sm">
-            <Checkbox aria-label="Show urgent items only" />
-            Show urgent items only
-          </label>
+        </header>
+        <div className="flex flex-1 flex-col gap-6 p-6">
+          <div className="grid gap-4 md:grid-cols-3">
+            {stats.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-xl border border-border p-4"
+              >
+                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <p className="mt-2 text-3xl font-semibold">{stat.value}</p>
+              </div>
+            ))}
+          </div>
+          <div className="rounded-xl border border-border p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-medium">Review queue</h2>
+                <p className="text-sm text-muted-foreground">
+                  Triage reports, profile checks, and marketplace quality tasks.
+                </p>
+              </div>
+              <Button>Open queue</Button>
+            </div>
+            <label className="mt-6 flex items-center gap-2 text-sm">
+              <Checkbox aria-label="Show urgent items only" />
+              Show urgent items only
+            </label>
+          </div>
         </div>
-      </section>
-    </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
