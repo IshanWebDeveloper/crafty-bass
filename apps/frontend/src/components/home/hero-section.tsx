@@ -70,7 +70,7 @@ export function HeroSection({
         </dl>
       </div>
       <div className="flex items-start lg:justify-end">
-        <JobSearchPanel locale={locale} />
+        <JobSearchPanel locale={locale} dict={dict} />
       </div>
     </section>
   );
