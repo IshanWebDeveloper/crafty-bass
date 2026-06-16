@@ -1,6 +1,13 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { cn, ThemeProvider } from '@repo/ui';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Crafty Bass',
@@ -15,7 +22,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn('h-full', 'antialiased', 'font-sans')}
+      className={cn(inter.variable, 'h-full', 'antialiased', 'font-sans')}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
