@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Avatar,
@@ -17,6 +18,7 @@ import {
   rejectQuote,
   type Quote,
 } from '@/lib/api/quotes';
+import { startConversation } from '@/lib/api/conversations';
 import { useSession } from '@/lib/auth-client';
 import { SubmitQuotePanel } from './submit-quote-panel';
 import type { Locale } from '@/i18n/config';
@@ -31,10 +33,12 @@ export function JobDetailView({
   dict: Dictionary;
   jobId: string;
 }) {
+  const router = useRouter();
   const qc = useQueryClient();
   const { data: session } = useSession();
   const t = dict.jobs;
   const tq = dict.quotes;
+  const tc = dict.chat;
 
   const { data: job, isLoading } = useQuery({
     queryKey: ['jobs', jobId],
@@ -169,6 +173,27 @@ export function JobDetailView({
                     onReject={() => rejectMutation.mutate(quote.id)}
                     acceptPending={acceptMutation.isPending}
                     rejectPending={rejectMutation.isPending}
+                    onMessage={async () => {
+                      try {
+                        const result = await startConversation({
+                          type: 'JOB_DIRECT',
+                          jobId: job.id,
+                          recipientId: quote.tradesman.id,
+                          body: tc.started,
+                        });
+                        toast.success(tc.started);
+                        router.push(
+                          `/${locale}/messages/${result.conversation.id}`,
+                        );
+                      } catch (err) {
+                        toast.error(
+                          err instanceof Error
+                            ? err.message
+                            : 'Failed to start conversation',
+                        );
+                      }
+                    }}
+                    messageLabel={tc.startCtaTradesman}
                   />
                 ))}
               </ul>
@@ -206,6 +231,8 @@ function QuoteRow({
   onReject,
   acceptPending,
   rejectPending,
+  onMessage,
+  messageLabel,
 }: {
   quote: Quote;
   job: Job;
@@ -215,6 +242,8 @@ function QuoteRow({
   onReject: () => void;
   acceptPending: boolean;
   rejectPending: boolean;
+  onMessage: () => void;
+  messageLabel: string;
 }) {
   const tq = dict.quotes;
   const profile = quote.tradesman.tradesmanProfile;
@@ -296,6 +325,9 @@ function QuoteRow({
             </Button>
           </div>
         ) : null}
+        <Button size="sm" variant="ghost" onClick={onMessage}>
+          {messageLabel}
+        </Button>
       </div>
     </li>
   );
