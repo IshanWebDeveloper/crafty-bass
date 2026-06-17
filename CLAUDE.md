@@ -2,19 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Read this first: the repo is mid-migration
+## Domain
 
-The Prisma schema (`apps/backend/prisma/schema.prisma`) has been rewritten for a **tradesman/homeowner marketplace** (models: `User`, `HomeownerProfile`, `TradesmanProfile`, `ServiceCategory`, `Skill`, `Job`, `Quote`, `Review`, `Conversation`, `Message`, `JobRecommendation`, `Report`; enums for `Role`, `UserType`, `JobStatus`, etc.).
-
-But `apps/backend/src/` is a **mix**: legacy e-commerce modules slated for deletion (`cart/`, `wishlist/`, `tax-rates/`, `promotions/`, `orders/`, `products/`, `payments/`, `support/`, `notifications/`) alongside modules kept or being rewritten for the marketplace (`users/`, `categories/`, `reviews/`, `recommendations/`, `consent/`, `legal/`, `admin/`). The authoritative inventory and sequencing live in **`apps/backend/LEGACY_SWEEP_PLAN.md`** (Phase A untangle the wiring → Phase B delete leaf modules → Phase C build out `profiles/`, `jobs/`, `quotes/`, `conversations/`, `messages/`, `reports/`). The Prisma schema, README roadmap, and that sweep plan are authoritative for the domain; the legacy backend modules are scaffolding to replace.
-
-### Where the docs/code lie about the product
-
-Three places still describe a different product than the current target — don't trust them when inferring intent (the sweep plan's Phase D tracks fixing all three):
-
-- `apps/backend/src/auth-access.ts` — RBAC statements (`product`, `category`, `cart`, `order`, `coupon`, `payments`, `review`, `ticket`, `user`) and roles (`customer`, `support`, `admin`) are built for the old e-commerce domain. Will need rewriting alongside the schema migration.
-- `apps/backend/src/main.ts` — Swagger title is still "StreetGadgetz E-Commerce API".
-- `apps/ai-service/pyproject.toml` — description still references "local Ollama workflows", but `LLM_PROVIDER` in `app/core/config.py` is typed `Literal["github", "openai"]` only.
+The Prisma schema (`apps/backend/prisma/schema.prisma`) and `apps/backend/src/` describe a **tradesman/homeowner marketplace**. Core models: `User`, `HomeownerProfile`, `TradesmanProfile`, `ServiceCategory`, `Skill`, `Job`, `Quote`, `Review`, `Conversation`, `Message`, `JobRecommendation`, `Report`; enums for `Role`, `UserType`, `JobStatus`, etc. Backend modules live under `apps/backend/src/{users,profiles,jobs,quotes,categories,reviews,recommendations,consent,legal,admin}`. RBAC statements/roles live in `packages/auth/src/access.ts` (statements: `profile`, `job`, `quote`, `conversation`, `message`, `review`, `report`, `recommendation`, `category`, `user`; roles: `customer`, `support`, `admin`). The legacy e-commerce sweep (`apps/backend/LEGACY_SWEEP_PLAN.md`) is complete; the remaining marketplace modules (`conversations/`, `messages/`, `reports/`) ship in their own PRs.
 
 ## Repository
 

@@ -6,18 +6,18 @@ import type { UpdatePrivacyPolicyDto } from './dto/index.js';
 const PRIVACY_POLICY_KEY = 'privacy_policy';
 const DEFAULT_PRIVACY_POLICY_VERSION = '2026-03-31';
 
-const DEFAULT_PRIVACY_POLICY_CONTENT = `# StreetGadgetz Privacy Policy (UK GDPR)
+const DEFAULT_PRIVACY_POLICY_CONTENT = `# Crafty Bass Privacy Policy (UK GDPR)
 
 Last updated: 31 March 2026
 
 ## 1. Who We Are
-StreetGadgetz is the data controller for personal data processed through this platform.
+Crafty Bass is the data controller for personal data processed through this marketplace, which connects homeowners with tradesmen.
 
 ## 2. What We Collect
-We collect account details, order and payment records, delivery information, support communications, and service usage data needed to operate the store.
+We collect account details, profile information (including verification documents for tradesmen), job postings, quotes, messages between users, reviews, and service usage data needed to operate the marketplace.
 
 ## 3. Why We Process Data
-We process personal data to fulfil orders, provide customer support, secure accounts, meet legal obligations, and improve service quality.
+We process personal data to match homeowners with tradesmen, facilitate quotes and communication, support reviews and disputes, secure accounts, meet legal obligations, and improve service quality.
 
 ## 4. Lawful Bases (UK GDPR)
 Our processing relies on contract performance, legal obligations, legitimate interests, and consent where required.
@@ -26,7 +26,7 @@ Our processing relies on contract performance, legal obligations, legitimate int
 Essential cookies are required for core site functionality. Non-essential cookies (analytics and marketing) are only used based on your preferences.
 
 ## 6. Data Sharing
-We share data only with trusted processors needed for payments, delivery, communications, and platform operations under appropriate safeguards.
+We share data only with trusted processors needed for identity verification, communications, and platform operations under appropriate safeguards. Job details visible to tradesmen are limited to what is necessary to submit a quote.
 
 ## 7. International Transfers
 Where transfers outside the UK occur, we apply lawful safeguards such as adequacy decisions or approved contractual protections.
@@ -38,7 +38,7 @@ We retain personal data only as long as necessary for service delivery, legal co
 You may request access, correction, deletion, restriction, portability, and objection. You may also withdraw consent at any time.
 
 ## 10. Contact and Complaints
-For privacy requests, contact support through StreetGadgetz. You may also complain to the UK Information Commissioner's Office (ICO).
+For privacy requests, contact support through Crafty Bass. You may also complain to the UK Information Commissioner's Office (ICO).
 `;
 
 type LegalDocumentRecord = {

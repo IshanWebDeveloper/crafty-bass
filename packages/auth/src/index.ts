@@ -29,7 +29,7 @@ const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const resendApiKey = process.env.RESEND_API_KEY;
 const resend = resendApiKey ? new Resend(resendApiKey) : undefined;
 const emailFrom =
-  process.env.RESEND_FROM_EMAIL ?? 'StreetGadgets <onboarding@resend.dev>';
+  process.env.RESEND_FROM_EMAIL ?? 'Crafty Bass <onboarding@resend.dev>';
 
 // Only initialise Stripe if keys are configured
 const stripeClient = stripeSecretKey ? new Stripe(stripeSecretKey) : undefined;
@@ -153,7 +153,7 @@ export const auth = betterAuth({
       await resend.emails.send({
         to: user.email,
         from: emailFrom,
-        subject: 'Reset Your Password — StreetGadgets',
+        subject: 'Reset Your Password — Crafty Bass',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Password Reset Request</h2>
@@ -193,7 +193,7 @@ export const auth = betterAuth({
       await resend.emails.send({
         to: user.email,
         from: emailFrom,
-        subject: 'Verify Your Email — StreetGadgets',
+        subject: 'Verify Your Email — Crafty Bass',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Verify your email address</h2>
