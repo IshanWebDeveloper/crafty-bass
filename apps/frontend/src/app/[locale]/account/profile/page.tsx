@@ -1,5 +1,6 @@
 import { SiteHeader } from '@/components/layout/site-header';
 import { ProfileView } from '@/components/profile/profile-view';
+import { ReviewsReceivedPanel } from '@/components/reviews/reviews-received-panel';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
 
@@ -22,6 +23,9 @@ export default async function ProfilePage({
             <p className="text-sm text-muted-foreground">{t.subtitle}</p>
           </div>
           <ProfileView dict={dict} />
+          <div className="mt-8">
+            <ReviewsReceivedPanel locale={locale} dict={dict} />
+          </div>
         </div>
       </main>
     </div>

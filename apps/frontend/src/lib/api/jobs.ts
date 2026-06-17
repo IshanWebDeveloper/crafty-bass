@@ -22,6 +22,7 @@ export type JobListItem = {
   budgetMax: number | null;
   scheduledFor: string | null;
   createdAt: string;
+  assignedTradesmanId: string | null;
   category: { id: string; slug: string; nameEn: string } | null;
   homeowner: { id: string; name: string };
   _count: { quotes: number };

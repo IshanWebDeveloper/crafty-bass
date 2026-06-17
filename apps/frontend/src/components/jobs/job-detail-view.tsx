@@ -21,6 +21,8 @@ import {
 import { startConversation } from '@/lib/api/conversations';
 import { useSession } from '@/lib/auth-client';
 import { SubmitQuotePanel } from './submit-quote-panel';
+import { LeaveReviewPanel } from '@/components/reviews/leave-review-panel';
+import { PublicReviewsList } from '@/components/reviews/public-reviews-list';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -200,6 +202,16 @@ export function JobDetailView({
             )}
           </CardContent>
         </Card>
+      ) : null}
+
+      {job.status === 'COMPLETED' && session ? (
+        <>
+          {session.user.id === job.homeowner.id ||
+          session.user.id === job.assignedTradesmanId ? (
+            <LeaveReviewPanel jobId={job.id} dict={dict} />
+          ) : null}
+          <PublicReviewsList jobId={job.id} dict={dict} />
+        </>
       ) : null}
     </div>
   );

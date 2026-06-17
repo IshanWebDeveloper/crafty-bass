@@ -68,6 +68,17 @@ export class ReviewsService {
     });
   }
 
+  async findReceivedByUser(userId: string) {
+    return this.prisma.review.findMany({
+      where: { revieweeId: userId, isPublic: true },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        reviewer: { select: REVIEW_PARTY_SELECT },
+        job: { select: { id: true, title: true } },
+      },
+    });
+  }
+
   async findForJob(jobId: string, query: ReviewQueryDto) {
     const { page, limit, sortBy, order } = query;
     const skip = (page - 1) * limit;
