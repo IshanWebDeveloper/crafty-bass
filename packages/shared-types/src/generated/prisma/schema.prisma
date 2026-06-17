@@ -182,6 +182,19 @@ model Verification {
   @@map("verification")
 }
 
+// Better Auth's JWT plugin stores rotating sign/verify key pairs here.
+// Without this table the plugin fails at boot with
+// `Model jwks does not exist in the database`, which 500s sign-in.
+model Jwks {
+  id         String    @id @default(cuid())
+  publicKey  String    @db.Text
+  privateKey String    @db.Text
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime?
+
+  @@map("jwks")
+}
+
 model UserConsent {
   id             String    @id @default(cuid())
   userId         String
