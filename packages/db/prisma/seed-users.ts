@@ -7,9 +7,14 @@
  * passwords and should only be applied to a local dev database.
  *
  * Run: `pnpm --filter @repo/db db:seed:users`
- *   (loads apps/backend/.env via dotenv; NODE_ENV is forced to 'test' so
- *    better-auth's MX-record sanity check is skipped for the @example.com
- *    fixture addresses)
+ *   (loads apps/backend/.env via dotenv)
+ *
+ * NODE_ENV must be set to 'test' BEFORE `@repo/auth` is evaluated so its
+ * `databaseHooks.user.create.before` skips the MX-record sanity check for the
+ * @example.com fixture addresses. ESM hoists all `import` declarations above
+ * any side-effecting top-level statement, so we use `await import(...)` (top
+ * level await) instead of static imports — the env mutation runs first, then
+ * @repo/auth initialises, then better-auth's hook reads the patched value.
  *
  * Idempotent — re-running is a no-op for already-existing users (signup is
  * caught as a UNIQUE-email conflict; profiles/jobs upsert).
@@ -18,13 +23,17 @@
  */
 process.env.NODE_ENV ??= 'test';
 
-import { prisma } from '../src/index.js';
+const { prisma } = await import('../src/index.js');
 // Dev-only seed script: importing @repo/auth from @repo/db creates a build-time
 // circular dependency at the Nx workspace level. The script is never part of
 // the production graph (it's invoked through pnpm scripts, not built into
 // dist), so we silence the boundary rule here rather than restructure.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { auth } from '@repo/auth';
+const { auth } = await import('@repo/auth');
+
+// Mark this file as a module so TypeScript allows the top-level `await`
+// import calls above (TS1375). The script has no other exports.
+export {};
 
 const COMMON_PASSWORD = 'Password123!';
 
