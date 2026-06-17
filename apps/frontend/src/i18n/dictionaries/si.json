@@ -139,6 +139,50 @@
     "withdrawConfirm": "මෙම මිල ගණන ඉවත් කරන්නද?",
     "withdrawSuccess": "මිල ගණන ඉවත් කරන ලදී"
   },
+  "profile": {
+    "title": "පැතිකඩ",
+    "subtitle": "ඔබව සොයාගත හැකි ආකාරය හා ඔබට ලබා දිය හැකි දේ ගැන කියන්න.",
+    "loading": "පැතිකඩ පූරණය වෙමින්…",
+    "saved": "පැතිකඩ සුරැකිණ",
+    "chooseRole": {
+      "heading": "ඔබ Crafty Bass භාවිතා කරන්නේ කෙසේද?",
+      "subtitle": "ඔබේ භූමිකාව තෝරන්න. පසුව මෙතැනින් වෙනස් කළ හැකියි.",
+      "homeowner": "මම ගෘහ හිමියෙක්",
+      "homeownerCopy": "කාර්ය පළ කර ශිල්පීන් කුලියට ගන්න.",
+      "tradesman": "මම ශිල්පියෙක්",
+      "tradesmanCopy": "කාර්ය මත මිල ගණන් දී ව්‍යාපාරය වර්ධනය කරන්න.",
+      "continue": "ඉදිරියට"
+    },
+    "homeowner": {
+      "heading": "ගෘහ හිමියන් පැතිකඩ",
+      "submit": "පැතිකඩ සුරකින්න",
+      "submitting": "සුරකිමින්…"
+    },
+    "tradesman": {
+      "heading": "ශිල්පී පැතිකඩ",
+      "submit": "පැතිකඩ සුරකින්න",
+      "submitting": "සුරකිමින්…",
+      "bio": "කෙටි විස්තරය",
+      "bioPlaceholder": "ඔබ කරන්නේ කුමන කාර්යයන්ද?",
+      "yearsExperience": "අත්දැකීම් වසර",
+      "hourlyRate": "පැයක ගාස්තුව (විකල්ප)",
+      "serviceRadiusKm": "සේවා පරාසය (km)",
+      "skills": "කුසලතා",
+      "skillsHelp": "අදාළ සියල්ල තෝරන්න. ඕනෑම වේලාවක යාවත්කාලීන කළ හැකිය."
+    },
+    "fields": {
+      "locationText": "ලිපිනය (විකල්ප)",
+      "city": "නගරය",
+      "district": "දිස්ත්‍රික්කය",
+      "postalCode": "තැපැල් කේතය",
+      "preferredLanguage": "කැමති භාෂාව"
+    },
+    "languages": {
+      "EN": "ඉංග්‍රීසි",
+      "SI": "සිංහල",
+      "TA": "දෙමළ"
+    }
+  },
   "quotes": {
     "amount": "මුදල",
     "message": "පණිවිඩය",
