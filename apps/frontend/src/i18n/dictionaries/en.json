@@ -139,6 +139,50 @@
     "withdrawConfirm": "Withdraw this quote?",
     "withdrawSuccess": "Quote withdrawn"
   },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Tell people how to find you and what you can offer.",
+    "loading": "Loading your profile…",
+    "saved": "Profile saved",
+    "chooseRole": {
+      "heading": "How will you use Crafty Bass?",
+      "subtitle": "Pick the role that fits your activity. You can update later from this page.",
+      "homeowner": "I'm a homeowner",
+      "homeownerCopy": "Post jobs and hire tradespeople.",
+      "tradesman": "I'm a tradesman",
+      "tradesmanCopy": "Quote on jobs and grow your business.",
+      "continue": "Continue"
+    },
+    "homeowner": {
+      "heading": "Homeowner profile",
+      "submit": "Save profile",
+      "submitting": "Saving…"
+    },
+    "tradesman": {
+      "heading": "Tradesman profile",
+      "submit": "Save profile",
+      "submitting": "Saving…",
+      "bio": "Short bio",
+      "bioPlaceholder": "What kinds of work do you take on?",
+      "yearsExperience": "Years of experience",
+      "hourlyRate": "Hourly rate (optional)",
+      "serviceRadiusKm": "Service radius (km)",
+      "skills": "Skills",
+      "skillsHelp": "Choose all that apply. You can update this list any time."
+    },
+    "fields": {
+      "locationText": "Address (optional)",
+      "city": "City",
+      "district": "District",
+      "postalCode": "Postal code",
+      "preferredLanguage": "Preferred language"
+    },
+    "languages": {
+      "EN": "English",
+      "SI": "Sinhala",
+      "TA": "Tamil"
+    }
+  },
   "quotes": {
     "amount": "Amount",
     "message": "Message",
