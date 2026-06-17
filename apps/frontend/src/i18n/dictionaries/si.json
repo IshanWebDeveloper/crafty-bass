@@ -5,7 +5,59 @@
     "quotes": "මිල ගණන්",
     "messages": "පණිවිඩ",
     "signIn": "පිවිසෙන්න",
-    "getStarted": "ආරම්භ කරන්න"
+    "getStarted": "ආරම්භ කරන්න",
+    "dashboard": "උපකරණ පුවරුව",
+    "profile": "පැතිකඩ",
+    "privacy": "පෞද්ගලිකත්වය",
+    "signOut": "පිටවෙන්න"
+  },
+  "auth": {
+    "signIn": {
+      "title": "ආයුබෝවන් ආපසු",
+      "subtitle": "ඔබේ කාර්ය, මිල ගණන් සහ පණිවිඩ කළමනාකරණය කිරීමට පිවිසෙන්න.",
+      "submit": "පිවිසෙන්න",
+      "submitting": "පිවිසෙමින්…",
+      "forgotPassword": "මුරපදය අමතක ද?",
+      "noAccount": "ගිණුමක් නැද්ද?",
+      "createAccount": "එකක් සාදන්න",
+      "success": "පිවිසුණා"
+    },
+    "signUp": {
+      "title": "ඔබේ Crafty Bass ගිණුම සාදන්න",
+      "subtitle": "ගෘහ හිමියෙකු ලෙස කාර්ය පළ කරන්න හෝ ශිල්පියෙකු ලෙස මිල ගණන් දෙන්න.",
+      "submit": "ගිණුම සාදන්න",
+      "submitting": "සාදමින්…",
+      "haveAccount": "දැනටමත් ගිණුමක් තිබේද?",
+      "signInLink": "පිවිසෙන්න",
+      "success": "ගිණුම සාදන ලදී"
+    },
+    "fields": {
+      "name": "නම",
+      "email": "ඊමේල්",
+      "password": "මුරපදය",
+      "confirmPassword": "මුරපදය තහවුරු කරන්න"
+    },
+    "errors": {
+      "invalidCredentials": "වැරදි ඊමේල් හෝ මුරපදය",
+      "signUpFailed": "ගිණුම සෑදිය නොහැකි විය",
+      "sessionRequired": "ඉදිරියට යාමට පිවිසෙන්න"
+    }
+  },
+  "dashboard": {
+    "title": "ඔබේ උපකරණ පුවරුව",
+    "subtitle": "Crafty Bass හි ඔබේ ක්‍රියාකාරකම් සාරාංශය.",
+    "loading": "උපකරණ පුවරුව පූරණය වෙමින්…",
+    "empty": "තවම කිසිවක් නැත. ආරම්භ කිරීමට කාර්යයක් පළ කරන්න හෝ ශිල්පීන් සොයන්න.",
+    "stats": {
+      "postedJobs": "පළ කළ කාර්ය",
+      "activeJobs": "ක්‍රියාකාරී කාර්ය",
+      "assignedJobs": "ඔබට පවරා ඇති",
+      "reviewsReceived": "ලැබුණු සමාලෝචන"
+    },
+    "recent": {
+      "heading": "මෑත පළ කළ කාර්ය",
+      "viewAll": "සියල්ල බලන්න"
+    }
   },
   "hero": {
     "badge": "සත්‍යාපිත දේශීය ශිල්පීන්",
