@@ -59,6 +59,97 @@
       "viewAll": "සියල්ල බලන්න"
     }
   },
+  "jobs": {
+    "new": {
+      "title": "කාර්යයක් පළ කරන්න",
+      "subtitle": "කාර්යය විස්තර කරන්න, අපි ඔබව සත්‍යාපිත ශිල්පීන් හා ගලපන්නෙමු.",
+      "submit": "කාර්යය පළ කරන්න",
+      "submitting": "පළ කරමින්…",
+      "success": "ඔබේ කාර්යය පළ කරන ලදී"
+    },
+    "fields": {
+      "title": "කාර්ය මාතෘකාව",
+      "titlePlaceholder": "උදා: බාත්රූම් ෂවර් මික්සරය ප්‍රතිස්ථාපනය කරන්න",
+      "description": "විස්තරය",
+      "descriptionPlaceholder": "කළ යුත්තේ කුමක්ද? ප්‍රවේශ සටහන්, සපයන ද්‍රව්‍ය ආදී දේ ඇතුළත් කරන්න.",
+      "descriptionLanguage": "ලියා ඇත්තේ",
+      "category": "කාණ්ඩය",
+      "categoryPlaceholder": "කාණ්ඩයක් තෝරන්න (විකල්ප)",
+      "urgency": "කොතරම් හදිසිද?",
+      "city": "නගරය",
+      "district": "දිස්ත්‍රික්කය",
+      "budgetMin": "අයවැය (අවම)",
+      "budgetMax": "අයවැය (උපරිම)",
+      "scheduledFor": "කැමති දිනය (විකල්ප)"
+    },
+    "urgencyLabels": {
+      "LOW": "ඉක්මන් නෑ",
+      "MEDIUM": "මේ සතියේ",
+      "HIGH": "අද / හෙට",
+      "EMERGENCY": "හදිසි"
+    },
+    "statusLabels": {
+      "OPEN": "විවෘතයි",
+      "ASSIGNED": "පවරා ඇත",
+      "IN_PROGRESS": "කරගෙන යමින්",
+      "COMPLETED": "අවසන්",
+      "CANCELLED": "අවලංගුයි",
+      "EXPIRED": "කල් ඉකුත්"
+    },
+    "mine": {
+      "title": "මගේ කාර්ය",
+      "subtitle": "ඔබ පළ කළ කාර්ය කළමනාකරණය කරන්න.",
+      "empty": "ඔබ තවම කාර්යක් පළ කර නැත.",
+      "postOne": "කාර්යයක් පළ කරන්න",
+      "viewQuotes": "මිල ගණන් {count}ක්"
+    },
+    "detail": {
+      "postedBy": "පළ කළේ",
+      "postedOn": "පළ කළ දිනය",
+      "budget": "අයවැය",
+      "noBudget": "සඳහන් කර නැත",
+      "scheduledFor": "කැමති දිනය",
+      "quotesHeading": "ලැබුණු මිල ගණන්",
+      "noQuotes": "තවම මිල ගණන් නෑ. කාර්යය විවෘත බව ශිල්පීන්ට දන්වන්නෙමු.",
+      "cancelJob": "කාර්යය අවලංගු කරන්න",
+      "cancelling": "අවලංගු කරමින්…",
+      "cancelConfirm": "මෙම කාර්යය අවලංගු කරන්නද? විවෘත මිල ගණන් වසා දමනු ලැබේ."
+    }
+  },
+  "quotes": {
+    "amount": "මුදල",
+    "message": "පණිවිඩය",
+    "estimatedStart": "ඇස්තමේන්තුගත ආරම්භය",
+    "estimatedCompletion": "ඇස්තමේන්තුගත අවසානය",
+    "stats": {
+      "rating": "{rating} ★ ({count})",
+      "jobsCompleted": "{count}ක් සම්පූර්ණයි"
+    },
+    "actions": {
+      "accept": "පිළිගන්න",
+      "accepting": "පිළිගනිමින්…",
+      "reject": "ප්‍රතික්ෂේප කරන්න",
+      "rejecting": "ප්‍රතික්ෂේප කරමින්…",
+      "withdraw": "ඉවත් කරන්න",
+      "withdrawing": "ඉවත් කරමින්…"
+    },
+    "statusLabels": {
+      "PENDING": "පොරොත්තුවෙන්",
+      "ACCEPTED": "පිළිගත්",
+      "REJECTED": "ප්‍රතික්ෂේපිත",
+      "WITHDRAWN": "ඉවත් කළ",
+      "EXPIRED": "කල් ඉකුත්"
+    },
+    "accepted": "මිල ගණන පිළිගෙන ඇත",
+    "rejected": "මිල ගණන ප්‍රතික්ෂේප කර ඇත",
+    "submitQuote": {
+      "heading": "මිල ගණනක් ඉදිරිපත් කරන්න",
+      "subtitle": "ඔබේ මිල සහ කාලය ගෘහ හිමියන්ට දන්වන්න.",
+      "submit": "මිල ගණන ඉදිරිපත් කරන්න",
+      "submitting": "ඉදිරිපත් කරමින්…",
+      "success": "මිල ගණන ඉදිරිපත් කරන ලදී"
+    }
+  },
   "hero": {
     "badge": "සත්‍යාපිත දේශීය ශිල්පීන්",
     "title": "මිල ගණන් අවුල් නැතිව විශ්වාසනීය ශිල්පීන් වෙන් කරගන්න.",

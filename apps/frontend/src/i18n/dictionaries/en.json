@@ -59,6 +59,97 @@
       "viewAll": "View all"
     }
   },
+  "jobs": {
+    "new": {
+      "title": "Post a job",
+      "subtitle": "Describe the work and we'll match you with verified tradespeople.",
+      "submit": "Post job",
+      "submitting": "Posting…",
+      "success": "Your job has been posted"
+    },
+    "fields": {
+      "title": "Job title",
+      "titlePlaceholder": "e.g. Replace bathroom shower mixer",
+      "description": "Description",
+      "descriptionPlaceholder": "What needs doing? Include any access notes, materials supplied, etc.",
+      "descriptionLanguage": "Written in",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category (optional)",
+      "urgency": "How urgent?",
+      "city": "City",
+      "district": "District",
+      "budgetMin": "Budget (min)",
+      "budgetMax": "Budget (max)",
+      "scheduledFor": "Preferred date (optional)"
+    },
+    "urgencyLabels": {
+      "LOW": "No rush",
+      "MEDIUM": "This week",
+      "HIGH": "Today / tomorrow",
+      "EMERGENCY": "Emergency"
+    },
+    "statusLabels": {
+      "OPEN": "Open",
+      "ASSIGNED": "Assigned",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired"
+    },
+    "mine": {
+      "title": "My jobs",
+      "subtitle": "Manage the jobs you have posted.",
+      "empty": "You haven't posted any jobs yet.",
+      "postOne": "Post a job",
+      "viewQuotes": "{count} quotes"
+    },
+    "detail": {
+      "postedBy": "Posted by",
+      "postedOn": "Posted on",
+      "budget": "Budget",
+      "noBudget": "Not specified",
+      "scheduledFor": "Preferred date",
+      "quotesHeading": "Quotes received",
+      "noQuotes": "No quotes yet. Tradespeople will be notified that the job is open.",
+      "cancelJob": "Cancel job",
+      "cancelling": "Cancelling…",
+      "cancelConfirm": "Cancel this job? Open quotes will be closed."
+    }
+  },
+  "quotes": {
+    "amount": "Amount",
+    "message": "Message",
+    "estimatedStart": "Estimated start",
+    "estimatedCompletion": "Estimated completion",
+    "stats": {
+      "rating": "{rating} ★ ({count})",
+      "jobsCompleted": "{count} completed"
+    },
+    "actions": {
+      "accept": "Accept",
+      "accepting": "Accepting…",
+      "reject": "Reject",
+      "rejecting": "Rejecting…",
+      "withdraw": "Withdraw",
+      "withdrawing": "Withdrawing…"
+    },
+    "statusLabels": {
+      "PENDING": "Pending",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Rejected",
+      "WITHDRAWN": "Withdrawn",
+      "EXPIRED": "Expired"
+    },
+    "accepted": "Quote accepted",
+    "rejected": "Quote rejected",
+    "submitQuote": {
+      "heading": "Submit a quote",
+      "subtitle": "Let the homeowner know your price and timing.",
+      "submit": "Submit quote",
+      "submitting": "Submitting…",
+      "success": "Quote submitted"
+    }
+  },
   "hero": {
     "badge": "Verified local trades",
     "title": "Book trusted tradespeople without the quote chaos.",

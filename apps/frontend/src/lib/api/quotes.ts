@@ -1,0 +1,65 @@
+import { apiFetch } from '../api';
+
+export type QuoteStatus =
+  | 'PENDING'
+  | 'ACCEPTED'
+  | 'REJECTED'
+  | 'WITHDRAWN'
+  | 'EXPIRED';
+
+export type Quote = {
+  id: string;
+  jobId: string;
+  tradesmanId: string;
+  amount: number;
+  currency: string;
+  message: string | null;
+  estimatedStart: string | null;
+  estimatedCompletion: string | null;
+  status: QuoteStatus;
+  respondedAt: string | null;
+  withdrawnAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  tradesman: {
+    id: string;
+    name: string;
+    image: string | null;
+    tradesmanProfile: {
+      avgRating: number;
+      ratingCount: number;
+      jobsCompleted: number;
+    } | null;
+  };
+};
+
+export type CreateQuoteBody = {
+  amount: number;
+  currency: string;
+  message?: string;
+  estimatedStart?: string;
+  estimatedCompletion?: string;
+};
+
+export function listQuotesForJob(jobId: string) {
+  return apiFetch<Quote[]>(`/jobs/${jobId}/quotes`);
+}
+
+export function createQuote(jobId: string, body: CreateQuoteBody) {
+  return apiFetch<Quote>(`/jobs/${jobId}/quotes`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+}
+
+export function acceptQuote(id: string) {
+  return apiFetch<Quote>(`/quotes/${id}/accept`, { method: 'PATCH' });
+}
+
+export function rejectQuote(id: string) {
+  return apiFetch<Quote>(`/quotes/${id}/reject`, { method: 'PATCH' });
+}
+
+export function withdrawQuote(id: string) {
+  return apiFetch<Quote>(`/quotes/${id}/withdraw`, { method: 'PATCH' });
+}
