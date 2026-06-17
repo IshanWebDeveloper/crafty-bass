@@ -5,7 +5,59 @@
     "quotes": "Quotes",
     "messages": "Messages",
     "signIn": "Sign in",
-    "getStarted": "Get started"
+    "getStarted": "Get started",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "privacy": "Privacy",
+    "signOut": "Sign out"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to manage your jobs, quotes, and messages.",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one",
+      "success": "Signed in"
+    },
+    "signUp": {
+      "title": "Create your Crafty Bass account",
+      "subtitle": "Post jobs as a homeowner or quote on jobs as a tradesman.",
+      "submit": "Create account",
+      "submitting": "Creating…",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in",
+      "success": "Account created"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password",
+      "signUpFailed": "Could not create your account",
+      "sessionRequired": "Please sign in to continue"
+    }
+  },
+  "dashboard": {
+    "title": "Your dashboard",
+    "subtitle": "A snapshot of your activity on Crafty Bass.",
+    "loading": "Loading your dashboard…",
+    "empty": "Nothing here yet. Post a job or browse trades to get started.",
+    "stats": {
+      "postedJobs": "Posted jobs",
+      "activeJobs": "Active jobs",
+      "assignedJobs": "Assigned to you",
+      "reviewsReceived": "Reviews received"
+    },
+    "recent": {
+      "heading": "Recent posted jobs",
+      "viewAll": "View all"
+    }
   },
   "hero": {
     "badge": "Verified local trades",
