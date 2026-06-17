@@ -114,7 +114,30 @@
       "cancelJob": "Cancel job",
       "cancelling": "Cancelling…",
       "cancelConfirm": "Cancel this job? Open quotes will be closed."
+    },
+    "browse": {
+      "title": "Open jobs",
+      "subtitle": "Browse jobs available for quoting.",
+      "filters": {
+        "category": "Category",
+        "allCategories": "All categories",
+        "district": "District",
+        "districtPlaceholder": "Any district",
+        "urgency": "Urgency",
+        "allUrgencies": "Any urgency",
+        "apply": "Apply filters"
+      },
+      "empty": "No open jobs match your filters right now.",
+      "loadMore": "Load more"
     }
+  },
+  "myQuotes": {
+    "title": "My quotes",
+    "subtitle": "Quotes you have submitted on open jobs.",
+    "empty": "You haven't submitted any quotes yet.",
+    "browseJobs": "Browse open jobs",
+    "withdrawConfirm": "Withdraw this quote?",
+    "withdrawSuccess": "Quote withdrawn"
   },
   "quotes": {
     "amount": "Amount",

@@ -18,6 +18,7 @@ import {
   type Quote,
 } from '@/lib/api/quotes';
 import { useSession } from '@/lib/auth-client';
+import { SubmitQuotePanel } from './submit-quote-panel';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -140,6 +141,10 @@ export function JobDetailView({
           ) : null}
         </CardContent>
       </Card>
+
+      {!isOwner && session && job.status === 'OPEN' ? (
+        <SubmitQuotePanel jobId={job.id} dict={dict} />
+      ) : null}
 
       {isOwner ? (
         <Card>
