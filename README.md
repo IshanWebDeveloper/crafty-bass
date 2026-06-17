@@ -116,13 +116,13 @@ pnpm stripe:listen
 
 This roadmap is based on the approved project scope
 
-### Phase 1: Core Platform Foundation
+### Phase 1: Core Platform Foundation ✅
 
 - Wire NestJS modules and route structure around existing Prisma models (`User`, `HomeownerProfile`, `TradesmanProfile`, `ServiceCategory`, `Skill`, `Job`, `Quote`, `Review`, `Conversation`, `Message`, `JobRecommendation`).
-- Integrate `auth.ts` with HTTP endpoints and role-based guards (`CUSTOMER`, `SUPPORT`, `ADMIN`).
+- Integrate `@repo/auth` with HTTP endpoints and role-based guards (`CUSTOMER`, `SUPPORT`, `ADMIN`); marketplace RBAC in `packages/auth/src/access.ts`.
 - Add seed data for service categories and skills (English, Sinhala, Tamil labels).
 
-Deliverable: authenticated backend APIs with a stable domain model and seeded taxonomy.
+Deliverable: authenticated backend APIs with a stable domain model and seeded taxonomy. **Complete** — backend modules `users/`, `profiles/`, `jobs/`, `quotes/`, `categories/`, `reviews/`, `recommendations/`, `consent/`, `legal/`, `admin/` are wired; taxonomy seeded.
 
 ### Phase 2: Two-Sided Marketplace Features
 
@@ -169,9 +169,10 @@ Deliverable: validated project outcomes aligned with dissertation/report require
 
 ## Current Repository Status (Quick Gap View)
 
-- Strong data model exists in `apps/backend/prisma/schema.prisma`.
-- Auth foundation exists in `apps/backend/src/auth.ts`.
-- Main app modules/features are not yet fully wired (`apps/backend/src/app.module.ts` is still minimal).
-- Frontend is currently a starter page in `apps/frontend/src/app/page.tsx`.
+- Data model is stable in `packages/db/prisma/schema.prisma` (marketplace domain).
+- Auth foundation lives in `packages/auth/` with marketplace RBAC in `packages/auth/src/access.ts`.
+- Backend modules wired in `apps/backend/src/app.module.ts`: `users`, `profiles`, `jobs`, `quotes`, `categories`, `reviews`, `recommendations`, `consent`, `legal`, `admin`.
+- Frontend has multilingual (en/si/ta) marketplace pages: home, job search, account/privacy.
+- Legacy e-commerce sweep complete (see `apps/backend/LEGACY_SWEEP_PLAN.md`).
 
-Recommended immediate next step: implement Phase 1 module wiring and seed scripts before adding advanced AI/recommendation features.
+Recommended immediate next step: finish Phase C marketplace modules (`conversations/`, `messages/`, `reports/`), then move into Phase 3 AI classification work.
