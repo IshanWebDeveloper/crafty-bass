@@ -24,6 +24,19 @@ export const ConversationTypeSchema = z.enum([
   'SUPPORT',
 ]);
 export const MessageTypeSchema = z.enum(['TEXT', 'IMAGE', 'FILE', 'SYSTEM']);
+export const ReportStatusSchema = z.enum([
+  'OPEN',
+  'UNDER_REVIEW',
+  'RESOLVED',
+  'DISMISSED',
+]);
+export const ReportTargetTypeSchema = z.enum([
+  'USER',
+  'JOB',
+  'QUOTE',
+  'REVIEW',
+  'MESSAGE',
+]);
 
 const id = z.string().trim().min(1);
 const optionalText = (max: number) => z.string().trim().max(max).optional();
@@ -136,6 +149,21 @@ export const SendMessageSchema = z.object({
   messageType: MessageTypeSchema.default('TEXT'),
 });
 
+// --- Reports (moderation) ---
+export const CreateReportSchema = z.object({
+  targetType: ReportTargetTypeSchema,
+  targetId: id,
+  reason: z.string().trim().min(10).max(2000),
+});
+
+export const UpdateReportSchema = z
+  .object({
+    status: ReportStatusSchema,
+    assigneeId: id.nullable(),
+    resolutionNotes: z.string().trim().max(2000).nullable(),
+  })
+  .partial();
+
 // Inferred types for reuse across apps + backend DTOs
 export type HomeownerProfileInput = z.infer<typeof HomeownerProfileSchema>;
 export type TradesmanProfileInput = z.infer<typeof TradesmanProfileSchema>;
@@ -146,3 +174,5 @@ export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;
 export type UpdateReviewInput = z.infer<typeof UpdateReviewSchema>;
 export type StartConversationInput = z.infer<typeof StartConversationSchema>;
 export type SendMessageInput = z.infer<typeof SendMessageSchema>;
+export type CreateReportInput = z.infer<typeof CreateReportSchema>;
+export type UpdateReportInput = z.infer<typeof UpdateReportSchema>;
