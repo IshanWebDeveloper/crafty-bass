@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@repo/ui';
 import { apiFetch, ApiError } from '@/lib/api';
+import { useI18n } from '@/i18n/provider';
 
 type Status =
   | { kind: 'idle' }
@@ -11,62 +12,47 @@ type Status =
   | { kind: 'error'; message: string };
 
 export function PrivacyActions() {
+  const { dict } = useI18n();
+  const t = dict.privacy;
+  const s = t.status;
+
   const [requestStatus, setRequestStatus] = useState<Status>({ kind: 'idle' });
   const [downloadStatus, setDownloadStatus] = useState<Status>({
     kind: 'idle',
   });
 
   async function requestExport() {
-    setRequestStatus({ kind: 'pending', message: 'Queuing export…' });
+    setRequestStatus({ kind: 'pending', message: s.queuing });
     try {
       await apiFetch('/users/me/export');
-      setRequestStatus({
-        kind: 'success',
-        message:
-          'Export queued. You will receive an email when it is ready to download.',
-      });
+      setRequestStatus({ kind: 'success', message: s.queued });
     } catch (error) {
       setRequestStatus({
         kind: 'error',
-        message:
-          error instanceof Error ? error.message : 'Unable to queue export',
+        message: error instanceof Error ? error.message : s.queueError,
       });
     }
   }
 
   async function downloadLatest() {
-    setDownloadStatus({
-      kind: 'pending',
-      message: 'Requesting download link…',
-    });
+    setDownloadStatus({ kind: 'pending', message: s.requestingLink });
     try {
       const data = await apiFetch<{ downloadUrl?: unknown }>(
         '/users/me/gdpr-exports/latest/download-url',
       );
       if (typeof data.downloadUrl !== 'string') {
-        throw new Error('Server returned an invalid download URL');
+        throw new Error(s.invalidUrl);
       }
-      setDownloadStatus({
-        kind: 'success',
-        message:
-          'Download starting. The link expires in 15 minutes — request a new one if you need to download again later.',
-      });
+      setDownloadStatus({ kind: 'success', message: s.downloadStarting });
       window.location.href = data.downloadUrl;
     } catch (error) {
       if (error instanceof ApiError && error.status === 404) {
-        setDownloadStatus({
-          kind: 'error',
-          message:
-            'No export is ready yet. Request one above and wait for the email.',
-        });
+        setDownloadStatus({ kind: 'error', message: s.noExport });
         return;
       }
       setDownloadStatus({
         kind: 'error',
-        message:
-          error instanceof Error
-            ? error.message
-            : 'Unable to fetch download link',
+        message: error instanceof Error ? error.message : s.downloadError,
       });
     }
   }
@@ -75,20 +61,17 @@ export function PrivacyActions() {
     <div className="flex flex-col gap-6">
       <section className="flex flex-col gap-2">
         <h2 className="text-base font-medium text-foreground">
-          Request a new data export
+          {t.requestHeading}
         </h2>
-        <p className="text-sm text-muted-foreground">
-          We&apos;ll prepare a ZIP archive of every record we hold against your
-          account and email you when it&apos;s ready.
-        </p>
+        <p className="text-sm text-muted-foreground">{t.requestBody}</p>
         <div className="flex items-center gap-3">
           <Button
             onClick={requestExport}
             disabled={requestStatus.kind === 'pending'}
           >
             {requestStatus.kind === 'pending'
-              ? 'Queuing…'
-              : 'Request data export'}
+              ? t.requestButtonPending
+              : t.requestButton}
           </Button>
           {requestStatus.kind !== 'idle' ? (
             <StatusText status={requestStatus} />
@@ -98,12 +81,9 @@ export function PrivacyActions() {
 
       <section className="flex flex-col gap-2">
         <h2 className="text-base font-medium text-foreground">
-          Download the latest export
+          {t.downloadHeading}
         </h2>
-        <p className="text-sm text-muted-foreground">
-          The download link is generated on demand and tied to your signed-in
-          session.
-        </p>
+        <p className="text-sm text-muted-foreground">{t.downloadBody}</p>
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
@@ -111,8 +91,8 @@ export function PrivacyActions() {
             disabled={downloadStatus.kind === 'pending'}
           >
             {downloadStatus.kind === 'pending'
-              ? 'Preparing…'
-              : 'Download latest export'}
+              ? t.downloadButtonPending
+              : t.downloadButton}
           </Button>
           {downloadStatus.kind !== 'idle' ? (
             <StatusText status={downloadStatus} />

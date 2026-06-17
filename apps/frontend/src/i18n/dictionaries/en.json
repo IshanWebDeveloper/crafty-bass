@@ -18,5 +18,58 @@
       "avgResponse": "avg. response",
       "verifiedReviews": "verified reviews"
     }
+  },
+  "jobSearch": {
+    "title": "What needs fixing?",
+    "findMatches": "Find matches",
+    "services": [
+      { "label": "Kitchen tap leak", "meta": "28 plumbers nearby" },
+      { "label": "Electrical socket", "meta": "19 matches" },
+      { "label": "Garden wall", "meta": "26 matches" },
+      { "label": "Bathroom tiling", "meta": "33 matches" }
+    ]
+  },
+  "categories": {
+    "available": "available",
+    "items": {
+      "plumbing": {
+        "title": "Plumbing",
+        "copy": "Leaks, boilers, drains, fittings"
+      },
+      "electrical": {
+        "title": "Electrical",
+        "copy": "Repairs, installs, safety checks"
+      },
+      "carpentry": {
+        "title": "Carpentry",
+        "copy": "Doors, flooring, custom builds"
+      },
+      "painting": {
+        "title": "Painting",
+        "copy": "Interior, exterior, finishing"
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy & data exports",
+    "intro": "Request a copy of the data we hold about you under GDPR. Exports are retained for 24 hours and then deleted automatically.",
+    "requestHeading": "Request a new data export",
+    "requestBody": "We'll prepare a ZIP archive of every record we hold against your account and email you when it's ready.",
+    "requestButton": "Request data export",
+    "requestButtonPending": "Queuing…",
+    "downloadHeading": "Download the latest export",
+    "downloadBody": "The download link is generated on demand and tied to your signed-in session.",
+    "downloadButton": "Download latest export",
+    "downloadButtonPending": "Preparing…",
+    "status": {
+      "queuing": "Queuing export…",
+      "queued": "Export queued. You will receive an email when it is ready to download.",
+      "queueError": "Unable to queue export",
+      "requestingLink": "Requesting download link…",
+      "invalidUrl": "Server returned an invalid download URL",
+      "downloadStarting": "Download starting. The link expires in 15 minutes — request a new one if you need to download again later.",
+      "noExport": "No export is ready yet. Request one above and wait for the email.",
+      "downloadError": "Unable to fetch download link"
+    }
   }
 }
