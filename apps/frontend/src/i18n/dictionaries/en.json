@@ -139,6 +139,39 @@
     "withdrawConfirm": "Withdraw this quote?",
     "withdrawSuccess": "Quote withdrawn"
   },
+  "reports": {
+    "openButton": "Report",
+    "modal": {
+      "title": "File a report",
+      "subtitle": "Tell us what's wrong — moderators will review.",
+      "reason": "Reason",
+      "reasonPlaceholder": "Describe what happened (10+ characters).",
+      "submit": "Submit report",
+      "submitting": "Submitting…",
+      "cancel": "Cancel",
+      "success": "Report filed",
+      "alreadyReported": "You have already reported this; the existing report is still open."
+    },
+    "targetTypes": {
+      "USER": "User",
+      "JOB": "Job",
+      "QUOTE": "Quote",
+      "REVIEW": "Review",
+      "MESSAGE": "Message"
+    },
+    "history": {
+      "title": "Reports you have filed",
+      "subtitle": "Track the status of your reports.",
+      "empty": "You haven't filed any reports.",
+      "filed": "Filed"
+    },
+    "statusLabels": {
+      "OPEN": "Open",
+      "UNDER_REVIEW": "Under review",
+      "RESOLVED": "Resolved",
+      "DISMISSED": "Dismissed"
+    }
+  },
   "reviews": {
     "leaveTitle": "Leave a review",
     "leaveSubtitle": "How did the work go? Your review helps the community.",

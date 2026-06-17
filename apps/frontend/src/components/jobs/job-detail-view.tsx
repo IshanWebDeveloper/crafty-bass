@@ -23,6 +23,7 @@ import { useSession } from '@/lib/auth-client';
 import { SubmitQuotePanel } from './submit-quote-panel';
 import { LeaveReviewPanel } from '@/components/reviews/leave-review-panel';
 import { PublicReviewsList } from '@/components/reviews/public-reviews-list';
+import { ReportButton } from '@/components/reports/report-button';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -125,11 +126,11 @@ export function JobDetailView({
             </Field>
           </dl>
 
-          {isOwner &&
-          (job.status === 'OPEN' ||
-            job.status === 'ASSIGNED' ||
-            job.status === 'IN_PROGRESS') ? (
-            <div className="pt-2">
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            {isOwner &&
+            (job.status === 'OPEN' ||
+              job.status === 'ASSIGNED' ||
+              job.status === 'IN_PROGRESS') ? (
               <Button
                 variant="outline"
                 onClick={() => {
@@ -143,8 +144,17 @@ export function JobDetailView({
                   ? t.detail.cancelling
                   : t.detail.cancelJob}
               </Button>
-            </div>
-          ) : null}
+            ) : null}
+            {!isOwner && session ? (
+              <ReportButton
+                targetType="JOB"
+                targetId={job.id}
+                dict={dict}
+                variant="outline"
+                size="default"
+              />
+            ) : null}
+          </div>
         </CardContent>
       </Card>
 

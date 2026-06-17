@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Avatar, AvatarFallback, AvatarImage, cn, Skeleton } from '@repo/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { listReviewsForJob } from '@/lib/api/reviews';
+import { ReportButton } from '@/components/reports/report-button';
+import { useSession } from '@/lib/auth-client';
 import type { Dictionary } from '@/i18n/dictionaries';
 
 export function PublicReviewsList({
@@ -14,6 +16,7 @@ export function PublicReviewsList({
   dict: Dictionary;
 }) {
   const t = dict.reviews;
+  const { data: session } = useSession();
   const { data, isLoading } = useQuery({
     queryKey: ['jobs', jobId, 'reviews'],
     queryFn: () => listReviewsForJob(jobId),
@@ -63,6 +66,15 @@ export function PublicReviewsList({
                       <p className="text-sm text-muted-foreground">
                         {r.comment}
                       </p>
+                    ) : null}
+                    {session && session.user.id !== r.reviewerId ? (
+                      <div className="pt-1">
+                        <ReportButton
+                          targetType="REVIEW"
+                          targetId={r.id}
+                          dict={dict}
+                        />
+                      </div>
                     ) : null}
                   </div>
                 </li>
