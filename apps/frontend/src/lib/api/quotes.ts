@@ -41,8 +41,28 @@ export type CreateQuoteBody = {
   estimatedCompletion?: string;
 };
 
+export type MyQuote = Omit<Quote, 'tradesman'> & {
+  job: {
+    id: string;
+    title: string;
+    status:
+      | 'OPEN'
+      | 'ASSIGNED'
+      | 'IN_PROGRESS'
+      | 'COMPLETED'
+      | 'CANCELLED'
+      | 'EXPIRED';
+    city: string | null;
+    district: string | null;
+  };
+};
+
 export function listQuotesForJob(jobId: string) {
   return apiFetch<Quote[]>(`/jobs/${jobId}/quotes`);
+}
+
+export function listMyQuotes() {
+  return apiFetch<MyQuote[]>(`/quotes/mine`);
 }
 
 export function createQuote(jobId: string, body: CreateQuoteBody) {

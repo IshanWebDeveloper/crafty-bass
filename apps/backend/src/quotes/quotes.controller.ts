@@ -29,6 +29,13 @@ export class QuotesController {
     return this.quotesService.listForJob(userId, jobId);
   }
 
+  @Get('quotes/mine')
+  @Permissions('quote', 'list')
+  @ApiOperation({ summary: 'List quotes I have submitted (tradesman)' })
+  listMine(@CurrentUser('id') userId: string) {
+    return this.quotesService.listMine(userId);
+  }
+
   @Patch('quotes/:id/accept')
   @Permissions('quote', 'accept')
   @ApiOperation({ summary: 'Accept a quote (job owner → assigns the job)' })
