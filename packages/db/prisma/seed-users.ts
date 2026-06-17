@@ -19,6 +19,11 @@
 process.env.NODE_ENV ??= 'test';
 
 import { prisma } from '../src/index.js';
+// Dev-only seed script: importing @repo/auth from @repo/db creates a build-time
+// circular dependency at the Nx workspace level. The script is never part of
+// the production graph (it's invoked through pnpm scripts, not built into
+// dist), so we silence the boundary rule here rather than restructure.
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { auth } from '@repo/auth';
 
 const COMMON_PASSWORD = 'Password123!';
