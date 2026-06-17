@@ -139,6 +139,25 @@
     "withdrawConfirm": "Withdraw this quote?",
     "withdrawSuccess": "Quote withdrawn"
   },
+  "chat": {
+    "inbox": {
+      "title": "Messages",
+      "subtitle": "Your job-linked and direct conversations.",
+      "empty": "You don't have any conversations yet.",
+      "openJob": "About: {title}"
+    },
+    "thread": {
+      "back": "← All messages",
+      "placeholder": "Write a message…",
+      "send": "Send",
+      "sending": "Sending…",
+      "loading": "Loading messages…",
+      "markedAt": "Read"
+    },
+    "startCta": "Message homeowner",
+    "startCtaTradesman": "Message tradesman",
+    "started": "Message sent"
+  },
   "profile": {
     "title": "Profile",
     "subtitle": "Tell people how to find you and what you can offer.",
