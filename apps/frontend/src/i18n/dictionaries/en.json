@@ -139,6 +139,21 @@
     "withdrawConfirm": "Withdraw this quote?",
     "withdrawSuccess": "Quote withdrawn"
   },
+  "reviews": {
+    "leaveTitle": "Leave a review",
+    "leaveSubtitle": "How did the work go? Your review helps the community.",
+    "rating": "Rating",
+    "title": "Title (optional)",
+    "comment": "Comment (optional)",
+    "submit": "Submit review",
+    "submitting": "Submitting…",
+    "success": "Review submitted",
+    "alreadyReviewed": "You have already reviewed this job.",
+    "publicHeading": "Reviews on this job",
+    "noPublic": "No reviews yet for this job.",
+    "receivedHeading": "Reviews received",
+    "receivedEmpty": "You haven't received any reviews yet."
+  },
   "chat": {
     "inbox": {
       "title": "Messages",
