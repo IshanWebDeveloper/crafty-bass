@@ -24,3 +24,5 @@ pnpm-lock.yaml text eol=lf
 *.gif binary
 *.ico binary
 *.pdf binary
+
+*.prisma text eol=lf

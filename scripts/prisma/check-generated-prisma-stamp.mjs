@@ -27,7 +27,9 @@ await access(generatedBrowserPath).catch(() => {
   );
 });
 
-const schema = await readFile(schemaPath, 'utf8');
+// Normalize line endings so the hash is identical across platforms
+// (Windows checkouts may have CRLF, CI/Linux has LF).
+const schema = (await readFile(schemaPath, 'utf8')).replace(/\r\n/g, '\n');
 const currentHash = createHash('sha256').update(schema).digest('hex');
 
 let stamp;

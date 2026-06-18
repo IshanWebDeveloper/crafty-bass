@@ -1,18 +1,31 @@
 import Link from 'next/link';
 import { buttonVariants, cn, ModeToggle } from '@repo/ui';
+import type { Locale } from '@/i18n/config';
+import type { Dictionary } from '@/i18n/dictionaries';
+import { LocaleSwitcher } from './locale-switcher';
 
-const navItems = [
-  { label: 'Find trades', href: '/trades' },
-  { label: 'Post a job', href: '/jobs/new' },
-  { label: 'Quotes', href: '/quotes' },
-  { label: 'Messages', href: '/messages' },
-];
+export function SiteHeader({
+  locale,
+  dict,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+}) {
+  const h = dict.header;
+  const navItems = [
+    { label: h.findTrades, href: `/${locale}/trades` },
+    { label: h.postJob, href: `/${locale}/jobs/new` },
+    { label: h.quotes, href: `/${locale}/quotes` },
+    { label: h.messages, href: `/${locale}/messages` },
+  ];
 
-export function SiteHeader() {
   return (
     <header className="w-full">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-6 lg:px-14">
-        <Link href="/" className="text-2xl font-medium tracking-tight">
+        <Link
+          href={`/${locale}`}
+          className="text-2xl font-medium tracking-tight"
+        >
           Crafty Bass
         </Link>
         <nav className="hidden items-center gap-10 md:flex">
@@ -27,24 +40,25 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
+          <LocaleSwitcher locale={locale} />
           <ModeToggle />
           <Link
-            href="/sign-in"
+            href={`/${locale}/sign-in`}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'lg' }),
               'h-10 rounded-md px-4',
             )}
           >
-            Sign in
+            {h.signIn}
           </Link>
           <Link
-            href="/sign-up"
+            href={`/${locale}/sign-up`}
             className={cn(
               buttonVariants({ size: 'lg' }),
               'h-10 rounded-md px-4',
             )}
           >
-            Get started
+            {h.getStarted}
           </Link>
         </div>
       </div>

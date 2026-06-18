@@ -18,6 +18,11 @@
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
+  /* Elevation scale — token-backed replacements for ad-hoc shadow-[…] values.
+     Spacing and type scales use Tailwind v4's built-in theme scales. */
+  --shadow-soft: 0px 1px 2px 0px rgba(9, 9, 10, 0.06);
+  --shadow-card: 0px 10px 30px -14px rgba(18, 25, 22, 0.1);
+  --shadow-elevated: 0px 18px 40px -16px rgba(18, 25, 22, 0.18);
   --color-canvas: var(--canvas);
   --color-accent-soft: var(--accent-soft);
   --color-accent-soft-foreground: var(--accent-soft-foreground);
