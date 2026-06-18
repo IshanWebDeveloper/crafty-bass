@@ -5,22 +5,19 @@ import {
   adminAc,
 } from 'better-auth/plugins/admin/access';
 
+// Marketplace RBAC. Roles are CUSTOMER / SUPPORT / ADMIN; the homeowner vs.
+// tradesman distinction is carried by User.userType and enforced at the service
+// layer (ownership + userType checks), not by a dedicated better-auth role.
 export const statements = {
-  product: ['create', 'update', 'delete', 'view', 'list', 'view:<id>'],
-  category: ['create', 'update', 'delete', 'view', 'list'],
-  cart: ['view', 'checkout', 'add-item', 'remove-item'],
-  order: ['create', 'update', 'cancel', 'process', 'ship', 'view', 'list'],
-  coupon: ['create', 'update', 'delete', 'view', 'list'],
-  payments: [
-    'list',
-    'checkout',
-    'request-refund',
-    'mock-confirm',
-    'refund',
-    'view',
-  ],
+  profile: ['view', 'edit', 'verify'],
+  job: ['create', 'view', 'list', 'edit', 'cancel', 'assign'],
+  quote: ['create', 'view', 'list', 'accept', 'reject', 'withdraw'],
+  conversation: ['create', 'view', 'list'],
+  message: ['create', 'view', 'list'],
   review: ['create', 'update', 'delete', 'view', 'moderate'],
-  ticket: ['create', 'assign', 'resolve', 'close', 'view', 'reply'],
+  report: ['create', 'view', 'list', 'moderate', 'resolve'],
+  recommendation: ['view', 'list'],
+  category: ['create', 'update', 'delete', 'view', 'list'],
   user: ['create', 'view', 'ban', 'list', 'set-role'],
 } as const;
 
@@ -38,25 +35,34 @@ export const ac = createAccessControl({
   ...statements,
 });
 
+// CUSTOMER covers both homeowners and tradesmen. Capability differences
+// (e.g. who can create a job vs. submit a quote) are enforced in services via
+// User.userType + record ownership.
 export const customer = ac.newRole({
   ...userAc.statements,
-  product: ['view', 'list'],
-  category: ['view', 'list'],
-  order: ['create', 'cancel', 'view', 'list'],
-  payments: ['checkout', 'request-refund', 'refund', 'view'],
-  cart: ['view', 'checkout', 'add-item', 'remove-item'],
+  profile: ['view', 'edit'],
+  job: ['create', 'view', 'list', 'edit', 'cancel'],
+  quote: ['create', 'view', 'list', 'accept', 'reject', 'withdraw'],
+  conversation: ['create', 'view', 'list'],
+  message: ['create', 'view', 'list'],
   review: ['create', 'update', 'delete', 'view'],
-  ticket: ['create', 'view', 'reply'],
+  report: ['create', 'view'],
+  recommendation: ['view', 'list'],
+  category: ['view', 'list'],
   user: ['view'],
 });
 
 export const support = ac.newRole({
   ...userAc.statements,
-  product: ['view', 'list'],
-  category: ['view', 'list'],
-  order: ['view', 'list'],
+  profile: ['view', 'verify'],
+  job: ['view', 'list'],
+  quote: ['view', 'list'],
+  conversation: ['view', 'list'],
+  message: ['view', 'list'],
   review: ['view', 'moderate'],
-  ticket: ['assign', 'resolve', 'close', 'view', 'reply'],
+  report: ['view', 'list', 'moderate', 'resolve'],
+  recommendation: ['view', 'list'],
+  category: ['view', 'list'],
   user: ['view'],
 });
 

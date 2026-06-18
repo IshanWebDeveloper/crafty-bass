@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "crafty-bass-ai-service"
 version = "0.1.0"
-description = "FastAPI LangChain and LangGraph service for local Ollama workflows."
+description = "FastAPI LangChain/LangGraph service for Crafty Bass job classification and assistant workflows."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
