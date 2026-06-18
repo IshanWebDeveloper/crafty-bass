@@ -71,6 +71,24 @@ export class QuotesService {
     });
   }
 
+  async listMine(userId: string) {
+    return this.prisma.quote.findMany({
+      where: { tradesmanId: userId },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        job: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
+            city: true,
+            district: true,
+          },
+        },
+      },
+    });
+  }
+
   async listForJob(userId: string, jobId: string) {
     const job = await this.prisma.job.findUnique({
       where: { id: jobId },

@@ -5,7 +5,284 @@
     "quotes": "මිල ගණන්",
     "messages": "පණිවිඩ",
     "signIn": "පිවිසෙන්න",
-    "getStarted": "ආරම්භ කරන්න"
+    "getStarted": "ආරම්භ කරන්න",
+    "dashboard": "උපකරණ පුවරුව",
+    "profile": "පැතිකඩ",
+    "privacy": "පෞද්ගලිකත්වය",
+    "signOut": "පිටවෙන්න"
+  },
+  "auth": {
+    "signIn": {
+      "title": "ආයුබෝවන් ආපසු",
+      "subtitle": "ඔබේ කාර්ය, මිල ගණන් සහ පණිවිඩ කළමනාකරණය කිරීමට පිවිසෙන්න.",
+      "submit": "පිවිසෙන්න",
+      "submitting": "පිවිසෙමින්…",
+      "forgotPassword": "මුරපදය අමතක ද?",
+      "noAccount": "ගිණුමක් නැද්ද?",
+      "createAccount": "එකක් සාදන්න",
+      "success": "පිවිසුණා"
+    },
+    "signUp": {
+      "title": "ඔබේ Crafty Bass ගිණුම සාදන්න",
+      "subtitle": "ගෘහ හිමියෙකු ලෙස කාර්ය පළ කරන්න හෝ ශිල්පියෙකු ලෙස මිල ගණන් දෙන්න.",
+      "submit": "ගිණුම සාදන්න",
+      "submitting": "සාදමින්…",
+      "haveAccount": "දැනටමත් ගිණුමක් තිබේද?",
+      "signInLink": "පිවිසෙන්න",
+      "success": "ගිණුම සාදන ලදී"
+    },
+    "fields": {
+      "name": "නම",
+      "email": "ඊමේල්",
+      "password": "මුරපදය",
+      "confirmPassword": "මුරපදය තහවුරු කරන්න"
+    },
+    "errors": {
+      "invalidCredentials": "වැරදි ඊමේල් හෝ මුරපදය",
+      "signUpFailed": "ගිණුම සෑදිය නොහැකි විය",
+      "sessionRequired": "ඉදිරියට යාමට පිවිසෙන්න"
+    }
+  },
+  "dashboard": {
+    "title": "ඔබේ උපකරණ පුවරුව",
+    "subtitle": "Crafty Bass හි ඔබේ ක්‍රියාකාරකම් සාරාංශය.",
+    "loading": "උපකරණ පුවරුව පූරණය වෙමින්…",
+    "empty": "තවම කිසිවක් නැත. ආරම්භ කිරීමට කාර්යයක් පළ කරන්න හෝ ශිල්පීන් සොයන්න.",
+    "stats": {
+      "postedJobs": "පළ කළ කාර්ය",
+      "activeJobs": "ක්‍රියාකාරී කාර්ය",
+      "assignedJobs": "ඔබට පවරා ඇති",
+      "reviewsReceived": "ලැබුණු සමාලෝචන"
+    },
+    "recent": {
+      "heading": "මෑත පළ කළ කාර්ය",
+      "viewAll": "සියල්ල බලන්න"
+    }
+  },
+  "jobs": {
+    "new": {
+      "title": "කාර්යයක් පළ කරන්න",
+      "subtitle": "කාර්යය විස්තර කරන්න, අපි ඔබව සත්‍යාපිත ශිල්පීන් හා ගලපන්නෙමු.",
+      "submit": "කාර්යය පළ කරන්න",
+      "submitting": "පළ කරමින්…",
+      "success": "ඔබේ කාර්යය පළ කරන ලදී"
+    },
+    "fields": {
+      "title": "කාර්ය මාතෘකාව",
+      "titlePlaceholder": "උදා: බාත්රූම් ෂවර් මික්සරය ප්‍රතිස්ථාපනය කරන්න",
+      "description": "විස්තරය",
+      "descriptionPlaceholder": "කළ යුත්තේ කුමක්ද? ප්‍රවේශ සටහන්, සපයන ද්‍රව්‍ය ආදී දේ ඇතුළත් කරන්න.",
+      "descriptionLanguage": "ලියා ඇත්තේ",
+      "category": "කාණ්ඩය",
+      "categoryPlaceholder": "කාණ්ඩයක් තෝරන්න (විකල්ප)",
+      "urgency": "කොතරම් හදිසිද?",
+      "city": "නගරය",
+      "district": "දිස්ත්‍රික්කය",
+      "budgetMin": "අයවැය (අවම)",
+      "budgetMax": "අයවැය (උපරිම)",
+      "scheduledFor": "කැමති දිනය (විකල්ප)"
+    },
+    "urgencyLabels": {
+      "LOW": "ඉක්මන් නෑ",
+      "MEDIUM": "මේ සතියේ",
+      "HIGH": "අද / හෙට",
+      "EMERGENCY": "හදිසි"
+    },
+    "statusLabels": {
+      "OPEN": "විවෘතයි",
+      "ASSIGNED": "පවරා ඇත",
+      "IN_PROGRESS": "කරගෙන යමින්",
+      "COMPLETED": "අවසන්",
+      "CANCELLED": "අවලංගුයි",
+      "EXPIRED": "කල් ඉකුත්"
+    },
+    "mine": {
+      "title": "මගේ කාර්ය",
+      "subtitle": "ඔබ පළ කළ කාර්ය කළමනාකරණය කරන්න.",
+      "empty": "ඔබ තවම කාර්යක් පළ කර නැත.",
+      "postOne": "කාර්යයක් පළ කරන්න",
+      "viewQuotes": "මිල ගණන් {count}ක්"
+    },
+    "detail": {
+      "postedBy": "පළ කළේ",
+      "postedOn": "පළ කළ දිනය",
+      "budget": "අයවැය",
+      "noBudget": "සඳහන් කර නැත",
+      "scheduledFor": "කැමති දිනය",
+      "quotesHeading": "ලැබුණු මිල ගණන්",
+      "noQuotes": "තවම මිල ගණන් නෑ. කාර්යය විවෘත බව ශිල්පීන්ට දන්වන්නෙමු.",
+      "cancelJob": "කාර්යය අවලංගු කරන්න",
+      "cancelling": "අවලංගු කරමින්…",
+      "cancelConfirm": "මෙම කාර්යය අවලංගු කරන්නද? විවෘත මිල ගණන් වසා දමනු ලැබේ."
+    },
+    "browse": {
+      "title": "විවෘත කාර්ය",
+      "subtitle": "මිල ගණන් සඳහා ඇති කාර්ය බලන්න.",
+      "filters": {
+        "category": "කාණ්ඩය",
+        "allCategories": "සියලු කාණ්ඩ",
+        "district": "දිස්ත්‍රික්කය",
+        "districtPlaceholder": "ඕනෑම දිස්ත්‍රික්කයක්",
+        "urgency": "හදිසිය",
+        "allUrgencies": "ඕනෑම හදිසියක්",
+        "apply": "ෆිල්ටර යොදන්න"
+      },
+      "empty": "ඔබේ ෆිල්ටරවලට ගැලපෙන විවෘත කාර්ය නැත.",
+      "loadMore": "තවත් පූරණය කරන්න"
+    }
+  },
+  "myQuotes": {
+    "title": "මගේ මිල ගණන්",
+    "subtitle": "ඔබ විවෘත කාර්ය මත ඉදිරිපත් කළ මිල ගණන්.",
+    "empty": "ඔබ තවම මිල ගණන් ඉදිරිපත් කර නැත.",
+    "browseJobs": "විවෘත කාර්ය බලන්න",
+    "withdrawConfirm": "මෙම මිල ගණන ඉවත් කරන්නද?",
+    "withdrawSuccess": "මිල ගණන ඉවත් කරන ලදී"
+  },
+  "reports": {
+    "openButton": "වාර්තා කරන්න",
+    "modal": {
+      "title": "වාර්තාවක් ඉදිරිපත් කරන්න",
+      "subtitle": "කුමක් වැරදී ඇත්ද? මොඩරේටරවරු සමාලෝචනය කරති.",
+      "reason": "හේතුව",
+      "reasonPlaceholder": "කුමක් සිදුවුණා දැයි විස්තර කරන්න (10+ අක්ෂර).",
+      "submit": "වාර්තාව ඉදිරිපත් කරන්න",
+      "submitting": "ඉදිරිපත් කරමින්…",
+      "cancel": "අවලංගු",
+      "success": "වාර්තාව ඉදිරිපත් කරන ලදී",
+      "alreadyReported": "ඔබ දැනටමත් වාර්තා කර ඇත; පවතින වාර්තාව තවම විවෘතයි."
+    },
+    "targetTypes": {
+      "USER": "පරිශීලකයා",
+      "JOB": "කාර්යය",
+      "QUOTE": "මිල ගණන",
+      "REVIEW": "සමාලෝචනය",
+      "MESSAGE": "පණිවිඩය"
+    },
+    "history": {
+      "title": "ඔබ ඉදිරිපත් කළ වාර්තා",
+      "subtitle": "ඔබේ වාර්තාවල තත්ත්වය ලුහුබඳින්න.",
+      "empty": "ඔබ වාර්තා කිසිවක් ඉදිරිපත් කර නැත.",
+      "filed": "ඉදිරිපත් කළේ"
+    },
+    "statusLabels": {
+      "OPEN": "විවෘතයි",
+      "UNDER_REVIEW": "සමාලෝචනයේ",
+      "RESOLVED": "විසඳා ඇත",
+      "DISMISSED": "ප්‍රතික්ෂේපිත"
+    }
+  },
+  "reviews": {
+    "leaveTitle": "සමාලෝචනයක් තබන්න",
+    "leaveSubtitle": "කාර්යය කෙසේ සිදු වුණා ද? ඔබේ සමාලෝචනය ප්‍රජාවට උපකාරී වේ.",
+    "rating": "ශ්‍රේණිගතකිරීම",
+    "title": "මාතෘකාව (විකල්ප)",
+    "comment": "අදහස (විකල්ප)",
+    "submit": "සමාලෝචනය යවන්න",
+    "submitting": "යවමින්…",
+    "success": "සමාලෝචනය යවන ලදී",
+    "alreadyReviewed": "ඔබ දැනටමත් මෙම කාර්යය සඳහා සමාලෝචනයක් කර ඇත.",
+    "publicHeading": "මෙම කාර්ය ගැන සමාලෝචන",
+    "noPublic": "තවම සමාලෝචන නැත.",
+    "receivedHeading": "ලැබුණු සමාලෝචන",
+    "receivedEmpty": "ඔබට තවම සමාලෝචන ලැබී නැත."
+  },
+  "chat": {
+    "inbox": {
+      "title": "පණිවිඩ",
+      "subtitle": "ඔබේ කාර්ය හා සෘජු සංවාද.",
+      "empty": "ඔබට තවම සංවාද නැත.",
+      "openJob": "කාර්යය: {title}"
+    },
+    "thread": {
+      "back": "← සියලු පණිවිඩ",
+      "placeholder": "පණිවිඩයක් ලියන්න…",
+      "send": "යවන්න",
+      "sending": "යවමින්…",
+      "loading": "පණිවිඩ පූරණය වෙමින්…",
+      "markedAt": "කියවා ඇත"
+    },
+    "startCta": "ගෘහ හිමියන්ට පණිවිඩයක්",
+    "startCtaTradesman": "ශිල්පියාට පණිවිඩයක්",
+    "started": "පණිවිඩය යවන ලදී"
+  },
+  "profile": {
+    "title": "පැතිකඩ",
+    "subtitle": "ඔබව සොයාගත හැකි ආකාරය හා ඔබට ලබා දිය හැකි දේ ගැන කියන්න.",
+    "loading": "පැතිකඩ පූරණය වෙමින්…",
+    "saved": "පැතිකඩ සුරැකිණ",
+    "chooseRole": {
+      "heading": "ඔබ Crafty Bass භාවිතා කරන්නේ කෙසේද?",
+      "subtitle": "ඔබේ භූමිකාව තෝරන්න. පසුව මෙතැනින් වෙනස් කළ හැකියි.",
+      "homeowner": "මම ගෘහ හිමියෙක්",
+      "homeownerCopy": "කාර්ය පළ කර ශිල්පීන් කුලියට ගන්න.",
+      "tradesman": "මම ශිල්පියෙක්",
+      "tradesmanCopy": "කාර්ය මත මිල ගණන් දී ව්‍යාපාරය වර්ධනය කරන්න.",
+      "continue": "ඉදිරියට"
+    },
+    "homeowner": {
+      "heading": "ගෘහ හිමියන් පැතිකඩ",
+      "submit": "පැතිකඩ සුරකින්න",
+      "submitting": "සුරකිමින්…"
+    },
+    "tradesman": {
+      "heading": "ශිල්පී පැතිකඩ",
+      "submit": "පැතිකඩ සුරකින්න",
+      "submitting": "සුරකිමින්…",
+      "bio": "කෙටි විස්තරය",
+      "bioPlaceholder": "ඔබ කරන්නේ කුමන කාර්යයන්ද?",
+      "yearsExperience": "අත්දැකීම් වසර",
+      "hourlyRate": "පැයක ගාස්තුව (විකල්ප)",
+      "serviceRadiusKm": "සේවා පරාසය (km)",
+      "skills": "කුසලතා",
+      "skillsHelp": "අදාළ සියල්ල තෝරන්න. ඕනෑම වේලාවක යාවත්කාලීන කළ හැකිය."
+    },
+    "fields": {
+      "locationText": "ලිපිනය (විකල්ප)",
+      "city": "නගරය",
+      "district": "දිස්ත්‍රික්කය",
+      "postalCode": "තැපැල් කේතය",
+      "preferredLanguage": "කැමති භාෂාව"
+    },
+    "languages": {
+      "EN": "ඉංග්‍රීසි",
+      "SI": "සිංහල",
+      "TA": "දෙමළ"
+    }
+  },
+  "quotes": {
+    "amount": "මුදල",
+    "message": "පණිවිඩය",
+    "estimatedStart": "ඇස්තමේන්තුගත ආරම්භය",
+    "estimatedCompletion": "ඇස්තමේන්තුගත අවසානය",
+    "stats": {
+      "rating": "{rating} ★ ({count})",
+      "jobsCompleted": "{count}ක් සම්පූර්ණයි"
+    },
+    "actions": {
+      "accept": "පිළිගන්න",
+      "accepting": "පිළිගනිමින්…",
+      "reject": "ප්‍රතික්ෂේප කරන්න",
+      "rejecting": "ප්‍රතික්ෂේප කරමින්…",
+      "withdraw": "ඉවත් කරන්න",
+      "withdrawing": "ඉවත් කරමින්…"
+    },
+    "statusLabels": {
+      "PENDING": "පොරොත්තුවෙන්",
+      "ACCEPTED": "පිළිගත්",
+      "REJECTED": "ප්‍රතික්ෂේපිත",
+      "WITHDRAWN": "ඉවත් කළ",
+      "EXPIRED": "කල් ඉකුත්"
+    },
+    "accepted": "මිල ගණන පිළිගෙන ඇත",
+    "rejected": "මිල ගණන ප්‍රතික්ෂේප කර ඇත",
+    "submitQuote": {
+      "heading": "මිල ගණනක් ඉදිරිපත් කරන්න",
+      "subtitle": "ඔබේ මිල සහ කාලය ගෘහ හිමියන්ට දන්වන්න.",
+      "submit": "මිල ගණන ඉදිරිපත් කරන්න",
+      "submitting": "ඉදිරිපත් කරමින්…",
+      "success": "මිල ගණන ඉදිරිපත් කරන ලදී"
+    }
   },
   "hero": {
     "badge": "සත්‍යාපිත දේශීය ශිල්පීන්",
