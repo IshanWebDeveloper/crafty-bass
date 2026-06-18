@@ -8,7 +8,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "dev": "nest start --watch",
+    "dev": "dotenv -e .env -- nest start --watch",
     "dev:test": "dotenv -e .env.test -- nest start --watch",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

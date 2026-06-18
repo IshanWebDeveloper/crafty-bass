@@ -18,7 +18,8 @@
     "db:migrate:dev": "dotenv -e ../../apps/backend/.env -- prisma migrate dev",
     "db:migrate:dev:test": "dotenv -e ../../apps/backend/.env.test -- prisma migrate dev --skip-seed",
     "db:migrate:reset": "dotenv -e ../../apps/backend/.env -- prisma migrate reset",
-    "db:seed": "dotenv -e ../../apps/backend/.env -- prisma db seed"
+    "db:seed": "dotenv -e ../../apps/backend/.env -- prisma db seed",
+    "db:seed:users": "dotenv -e ../../apps/backend/.env -- tsx prisma/seed-users.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

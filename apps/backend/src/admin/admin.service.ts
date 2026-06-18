@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { type Role } from '@repo/db';
@@ -28,6 +29,7 @@ type CreateUserInput = {
  */
 @Injectable()
 export class AdminService {
+  private readonly logger = new Logger(AdminService.name);
   private static readonly VALID_ROLES: Role[] = [
     'CUSTOMER',
     'ADMIN',
@@ -204,16 +206,25 @@ export class AdminService {
   }
 
   /**
-   * No-op audit hook. The legacy AuditLog model was removed in the marketplace
-   * migration. TODO(Phase C): persist admin actions to a marketplace audit trail.
+   * Stub audit hook. The legacy AuditLog model was removed in the marketplace
+   * migration. Until the Phase C marketplace audit trail lands, admin actions
+   * are written to the structured logger so they remain observable.
    */
   async log(
-    _userId: string,
-    _action: string,
-    _entity: string,
-    _entityId: string,
-    _details?: unknown,
+    userId: string,
+    action: string,
+    entity: string,
+    entityId: string,
+    details?: unknown,
   ): Promise<void> {
-    return;
+    await Promise.resolve();
+    this.logger.log({
+      msg: '[admin.audit]',
+      userId,
+      action,
+      entity,
+      entityId,
+      details,
+    });
   }
 }

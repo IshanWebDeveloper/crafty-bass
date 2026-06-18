@@ -18,6 +18,25 @@ export const QuoteStatusSchema = z.enum([
   'WITHDRAWN',
   'EXPIRED',
 ]);
+export const ConversationTypeSchema = z.enum([
+  'JOB_DIRECT',
+  'DIRECT',
+  'SUPPORT',
+]);
+export const MessageTypeSchema = z.enum(['TEXT', 'IMAGE', 'FILE', 'SYSTEM']);
+export const ReportStatusSchema = z.enum([
+  'OPEN',
+  'UNDER_REVIEW',
+  'RESOLVED',
+  'DISMISSED',
+]);
+export const ReportTargetTypeSchema = z.enum([
+  'USER',
+  'JOB',
+  'QUOTE',
+  'REVIEW',
+  'MESSAGE',
+]);
 
 const id = z.string().trim().min(1);
 const optionalText = (max: number) => z.string().trim().max(max).optional();
@@ -108,6 +127,43 @@ export const UpdateReviewSchema = CreateReviewSchema.pick({
   comment: true,
 }).partial();
 
+// --- Conversations + Messages (chat) ---
+// A direct conversation is created on the fly when sending the first message
+// between two users; job-linked conversations target a Job and pull the
+// counterpart from the job (homeowner ↔ accepted tradesman / quoter).
+export const StartConversationSchema = z
+  .object({
+    type: z.enum(['JOB_DIRECT', 'DIRECT']).default('JOB_DIRECT'),
+    jobId: id.optional(),
+    recipientId: id.optional(),
+    body: z.string().trim().min(1).max(4000),
+    messageType: MessageTypeSchema.default('TEXT'),
+  })
+  .refine((v) => v.jobId !== undefined || v.recipientId !== undefined, {
+    message: 'Either jobId or recipientId is required',
+    path: ['jobId'],
+  });
+
+export const SendMessageSchema = z.object({
+  body: z.string().trim().min(1).max(4000),
+  messageType: MessageTypeSchema.default('TEXT'),
+});
+
+// --- Reports (moderation) ---
+export const CreateReportSchema = z.object({
+  targetType: ReportTargetTypeSchema,
+  targetId: id,
+  reason: z.string().trim().min(10).max(2000),
+});
+
+export const UpdateReportSchema = z
+  .object({
+    status: ReportStatusSchema,
+    assigneeId: id.nullable(),
+    resolutionNotes: z.string().trim().max(2000).nullable(),
+  })
+  .partial();
+
 // Inferred types for reuse across apps + backend DTOs
 export type HomeownerProfileInput = z.infer<typeof HomeownerProfileSchema>;
 export type TradesmanProfileInput = z.infer<typeof TradesmanProfileSchema>;
@@ -116,3 +172,7 @@ export type UpdateJobInput = z.infer<typeof UpdateJobSchema>;
 export type CreateQuoteInput = z.infer<typeof CreateQuoteSchema>;
 export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;
 export type UpdateReviewInput = z.infer<typeof UpdateReviewSchema>;
+export type StartConversationInput = z.infer<typeof StartConversationSchema>;
+export type SendMessageInput = z.infer<typeof SendMessageSchema>;
+export type CreateReportInput = z.infer<typeof CreateReportSchema>;
+export type UpdateReportInput = z.infer<typeof UpdateReportSchema>;

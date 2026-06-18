@@ -41,6 +41,13 @@ export class ReviewsController {
     return this.reviewsService.findForJob(jobId, query);
   }
 
+  @Get('reviews/received')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'List reviews received by the current user' })
+  findReceived(@CurrentUser('id') userId: string) {
+    return this.reviewsService.findReceivedByUser(userId);
+  }
+
   @Patch('reviews/:id')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Edit own review' })

@@ -5,7 +5,284 @@
     "quotes": "Quotes",
     "messages": "Messages",
     "signIn": "Sign in",
-    "getStarted": "Get started"
+    "getStarted": "Get started",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "privacy": "Privacy",
+    "signOut": "Sign out"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to manage your jobs, quotes, and messages.",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one",
+      "success": "Signed in"
+    },
+    "signUp": {
+      "title": "Create your Crafty Bass account",
+      "subtitle": "Post jobs as a homeowner or quote on jobs as a tradesman.",
+      "submit": "Create account",
+      "submitting": "Creating…",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in",
+      "success": "Account created"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password",
+      "signUpFailed": "Could not create your account",
+      "sessionRequired": "Please sign in to continue"
+    }
+  },
+  "dashboard": {
+    "title": "Your dashboard",
+    "subtitle": "A snapshot of your activity on Crafty Bass.",
+    "loading": "Loading your dashboard…",
+    "empty": "Nothing here yet. Post a job or browse trades to get started.",
+    "stats": {
+      "postedJobs": "Posted jobs",
+      "activeJobs": "Active jobs",
+      "assignedJobs": "Assigned to you",
+      "reviewsReceived": "Reviews received"
+    },
+    "recent": {
+      "heading": "Recent posted jobs",
+      "viewAll": "View all"
+    }
+  },
+  "jobs": {
+    "new": {
+      "title": "Post a job",
+      "subtitle": "Describe the work and we'll match you with verified tradespeople.",
+      "submit": "Post job",
+      "submitting": "Posting…",
+      "success": "Your job has been posted"
+    },
+    "fields": {
+      "title": "Job title",
+      "titlePlaceholder": "e.g. Replace bathroom shower mixer",
+      "description": "Description",
+      "descriptionPlaceholder": "What needs doing? Include any access notes, materials supplied, etc.",
+      "descriptionLanguage": "Written in",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category (optional)",
+      "urgency": "How urgent?",
+      "city": "City",
+      "district": "District",
+      "budgetMin": "Budget (min)",
+      "budgetMax": "Budget (max)",
+      "scheduledFor": "Preferred date (optional)"
+    },
+    "urgencyLabels": {
+      "LOW": "No rush",
+      "MEDIUM": "This week",
+      "HIGH": "Today / tomorrow",
+      "EMERGENCY": "Emergency"
+    },
+    "statusLabels": {
+      "OPEN": "Open",
+      "ASSIGNED": "Assigned",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired"
+    },
+    "mine": {
+      "title": "My jobs",
+      "subtitle": "Manage the jobs you have posted.",
+      "empty": "You haven't posted any jobs yet.",
+      "postOne": "Post a job",
+      "viewQuotes": "{count} quotes"
+    },
+    "detail": {
+      "postedBy": "Posted by",
+      "postedOn": "Posted on",
+      "budget": "Budget",
+      "noBudget": "Not specified",
+      "scheduledFor": "Preferred date",
+      "quotesHeading": "Quotes received",
+      "noQuotes": "No quotes yet. Tradespeople will be notified that the job is open.",
+      "cancelJob": "Cancel job",
+      "cancelling": "Cancelling…",
+      "cancelConfirm": "Cancel this job? Open quotes will be closed."
+    },
+    "browse": {
+      "title": "Open jobs",
+      "subtitle": "Browse jobs available for quoting.",
+      "filters": {
+        "category": "Category",
+        "allCategories": "All categories",
+        "district": "District",
+        "districtPlaceholder": "Any district",
+        "urgency": "Urgency",
+        "allUrgencies": "Any urgency",
+        "apply": "Apply filters"
+      },
+      "empty": "No open jobs match your filters right now.",
+      "loadMore": "Load more"
+    }
+  },
+  "myQuotes": {
+    "title": "My quotes",
+    "subtitle": "Quotes you have submitted on open jobs.",
+    "empty": "You haven't submitted any quotes yet.",
+    "browseJobs": "Browse open jobs",
+    "withdrawConfirm": "Withdraw this quote?",
+    "withdrawSuccess": "Quote withdrawn"
+  },
+  "reports": {
+    "openButton": "Report",
+    "modal": {
+      "title": "File a report",
+      "subtitle": "Tell us what's wrong — moderators will review.",
+      "reason": "Reason",
+      "reasonPlaceholder": "Describe what happened (10+ characters).",
+      "submit": "Submit report",
+      "submitting": "Submitting…",
+      "cancel": "Cancel",
+      "success": "Report filed",
+      "alreadyReported": "You have already reported this; the existing report is still open."
+    },
+    "targetTypes": {
+      "USER": "User",
+      "JOB": "Job",
+      "QUOTE": "Quote",
+      "REVIEW": "Review",
+      "MESSAGE": "Message"
+    },
+    "history": {
+      "title": "Reports you have filed",
+      "subtitle": "Track the status of your reports.",
+      "empty": "You haven't filed any reports.",
+      "filed": "Filed"
+    },
+    "statusLabels": {
+      "OPEN": "Open",
+      "UNDER_REVIEW": "Under review",
+      "RESOLVED": "Resolved",
+      "DISMISSED": "Dismissed"
+    }
+  },
+  "reviews": {
+    "leaveTitle": "Leave a review",
+    "leaveSubtitle": "How did the work go? Your review helps the community.",
+    "rating": "Rating",
+    "title": "Title (optional)",
+    "comment": "Comment (optional)",
+    "submit": "Submit review",
+    "submitting": "Submitting…",
+    "success": "Review submitted",
+    "alreadyReviewed": "You have already reviewed this job.",
+    "publicHeading": "Reviews on this job",
+    "noPublic": "No reviews yet for this job.",
+    "receivedHeading": "Reviews received",
+    "receivedEmpty": "You haven't received any reviews yet."
+  },
+  "chat": {
+    "inbox": {
+      "title": "Messages",
+      "subtitle": "Your job-linked and direct conversations.",
+      "empty": "You don't have any conversations yet.",
+      "openJob": "About: {title}"
+    },
+    "thread": {
+      "back": "← All messages",
+      "placeholder": "Write a message…",
+      "send": "Send",
+      "sending": "Sending…",
+      "loading": "Loading messages…",
+      "markedAt": "Read"
+    },
+    "startCta": "Message homeowner",
+    "startCtaTradesman": "Message tradesman",
+    "started": "Message sent"
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Tell people how to find you and what you can offer.",
+    "loading": "Loading your profile…",
+    "saved": "Profile saved",
+    "chooseRole": {
+      "heading": "How will you use Crafty Bass?",
+      "subtitle": "Pick the role that fits your activity. You can update later from this page.",
+      "homeowner": "I'm a homeowner",
+      "homeownerCopy": "Post jobs and hire tradespeople.",
+      "tradesman": "I'm a tradesman",
+      "tradesmanCopy": "Quote on jobs and grow your business.",
+      "continue": "Continue"
+    },
+    "homeowner": {
+      "heading": "Homeowner profile",
+      "submit": "Save profile",
+      "submitting": "Saving…"
+    },
+    "tradesman": {
+      "heading": "Tradesman profile",
+      "submit": "Save profile",
+      "submitting": "Saving…",
+      "bio": "Short bio",
+      "bioPlaceholder": "What kinds of work do you take on?",
+      "yearsExperience": "Years of experience",
+      "hourlyRate": "Hourly rate (optional)",
+      "serviceRadiusKm": "Service radius (km)",
+      "skills": "Skills",
+      "skillsHelp": "Choose all that apply. You can update this list any time."
+    },
+    "fields": {
+      "locationText": "Address (optional)",
+      "city": "City",
+      "district": "District",
+      "postalCode": "Postal code",
+      "preferredLanguage": "Preferred language"
+    },
+    "languages": {
+      "EN": "English",
+      "SI": "Sinhala",
+      "TA": "Tamil"
+    }
+  },
+  "quotes": {
+    "amount": "Amount",
+    "message": "Message",
+    "estimatedStart": "Estimated start",
+    "estimatedCompletion": "Estimated completion",
+    "stats": {
+      "rating": "{rating} ★ ({count})",
+      "jobsCompleted": "{count} completed"
+    },
+    "actions": {
+      "accept": "Accept",
+      "accepting": "Accepting…",
+      "reject": "Reject",
+      "rejecting": "Rejecting…",
+      "withdraw": "Withdraw",
+      "withdrawing": "Withdrawing…"
+    },
+    "statusLabels": {
+      "PENDING": "Pending",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Rejected",
+      "WITHDRAWN": "Withdrawn",
+      "EXPIRED": "Expired"
+    },
+    "accepted": "Quote accepted",
+    "rejected": "Quote rejected",
+    "submitQuote": {
+      "heading": "Submit a quote",
+      "subtitle": "Let the homeowner know your price and timing.",
+      "submit": "Submit quote",
+      "submitting": "Submitting…",
+      "success": "Quote submitted"
+    }
   },
   "hero": {
     "badge": "Verified local trades",
