@@ -94,9 +94,9 @@ async function bootstrap() {
     const openApiDoc = SwaggerModule.createDocument(
       app,
       new DocumentBuilder()
-        .setTitle('StreetGadgetz E-Commerce API')
+        .setTitle('Crafty Bass Marketplace API')
         .setDescription(
-          'Back-end API for StreetGadgetz — authentication, product catalogue, orders, payments, and customer support.',
+          'Back-end API for Crafty Bass — authentication, homeowner/tradesman profiles, jobs, quotes, messaging, reviews, and moderation.',
         )
         .setVersion('1.0')
         .addBearerAuth()
