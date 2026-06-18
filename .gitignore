@@ -63,3 +63,4 @@ vitest.config.*.timestamp*
 *.tsbuildinfo*
 SECURITY_AUDIT.md
 .pr-bodies/
+apps/backend/swagger-error-debug.txt
