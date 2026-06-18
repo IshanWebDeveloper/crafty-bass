@@ -1,9 +1,21 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 import { RoleSchema, PaymentMethodSchema } from '@repo/shared-types';
-import { ShippingAddressSchema } from '@repo/validation';
 
 // ─── Update Profile ─────────────────────────────────────────────────────────
+
+// NOTE: legacy address shape kept inline pending the Phase C users-module
+// rewrite; marketplace location data now lives on Homeowner/TradesmanProfile.
+const ShippingAddressSchema = z.object({
+  fullName: z.string().trim().min(1).max(120),
+  line1: z.string().trim().min(1).max(160),
+  line2: z.string().trim().max(160).optional(),
+  city: z.string().trim().min(1).max(80),
+  district: z.string().trim().max(80).optional(),
+  postalCode: z.string().trim().max(20).optional(),
+  country: z.string().trim().min(2).max(80).default('Sri Lanka'),
+  phone: z.string().trim().min(5).max(32).optional(),
+});
 
 const UpdateProfileSchema = z.object({
   name: z.string().min(1).max(100).optional(),

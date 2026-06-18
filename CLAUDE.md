@@ -115,12 +115,9 @@ CI (`.github/workflows/ci.yml`) creates the venv on a self-hosted Windows runner
 
 ### Frontend (Next.js App Router)
 
-Two frontend-only docs at `apps/frontend/`:
+Frontend-specific guidance lives in **`apps/frontend/CLAUDE.md`** (the Figma-MCP → code workflow plus the Next.js 16 rule and stack notes). Read it before touching frontend code; this root file does not duplicate it. There are no `AGENTS.md` files in this repo — `CLAUDE.md` is the single source.
 
-- **`AGENTS.md`** — single hard rule: Next.js 16 has breaking changes from training data, so **read `node_modules/next/dist/docs/` before writing any code**. Heed deprecation notices.
-- **`CLAUDE.md`** — the Figma-MCP → code workflow contract (token-first, primitives before pages, asset/icon conventions, server/client boundary rules).
-
-Read both before touching frontend code. This root file deliberately does not duplicate them.
+**Next.js 16 — use the live docs, not training data.** This repo runs Next.js 16, which renamed/changed APIs from older versions. Don't answer from memory: read current docs through the **Next.js DevTools MCP** — the `nextjs-docs://llms-index` resource for the index, then `nextjs_docs` for a page. (There is no bundled `node_modules/next/dist/docs/` folder.) Notably, the `middleware.ts` convention is **removed/renamed to `proxy.ts`** in Next 16 (codemod: `npx @next/codemod@canary middleware-to-proxy .`).
 
 Quick orientation: path alias `@/*` → `src/*`. Shared UI primitives now live in the `@repo/ui` package, **not** in local `src/components/` — import them from there (e.g. `import { Button, cn, ThemeProvider } from '@repo/ui'`). Theming via `next-themes` + `ThemeProvider` (now exported from `@repo/ui`; the old `src/components/theme-provider.tsx` is gone). Tokens live in `src/app/globals.css` as CSS custom properties plus `@theme inline` aliases for Tailwind v4.
 
