@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prisma-generated-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check generated Prisma types are up to date
+        run: pnpm prisma:check:generated
+
+  affected:
+    runs-on: [self-hosted, windows]
+    needs: prisma-generated-check
+    # Self-hosted runners must not execute untrusted PR code (lifecycle scripts
+    # in `pnpm install` and `pip install -e .` would run on our infrastructure).
+    # Skip the job for PRs originating from forks; only same-repo PRs, pushes to
+    # main, and manual dispatch are allowed to reach the runner.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Setup Python for ai-service targets
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create ai-service virtual environment
+        run: python -m venv apps/ai-service/.venv
+
+      - name: Install ai-service Python dependencies
+        run: |
+          .\apps\ai-service\.venv\Scripts\python.exe -m pip install --upgrade pip
+          .\apps\ai-service\.venv\Scripts\python.exe -m pip install -e ".\apps\ai-service[dev]"
+
+      - name: Lint affected projects
+        run: pnpm affected:lint
+
+      - name: Test affected projects
+        run: pnpm affected:test
+
+      - name: Build affected projects
+        run: pnpm affected:build

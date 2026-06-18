@@ -1,0 +1,48 @@
+{
+  "name": "ai-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "root": "apps/ai-service",
+  "sourceRoot": "apps/ai-service/app",
+  "projectType": "application",
+  "tags": ["type:app", "scope:ai"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": ".\\.venv\\Scripts\\python.exe -m compileall app"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": ".\\.venv\\Scripts\\python.exe -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8006"
+      },
+      "cache": false
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": ".\\.venv\\Scripts\\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8006"
+      },
+      "cache": false
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": ".\\.venv\\Scripts\\python.exe -m ruff check app tests"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ai-service",
+        "command": ".\\.venv\\Scripts\\python.exe -m pytest"
+      },
+      "outputs": ["{projectRoot}/.pytest_cache/**"]
+    }
+  }
+}

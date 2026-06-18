@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nx next:dev",
-    "build": "nx next:build",
-    "start": "nx next:start",
-    "lint": "eslint",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
     "test": "echo No frontend tests configured"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^5.2.2",
+    "@repo/ui": "workspace:^",
     "@t3-oss/env-nextjs": "^0.13.10",
     "@tabler/icons-react": "^3.40.0",
     "@tanstack/react-query": "^5.90.21",
@@ -53,6 +54,8 @@
     "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.58.2",
     "@prisma/client": "^6.16.3",
+    "@repo/eslint-config": "workspace:^",
+    "@repo/prettier-config": "workspace:^",
     "@sendgrid/mail": "^8.1.6",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",

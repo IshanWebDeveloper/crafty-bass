@@ -19,6 +19,8 @@ yarn-error.log*
 
 # Misc
 .tmp/
+.tmp-*
+*.stackdump
 *.html
 .DS_Store
 *.pem
@@ -29,6 +31,7 @@ yarn-error.log*
 # Local env files
 .env
 .env.*
+!**/.env.example
 
 node_modules
 .turbo
@@ -37,4 +40,19 @@ node_modules
 apps/*/.next
 apps/*/.turbo
 apps/*/dist
+apps/*/.venv
+apps/*/.pytest_cache
+apps/*/.ruff_cache
+apps/*/__pycache__
+apps/*/app/__pycache__
+apps/*/tests/__pycache__
 apps/backend/src/generated
+packages/db/src/generated
+_pycache__
+*.pyc
+*.pyo
+crafty_bass_ai_service.egg-info/
+
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
+*.tsbuildinfo*

@@ -10,7 +10,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/frontend",
-        "command": "pnpm build"
+        "command": "next build"
       },
       "outputs": ["{projectRoot}/.next/**", "!{projectRoot}/.next/cache/**"]
     },
@@ -18,7 +18,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/frontend",
-        "command": "pnpm dev"
+        "command": "next dev"
       },
       "cache": false
     },
@@ -26,7 +26,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/frontend",
-        "command": "pnpm start"
+        "command": "next start"
       },
       "cache": false
     },
@@ -34,14 +34,14 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/frontend",
-        "command": "pnpm lint"
+        "command": "eslint ."
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/frontend",
-        "command": "pnpm test"
+        "command": "echo No frontend tests configured"
       }
     }
   }

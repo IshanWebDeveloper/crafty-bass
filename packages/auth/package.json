@@ -1,0 +1,41 @@
+{
+  "name": "@repo/auth",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "lint": "eslint .",
+    "auth:generate": "cross-env PRISMA_USE_DIRECT_URL=1 better-auth generate --config src/index.ts"
+  },
+  "dependencies": {
+    "@better-auth/stripe": "^1.4.19",
+    "@repo/db": "workspace:^",
+    "better-auth": "^1.4.19",
+    "resend": "^6.9.3",
+    "stripe": "^20.3.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@better-auth/cli": "1.4.19",
+    "@repo/eslint-config": "workspace:^",
+    "cross-env": "^10.1.0",
+    "tsup": "^8.5.0",
+    "typescript": "~5.7.2"
+  }
+}
