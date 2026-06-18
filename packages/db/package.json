@@ -1,0 +1,38 @@
+{
+  "name": "@repo/db",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.lib.json && node scripts/copy-prisma-assets.mjs",
+    "lint": "eslint .",
+    "db:generate": "prisma generate",
+    "db:migrate:dev": "dotenv -e ../../apps/backend/.env -- prisma migrate dev",
+    "db:migrate:dev:test": "dotenv -e ../../apps/backend/.env.test -- prisma migrate dev --skip-seed",
+    "db:migrate:reset": "dotenv -e ../../apps/backend/.env -- prisma migrate reset",
+    "db:seed": "dotenv -e ../../apps/backend/.env -- prisma db seed"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@prisma/config": "^7.8.0",
+    "@repo/eslint-config": "workspace:^",
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.11.10",
+    "dotenv-cli": "^11.0.0",
+    "prisma": "^7.8.0",
+    "tsx": "^4.21.0",
+    "typescript": "~5.7.2"
+  }
+}

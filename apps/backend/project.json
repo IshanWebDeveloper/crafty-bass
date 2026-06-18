@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/backend",
-        "command": "pnpm build",
+        "command": "nest build",
         "forwardAllArgs": false,
         "outputPath": "apps/backend/dist"
       },
@@ -19,7 +19,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/backend",
-        "command": "pnpm dev"
+        "command": "nest start --watch"
       },
       "cache": false
     },
@@ -27,7 +27,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/backend",
-        "command": "pnpm start"
+        "command": "nest start"
       },
       "cache": false
     },
@@ -35,14 +35,14 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/backend",
-        "command": "pnpm lint"
+        "command": "eslint \"src/**/*.ts\" \"test/**/*.ts\""
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/backend",
-        "command": "pnpm test"
+        "command": "dotenv -e .env.test -- jest"
       },
       "outputs": ["{projectRoot}/coverage/**"]
     },

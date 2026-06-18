@@ -1,4 +1,23 @@
-@AGENTS.md
+# Crafty Bass Frontend — Agent Guide
+
+This is the single guide for `apps/frontend` (the former `AGENTS.md` has been folded in here — refer only to `CLAUDE.md`).
+
+## Next.js 16 — read the live docs, not training data
+
+This app runs **Next.js 16** (App Router), which renamed and changed APIs versus older versions. Do not answer from memory or stale training data. Read current docs through the **Next.js DevTools MCP**: read the `nextjs-docs://llms-index` resource for the index, then `nextjs_docs` for a page. (There is **no** bundled `node_modules/next/dist/docs/` folder — the MCP is the source of truth.)
+
+Known Next 16 changes that bite:
+
+- **`middleware.ts` is removed** — it's renamed to **`proxy.ts`** (export a `proxy` function, placed at the same level as `app/`, e.g. `src/proxy.ts`). Codemod: `npx @next/codemod@canary middleware-to-proxy .`.
+- Always verify routing, data-fetching, caching, and `next.config` APIs against the live docs before using them; heed deprecation notices.
+
+## Stack
+
+- Next.js 16 App Router + React 19, TypeScript.
+- Tailwind CSS v4 via `@tailwindcss/postcss`; tokens in `src/app/globals.css`.
+- Shared shadcn-style primitives in `@repo/ui` (wrapping **base-ui**, not Radix); theming via `next-themes` + the `@repo/ui` provider/toggle.
+- Icons: prefer `lucide-react` / `@tabler/icons-react`.
+- Path alias `@/*` → `src/*`. Keep route files thin; reusable UI in `src/components`, feature folders when it grows.
 
 # Figma MCP Integration Rules For Crafty-Bass Frontend
 
@@ -192,7 +211,7 @@ Current tooling evidence:
 Example:
 
 ```tsx
-import Image from "next/image";
+import Image from 'next/image';
 
 <Image src="/next.svg" alt="Next.js logo" width={100} height={20} priority />;
 ```
@@ -210,7 +229,7 @@ Evidence:
 
 ```ts
 const nextConfig: NextConfig = {
-  distDir: "dist",
+  distDir: 'dist',
 };
 ```
 
