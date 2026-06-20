@@ -36,7 +36,10 @@ export function MyJobsList({
       <Card>
         <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
           <p className="text-sm text-muted-foreground">{t.mine.empty}</p>
-          <Button render={<Link href={`/${locale}/jobs/new`} />}>
+          <Button
+            nativeButton={false}
+            render={<Link href={`/${locale}/jobs/new`} />}
+          >
             {t.mine.postOne}
           </Button>
         </CardContent>

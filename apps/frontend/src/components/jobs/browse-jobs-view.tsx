@@ -136,6 +136,7 @@ export function BrowseJobsView({
                   </div>
                   <Button
                     size="sm"
+                    nativeButton={false}
                     render={<Link href={`/${locale}/jobs/${job.id}`} />}
                   >
                     {t.detail.quotesHeading.split(' ')[0]}

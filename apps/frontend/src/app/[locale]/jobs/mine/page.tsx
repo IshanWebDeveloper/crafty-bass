@@ -26,7 +26,10 @@ export default async function MyJobsPage({
               </h1>
               <p className="text-sm text-muted-foreground">{t.mine.subtitle}</p>
             </div>
-            <Button render={<Link href={`/${locale}/jobs/new`} />}>
+            <Button
+              nativeButton={false}
+              render={<Link href={`/${locale}/jobs/new`} />}
+            >
               {t.mine.postOne}
             </Button>
           </div>
