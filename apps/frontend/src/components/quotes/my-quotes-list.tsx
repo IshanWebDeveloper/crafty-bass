@@ -51,7 +51,10 @@ export function MyQuotesList({
       <Card>
         <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
           <p className="text-sm text-muted-foreground">{tm.empty}</p>
-          <Button render={<Link href={`/${locale}/jobs`} />}>
+          <Button
+            nativeButton={false}
+            render={<Link href={`/${locale}/jobs`} />}
+          >
             {tm.browseJobs}
           </Button>
         </CardContent>
