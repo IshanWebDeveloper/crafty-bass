@@ -43,6 +43,108 @@
       "sessionRequired": "Please sign in to continue"
     }
   },
+  "verification": {
+    "title": "Get verified",
+    "subtitle": "Verify your identity and trade so homeowners can trust you. Required before you can receive jobs or send quotes.",
+    "status": {
+      "underReview": "Under review",
+      "heading": "Your details are under review",
+      "body": "Submitted just now. An admin verifies every tradesman manually — most are reviewed within 1–2 business days. You can update anything below and resubmit."
+    },
+    "sections": {
+      "identity": {
+        "title": "Identity",
+        "desc": "Matched against your NIC. Used only to verify you — never shown to homeowners."
+      },
+      "address": {
+        "title": "Address",
+        "desc": "Where you're based. We use your district to match you to nearby jobs."
+      },
+      "trade": {
+        "title": "Trade & credentials",
+        "desc": "Your trade, skills and any licences or certifications."
+      },
+      "payout": {
+        "title": "Payout",
+        "desc": "Where we send payment for completed jobs. Encrypted and never shown to homeowners."
+      },
+      "confirm": {
+        "title": "Confirm & submit",
+        "desc": "Review your details before submitting for verification."
+      }
+    },
+    "fields": {
+      "fullName": "Full name (as on your NIC)",
+      "gender": "Gender",
+      "dob": "Date of birth",
+      "nic": "NIC number",
+      "nicHint": "National Identity Card number.",
+      "nicFront": "NIC — front",
+      "nicBack": "NIC — back",
+      "photo": "Recent passport-size photo",
+      "photoHint": "Clear, front-facing, taken within the last 6 months.",
+      "address": "Residential address",
+      "city": "City",
+      "district": "District",
+      "primaryTrade": "Primary trade",
+      "yearsExperience": "Years of experience",
+      "skills": "Skills",
+      "licence": "Trade licence or certificate",
+      "licenceHint": "Add at least one if you have it.",
+      "additionalCert": "Additional certificate (optional)",
+      "licenceNumber": "Licence / registration number (optional)",
+      "licenceNumberPlaceholder": "e.g. CIDA registration no.",
+      "accountHolder": "Account holder name",
+      "bank": "Bank",
+      "branch": "Branch",
+      "accountNumber": "Account number",
+      "accountNumberHint": "Used only to pay you for completed jobs."
+    },
+    "upload": {
+      "cta": "Click to upload or drag a file",
+      "hint": "JPG, PNG or PDF · up to 5 MB"
+    },
+    "genders": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "preferNot": "Prefer not to say"
+    },
+    "consent": "I confirm these details are accurate and authorise Crafty Bass to verify my identity, trade credentials and bank details. I understand verification is required before I can receive jobs or send quotes.",
+    "submit": "Submit for verification",
+    "submitting": "Submitting…",
+    "submitted": "Submitted for verification"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Your escrow, quotes, messages and account updates.",
+    "newCount": "{count} new",
+    "markAllRead": "Mark all read",
+    "seeAll": "See all notifications",
+    "empty": "You're all caught up.",
+    "filters": {
+      "all": "All",
+      "escrow": "Escrow",
+      "message": "Messages",
+      "job": "Jobs",
+      "account": "Account"
+    }
+  },
+  "escrow": {
+    "heading": "Escrow",
+    "subtitle": "Crafty Bass holds the funds and releases them on agreed milestones.",
+    "steps": {
+      "deposit": "Deposit funded",
+      "inProgress": "Work in progress",
+      "released": "Balance released"
+    },
+    "heldInEscrow": "Held in escrow",
+    "depositReleased": "Deposit released",
+    "balanceToRelease": "Balance to release",
+    "fundCta": "Fund deposit",
+    "approveCta": "Approve & release",
+    "todo": "Payments aren't wired up yet."
+  },
   "dashboard": {
     "title": "Your dashboard",
     "subtitle": "A snapshot of your activity on Crafty Bass.",
@@ -255,6 +357,7 @@
     "message": "Message",
     "estimatedStart": "Estimated start",
     "estimatedCompletion": "Estimated completion",
+    "verifiedTradesman": "Verified tradesman",
     "stats": {
       "rating": "{rating} ★ ({count})",
       "jobsCompleted": "{count} completed"

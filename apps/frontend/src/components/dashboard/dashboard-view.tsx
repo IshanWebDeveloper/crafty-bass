@@ -4,9 +4,10 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Skeleton } from '@repo/ui';
+import { Badge, Skeleton } from '@repo/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getDashboard } from '@/lib/api/users';
+import { statusVariant } from '@/lib/status';
 import { useSession } from '@/lib/auth-client';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
@@ -98,9 +99,9 @@ export function DashboardView({
                       {new Date(job.createdAt).toLocaleDateString(locale)}
                     </p>
                   </div>
-                  <span className="rounded-full border border-border px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                  <Badge variant={statusVariant(job.status)}>
                     {job.status}
-                  </span>
+                  </Badge>
                 </li>
               ))}
             </ul>

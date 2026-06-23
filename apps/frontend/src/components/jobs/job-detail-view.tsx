@@ -6,12 +6,24 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Badge,
   Button,
+  RatingStars,
   Skeleton,
+  VerifiedBadge,
 } from '@repo/ui';
 import { toast } from 'sonner';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { getJob, cancelJob, type Job } from '@/lib/api/jobs';
+import { statusVariant } from '@/lib/status';
+import { formatBudgetRange, formatLKR } from '@/lib/currency';
+import { EscrowStrip } from '@/components/escrow/escrow-strip';
 import {
   listQuotesForJob,
   acceptQuote,
@@ -95,9 +107,9 @@ export function JobDetailView({
         <CardHeader className="space-y-2">
           <div className="flex items-start justify-between gap-3">
             <CardTitle className="text-2xl">{job.title}</CardTitle>
-            <span className="shrink-0 rounded-full border border-border px-3 py-1 text-xs font-medium">
+            <Badge variant={statusVariant(job.status)} className="shrink-0">
               {t.statusLabels[job.status]}
-            </span>
+            </Badge>
           </div>
           <p className="text-xs text-muted-foreground">
             {t.detail.postedBy} {job.homeowner.name} · {t.detail.postedOn}{' '}
@@ -115,7 +127,10 @@ export function JobDetailView({
               {t.urgencyLabels[job.urgency]}
             </Field>
             <Field label={t.detail.budget}>
-              {formatBudget(job.budgetMin, job.budgetMax) ?? t.detail.noBudget}
+              <span className="font-mono">
+                {formatBudgetRange(job.budgetMin, job.budgetMax) ||
+                  t.detail.noBudget}
+              </span>
             </Field>
             <Field label={t.fields.city}>{job.city ?? '—'}</Field>
             <Field label={t.fields.district}>{job.district ?? '—'}</Field>
@@ -162,7 +177,11 @@ export function JobDetailView({
         <SubmitQuotePanel jobId={job.id} dict={dict} />
       ) : null}
 
-      {isOwner ? (
+      {isOwner && job.status !== 'OPEN' ? (
+        <EscrowCard job={job} quotes={quotes} dict={dict} />
+      ) : null}
+
+      {isOwner && job.status === 'OPEN' ? (
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">{t.detail.quotesHeading}</CardTitle>
@@ -224,6 +243,66 @@ export function JobDetailView({
         </>
       ) : null}
     </div>
+  );
+}
+
+function EscrowCard({
+  job,
+  quotes,
+  dict,
+}: {
+  job: Job;
+  quotes: Quote[] | undefined;
+  dict: Dictionary;
+}) {
+  const te = dict.escrow;
+  // TODO(backend): escrow amounts/lifecycle aren't modelled yet (plan Gap #2).
+  // Deposit is derived from the accepted quote as a placeholder (30%).
+  const accepted = quotes?.find((q) => q.status === 'ACCEPTED');
+  const amount = accepted?.amount ?? 0;
+  const deposit = Math.round(0.3 * amount);
+  const balance = amount - deposit;
+  const step =
+    job.status === 'COMPLETED' ? 2 : job.status === 'IN_PROGRESS' ? 1 : 0;
+  const steps: [string, string, string] = [
+    te.steps.deposit,
+    te.steps.inProgress,
+    te.steps.released,
+  ];
+  const summaryLabel =
+    step === 2
+      ? te.balanceToRelease
+      : step === 1
+        ? te.depositReleased
+        : te.heldInEscrow;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg">{te.heading}</CardTitle>
+        <CardDescription>{te.subtitle}</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-5">
+        <EscrowStrip current={step} steps={steps} />
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 text-sm text-muted-foreground">
+          <span>
+            {summaryLabel}:{' '}
+            <span className="font-mono font-semibold text-foreground">
+              {formatLKR(step === 2 ? balance : deposit)}
+            </span>
+          </span>
+          {step === 0 ? (
+            <Button size="sm" onClick={() => toast.info(te.todo)}>
+              {te.fundCta}
+            </Button>
+          ) : step === 2 ? (
+            <Button size="sm" onClick={() => toast.info(te.todo)}>
+              {te.approveCta}
+            </Button>
+          ) : null}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -292,18 +371,25 @@ function QuoteRow({
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
         <div className="space-y-1">
-          <p className="text-sm font-medium">{quote.tradesman.name}</p>
+          <p className="flex items-center gap-1.5 text-sm font-medium">
+            {quote.tradesman.name}
+            {/* Quoting is gated on verification, so every quoter is verified. */}
+            <VerifiedBadge size={15} title={tq.verifiedTradesman} />
+          </p>
           {profile ? (
-            <p className="text-xs text-muted-foreground">
-              {tq.stats.rating
-                .replace('{rating}', profile.avgRating.toFixed(1))
-                .replace('{count}', String(profile.ratingCount))}{' '}
-              ·{' '}
-              {tq.stats.jobsCompleted.replace(
-                '{count}',
-                String(profile.jobsCompleted),
-              )}
-            </p>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <RatingStars
+                value={profile.avgRating}
+                count={profile.ratingCount}
+              />
+              <span className="text-xs text-muted-foreground">
+                ·{' '}
+                {tq.stats.jobsCompleted.replace(
+                  '{count}',
+                  String(profile.jobsCompleted),
+                )}
+              </span>
+            </div>
           ) : null}
           {quote.message ? (
             <p className="mt-2 max-w-prose text-sm">{quote.message}</p>
@@ -322,12 +408,12 @@ function QuoteRow({
         </div>
       </div>
       <div className="flex flex-col items-end gap-2">
-        <p className="text-lg font-semibold">
+        <p className="font-mono text-lg font-semibold">
           {quote.currency} {quote.amount.toLocaleString(locale)}
         </p>
-        <span className="rounded-full border border-border px-2 py-0.5 text-xs">
+        <Badge variant={statusVariant(quote.status)}>
           {tq.statusLabels[quote.status]}
-        </span>
+        </Badge>
         {canActOnPending ? (
           <div className="flex gap-2">
             <Button
@@ -353,11 +439,4 @@ function QuoteRow({
       </div>
     </li>
   );
-}
-
-function formatBudget(min: number | null, max: number | null) {
-  if (min !== null && max !== null) return `LKR ${min} – ${max}`;
-  if (min !== null) return `LKR ${min}+`;
-  if (max !== null) return `Up to LKR ${max}`;
-  return null;
 }

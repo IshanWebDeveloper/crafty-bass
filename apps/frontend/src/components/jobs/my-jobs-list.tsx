@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Skeleton } from '@repo/ui';
+import { Badge, Button, Skeleton } from '@repo/ui';
 import { Card, CardContent } from '@/components/ui/card';
 import { listMyJobs } from '@/lib/api/jobs';
+import { statusVariant } from '@/lib/status';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -70,9 +71,9 @@ export function MyJobsList({
                 </p>
               </div>
               <div className="flex flex-col items-end gap-2 text-right">
-                <span className="rounded-full border border-border px-2.5 py-0.5 text-xs font-medium">
+                <Badge variant={statusVariant(job.status)}>
                   {t.statusLabels[job.status]}
-                </span>
+                </Badge>
                 <span className="text-xs text-muted-foreground">
                   {t.mine.viewQuotes.replace(
                     '{count}',

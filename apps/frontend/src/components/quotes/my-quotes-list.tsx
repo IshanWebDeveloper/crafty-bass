@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Skeleton } from '@repo/ui';
+import { Badge, Button, Skeleton } from '@repo/ui';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { listMyQuotes, withdrawQuote } from '@/lib/api/quotes';
+import { statusVariant } from '@/lib/status';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -88,12 +89,12 @@ export function MyQuotesList({
                 ) : null}
               </div>
               <div className="flex flex-col items-end gap-2 text-right">
-                <p className="text-lg font-semibold">
+                <p className="font-mono text-lg font-semibold">
                   {q.currency} {q.amount.toLocaleString(locale)}
                 </p>
-                <span className="rounded-full border border-border px-2 py-0.5 text-xs">
+                <Badge variant={statusVariant(q.status)}>
                   {t.statusLabels[q.status]}
-                </span>
+                </Badge>
                 {q.status === 'PENDING' ? (
                   <Button
                     size="sm"

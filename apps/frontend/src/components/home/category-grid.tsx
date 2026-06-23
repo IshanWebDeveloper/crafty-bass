@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Badge } from '@repo/ui';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -27,16 +28,16 @@ export function CategoryGrid({
             <Link
               key={category.key}
               href={`/${locale}${category.href}`}
-              className="group flex flex-col rounded-xl border border-border bg-card p-6 shadow-card transition-colors hover:border-foreground/20"
+              className="group flex flex-col rounded-xl border border-border bg-card p-6 shadow-soft transition-all hover:border-[color-mix(in_oklch,var(--border)_40%,var(--foreground)_20%)] hover:shadow-card"
             >
               <h3 className="text-xl font-semibold text-foreground">
                 {item.title}
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">{item.copy}</p>
               <div className="mt-auto pt-5">
-                <span className="inline-flex w-fit items-center rounded-md bg-accent-soft px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                <Badge variant="soft">
                   {category.count} {t.available}
-                </span>
+                </Badge>
               </div>
             </Link>
           );
