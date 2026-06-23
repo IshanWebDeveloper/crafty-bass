@@ -4,6 +4,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 import { LocaleSwitcher } from './locale-switcher';
 import { HeaderAuth } from './header-auth';
+import { NotificationBell } from '@/components/notifications/notification-bell';
 
 export function SiteHeader({
   locale,
@@ -43,6 +44,7 @@ export function SiteHeader({
         <div className="flex items-center gap-3">
           <LocaleSwitcher locale={locale} />
           <ModeToggle />
+          <NotificationBell locale={locale} dict={dict} />
           <HeaderAuth locale={locale} dict={dict} />
         </div>
       </div>

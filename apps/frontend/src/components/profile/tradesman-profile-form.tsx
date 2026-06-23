@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Checkbox, Input } from '@repo/ui';
+import { Button, Input, cn, tagVariants } from '@repo/ui';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { NativeSelect } from '@/components/ui/select';
@@ -214,17 +214,22 @@ export function TradesmanProfileForm({
             {t.tradesman.skillsHelp}
           </p>
         </div>
-        <div className="grid gap-2 rounded-lg border border-border p-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-wrap gap-2 rounded-lg border border-border p-3">
           {skills?.map((skill) => {
             const checked = selectedSkillIds.has(skill.id);
             return (
-              <label key={skill.id} className="flex items-center gap-2 text-sm">
-                <Checkbox
-                  checked={checked}
-                  onCheckedChange={(v) => toggleSkill(skill.id, v === true)}
-                />
+              <button
+                key={skill.id}
+                type="button"
+                aria-pressed={checked}
+                onClick={() => toggleSkill(skill.id, !checked)}
+                className={cn(
+                  tagVariants({ variant: checked ? 'active' : 'default' }),
+                  'cursor-pointer rounded-md px-2.5 py-1.5 transition-colors',
+                )}
+              >
                 {skill.nameEn}
-              </label>
+              </button>
             );
           })}
         </div>
