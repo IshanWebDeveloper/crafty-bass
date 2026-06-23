@@ -133,6 +133,8 @@ exports.Prisma.UserScalarFieldEnum = {
   banExpires: 'banExpires',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  phoneNumber: 'phoneNumber',
+  phoneNumberVerified: 'phoneNumberVerified',
 };
 
 exports.Prisma.AccountScalarFieldEnum = {

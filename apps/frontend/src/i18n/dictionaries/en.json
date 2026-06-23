@@ -14,7 +14,7 @@
   "auth": {
     "signIn": {
       "title": "Welcome back",
-      "subtitle": "Sign in to manage your jobs, quotes, and messages.",
+      "subtitle": "Enter your mobile number and we'll text you a code to sign in — no password needed.",
       "submit": "Sign in",
       "submitting": "Signing in…",
       "forgotPassword": "Forgot password?",
@@ -24,18 +24,48 @@
     },
     "signUp": {
       "title": "Create your Crafty Bass account",
-      "subtitle": "Post jobs as a homeowner or quote on jobs as a tradesman.",
+      "subtitle": "First, tell us how you'll use Crafty Bass.",
       "submit": "Create account",
       "submitting": "Creating…",
       "haveAccount": "Already have an account?",
       "signInLink": "Sign in",
-      "success": "Account created"
+      "success": "Account created",
+      "iWantTo": "I want to",
+      "roleHomeowner": "Hire a tradesman",
+      "roleHomeownerSub": "Post jobs and compare quotes",
+      "roleTradesman": "Work as a tradesman",
+      "roleTradesmanSub": "Quote on jobs nearby",
+      "nameRequired": "Please enter your name.",
+      "consentRequired": "Please accept the terms to continue.",
+      "consentPre": "I agree to the",
+      "consentAnd": "and",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy"
     },
     "fields": {
       "name": "Name",
       "email": "Email",
       "password": "Password",
-      "confirmPassword": "Confirm password"
+      "confirmPassword": "Confirm password",
+      "phoneHint": "We'll text a 6-digit code to verify it. This is how you'll sign in — no password needed.",
+      "recoveryEmail": "Recovery email",
+      "recoveryEmailHint": "You'll verify this so you can recover your account if you lose your number."
+    },
+    "phone": {
+      "number": "Mobile number",
+      "numberHint": "We'll text a 6-digit code to this number.",
+      "send": "Send verification code",
+      "sending": "Sending…",
+      "code": "Verification code",
+      "codeSentTo": "We texted a 6-digit code to {phone}.",
+      "verifySignIn": "Verify & sign in",
+      "verifyCreate": "Verify & create account",
+      "verifying": "Verifying…",
+      "resend": "Resend code",
+      "changeNumber": "Change number",
+      "invalidNumber": "Enter a valid Sri Lankan mobile number.",
+      "sendFailed": "Couldn't send the code. Check the number and try again.",
+      "verifyFailed": "That code didn't match. Try again."
     },
     "errors": {
       "invalidCredentials": "Invalid email or password",

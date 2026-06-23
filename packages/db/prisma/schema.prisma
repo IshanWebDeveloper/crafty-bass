@@ -1,3 +1,4 @@
+
 generator client {
   provider     = "prisma-client"
   output       = "../src/generated/prisma"
@@ -122,10 +123,14 @@ model User {
   recommendations   JobRecommendation[]       @relation("RecommendedTradesman")
   conversationLinks ConversationParticipant[]
 
+  phoneNumber         String?
+  phoneNumberVerified Boolean?
+
   @@index([role])
   @@index([userType])
   @@index([createdAt])
   @@map("user")
+  @@unique([phoneNumber])
 }
 
 model Account {
@@ -185,6 +190,7 @@ model Verification {
 // Better Auth's JWT plugin stores rotating sign/verify key pairs here.
 // Without this table the plugin fails at boot with
 // `Model jwks does not exist in the database`, which 500s sign-in.
+
 model Jwks {
   id         String    @id @default(cuid())
   publicKey  String    @db.Text
@@ -525,6 +531,7 @@ enum WebhookEventStatus {
 // (RECEIVED) and mark()-ed before each return, including on rejection, so the
 // admin surface has a complete record. Wired into the marketplace Stripe Connect
 // payout webhook when that is built (Phase C).
+
 model WebhookEvent {
   id          String             @id @default(cuid())
   source      String
