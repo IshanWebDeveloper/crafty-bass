@@ -3544,6 +3544,8 @@ export namespace Prisma {
     banExpires: Date | null;
     createdAt: Date | null;
     updatedAt: Date | null;
+    phoneNumber: string | null;
+    phoneNumberVerified: boolean | null;
   };
 
   export type UserMaxAggregateOutputType = {
@@ -3563,6 +3565,8 @@ export namespace Prisma {
     banExpires: Date | null;
     createdAt: Date | null;
     updatedAt: Date | null;
+    phoneNumber: string | null;
+    phoneNumberVerified: boolean | null;
   };
 
   export type UserCountAggregateOutputType = {
@@ -3582,6 +3586,8 @@ export namespace Prisma {
     banExpires: number;
     createdAt: number;
     updatedAt: number;
+    phoneNumber: number;
+    phoneNumberVerified: number;
     _all: number;
   };
 
@@ -3602,6 +3608,8 @@ export namespace Prisma {
     banExpires?: true;
     createdAt?: true;
     updatedAt?: true;
+    phoneNumber?: true;
+    phoneNumberVerified?: true;
   };
 
   export type UserMaxAggregateInputType = {
@@ -3621,6 +3629,8 @@ export namespace Prisma {
     banExpires?: true;
     createdAt?: true;
     updatedAt?: true;
+    phoneNumber?: true;
+    phoneNumberVerified?: true;
   };
 
   export type UserCountAggregateInputType = {
@@ -3640,6 +3650,8 @@ export namespace Prisma {
     banExpires?: true;
     createdAt?: true;
     updatedAt?: true;
+    phoneNumber?: true;
+    phoneNumberVerified?: true;
     _all?: true;
   };
 
@@ -3735,6 +3747,8 @@ export namespace Prisma {
     banExpires: Date | null;
     createdAt: Date;
     updatedAt: Date;
+    phoneNumber: string | null;
+    phoneNumberVerified: boolean | null;
     _count: UserCountAggregateOutputType | null;
     _min: UserMinAggregateOutputType | null;
     _max: UserMaxAggregateOutputType | null;
@@ -3772,6 +3786,8 @@ export namespace Prisma {
       banExpires?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
+      phoneNumber?: boolean;
+      phoneNumberVerified?: boolean;
       accounts?: boolean | User$accountsArgs<ExtArgs>;
       sessions?: boolean | User$sessionsArgs<ExtArgs>;
       consents?: boolean | User$consentsArgs<ExtArgs>;
@@ -3813,6 +3829,8 @@ export namespace Prisma {
       banExpires?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
+      phoneNumber?: boolean;
+      phoneNumberVerified?: boolean;
     },
     ExtArgs['result']['user']
   >;
@@ -3837,6 +3855,8 @@ export namespace Prisma {
       banExpires?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
+      phoneNumber?: boolean;
+      phoneNumberVerified?: boolean;
     },
     ExtArgs['result']['user']
   >;
@@ -3858,6 +3878,8 @@ export namespace Prisma {
     banExpires?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    phoneNumber?: boolean;
+    phoneNumberVerified?: boolean;
   };
 
   export type UserOmit<
@@ -3878,7 +3900,9 @@ export namespace Prisma {
     | 'banReason'
     | 'banExpires'
     | 'createdAt'
-    | 'updatedAt',
+    | 'updatedAt'
+    | 'phoneNumber'
+    | 'phoneNumberVerified',
     ExtArgs['result']['user']
   >;
   export type UserInclude<
@@ -3949,6 +3973,8 @@ export namespace Prisma {
         banExpires: Date | null;
         createdAt: Date;
         updatedAt: Date;
+        phoneNumber: string | null;
+        phoneNumberVerified: boolean | null;
       },
       ExtArgs['result']['user']
     >;
@@ -4730,6 +4756,8 @@ export namespace Prisma {
     readonly banExpires: FieldRef<'User', 'DateTime'>;
     readonly createdAt: FieldRef<'User', 'DateTime'>;
     readonly updatedAt: FieldRef<'User', 'DateTime'>;
+    readonly phoneNumber: FieldRef<'User', 'String'>;
+    readonly phoneNumberVerified: FieldRef<'User', 'Boolean'>;
   }
 
   // Custom InputTypes
@@ -34766,6 +34794,8 @@ export namespace Prisma {
     banExpires: 'banExpires';
     createdAt: 'createdAt';
     updatedAt: 'updatedAt';
+    phoneNumber: 'phoneNumber';
+    phoneNumberVerified: 'phoneNumberVerified';
   };
 
   export type UserScalarFieldEnum =
@@ -35423,6 +35453,8 @@ export namespace Prisma {
     banExpires?: DateTimeNullableFilter<'User'> | Date | string | null;
     createdAt?: DateTimeFilter<'User'> | Date | string;
     updatedAt?: DateTimeFilter<'User'> | Date | string;
+    phoneNumber?: StringNullableFilter<'User'> | string | null;
+    phoneNumberVerified?: BoolNullableFilter<'User'> | boolean | null;
     accounts?: AccountListRelationFilter;
     sessions?: SessionListRelationFilter;
     consents?: UserConsentListRelationFilter;
@@ -35464,6 +35496,8 @@ export namespace Prisma {
     banExpires?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    phoneNumber?: SortOrderInput | SortOrder;
+    phoneNumberVerified?: SortOrderInput | SortOrder;
     accounts?: AccountOrderByRelationAggregateInput;
     sessions?: SessionOrderByRelationAggregateInput;
     consents?: UserConsentOrderByRelationAggregateInput;
@@ -35487,6 +35521,7 @@ export namespace Prisma {
       id?: string;
       email?: string;
       stripeCustomerId?: string;
+      phoneNumber?: string;
       AND?: UserWhereInput | UserWhereInput[];
       OR?: UserWhereInput[];
       NOT?: UserWhereInput | UserWhereInput[];
@@ -35507,6 +35542,7 @@ export namespace Prisma {
       banExpires?: DateTimeNullableFilter<'User'> | Date | string | null;
       createdAt?: DateTimeFilter<'User'> | Date | string;
       updatedAt?: DateTimeFilter<'User'> | Date | string;
+      phoneNumberVerified?: BoolNullableFilter<'User'> | boolean | null;
       accounts?: AccountListRelationFilter;
       sessions?: SessionListRelationFilter;
       consents?: UserConsentListRelationFilter;
@@ -35530,7 +35566,7 @@ export namespace Prisma {
       recommendations?: JobRecommendationListRelationFilter;
       conversationLinks?: ConversationParticipantListRelationFilter;
     },
-    'id' | 'email' | 'stripeCustomerId'
+    'id' | 'email' | 'stripeCustomerId' | 'phoneNumber'
   >;
 
   export type UserOrderByWithAggregationInput = {
@@ -35550,6 +35586,8 @@ export namespace Prisma {
     banExpires?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    phoneNumber?: SortOrderInput | SortOrder;
+    phoneNumberVerified?: SortOrderInput | SortOrder;
     _count?: UserCountOrderByAggregateInput;
     _max?: UserMaxOrderByAggregateInput;
     _min?: UserMinOrderByAggregateInput;
@@ -35596,6 +35634,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeWithAggregatesFilter<'User'> | Date | string;
     updatedAt?: DateTimeWithAggregatesFilter<'User'> | Date | string;
+    phoneNumber?: StringNullableWithAggregatesFilter<'User'> | string | null;
+    phoneNumberVerified?:
+      | BoolNullableWithAggregatesFilter<'User'>
+      | boolean
+      | null;
   };
 
   export type AccountWhereInput = {
@@ -37953,6 +37996,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -37988,6 +38033,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -38037,6 +38084,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -38086,6 +38138,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -38121,6 +38178,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
   };
 
   export type UserUpdateManyMutationInput = {
@@ -38154,6 +38213,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
   };
 
   export type UserUncheckedUpdateManyInput = {
@@ -38187,6 +38251,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
   };
 
   export type AccountCreateInput = {
@@ -40695,6 +40764,11 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string;
   };
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null;
+  };
+
   export type AccountListRelationFilter = {
     every?: AccountWhereInput;
     some?: AccountWhereInput;
@@ -40827,6 +40901,8 @@ export namespace Prisma {
     banExpires?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    phoneNumber?: SortOrder;
+    phoneNumberVerified?: SortOrder;
   };
 
   export type UserMaxOrderByAggregateInput = {
@@ -40846,6 +40922,8 @@ export namespace Prisma {
     banExpires?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    phoneNumber?: SortOrder;
+    phoneNumberVerified?: SortOrder;
   };
 
   export type UserMinOrderByAggregateInput = {
@@ -40865,6 +40943,8 @@ export namespace Prisma {
     banExpires?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    phoneNumber?: SortOrder;
+    phoneNumberVerified?: SortOrder;
   };
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -40970,6 +41050,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedDateTimeFilter<$PrismaModel>;
     _max?: NestedDateTimeFilter<$PrismaModel>;
+  };
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedBoolNullableFilter<$PrismaModel>;
+    _max?: NestedBoolNullableFilter<$PrismaModel>;
   };
 
   export type UserScalarRelationFilter = {
@@ -43102,6 +43190,10 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string;
+  };
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null;
   };
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -46627,6 +46719,11 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string;
   };
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null;
+  };
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -46757,6 +46854,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedDateTimeFilter<$PrismaModel>;
     _max?: NestedDateTimeFilter<$PrismaModel>;
+  };
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedBoolNullableFilter<$PrismaModel>;
+    _max?: NestedBoolNullableFilter<$PrismaModel>;
   };
 
   export type NestedEnumLanguageCodeFilter<$PrismaModel = never> = {
@@ -48857,6 +48962,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
     homeownerProfile?: HomeownerProfileCreateNestedOneWithoutUserInput;
@@ -48891,6 +48998,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
     homeownerProfile?: HomeownerProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -48967,6 +49076,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
     homeownerProfile?: HomeownerProfileUpdateOneWithoutUserNestedInput;
@@ -49015,6 +49129,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
     homeownerProfile?: HomeownerProfileUncheckedUpdateOneWithoutUserNestedInput;
@@ -49049,6 +49168,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
     homeownerProfile?: HomeownerProfileCreateNestedOneWithoutUserInput;
@@ -49083,6 +49204,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
     homeownerProfile?: HomeownerProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -49159,6 +49282,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
     homeownerProfile?: HomeownerProfileUpdateOneWithoutUserNestedInput;
@@ -49207,6 +49335,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
     homeownerProfile?: HomeownerProfileUncheckedUpdateOneWithoutUserNestedInput;
@@ -49241,6 +49374,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     homeownerProfile?: HomeownerProfileCreateNestedOneWithoutUserInput;
@@ -49275,6 +49410,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     homeownerProfile?: HomeownerProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -49351,6 +49488,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     homeownerProfile?: HomeownerProfileUpdateOneWithoutUserNestedInput;
@@ -49399,6 +49541,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     homeownerProfile?: HomeownerProfileUncheckedUpdateOneWithoutUserNestedInput;
@@ -49433,6 +49580,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -49467,6 +49616,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -49543,6 +49694,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -49591,6 +49747,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -49625,6 +49786,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -49659,6 +49822,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -49764,6 +49929,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -49812,6 +49982,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -50831,6 +51006,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -50865,6 +51042,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -50987,6 +51166,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -51021,6 +51202,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -51359,6 +51542,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -51407,6 +51595,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -51580,6 +51773,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -51628,6 +51826,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -52338,6 +52541,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -52372,6 +52577,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -52699,6 +52906,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -52747,6 +52959,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -53366,6 +53583,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -53400,6 +53619,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -53528,6 +53749,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -53576,6 +53802,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -53638,6 +53869,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -53672,6 +53905,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -53714,6 +53949,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -53748,6 +53985,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -53921,6 +54160,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -53969,6 +54213,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -54037,6 +54286,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -54085,6 +54339,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -54221,6 +54480,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -54255,6 +54516,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -54297,6 +54560,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -54331,6 +54596,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -54629,6 +54896,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -54677,6 +54949,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -54745,6 +55022,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -54793,6 +55075,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -54929,6 +55216,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -54963,6 +55252,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -55216,6 +55507,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -55264,6 +55560,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -55298,6 +55599,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -55332,6 +55635,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -55374,6 +55679,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountCreateNestedManyWithoutUserInput;
     sessions?: SessionCreateNestedManyWithoutUserInput;
     consents?: UserConsentCreateNestedManyWithoutUserInput;
@@ -55408,6 +55715,8 @@ export namespace Prisma {
     banExpires?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
     consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
@@ -55628,6 +55937,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -55676,6 +55990,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
@@ -55744,6 +56063,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUpdateManyWithoutUserNestedInput;
     sessions?: SessionUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUpdateManyWithoutUserNestedInput;
@@ -55792,6 +56116,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
     consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;

@@ -1,7 +1,7 @@
 import { prisma } from '@repo/db';
 import { APIError, betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { admin, openAPI, bearer, jwt } from 'better-auth/plugins';
+import { admin, openAPI, bearer, jwt, phoneNumber } from 'better-auth/plugins';
 import {
   ac,
   admin as adminRole,
@@ -71,6 +71,29 @@ const plugins = [
     jwt: {
       issuer: jwtIssuer,
       audience: jwtAudience,
+    },
+  }),
+  phoneNumber({
+    otpLength: 6,
+    expiresIn: 300, // 5 minutes
+    // Phone is the primary credential for the marketplace. In dev we log the
+    // code; wire an SMS provider (e.g. Notify.lk / Twilio) for production.
+    sendOTP: async ({ phoneNumber: to, code }) => {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`[DEV] Crafty Bass OTP for ${to}: ${code}`);
+        return;
+      }
+      // TODO: integrate an SMS provider here.
+      console.warn(
+        '⚠️ No SMS provider configured — phone OTP not sent in production.',
+      );
+    },
+    // Verifying an OTP for an unknown number creates the account. The sign-up
+    // form then patches the real name + recovery email onto it.
+    signUpOnVerification: {
+      getTempEmail: (phone) =>
+        `${phone.replace(/[^\d]/g, '')}@phone.craftybass.lk`,
+      getTempName: (phone) => phone,
     },
   }),
   ...(stripeClient && stripeWebhookSecret
@@ -244,6 +267,20 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user, context) => {
+          // Phone sign-up (the phoneNumber plugin) creates the user outside the
+          // /sign-up/email path, so the required privacyPolicyAcceptedAt isn't
+          // supplied. The sign-up form gates on consent before sending the OTP,
+          // so default it here to satisfy the NOT NULL column.
+          if (
+            context?.path !== '/sign-up/email' &&
+            !(user as { privacyPolicyAcceptedAt?: unknown })
+              .privacyPolicyAcceptedAt
+          ) {
+            (
+              user as { privacyPolicyAcceptedAt?: Date }
+            ).privacyPolicyAcceptedAt = new Date();
+          }
+
           if (context?.path === '/sign-up/email') {
             const acceptedAtRaw = (
               user as { privacyPolicyAcceptedAt?: unknown }

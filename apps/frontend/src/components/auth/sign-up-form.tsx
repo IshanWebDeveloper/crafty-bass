@@ -2,28 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button, Input } from '@repo/ui';
+import Link from 'next/link';
+import { Building2, Check, Wrench } from 'lucide-react';
+import { Button, Input, cn } from '@repo/ui';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
-import { signUp } from '@/lib/auth-client';
+import { authClient } from '@/lib/auth-client';
+import { toE164LK } from '@/lib/phone';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
-const SignUpSchema = z
-  .object({
-    name: z.string().trim().min(1, 'Name is required').max(120),
-    email: z.string().email(),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    confirm: z.string(),
-  })
-  .refine((v) => v.password === v.confirm, {
-    path: ['confirm'],
-    message: 'Passwords do not match',
-  });
-type SignUpValues = z.infer<typeof SignUpSchema>;
+type Role = 'homeowner' | 'tradesman';
 
 export function SignUpForm({
   locale,
@@ -34,96 +23,280 @@ export function SignUpForm({
 }) {
   const router = useRouter();
   const t = dict.auth;
+  const tp = t.phone;
+  const [step, setStep] = useState<'form' | 'code'>('form');
+  const [role, setRole] = useState<Role>('tradesman');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [agreed, setAgreed] = useState(false);
+  const [code, setCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignUpValues>({
-    resolver: zodResolver(SignUpSchema),
-    defaultValues: { name: '', email: '', password: '', confirm: '' },
-  });
 
-  async function onSubmit(values: SignUpValues) {
+  async function requestOtp() {
+    const phoneNumber = toE164LK(phone);
+    if (!name.trim()) {
+      toast.error(t.signUp.nameRequired);
+      return;
+    }
+    if (!phoneNumber) {
+      toast.error(tp.invalidNumber);
+      return;
+    }
+    if (!agreed) {
+      toast.error(t.signUp.consentRequired);
+      return;
+    }
     setSubmitting(true);
     try {
-      const result = await signUp.email({
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      });
-      if (result.error) {
-        toast.error(result.error.message ?? t.errors.signUpFailed);
+      const { error } = await authClient.phoneNumber.sendOtp({ phoneNumber });
+      if (error) {
+        toast.error(error.message ?? tp.sendFailed);
         return;
       }
-      toast.success(t.signUp.success);
-      // Some setups auto-sign-in after sign-up; if not, the dashboard route
-      // will bounce them to /sign-in via the session guard.
-      router.push(`/${locale}/dashboard`);
-      router.refresh();
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : t.errors.signUpFailed);
+      setStep('code');
+    } catch {
+      toast.error(tp.sendFailed);
     } finally {
       setSubmitting(false);
     }
   }
 
+  async function verify(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const phoneNumber = toE164LK(phone);
+    if (!phoneNumber) return;
+    setSubmitting(true);
+    try {
+      const { error } = await authClient.phoneNumber.verify({
+        phoneNumber,
+        code,
+      });
+      if (error) {
+        toast.error(error.message ?? tp.verifyFailed);
+        return;
+      }
+      // The OTP verify created the account with a temporary email/name. Patch
+      // the real name now; set the recovery email best-effort (it'll be sent a
+      // verification link). userType is set later when the profile is created.
+      await authClient.updateUser({ name: name.trim() }).catch(() => {});
+      if (email.trim()) {
+        await authClient
+          .changeEmail({ newEmail: email.trim() })
+          .catch(() => {});
+      }
+      toast.success(t.signUp.success);
+      router.push(
+        role === 'tradesman'
+          ? `/${locale}/account/get-verified`
+          : `/${locale}/dashboard`,
+      );
+      router.refresh();
+    } catch {
+      toast.error(tp.verifyFailed);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (step === 'code') {
+    return (
+      <form onSubmit={verify} className="space-y-4">
+        <p className="text-sm text-muted-foreground">
+          {tp.codeSentTo.replace('{phone}', toE164LK(phone) ?? phone)}
+        </p>
+        <div className="space-y-1.5">
+          <Label htmlFor="code">{tp.code}</Label>
+          <Input
+            id="code"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            maxLength={6}
+            placeholder="••••••"
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+          />
+        </div>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={submitting || code.length < 6}
+        >
+          {submitting ? tp.verifying : tp.verifyCreate}
+        </Button>
+        <div className="flex items-center justify-between text-sm">
+          <button
+            type="button"
+            onClick={() => setStep('form')}
+            className="text-muted-foreground underline-offset-4 hover:underline"
+          >
+            {tp.changeNumber}
+          </button>
+          <button
+            type="button"
+            onClick={() => void requestOtp()}
+            disabled={submitting}
+            className="text-muted-foreground underline-offset-4 hover:underline"
+          >
+            {tp.resend}
+          </button>
+        </div>
+      </form>
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        void requestOtp();
+      }}
+      className="space-y-4"
+    >
+      <div className="space-y-1.5">
+        <Label>{t.signUp.iWantTo}</Label>
+        <div
+          role="radiogroup"
+          aria-label={t.signUp.iWantTo}
+          className="grid grid-cols-2 gap-3"
+        >
+          <RoleTile
+            icon={<Building2 className="size-5" />}
+            title={t.signUp.roleHomeowner}
+            sub={t.signUp.roleHomeownerSub}
+            selected={role === 'homeowner'}
+            onSelect={() => setRole('homeowner')}
+          />
+          <RoleTile
+            icon={<Wrench className="size-5" />}
+            title={t.signUp.roleTradesman}
+            sub={t.signUp.roleTradesmanSub}
+            selected={role === 'tradesman'}
+            onSelect={() => setRole('tradesman')}
+          />
+        </div>
+      </div>
       <div className="space-y-1.5">
         <Label htmlFor="name">{t.fields.name}</Label>
         <Input
           id="name"
           autoComplete="name"
-          aria-invalid={errors.name !== undefined}
-          {...register('name')}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
-        {errors.name ? (
-          <p className="text-xs text-destructive">{errors.name.message}</p>
-        ) : null}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="email">{t.fields.email}</Label>
+        <Label htmlFor="phone">{tp.number}</Label>
+        <div className="flex gap-2">
+          <span className="inline-flex h-8 shrink-0 items-center justify-center rounded-lg border border-input px-3 text-sm font-medium text-muted-foreground">
+            +94
+          </span>
+          <Input
+            id="phone"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="077 123 4567"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+        <p className="text-xs text-muted-foreground">{t.fields.phoneHint}</p>
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="email">{t.fields.recoveryEmail}</Label>
         <Input
           id="email"
           type="email"
           autoComplete="email"
-          aria-invalid={errors.email !== undefined}
-          {...register('email')}
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        {errors.email ? (
-          <p className="text-xs text-destructive">{errors.email.message}</p>
-        ) : null}
+        <p className="text-xs text-muted-foreground">
+          {t.fields.recoveryEmailHint}
+        </p>
       </div>
-      <div className="space-y-1.5">
-        <Label htmlFor="password">{t.fields.password}</Label>
-        <Input
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          aria-invalid={errors.password !== undefined}
-          {...register('password')}
+      <label
+        htmlFor="consent"
+        className="flex cursor-pointer items-start gap-2.5"
+      >
+        <input
+          id="consent"
+          type="checkbox"
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+          className="mt-0.5 size-4 shrink-0 accent-[var(--primary)]"
         />
-        {errors.password ? (
-          <p className="text-xs text-destructive">{errors.password.message}</p>
-        ) : null}
-      </div>
-      <div className="space-y-1.5">
-        <Label htmlFor="confirm">{t.fields.confirmPassword}</Label>
-        <Input
-          id="confirm"
-          type="password"
-          autoComplete="new-password"
-          aria-invalid={errors.confirm !== undefined}
-          {...register('confirm')}
-        />
-        {errors.confirm ? (
-          <p className="text-xs text-destructive">{errors.confirm.message}</p>
-        ) : null}
-      </div>
-      <Button type="submit" className="w-full" disabled={submitting}>
-        {submitting ? t.signUp.submitting : t.signUp.submit}
+        <span className="text-xs leading-relaxed text-muted-foreground">
+          {t.signUp.consentPre}{' '}
+          <Link
+            href={`/${locale}/terms`}
+            className="font-medium text-foreground underline underline-offset-2"
+          >
+            {t.signUp.terms}
+          </Link>{' '}
+          {t.signUp.consentAnd}{' '}
+          <Link
+            href={`/${locale}/account/privacy`}
+            className="font-medium text-foreground underline underline-offset-2"
+          >
+            {t.signUp.privacy}
+          </Link>
+          .
+        </span>
+      </label>
+      <Button type="submit" className="w-full" disabled={submitting || !agreed}>
+        {submitting ? tp.sending : tp.send}
       </Button>
     </form>
+  );
+}
+
+function RoleTile({
+  icon,
+  title,
+  sub,
+  selected,
+  onSelect,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  sub: string;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={selected}
+      onClick={onSelect}
+      className={cn(
+        'flex flex-col gap-2 rounded-xl border p-4 text-left transition-colors',
+        selected
+          ? 'border-primary bg-accent-soft shadow-soft'
+          : 'border-border bg-background hover:bg-muted',
+      )}
+    >
+      <div className="flex items-center justify-between">
+        {icon}
+        <span
+          className={cn(
+            'inline-flex size-[18px] items-center justify-center rounded-full border',
+            selected
+              ? 'border-primary bg-primary text-primary-foreground'
+              : 'border-border',
+          )}
+        >
+          {selected ? <Check className="size-3" /> : null}
+        </span>
+      </div>
+      <div>
+        <span className="block text-sm font-semibold">{title}</span>
+        <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
+          {sub}
+        </span>
+      </div>
+    </button>
   );
 }
