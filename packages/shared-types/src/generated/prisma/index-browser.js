@@ -348,6 +348,44 @@ exports.Prisma.EscrowTransactionScalarFieldEnum = {
   createdAt: 'createdAt',
 };
 
+exports.Prisma.TradesmanVerificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  fullName: 'fullName',
+  gender: 'gender',
+  dateOfBirth: 'dateOfBirth',
+  nicNumber: 'nicNumber',
+  addressLine: 'addressLine',
+  city: 'city',
+  district: 'district',
+  primaryTrade: 'primaryTrade',
+  yearsExperience: 'yearsExperience',
+  nicFrontKey: 'nicFrontKey',
+  nicBackKey: 'nicBackKey',
+  photoKey: 'photoKey',
+  gramaNiladhariKey: 'gramaNiladhariKey',
+  licenceKey: 'licenceKey',
+  licenceNumber: 'licenceNumber',
+  policeClearanceKey: 'policeClearanceKey',
+  serviceRadiusKm: 'serviceRadiusKm',
+  crewType: 'crewType',
+  helperCount: 'helperCount',
+  portfolioKeys: 'portfolioKeys',
+  guarantorName: 'guarantorName',
+  guarantorNic: 'guarantorNic',
+  voiceIntroKey: 'voiceIntroKey',
+  payoutAccountHolder: 'payoutAccountHolder',
+  payoutBank: 'payoutBank',
+  payoutBranch: 'payoutBranch',
+  payoutAccountNumber: 'payoutAccountNumber',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  rejectionReason: 'rejectionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
 exports.Prisma.ConversationScalarFieldEnum = {
   id: 'id',
   type: 'type',
@@ -518,6 +556,12 @@ exports.EscrowTransactionType = exports.$Enums.EscrowTransactionType = {
   REFUND: 'REFUND',
 };
 
+exports.VerificationStatus = exports.$Enums.VerificationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+};
+
 exports.ConversationType = exports.$Enums.ConversationType = {
   JOB_DIRECT: 'JOB_DIRECT',
   DIRECT: 'DIRECT',
@@ -572,6 +616,7 @@ exports.Prisma.ModelName = {
   Quote: 'Quote',
   JobEscrow: 'JobEscrow',
   EscrowTransaction: 'EscrowTransaction',
+  TradesmanVerification: 'TradesmanVerification',
   Conversation: 'Conversation',
   ConversationParticipant: 'ConversationParticipant',
   Message: 'Message',

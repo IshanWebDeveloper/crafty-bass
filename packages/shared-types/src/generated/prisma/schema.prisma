@@ -81,6 +81,15 @@ enum EscrowTransactionType {
   REFUND
 }
 
+// Tradesman KYC verification submission. A tradesman submits one (PENDING); an
+// admin/support reviewer approves it (flips TradesmanProfile.isVerified, and
+// backgroundChecked when a police-clearance document is attached) or rejects it.
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum ConversationType {
   JOB_DIRECT
   DIRECT
@@ -127,24 +136,26 @@ model User {
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @updatedAt
 
-  accounts           Account[]
-  sessions           Session[]
-  consents           UserConsent[]
-  homeownerProfile   HomeownerProfile?
-  tradesmanProfile   TradesmanProfile?
-  postedJobs         Job[]                     @relation("HomeownerJobs")
-  assignedJobs       Job[]                     @relation("AssignedTradesman")
-  quotes             Quote[]                   @relation("TradesmanQuotes")
-  sentMessages       Message[]                 @relation("SentMessages")
-  receivedMessages   Message[]                 @relation("ReceivedMessages")
-  reviewsGiven       Review[]                  @relation("ReviewsGiven")
-  reviewsReceived    Review[]                  @relation("ReviewsReceived")
-  createdReports     Report[]                  @relation("ReportsCreated")
-  assignedReports    Report[]                  @relation("ReportsAssigned")
-  recommendations    JobRecommendation[]       @relation("RecommendedTradesman")
-  conversationLinks  ConversationParticipant[]
-  escrowsAsHomeowner JobEscrow[]               @relation("EscrowHomeowner")
-  escrowsAsTradesman JobEscrow[]               @relation("EscrowTradesman")
+  accounts              Account[]
+  sessions              Session[]
+  consents              UserConsent[]
+  homeownerProfile      HomeownerProfile?
+  tradesmanProfile      TradesmanProfile?
+  postedJobs            Job[]                     @relation("HomeownerJobs")
+  assignedJobs          Job[]                     @relation("AssignedTradesman")
+  quotes                Quote[]                   @relation("TradesmanQuotes")
+  sentMessages          Message[]                 @relation("SentMessages")
+  receivedMessages      Message[]                 @relation("ReceivedMessages")
+  reviewsGiven          Review[]                  @relation("ReviewsGiven")
+  reviewsReceived       Review[]                  @relation("ReviewsReceived")
+  createdReports        Report[]                  @relation("ReportsCreated")
+  assignedReports       Report[]                  @relation("ReportsAssigned")
+  recommendations       JobRecommendation[]       @relation("RecommendedTradesman")
+  conversationLinks     ConversationParticipant[]
+  escrowsAsHomeowner    JobEscrow[]               @relation("EscrowHomeowner")
+  escrowsAsTradesman    JobEscrow[]               @relation("EscrowTradesman")
+  verification          TradesmanVerification?    @relation("TradesmanVerification")
+  reviewedVerifications TradesmanVerification[]   @relation("VerificationReviewer")
 
   phoneNumber         String?
   phoneNumberVerified Boolean?
@@ -477,6 +488,69 @@ model EscrowTransaction {
   escrow JobEscrow @relation(fields: [escrowId], references: [id], onDelete: Cascade)
 
   @@index([escrowId])
+}
+
+// One KYC submission per tradesman (resubmittable while not approved). Document
+// fields hold storage references (keys/URLs) — the actual binary upload is a
+// separate concern. Sensitive fields (NIC, payout) are never exposed to
+// homeowners; only the submitting tradesman and reviewers can read them.
+model TradesmanVerification {
+  id     String             @id @default(cuid())
+  userId String             @unique
+  status VerificationStatus @default(PENDING)
+
+  // Identity
+  fullName    String
+  gender      String?
+  dateOfBirth DateTime?
+  nicNumber   String
+
+  // Address
+  addressLine String?
+  city        String?
+  district    String?
+
+  // Trade
+  primaryTrade    String?
+  yearsExperience Int     @default(0)
+
+  // Document references (storage keys/URLs)
+  nicFrontKey        String?
+  nicBackKey         String?
+  photoKey           String?
+  gramaNiladhariKey  String?
+  licenceKey         String?
+  licenceNumber      String?
+  policeClearanceKey String? // presence unlocks the Background-checked tier
+
+  // Work details
+  serviceRadiusKm Int     @default(15)
+  crewType        String? // solo | team
+  helperCount     Int?
+  portfolioKeys   Json? // string[]
+  guarantorName   String?
+  guarantorNic    String?
+  voiceIntroKey   String?
+
+  // Payout (sensitive)
+  payoutAccountHolder String?
+  payoutBank          String?
+  payoutBranch        String?
+  payoutAccountNumber String?
+
+  // Review
+  reviewedById    String?
+  reviewedAt      DateTime?
+  rejectionReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user       User  @relation("TradesmanVerification", fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy User? @relation("VerificationReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([reviewedById])
 }
 
 model Conversation {
