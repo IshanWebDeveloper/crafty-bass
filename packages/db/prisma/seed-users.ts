@@ -40,6 +40,10 @@ const COMMON_PASSWORD = 'Password123!';
 type SeedUser = {
   email: string;
   name: string;
+  // E.164 phone for OTP login. Sign in by typing the local form (e.g. the
+  // "077 100 0005" matching "+94771000005"); the dev OTP prints to the backend
+  // console. Each must be unique (phoneNumber has a unique index).
+  phone: string;
   role?: 'ADMIN' | 'SUPPORT';
   userType?: 'HOMEOWNER' | 'TRADESMAN';
   homeowner?: {
@@ -56,6 +60,9 @@ type SeedUser = {
     district?: string;
     serviceRadiusKm: number;
     skillSlugs: string[];
+    // Verified tradesmen can quote; unverified ones are gated. Mix both so the
+    // browse-jobs gating + profile verification card are testable.
+    isVerified?: boolean;
   };
 };
 
@@ -63,16 +70,19 @@ const users: SeedUser[] = [
   {
     email: 'admin@example.com',
     name: 'Admin User',
+    phone: '+94771000001',
     role: 'ADMIN',
   },
   {
     email: 'support@example.com',
     name: 'Support User',
+    phone: '+94771000002',
     role: 'SUPPORT',
   },
   {
     email: 'anna@example.com',
     name: 'Anna Perera',
+    phone: '+94771000003',
     userType: 'HOMEOWNER',
     homeowner: {
       locationText: '14 Galle Road',
@@ -84,6 +94,7 @@ const users: SeedUser[] = [
   {
     email: 'ben@example.com',
     name: 'Ben Silva',
+    phone: '+94771000004',
     userType: 'HOMEOWNER',
     homeowner: {
       locationText: '6 Lake Drive',
@@ -95,6 +106,7 @@ const users: SeedUser[] = [
   {
     email: 'priya@example.com',
     name: 'Priya Fernando',
+    phone: '+94771000005',
     userType: 'TRADESMAN',
     tradesman: {
       bio: 'Licensed plumber, 12 years on residential repairs and boiler service.',
@@ -108,11 +120,14 @@ const users: SeedUser[] = [
         'plumbing-boiler-service',
         'plumbing-fittings',
       ],
+      // Verified — can quote on browse-jobs and shows the green seal.
+      isVerified: true,
     },
   },
   {
     email: 'kasun@example.com',
     name: 'Kasun Jayasinghe',
+    phone: '+94771000006',
     userType: 'TRADESMAN',
     tradesman: {
       bio: 'Certified electrician focused on safe rewiring and lighting installs.',
@@ -127,11 +142,14 @@ const users: SeedUser[] = [
         'electrical-lighting',
         'electrical-safety',
       ],
+      // Unverified — quoting is gated; profile shows "Verification required".
+      isVerified: false,
     },
   },
   {
     email: 'ravi@example.com',
     name: 'Ravi Kumar',
+    phone: '+94771000007',
     userType: 'TRADESMAN',
     tradesman: {
       bio: 'Painter and finishing carpenter. Interior + exterior work.',
@@ -146,6 +164,7 @@ const users: SeedUser[] = [
         'painting-wall-prep',
         'carpentry-doors-windows',
       ],
+      isVerified: false,
     },
   },
 ];
@@ -190,6 +209,10 @@ async function applyRoleAndType(userId: string, seed: SeedUser) {
     data: {
       ...(seed.role ? { role: seed.role } : {}),
       ...(seed.userType ? { userType: seed.userType } : {}),
+      // Set the OTP-login phone (already "verified" for these fixtures).
+      phone: seed.phone,
+      phoneNumber: seed.phone,
+      phoneNumberVerified: true,
     },
   });
 }
@@ -233,6 +256,7 @@ async function applyTradesmanProfile(userId: string, seed: SeedUser) {
       city: seed.tradesman.city ?? null,
       district: seed.tradesman.district ?? null,
       serviceRadiusKm: seed.tradesman.serviceRadiusKm,
+      isVerified: seed.tradesman.isVerified ?? false,
       preferredLanguage: 'EN',
     },
     update: {
@@ -242,6 +266,7 @@ async function applyTradesmanProfile(userId: string, seed: SeedUser) {
       city: seed.tradesman.city ?? null,
       district: seed.tradesman.district ?? null,
       serviceRadiusKm: seed.tradesman.serviceRadiusKm,
+      isVerified: seed.tradesman.isVerified ?? false,
     },
     select: { id: true },
   });
@@ -329,10 +354,19 @@ async function main() {
 
   await seedSampleJobs(emailToId);
 
-  console.log(`Seeded ${users.length} users (password: ${COMMON_PASSWORD}).`);
+  console.log(
+    `Seeded ${users.length} users — sign in by phone (OTP prints to this ` +
+      `console in dev) or email + password ${COMMON_PASSWORD}.`,
+  );
   for (const u of users) {
     const tag = u.role ?? u.userType ?? 'USER';
-    console.log(`  - ${u.email}  (${tag})`);
+    const verified =
+      u.tradesman?.isVerified === true
+        ? ' [verified]'
+        : u.userType === 'TRADESMAN'
+          ? ' [unverified]'
+          : '';
+    console.log(`  - ${u.phone}  ${u.email}  (${tag})${verified}`);
   }
   console.log(
     'Sample OPEN jobs: kitchen tap leak (Anna), bedroom rewire (Ben).',
