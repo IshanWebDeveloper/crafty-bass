@@ -98,6 +98,12 @@ export type JobEscrow = $Result.DefaultSelection<Prisma.$JobEscrowPayload>;
 export type EscrowTransaction =
   $Result.DefaultSelection<Prisma.$EscrowTransactionPayload>;
 /**
+ * Model TradesmanVerification
+ *
+ */
+export type TradesmanVerification =
+  $Result.DefaultSelection<Prisma.$TradesmanVerificationPayload>;
+/**
  * Model Conversation
  *
  */
@@ -216,6 +222,15 @@ export namespace $Enums {
   export type EscrowTransactionType =
     (typeof EscrowTransactionType)[keyof typeof EscrowTransactionType];
 
+  export const VerificationStatus: {
+    PENDING: 'PENDING';
+    APPROVED: 'APPROVED';
+    REJECTED: 'REJECTED';
+  };
+
+  export type VerificationStatus =
+    (typeof VerificationStatus)[keyof typeof VerificationStatus];
+
   export const ConversationType: {
     JOB_DIRECT: 'JOB_DIRECT';
     DIRECT: 'DIRECT';
@@ -298,6 +313,10 @@ export const EscrowStatus: typeof $Enums.EscrowStatus;
 export type EscrowTransactionType = $Enums.EscrowTransactionType;
 
 export const EscrowTransactionType: typeof $Enums.EscrowTransactionType;
+
+export type VerificationStatus = $Enums.VerificationStatus;
+
+export const VerificationStatus: typeof $Enums.VerificationStatus;
 
 export type ConversationType = $Enums.ConversationType;
 
@@ -651,6 +670,19 @@ export class PrismaClient<
    * ```
    */
   get escrowTransaction(): Prisma.EscrowTransactionDelegate<
+    ExtArgs,
+    ClientOptions
+  >;
+
+  /**
+   * `prisma.tradesmanVerification`: Exposes CRUD operations for the **TradesmanVerification** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more TradesmanVerifications
+   * const tradesmanVerifications = await prisma.tradesmanVerification.findMany()
+   * ```
+   */
+  get tradesmanVerification(): Prisma.TradesmanVerificationDelegate<
     ExtArgs,
     ClientOptions
   >;
@@ -1198,6 +1230,7 @@ export namespace Prisma {
     Quote: 'Quote';
     JobEscrow: 'JobEscrow';
     EscrowTransaction: 'EscrowTransaction';
+    TradesmanVerification: 'TradesmanVerification';
     Conversation: 'Conversation';
     ConversationParticipant: 'ConversationParticipant';
     Message: 'Message';
@@ -1244,6 +1277,7 @@ export namespace Prisma {
         | 'quote'
         | 'jobEscrow'
         | 'escrowTransaction'
+        | 'tradesmanVerification'
         | 'conversation'
         | 'conversationParticipant'
         | 'message'
@@ -2452,6 +2486,82 @@ export namespace Prisma {
           };
         };
       };
+      TradesmanVerification: {
+        payload: Prisma.$TradesmanVerificationPayload<ExtArgs>;
+        fields: Prisma.TradesmanVerificationFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.TradesmanVerificationFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.TradesmanVerificationFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload>;
+          };
+          findFirst: {
+            args: Prisma.TradesmanVerificationFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.TradesmanVerificationFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload>;
+          };
+          findMany: {
+            args: Prisma.TradesmanVerificationFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload>[];
+          };
+          create: {
+            args: Prisma.TradesmanVerificationCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload>;
+          };
+          createMany: {
+            args: Prisma.TradesmanVerificationCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.TradesmanVerificationCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload>[];
+          };
+          delete: {
+            args: Prisma.TradesmanVerificationDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload>;
+          };
+          update: {
+            args: Prisma.TradesmanVerificationUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload>;
+          };
+          deleteMany: {
+            args: Prisma.TradesmanVerificationDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.TradesmanVerificationUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.TradesmanVerificationUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload>[];
+          };
+          upsert: {
+            args: Prisma.TradesmanVerificationUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TradesmanVerificationPayload>;
+          };
+          aggregate: {
+            args: Prisma.TradesmanVerificationAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateTradesmanVerification>;
+          };
+          groupBy: {
+            args: Prisma.TradesmanVerificationGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<TradesmanVerificationGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.TradesmanVerificationCountArgs<ExtArgs>;
+            result:
+              | $Utils.Optional<TradesmanVerificationCountAggregateOutputType>
+              | number;
+          };
+        };
+      };
       Conversation: {
         payload: Prisma.$ConversationPayload<ExtArgs>;
         fields: Prisma.ConversationFieldRefs;
@@ -3106,6 +3216,7 @@ export namespace Prisma {
     quote?: QuoteOmit;
     jobEscrow?: JobEscrowOmit;
     escrowTransaction?: EscrowTransactionOmit;
+    tradesmanVerification?: TradesmanVerificationOmit;
     conversation?: ConversationOmit;
     conversationParticipant?: ConversationParticipantOmit;
     message?: MessageOmit;
@@ -3211,6 +3322,7 @@ export namespace Prisma {
     conversationLinks: number;
     escrowsAsHomeowner: number;
     escrowsAsTradesman: number;
+    reviewedVerifications: number;
   };
 
   export type UserCountOutputTypeSelect<
@@ -3236,6 +3348,9 @@ export namespace Prisma {
     escrowsAsTradesman?:
       | boolean
       | UserCountOutputTypeCountEscrowsAsTradesmanArgs;
+    reviewedVerifications?:
+      | boolean
+      | UserCountOutputTypeCountReviewedVerificationsArgs;
   };
 
   // Custom InputTypes
@@ -3393,6 +3508,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: JobEscrowWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReviewedVerificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: TradesmanVerificationWhereInput;
   };
 
   /**
@@ -4088,6 +4212,8 @@ export namespace Prisma {
       conversationLinks?: boolean | User$conversationLinksArgs<ExtArgs>;
       escrowsAsHomeowner?: boolean | User$escrowsAsHomeownerArgs<ExtArgs>;
       escrowsAsTradesman?: boolean | User$escrowsAsTradesmanArgs<ExtArgs>;
+      verification?: boolean | User$verificationArgs<ExtArgs>;
+      reviewedVerifications?: boolean | User$reviewedVerificationsArgs<ExtArgs>;
       _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['user']
@@ -4210,6 +4336,8 @@ export namespace Prisma {
     conversationLinks?: boolean | User$conversationLinksArgs<ExtArgs>;
     escrowsAsHomeowner?: boolean | User$escrowsAsHomeownerArgs<ExtArgs>;
     escrowsAsTradesman?: boolean | User$escrowsAsTradesmanArgs<ExtArgs>;
+    verification?: boolean | User$verificationArgs<ExtArgs>;
+    reviewedVerifications?: boolean | User$reviewedVerificationsArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -4242,6 +4370,8 @@ export namespace Prisma {
       conversationLinks: Prisma.$ConversationParticipantPayload<ExtArgs>[];
       escrowsAsHomeowner: Prisma.$JobEscrowPayload<ExtArgs>[];
       escrowsAsTradesman: Prisma.$JobEscrowPayload<ExtArgs>[];
+      verification: Prisma.$TradesmanVerificationPayload<ExtArgs> | null;
+      reviewedVerifications: Prisma.$TradesmanVerificationPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -5004,6 +5134,32 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       | $Result.GetResult<
           Prisma.$JobEscrowPayload<ExtArgs>,
+          T,
+          'findMany',
+          GlobalOmitOptions
+        >
+      | Null
+    >;
+    verification<T extends User$verificationArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$verificationArgs<ExtArgs>>,
+    ): Prisma__TradesmanVerificationClient<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    reviewedVerifications<
+      T extends User$reviewedVerificationsArgs<ExtArgs> = {},
+    >(
+      args?: Subset<T, User$reviewedVerificationsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$TradesmanVerificationPayload<ExtArgs>,
           T,
           'findMany',
           GlobalOmitOptions
@@ -5965,6 +6121,57 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: JobEscrowScalarFieldEnum | JobEscrowScalarFieldEnum[];
+  };
+
+  /**
+   * User.verification
+   */
+  export type User$verificationArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    where?: TradesmanVerificationWhereInput;
+  };
+
+  /**
+   * User.reviewedVerifications
+   */
+  export type User$reviewedVerificationsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    where?: TradesmanVerificationWhereInput;
+    orderBy?:
+      | TradesmanVerificationOrderByWithRelationInput
+      | TradesmanVerificationOrderByWithRelationInput[];
+    cursor?: TradesmanVerificationWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?:
+      | TradesmanVerificationScalarFieldEnum
+      | TradesmanVerificationScalarFieldEnum[];
   };
 
   /**
@@ -28208,6 +28415,1873 @@ export namespace Prisma {
   };
 
   /**
+   * Model TradesmanVerification
+   */
+
+  export type AggregateTradesmanVerification = {
+    _count: TradesmanVerificationCountAggregateOutputType | null;
+    _avg: TradesmanVerificationAvgAggregateOutputType | null;
+    _sum: TradesmanVerificationSumAggregateOutputType | null;
+    _min: TradesmanVerificationMinAggregateOutputType | null;
+    _max: TradesmanVerificationMaxAggregateOutputType | null;
+  };
+
+  export type TradesmanVerificationAvgAggregateOutputType = {
+    yearsExperience: number | null;
+    serviceRadiusKm: number | null;
+    helperCount: number | null;
+  };
+
+  export type TradesmanVerificationSumAggregateOutputType = {
+    yearsExperience: number | null;
+    serviceRadiusKm: number | null;
+    helperCount: number | null;
+  };
+
+  export type TradesmanVerificationMinAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    status: $Enums.VerificationStatus | null;
+    fullName: string | null;
+    gender: string | null;
+    dateOfBirth: Date | null;
+    nicNumber: string | null;
+    addressLine: string | null;
+    city: string | null;
+    district: string | null;
+    primaryTrade: string | null;
+    yearsExperience: number | null;
+    nicFrontKey: string | null;
+    nicBackKey: string | null;
+    photoKey: string | null;
+    gramaNiladhariKey: string | null;
+    licenceKey: string | null;
+    licenceNumber: string | null;
+    policeClearanceKey: string | null;
+    serviceRadiusKm: number | null;
+    crewType: string | null;
+    helperCount: number | null;
+    guarantorName: string | null;
+    guarantorNic: string | null;
+    voiceIntroKey: string | null;
+    payoutAccountHolder: string | null;
+    payoutBank: string | null;
+    payoutBranch: string | null;
+    payoutAccountNumber: string | null;
+    reviewedById: string | null;
+    reviewedAt: Date | null;
+    rejectionReason: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type TradesmanVerificationMaxAggregateOutputType = {
+    id: string | null;
+    userId: string | null;
+    status: $Enums.VerificationStatus | null;
+    fullName: string | null;
+    gender: string | null;
+    dateOfBirth: Date | null;
+    nicNumber: string | null;
+    addressLine: string | null;
+    city: string | null;
+    district: string | null;
+    primaryTrade: string | null;
+    yearsExperience: number | null;
+    nicFrontKey: string | null;
+    nicBackKey: string | null;
+    photoKey: string | null;
+    gramaNiladhariKey: string | null;
+    licenceKey: string | null;
+    licenceNumber: string | null;
+    policeClearanceKey: string | null;
+    serviceRadiusKm: number | null;
+    crewType: string | null;
+    helperCount: number | null;
+    guarantorName: string | null;
+    guarantorNic: string | null;
+    voiceIntroKey: string | null;
+    payoutAccountHolder: string | null;
+    payoutBank: string | null;
+    payoutBranch: string | null;
+    payoutAccountNumber: string | null;
+    reviewedById: string | null;
+    reviewedAt: Date | null;
+    rejectionReason: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type TradesmanVerificationCountAggregateOutputType = {
+    id: number;
+    userId: number;
+    status: number;
+    fullName: number;
+    gender: number;
+    dateOfBirth: number;
+    nicNumber: number;
+    addressLine: number;
+    city: number;
+    district: number;
+    primaryTrade: number;
+    yearsExperience: number;
+    nicFrontKey: number;
+    nicBackKey: number;
+    photoKey: number;
+    gramaNiladhariKey: number;
+    licenceKey: number;
+    licenceNumber: number;
+    policeClearanceKey: number;
+    serviceRadiusKm: number;
+    crewType: number;
+    helperCount: number;
+    portfolioKeys: number;
+    guarantorName: number;
+    guarantorNic: number;
+    voiceIntroKey: number;
+    payoutAccountHolder: number;
+    payoutBank: number;
+    payoutBranch: number;
+    payoutAccountNumber: number;
+    reviewedById: number;
+    reviewedAt: number;
+    rejectionReason: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type TradesmanVerificationAvgAggregateInputType = {
+    yearsExperience?: true;
+    serviceRadiusKm?: true;
+    helperCount?: true;
+  };
+
+  export type TradesmanVerificationSumAggregateInputType = {
+    yearsExperience?: true;
+    serviceRadiusKm?: true;
+    helperCount?: true;
+  };
+
+  export type TradesmanVerificationMinAggregateInputType = {
+    id?: true;
+    userId?: true;
+    status?: true;
+    fullName?: true;
+    gender?: true;
+    dateOfBirth?: true;
+    nicNumber?: true;
+    addressLine?: true;
+    city?: true;
+    district?: true;
+    primaryTrade?: true;
+    yearsExperience?: true;
+    nicFrontKey?: true;
+    nicBackKey?: true;
+    photoKey?: true;
+    gramaNiladhariKey?: true;
+    licenceKey?: true;
+    licenceNumber?: true;
+    policeClearanceKey?: true;
+    serviceRadiusKm?: true;
+    crewType?: true;
+    helperCount?: true;
+    guarantorName?: true;
+    guarantorNic?: true;
+    voiceIntroKey?: true;
+    payoutAccountHolder?: true;
+    payoutBank?: true;
+    payoutBranch?: true;
+    payoutAccountNumber?: true;
+    reviewedById?: true;
+    reviewedAt?: true;
+    rejectionReason?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type TradesmanVerificationMaxAggregateInputType = {
+    id?: true;
+    userId?: true;
+    status?: true;
+    fullName?: true;
+    gender?: true;
+    dateOfBirth?: true;
+    nicNumber?: true;
+    addressLine?: true;
+    city?: true;
+    district?: true;
+    primaryTrade?: true;
+    yearsExperience?: true;
+    nicFrontKey?: true;
+    nicBackKey?: true;
+    photoKey?: true;
+    gramaNiladhariKey?: true;
+    licenceKey?: true;
+    licenceNumber?: true;
+    policeClearanceKey?: true;
+    serviceRadiusKm?: true;
+    crewType?: true;
+    helperCount?: true;
+    guarantorName?: true;
+    guarantorNic?: true;
+    voiceIntroKey?: true;
+    payoutAccountHolder?: true;
+    payoutBank?: true;
+    payoutBranch?: true;
+    payoutAccountNumber?: true;
+    reviewedById?: true;
+    reviewedAt?: true;
+    rejectionReason?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type TradesmanVerificationCountAggregateInputType = {
+    id?: true;
+    userId?: true;
+    status?: true;
+    fullName?: true;
+    gender?: true;
+    dateOfBirth?: true;
+    nicNumber?: true;
+    addressLine?: true;
+    city?: true;
+    district?: true;
+    primaryTrade?: true;
+    yearsExperience?: true;
+    nicFrontKey?: true;
+    nicBackKey?: true;
+    photoKey?: true;
+    gramaNiladhariKey?: true;
+    licenceKey?: true;
+    licenceNumber?: true;
+    policeClearanceKey?: true;
+    serviceRadiusKm?: true;
+    crewType?: true;
+    helperCount?: true;
+    portfolioKeys?: true;
+    guarantorName?: true;
+    guarantorNic?: true;
+    voiceIntroKey?: true;
+    payoutAccountHolder?: true;
+    payoutBank?: true;
+    payoutBranch?: true;
+    payoutAccountNumber?: true;
+    reviewedById?: true;
+    reviewedAt?: true;
+    rejectionReason?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type TradesmanVerificationAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which TradesmanVerification to aggregate.
+     */
+    where?: TradesmanVerificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TradesmanVerifications to fetch.
+     */
+    orderBy?:
+      | TradesmanVerificationOrderByWithRelationInput
+      | TradesmanVerificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: TradesmanVerificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TradesmanVerifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TradesmanVerifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned TradesmanVerifications
+     **/
+    _count?: true | TradesmanVerificationCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: TradesmanVerificationAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: TradesmanVerificationSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: TradesmanVerificationMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: TradesmanVerificationMaxAggregateInputType;
+  };
+
+  export type GetTradesmanVerificationAggregateType<
+    T extends TradesmanVerificationAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateTradesmanVerification]: P extends
+      | '_count'
+      | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTradesmanVerification[P]>
+      : GetScalarType<T[P], AggregateTradesmanVerification[P]>;
+  };
+
+  export type TradesmanVerificationGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: TradesmanVerificationWhereInput;
+    orderBy?:
+      | TradesmanVerificationOrderByWithAggregationInput
+      | TradesmanVerificationOrderByWithAggregationInput[];
+    by:
+      | TradesmanVerificationScalarFieldEnum[]
+      | TradesmanVerificationScalarFieldEnum;
+    having?: TradesmanVerificationScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: TradesmanVerificationCountAggregateInputType | true;
+    _avg?: TradesmanVerificationAvgAggregateInputType;
+    _sum?: TradesmanVerificationSumAggregateInputType;
+    _min?: TradesmanVerificationMinAggregateInputType;
+    _max?: TradesmanVerificationMaxAggregateInputType;
+  };
+
+  export type TradesmanVerificationGroupByOutputType = {
+    id: string;
+    userId: string;
+    status: $Enums.VerificationStatus;
+    fullName: string;
+    gender: string | null;
+    dateOfBirth: Date | null;
+    nicNumber: string;
+    addressLine: string | null;
+    city: string | null;
+    district: string | null;
+    primaryTrade: string | null;
+    yearsExperience: number;
+    nicFrontKey: string | null;
+    nicBackKey: string | null;
+    photoKey: string | null;
+    gramaNiladhariKey: string | null;
+    licenceKey: string | null;
+    licenceNumber: string | null;
+    policeClearanceKey: string | null;
+    serviceRadiusKm: number;
+    crewType: string | null;
+    helperCount: number | null;
+    portfolioKeys: JsonValue | null;
+    guarantorName: string | null;
+    guarantorNic: string | null;
+    voiceIntroKey: string | null;
+    payoutAccountHolder: string | null;
+    payoutBank: string | null;
+    payoutBranch: string | null;
+    payoutAccountNumber: string | null;
+    reviewedById: string | null;
+    reviewedAt: Date | null;
+    rejectionReason: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: TradesmanVerificationCountAggregateOutputType | null;
+    _avg: TradesmanVerificationAvgAggregateOutputType | null;
+    _sum: TradesmanVerificationSumAggregateOutputType | null;
+    _min: TradesmanVerificationMinAggregateOutputType | null;
+    _max: TradesmanVerificationMaxAggregateOutputType | null;
+  };
+
+  type GetTradesmanVerificationGroupByPayload<
+    T extends TradesmanVerificationGroupByArgs,
+  > = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TradesmanVerificationGroupByOutputType, T['by']> & {
+        [P in keyof T &
+          keyof TradesmanVerificationGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], TradesmanVerificationGroupByOutputType[P]>
+          : GetScalarType<T[P], TradesmanVerificationGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type TradesmanVerificationSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      status?: boolean;
+      fullName?: boolean;
+      gender?: boolean;
+      dateOfBirth?: boolean;
+      nicNumber?: boolean;
+      addressLine?: boolean;
+      city?: boolean;
+      district?: boolean;
+      primaryTrade?: boolean;
+      yearsExperience?: boolean;
+      nicFrontKey?: boolean;
+      nicBackKey?: boolean;
+      photoKey?: boolean;
+      gramaNiladhariKey?: boolean;
+      licenceKey?: boolean;
+      licenceNumber?: boolean;
+      policeClearanceKey?: boolean;
+      serviceRadiusKm?: boolean;
+      crewType?: boolean;
+      helperCount?: boolean;
+      portfolioKeys?: boolean;
+      guarantorName?: boolean;
+      guarantorNic?: boolean;
+      voiceIntroKey?: boolean;
+      payoutAccountHolder?: boolean;
+      payoutBank?: boolean;
+      payoutBranch?: boolean;
+      payoutAccountNumber?: boolean;
+      reviewedById?: boolean;
+      reviewedAt?: boolean;
+      rejectionReason?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+      reviewedBy?: boolean | TradesmanVerification$reviewedByArgs<ExtArgs>;
+    },
+    ExtArgs['result']['tradesmanVerification']
+  >;
+
+  export type TradesmanVerificationSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      status?: boolean;
+      fullName?: boolean;
+      gender?: boolean;
+      dateOfBirth?: boolean;
+      nicNumber?: boolean;
+      addressLine?: boolean;
+      city?: boolean;
+      district?: boolean;
+      primaryTrade?: boolean;
+      yearsExperience?: boolean;
+      nicFrontKey?: boolean;
+      nicBackKey?: boolean;
+      photoKey?: boolean;
+      gramaNiladhariKey?: boolean;
+      licenceKey?: boolean;
+      licenceNumber?: boolean;
+      policeClearanceKey?: boolean;
+      serviceRadiusKm?: boolean;
+      crewType?: boolean;
+      helperCount?: boolean;
+      portfolioKeys?: boolean;
+      guarantorName?: boolean;
+      guarantorNic?: boolean;
+      voiceIntroKey?: boolean;
+      payoutAccountHolder?: boolean;
+      payoutBank?: boolean;
+      payoutBranch?: boolean;
+      payoutAccountNumber?: boolean;
+      reviewedById?: boolean;
+      reviewedAt?: boolean;
+      rejectionReason?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+      reviewedBy?: boolean | TradesmanVerification$reviewedByArgs<ExtArgs>;
+    },
+    ExtArgs['result']['tradesmanVerification']
+  >;
+
+  export type TradesmanVerificationSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      userId?: boolean;
+      status?: boolean;
+      fullName?: boolean;
+      gender?: boolean;
+      dateOfBirth?: boolean;
+      nicNumber?: boolean;
+      addressLine?: boolean;
+      city?: boolean;
+      district?: boolean;
+      primaryTrade?: boolean;
+      yearsExperience?: boolean;
+      nicFrontKey?: boolean;
+      nicBackKey?: boolean;
+      photoKey?: boolean;
+      gramaNiladhariKey?: boolean;
+      licenceKey?: boolean;
+      licenceNumber?: boolean;
+      policeClearanceKey?: boolean;
+      serviceRadiusKm?: boolean;
+      crewType?: boolean;
+      helperCount?: boolean;
+      portfolioKeys?: boolean;
+      guarantorName?: boolean;
+      guarantorNic?: boolean;
+      voiceIntroKey?: boolean;
+      payoutAccountHolder?: boolean;
+      payoutBank?: boolean;
+      payoutBranch?: boolean;
+      payoutAccountNumber?: boolean;
+      reviewedById?: boolean;
+      reviewedAt?: boolean;
+      rejectionReason?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+      reviewedBy?: boolean | TradesmanVerification$reviewedByArgs<ExtArgs>;
+    },
+    ExtArgs['result']['tradesmanVerification']
+  >;
+
+  export type TradesmanVerificationSelectScalar = {
+    id?: boolean;
+    userId?: boolean;
+    status?: boolean;
+    fullName?: boolean;
+    gender?: boolean;
+    dateOfBirth?: boolean;
+    nicNumber?: boolean;
+    addressLine?: boolean;
+    city?: boolean;
+    district?: boolean;
+    primaryTrade?: boolean;
+    yearsExperience?: boolean;
+    nicFrontKey?: boolean;
+    nicBackKey?: boolean;
+    photoKey?: boolean;
+    gramaNiladhariKey?: boolean;
+    licenceKey?: boolean;
+    licenceNumber?: boolean;
+    policeClearanceKey?: boolean;
+    serviceRadiusKm?: boolean;
+    crewType?: boolean;
+    helperCount?: boolean;
+    portfolioKeys?: boolean;
+    guarantorName?: boolean;
+    guarantorNic?: boolean;
+    voiceIntroKey?: boolean;
+    payoutAccountHolder?: boolean;
+    payoutBank?: boolean;
+    payoutBranch?: boolean;
+    payoutAccountNumber?: boolean;
+    reviewedById?: boolean;
+    reviewedAt?: boolean;
+    rejectionReason?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type TradesmanVerificationOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | 'id'
+    | 'userId'
+    | 'status'
+    | 'fullName'
+    | 'gender'
+    | 'dateOfBirth'
+    | 'nicNumber'
+    | 'addressLine'
+    | 'city'
+    | 'district'
+    | 'primaryTrade'
+    | 'yearsExperience'
+    | 'nicFrontKey'
+    | 'nicBackKey'
+    | 'photoKey'
+    | 'gramaNiladhariKey'
+    | 'licenceKey'
+    | 'licenceNumber'
+    | 'policeClearanceKey'
+    | 'serviceRadiusKm'
+    | 'crewType'
+    | 'helperCount'
+    | 'portfolioKeys'
+    | 'guarantorName'
+    | 'guarantorNic'
+    | 'voiceIntroKey'
+    | 'payoutAccountHolder'
+    | 'payoutBank'
+    | 'payoutBranch'
+    | 'payoutAccountNumber'
+    | 'reviewedById'
+    | 'reviewedAt'
+    | 'rejectionReason'
+    | 'createdAt'
+    | 'updatedAt',
+    ExtArgs['result']['tradesmanVerification']
+  >;
+  export type TradesmanVerificationInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+    reviewedBy?: boolean | TradesmanVerification$reviewedByArgs<ExtArgs>;
+  };
+  export type TradesmanVerificationIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+    reviewedBy?: boolean | TradesmanVerification$reviewedByArgs<ExtArgs>;
+  };
+  export type TradesmanVerificationIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+    reviewedBy?: boolean | TradesmanVerification$reviewedByArgs<ExtArgs>;
+  };
+
+  export type $TradesmanVerificationPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'TradesmanVerification';
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>;
+      reviewedBy: Prisma.$UserPayload<ExtArgs> | null;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        userId: string;
+        status: $Enums.VerificationStatus;
+        fullName: string;
+        gender: string | null;
+        dateOfBirth: Date | null;
+        nicNumber: string;
+        addressLine: string | null;
+        city: string | null;
+        district: string | null;
+        primaryTrade: string | null;
+        yearsExperience: number;
+        nicFrontKey: string | null;
+        nicBackKey: string | null;
+        photoKey: string | null;
+        gramaNiladhariKey: string | null;
+        licenceKey: string | null;
+        licenceNumber: string | null;
+        policeClearanceKey: string | null;
+        serviceRadiusKm: number;
+        crewType: string | null;
+        helperCount: number | null;
+        portfolioKeys: Prisma.JsonValue | null;
+        guarantorName: string | null;
+        guarantorNic: string | null;
+        voiceIntroKey: string | null;
+        payoutAccountHolder: string | null;
+        payoutBank: string | null;
+        payoutBranch: string | null;
+        payoutAccountNumber: string | null;
+        reviewedById: string | null;
+        reviewedAt: Date | null;
+        rejectionReason: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['tradesmanVerification']
+    >;
+    composites: {};
+  };
+
+  type TradesmanVerificationGetPayload<
+    S extends boolean | null | undefined | TradesmanVerificationDefaultArgs,
+  > = $Result.GetResult<Prisma.$TradesmanVerificationPayload, S>;
+
+  type TradesmanVerificationCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    TradesmanVerificationFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit'
+  > & {
+    select?: TradesmanVerificationCountAggregateInputType | true;
+  };
+
+  export interface TradesmanVerificationDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['TradesmanVerification'];
+      meta: { name: 'TradesmanVerification' };
+    };
+    /**
+     * Find zero or one TradesmanVerification that matches the filter.
+     * @param {TradesmanVerificationFindUniqueArgs} args - Arguments to find a TradesmanVerification
+     * @example
+     * // Get one TradesmanVerification
+     * const tradesmanVerification = await prisma.tradesmanVerification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TradesmanVerificationFindUniqueArgs>(
+      args: SelectSubset<T, TradesmanVerificationFindUniqueArgs<ExtArgs>>,
+    ): Prisma__TradesmanVerificationClient<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one TradesmanVerification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TradesmanVerificationFindUniqueOrThrowArgs} args - Arguments to find a TradesmanVerification
+     * @example
+     * // Get one TradesmanVerification
+     * const tradesmanVerification = await prisma.tradesmanVerification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TradesmanVerificationFindUniqueOrThrowArgs>(
+      args: SelectSubset<
+        T,
+        TradesmanVerificationFindUniqueOrThrowArgs<ExtArgs>
+      >,
+    ): Prisma__TradesmanVerificationClient<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first TradesmanVerification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradesmanVerificationFindFirstArgs} args - Arguments to find a TradesmanVerification
+     * @example
+     * // Get one TradesmanVerification
+     * const tradesmanVerification = await prisma.tradesmanVerification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TradesmanVerificationFindFirstArgs>(
+      args?: SelectSubset<T, TradesmanVerificationFindFirstArgs<ExtArgs>>,
+    ): Prisma__TradesmanVerificationClient<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first TradesmanVerification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradesmanVerificationFindFirstOrThrowArgs} args - Arguments to find a TradesmanVerification
+     * @example
+     * // Get one TradesmanVerification
+     * const tradesmanVerification = await prisma.tradesmanVerification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TradesmanVerificationFindFirstOrThrowArgs>(
+      args?: SelectSubset<
+        T,
+        TradesmanVerificationFindFirstOrThrowArgs<ExtArgs>
+      >,
+    ): Prisma__TradesmanVerificationClient<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more TradesmanVerifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradesmanVerificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TradesmanVerifications
+     * const tradesmanVerifications = await prisma.tradesmanVerification.findMany()
+     *
+     * // Get first 10 TradesmanVerifications
+     * const tradesmanVerifications = await prisma.tradesmanVerification.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const tradesmanVerificationWithIdOnly = await prisma.tradesmanVerification.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends TradesmanVerificationFindManyArgs>(
+      args?: SelectSubset<T, TradesmanVerificationFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create a TradesmanVerification.
+     * @param {TradesmanVerificationCreateArgs} args - Arguments to create a TradesmanVerification.
+     * @example
+     * // Create one TradesmanVerification
+     * const TradesmanVerification = await prisma.tradesmanVerification.create({
+     *   data: {
+     *     // ... data to create a TradesmanVerification
+     *   }
+     * })
+     *
+     */
+    create<T extends TradesmanVerificationCreateArgs>(
+      args: SelectSubset<T, TradesmanVerificationCreateArgs<ExtArgs>>,
+    ): Prisma__TradesmanVerificationClient<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'create',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many TradesmanVerifications.
+     * @param {TradesmanVerificationCreateManyArgs} args - Arguments to create many TradesmanVerifications.
+     * @example
+     * // Create many TradesmanVerifications
+     * const tradesmanVerification = await prisma.tradesmanVerification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends TradesmanVerificationCreateManyArgs>(
+      args?: SelectSubset<T, TradesmanVerificationCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many TradesmanVerifications and returns the data saved in the database.
+     * @param {TradesmanVerificationCreateManyAndReturnArgs} args - Arguments to create many TradesmanVerifications.
+     * @example
+     * // Create many TradesmanVerifications
+     * const tradesmanVerification = await prisma.tradesmanVerification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many TradesmanVerifications and only return the `id`
+     * const tradesmanVerificationWithIdOnly = await prisma.tradesmanVerification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends TradesmanVerificationCreateManyAndReturnArgs>(
+      args?: SelectSubset<
+        T,
+        TradesmanVerificationCreateManyAndReturnArgs<ExtArgs>
+      >,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a TradesmanVerification.
+     * @param {TradesmanVerificationDeleteArgs} args - Arguments to delete one TradesmanVerification.
+     * @example
+     * // Delete one TradesmanVerification
+     * const TradesmanVerification = await prisma.tradesmanVerification.delete({
+     *   where: {
+     *     // ... filter to delete one TradesmanVerification
+     *   }
+     * })
+     *
+     */
+    delete<T extends TradesmanVerificationDeleteArgs>(
+      args: SelectSubset<T, TradesmanVerificationDeleteArgs<ExtArgs>>,
+    ): Prisma__TradesmanVerificationClient<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'delete',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one TradesmanVerification.
+     * @param {TradesmanVerificationUpdateArgs} args - Arguments to update one TradesmanVerification.
+     * @example
+     * // Update one TradesmanVerification
+     * const tradesmanVerification = await prisma.tradesmanVerification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends TradesmanVerificationUpdateArgs>(
+      args: SelectSubset<T, TradesmanVerificationUpdateArgs<ExtArgs>>,
+    ): Prisma__TradesmanVerificationClient<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'update',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more TradesmanVerifications.
+     * @param {TradesmanVerificationDeleteManyArgs} args - Arguments to filter TradesmanVerifications to delete.
+     * @example
+     * // Delete a few TradesmanVerifications
+     * const { count } = await prisma.tradesmanVerification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends TradesmanVerificationDeleteManyArgs>(
+      args?: SelectSubset<T, TradesmanVerificationDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more TradesmanVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradesmanVerificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TradesmanVerifications
+     * const tradesmanVerification = await prisma.tradesmanVerification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends TradesmanVerificationUpdateManyArgs>(
+      args: SelectSubset<T, TradesmanVerificationUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more TradesmanVerifications and returns the data updated in the database.
+     * @param {TradesmanVerificationUpdateManyAndReturnArgs} args - Arguments to update many TradesmanVerifications.
+     * @example
+     * // Update many TradesmanVerifications
+     * const tradesmanVerification = await prisma.tradesmanVerification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more TradesmanVerifications and only return the `id`
+     * const tradesmanVerificationWithIdOnly = await prisma.tradesmanVerification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends TradesmanVerificationUpdateManyAndReturnArgs>(
+      args: SelectSubset<
+        T,
+        TradesmanVerificationUpdateManyAndReturnArgs<ExtArgs>
+      >,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one TradesmanVerification.
+     * @param {TradesmanVerificationUpsertArgs} args - Arguments to update or create a TradesmanVerification.
+     * @example
+     * // Update or create a TradesmanVerification
+     * const tradesmanVerification = await prisma.tradesmanVerification.upsert({
+     *   create: {
+     *     // ... data to create a TradesmanVerification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TradesmanVerification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TradesmanVerificationUpsertArgs>(
+      args: SelectSubset<T, TradesmanVerificationUpsertArgs<ExtArgs>>,
+    ): Prisma__TradesmanVerificationClient<
+      $Result.GetResult<
+        Prisma.$TradesmanVerificationPayload<ExtArgs>,
+        T,
+        'upsert',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of TradesmanVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradesmanVerificationCountArgs} args - Arguments to filter TradesmanVerifications to count.
+     * @example
+     * // Count the number of TradesmanVerifications
+     * const count = await prisma.tradesmanVerification.count({
+     *   where: {
+     *     // ... the filter for the TradesmanVerifications we want to count
+     *   }
+     * })
+     **/
+    count<T extends TradesmanVerificationCountArgs>(
+      args?: Subset<T, TradesmanVerificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<
+              T['select'],
+              TradesmanVerificationCountAggregateOutputType
+            >
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a TradesmanVerification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradesmanVerificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends TradesmanVerificationAggregateArgs>(
+      args: Subset<T, TradesmanVerificationAggregateArgs>,
+    ): Prisma.PrismaPromise<GetTradesmanVerificationAggregateType<T>>;
+
+    /**
+     * Group by TradesmanVerification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradesmanVerificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends TradesmanVerificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TradesmanVerificationGroupByArgs['orderBy'] }
+        : { orderBy?: TradesmanVerificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T['orderBy']>>
+      >,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      'Field ',
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<
+        T,
+        TradesmanVerificationGroupByArgs,
+        OrderByArg
+      > &
+        InputErrors,
+    ): {} extends InputErrors
+      ? GetTradesmanVerificationGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the TradesmanVerification model
+     */
+    readonly fields: TradesmanVerificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TradesmanVerification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TradesmanVerificationClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    reviewedBy<T extends TradesmanVerification$reviewedByArgs<ExtArgs> = {}>(
+      args?: Subset<T, TradesmanVerification$reviewedByArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the TradesmanVerification model
+   */
+  interface TradesmanVerificationFieldRefs {
+    readonly id: FieldRef<'TradesmanVerification', 'String'>;
+    readonly userId: FieldRef<'TradesmanVerification', 'String'>;
+    readonly status: FieldRef<'TradesmanVerification', 'VerificationStatus'>;
+    readonly fullName: FieldRef<'TradesmanVerification', 'String'>;
+    readonly gender: FieldRef<'TradesmanVerification', 'String'>;
+    readonly dateOfBirth: FieldRef<'TradesmanVerification', 'DateTime'>;
+    readonly nicNumber: FieldRef<'TradesmanVerification', 'String'>;
+    readonly addressLine: FieldRef<'TradesmanVerification', 'String'>;
+    readonly city: FieldRef<'TradesmanVerification', 'String'>;
+    readonly district: FieldRef<'TradesmanVerification', 'String'>;
+    readonly primaryTrade: FieldRef<'TradesmanVerification', 'String'>;
+    readonly yearsExperience: FieldRef<'TradesmanVerification', 'Int'>;
+    readonly nicFrontKey: FieldRef<'TradesmanVerification', 'String'>;
+    readonly nicBackKey: FieldRef<'TradesmanVerification', 'String'>;
+    readonly photoKey: FieldRef<'TradesmanVerification', 'String'>;
+    readonly gramaNiladhariKey: FieldRef<'TradesmanVerification', 'String'>;
+    readonly licenceKey: FieldRef<'TradesmanVerification', 'String'>;
+    readonly licenceNumber: FieldRef<'TradesmanVerification', 'String'>;
+    readonly policeClearanceKey: FieldRef<'TradesmanVerification', 'String'>;
+    readonly serviceRadiusKm: FieldRef<'TradesmanVerification', 'Int'>;
+    readonly crewType: FieldRef<'TradesmanVerification', 'String'>;
+    readonly helperCount: FieldRef<'TradesmanVerification', 'Int'>;
+    readonly portfolioKeys: FieldRef<'TradesmanVerification', 'Json'>;
+    readonly guarantorName: FieldRef<'TradesmanVerification', 'String'>;
+    readonly guarantorNic: FieldRef<'TradesmanVerification', 'String'>;
+    readonly voiceIntroKey: FieldRef<'TradesmanVerification', 'String'>;
+    readonly payoutAccountHolder: FieldRef<'TradesmanVerification', 'String'>;
+    readonly payoutBank: FieldRef<'TradesmanVerification', 'String'>;
+    readonly payoutBranch: FieldRef<'TradesmanVerification', 'String'>;
+    readonly payoutAccountNumber: FieldRef<'TradesmanVerification', 'String'>;
+    readonly reviewedById: FieldRef<'TradesmanVerification', 'String'>;
+    readonly reviewedAt: FieldRef<'TradesmanVerification', 'DateTime'>;
+    readonly rejectionReason: FieldRef<'TradesmanVerification', 'String'>;
+    readonly createdAt: FieldRef<'TradesmanVerification', 'DateTime'>;
+    readonly updatedAt: FieldRef<'TradesmanVerification', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * TradesmanVerification findUnique
+   */
+  export type TradesmanVerificationFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which TradesmanVerification to fetch.
+     */
+    where: TradesmanVerificationWhereUniqueInput;
+  };
+
+  /**
+   * TradesmanVerification findUniqueOrThrow
+   */
+  export type TradesmanVerificationFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which TradesmanVerification to fetch.
+     */
+    where: TradesmanVerificationWhereUniqueInput;
+  };
+
+  /**
+   * TradesmanVerification findFirst
+   */
+  export type TradesmanVerificationFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which TradesmanVerification to fetch.
+     */
+    where?: TradesmanVerificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TradesmanVerifications to fetch.
+     */
+    orderBy?:
+      | TradesmanVerificationOrderByWithRelationInput
+      | TradesmanVerificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TradesmanVerifications.
+     */
+    cursor?: TradesmanVerificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TradesmanVerifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TradesmanVerifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TradesmanVerifications.
+     */
+    distinct?:
+      | TradesmanVerificationScalarFieldEnum
+      | TradesmanVerificationScalarFieldEnum[];
+  };
+
+  /**
+   * TradesmanVerification findFirstOrThrow
+   */
+  export type TradesmanVerificationFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which TradesmanVerification to fetch.
+     */
+    where?: TradesmanVerificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TradesmanVerifications to fetch.
+     */
+    orderBy?:
+      | TradesmanVerificationOrderByWithRelationInput
+      | TradesmanVerificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TradesmanVerifications.
+     */
+    cursor?: TradesmanVerificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TradesmanVerifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TradesmanVerifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TradesmanVerifications.
+     */
+    distinct?:
+      | TradesmanVerificationScalarFieldEnum
+      | TradesmanVerificationScalarFieldEnum[];
+  };
+
+  /**
+   * TradesmanVerification findMany
+   */
+  export type TradesmanVerificationFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter, which TradesmanVerifications to fetch.
+     */
+    where?: TradesmanVerificationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TradesmanVerifications to fetch.
+     */
+    orderBy?:
+      | TradesmanVerificationOrderByWithRelationInput
+      | TradesmanVerificationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing TradesmanVerifications.
+     */
+    cursor?: TradesmanVerificationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TradesmanVerifications from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TradesmanVerifications.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TradesmanVerifications.
+     */
+    distinct?:
+      | TradesmanVerificationScalarFieldEnum
+      | TradesmanVerificationScalarFieldEnum[];
+  };
+
+  /**
+   * TradesmanVerification create
+   */
+  export type TradesmanVerificationCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a TradesmanVerification.
+     */
+    data: XOR<
+      TradesmanVerificationCreateInput,
+      TradesmanVerificationUncheckedCreateInput
+    >;
+  };
+
+  /**
+   * TradesmanVerification createMany
+   */
+  export type TradesmanVerificationCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many TradesmanVerifications.
+     */
+    data:
+      | TradesmanVerificationCreateManyInput
+      | TradesmanVerificationCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * TradesmanVerification createManyAndReturn
+   */
+  export type TradesmanVerificationCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * The data used to create many TradesmanVerifications.
+     */
+    data:
+      | TradesmanVerificationCreateManyInput
+      | TradesmanVerificationCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * TradesmanVerification update
+   */
+  export type TradesmanVerificationUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a TradesmanVerification.
+     */
+    data: XOR<
+      TradesmanVerificationUpdateInput,
+      TradesmanVerificationUncheckedUpdateInput
+    >;
+    /**
+     * Choose, which TradesmanVerification to update.
+     */
+    where: TradesmanVerificationWhereUniqueInput;
+  };
+
+  /**
+   * TradesmanVerification updateMany
+   */
+  export type TradesmanVerificationUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update TradesmanVerifications.
+     */
+    data: XOR<
+      TradesmanVerificationUpdateManyMutationInput,
+      TradesmanVerificationUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which TradesmanVerifications to update
+     */
+    where?: TradesmanVerificationWhereInput;
+    /**
+     * Limit how many TradesmanVerifications to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * TradesmanVerification updateManyAndReturn
+   */
+  export type TradesmanVerificationUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * The data used to update TradesmanVerifications.
+     */
+    data: XOR<
+      TradesmanVerificationUpdateManyMutationInput,
+      TradesmanVerificationUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which TradesmanVerifications to update
+     */
+    where?: TradesmanVerificationWhereInput;
+    /**
+     * Limit how many TradesmanVerifications to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * TradesmanVerification upsert
+   */
+  export type TradesmanVerificationUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the TradesmanVerification to update in case it exists.
+     */
+    where: TradesmanVerificationWhereUniqueInput;
+    /**
+     * In case the TradesmanVerification found by the `where` argument doesn't exist, create a new TradesmanVerification with this data.
+     */
+    create: XOR<
+      TradesmanVerificationCreateInput,
+      TradesmanVerificationUncheckedCreateInput
+    >;
+    /**
+     * In case the TradesmanVerification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<
+      TradesmanVerificationUpdateInput,
+      TradesmanVerificationUncheckedUpdateInput
+    >;
+  };
+
+  /**
+   * TradesmanVerification delete
+   */
+  export type TradesmanVerificationDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+    /**
+     * Filter which TradesmanVerification to delete.
+     */
+    where: TradesmanVerificationWhereUniqueInput;
+  };
+
+  /**
+   * TradesmanVerification deleteMany
+   */
+  export type TradesmanVerificationDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which TradesmanVerifications to delete
+     */
+    where?: TradesmanVerificationWhereInput;
+    /**
+     * Limit how many TradesmanVerifications to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * TradesmanVerification.reviewedBy
+   */
+  export type TradesmanVerification$reviewedByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null;
+    where?: UserWhereInput;
+  };
+
+  /**
+   * TradesmanVerification without action
+   */
+  export type TradesmanVerificationDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TradesmanVerification
+     */
+    select?: TradesmanVerificationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TradesmanVerification
+     */
+    omit?: TradesmanVerificationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradesmanVerificationInclude<ExtArgs> | null;
+  };
+
+  /**
    * Model Conversation
    */
 
@@ -38620,6 +40694,47 @@ export namespace Prisma {
   export type EscrowTransactionScalarFieldEnum =
     (typeof EscrowTransactionScalarFieldEnum)[keyof typeof EscrowTransactionScalarFieldEnum];
 
+  export const TradesmanVerificationScalarFieldEnum: {
+    id: 'id';
+    userId: 'userId';
+    status: 'status';
+    fullName: 'fullName';
+    gender: 'gender';
+    dateOfBirth: 'dateOfBirth';
+    nicNumber: 'nicNumber';
+    addressLine: 'addressLine';
+    city: 'city';
+    district: 'district';
+    primaryTrade: 'primaryTrade';
+    yearsExperience: 'yearsExperience';
+    nicFrontKey: 'nicFrontKey';
+    nicBackKey: 'nicBackKey';
+    photoKey: 'photoKey';
+    gramaNiladhariKey: 'gramaNiladhariKey';
+    licenceKey: 'licenceKey';
+    licenceNumber: 'licenceNumber';
+    policeClearanceKey: 'policeClearanceKey';
+    serviceRadiusKm: 'serviceRadiusKm';
+    crewType: 'crewType';
+    helperCount: 'helperCount';
+    portfolioKeys: 'portfolioKeys';
+    guarantorName: 'guarantorName';
+    guarantorNic: 'guarantorNic';
+    voiceIntroKey: 'voiceIntroKey';
+    payoutAccountHolder: 'payoutAccountHolder';
+    payoutBank: 'payoutBank';
+    payoutBranch: 'payoutBranch';
+    payoutAccountNumber: 'payoutAccountNumber';
+    reviewedById: 'reviewedById';
+    reviewedAt: 'reviewedAt';
+    rejectionReason: 'rejectionReason';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type TradesmanVerificationScalarFieldEnum =
+    (typeof TradesmanVerificationScalarFieldEnum)[keyof typeof TradesmanVerificationScalarFieldEnum];
+
   export const ConversationScalarFieldEnum: {
     id: 'id';
     type: 'type';
@@ -38980,6 +41095,18 @@ export namespace Prisma {
     FieldRefInputType<$PrismaModel, 'EscrowTransactionType[]'>;
 
   /**
+   * Reference to a field of type 'VerificationStatus'
+   */
+  export type EnumVerificationStatusFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'VerificationStatus'>;
+
+  /**
+   * Reference to a field of type 'VerificationStatus[]'
+   */
+  export type ListEnumVerificationStatusFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'VerificationStatus[]'>;
+
+  /**
    * Reference to a field of type 'ConversationType'
    */
   export type EnumConversationTypeFieldRefInput<$PrismaModel> =
@@ -39109,6 +41236,11 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantListRelationFilter;
     escrowsAsHomeowner?: JobEscrowListRelationFilter;
     escrowsAsTradesman?: JobEscrowListRelationFilter;
+    verification?: XOR<
+      TradesmanVerificationNullableScalarRelationFilter,
+      TradesmanVerificationWhereInput
+    > | null;
+    reviewedVerifications?: TradesmanVerificationListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -39148,6 +41280,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantOrderByRelationAggregateInput;
     escrowsAsHomeowner?: JobEscrowOrderByRelationAggregateInput;
     escrowsAsTradesman?: JobEscrowOrderByRelationAggregateInput;
+    verification?: TradesmanVerificationOrderByWithRelationInput;
+    reviewedVerifications?: TradesmanVerificationOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -39201,6 +41335,11 @@ export namespace Prisma {
       conversationLinks?: ConversationParticipantListRelationFilter;
       escrowsAsHomeowner?: JobEscrowListRelationFilter;
       escrowsAsTradesman?: JobEscrowListRelationFilter;
+      verification?: XOR<
+        TradesmanVerificationNullableScalarRelationFilter,
+        TradesmanVerificationWhereInput
+      > | null;
+      reviewedVerifications?: TradesmanVerificationListRelationFilter;
     },
     'id' | 'email' | 'stripeCustomerId' | 'phoneNumber'
   >;
@@ -41307,6 +43446,415 @@ export namespace Prisma {
       | string;
   };
 
+  export type TradesmanVerificationWhereInput = {
+    AND?: TradesmanVerificationWhereInput | TradesmanVerificationWhereInput[];
+    OR?: TradesmanVerificationWhereInput[];
+    NOT?: TradesmanVerificationWhereInput | TradesmanVerificationWhereInput[];
+    id?: StringFilter<'TradesmanVerification'> | string;
+    userId?: StringFilter<'TradesmanVerification'> | string;
+    status?:
+      | EnumVerificationStatusFilter<'TradesmanVerification'>
+      | $Enums.VerificationStatus;
+    fullName?: StringFilter<'TradesmanVerification'> | string;
+    gender?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    dateOfBirth?:
+      | DateTimeNullableFilter<'TradesmanVerification'>
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFilter<'TradesmanVerification'> | string;
+    addressLine?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    city?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    district?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    primaryTrade?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    yearsExperience?: IntFilter<'TradesmanVerification'> | number;
+    nicFrontKey?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    nicBackKey?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    photoKey?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    gramaNiladhariKey?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    licenceKey?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    licenceNumber?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    policeClearanceKey?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    serviceRadiusKm?: IntFilter<'TradesmanVerification'> | number;
+    crewType?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    helperCount?: IntNullableFilter<'TradesmanVerification'> | number | null;
+    portfolioKeys?: JsonNullableFilter<'TradesmanVerification'>;
+    guarantorName?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    guarantorNic?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    voiceIntroKey?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutAccountHolder?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutBank?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    payoutBranch?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutAccountNumber?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    reviewedById?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    reviewedAt?:
+      | DateTimeNullableFilter<'TradesmanVerification'>
+      | Date
+      | string
+      | null;
+    rejectionReason?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    createdAt?: DateTimeFilter<'TradesmanVerification'> | Date | string;
+    updatedAt?: DateTimeFilter<'TradesmanVerification'> | Date | string;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null;
+  };
+
+  export type TradesmanVerificationOrderByWithRelationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    status?: SortOrder;
+    fullName?: SortOrder;
+    gender?: SortOrderInput | SortOrder;
+    dateOfBirth?: SortOrderInput | SortOrder;
+    nicNumber?: SortOrder;
+    addressLine?: SortOrderInput | SortOrder;
+    city?: SortOrderInput | SortOrder;
+    district?: SortOrderInput | SortOrder;
+    primaryTrade?: SortOrderInput | SortOrder;
+    yearsExperience?: SortOrder;
+    nicFrontKey?: SortOrderInput | SortOrder;
+    nicBackKey?: SortOrderInput | SortOrder;
+    photoKey?: SortOrderInput | SortOrder;
+    gramaNiladhariKey?: SortOrderInput | SortOrder;
+    licenceKey?: SortOrderInput | SortOrder;
+    licenceNumber?: SortOrderInput | SortOrder;
+    policeClearanceKey?: SortOrderInput | SortOrder;
+    serviceRadiusKm?: SortOrder;
+    crewType?: SortOrderInput | SortOrder;
+    helperCount?: SortOrderInput | SortOrder;
+    portfolioKeys?: SortOrderInput | SortOrder;
+    guarantorName?: SortOrderInput | SortOrder;
+    guarantorNic?: SortOrderInput | SortOrder;
+    voiceIntroKey?: SortOrderInput | SortOrder;
+    payoutAccountHolder?: SortOrderInput | SortOrder;
+    payoutBank?: SortOrderInput | SortOrder;
+    payoutBranch?: SortOrderInput | SortOrder;
+    payoutAccountNumber?: SortOrderInput | SortOrder;
+    reviewedById?: SortOrderInput | SortOrder;
+    reviewedAt?: SortOrderInput | SortOrder;
+    rejectionReason?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    user?: UserOrderByWithRelationInput;
+    reviewedBy?: UserOrderByWithRelationInput;
+  };
+
+  export type TradesmanVerificationWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      userId?: string;
+      AND?: TradesmanVerificationWhereInput | TradesmanVerificationWhereInput[];
+      OR?: TradesmanVerificationWhereInput[];
+      NOT?: TradesmanVerificationWhereInput | TradesmanVerificationWhereInput[];
+      status?:
+        | EnumVerificationStatusFilter<'TradesmanVerification'>
+        | $Enums.VerificationStatus;
+      fullName?: StringFilter<'TradesmanVerification'> | string;
+      gender?: StringNullableFilter<'TradesmanVerification'> | string | null;
+      dateOfBirth?:
+        | DateTimeNullableFilter<'TradesmanVerification'>
+        | Date
+        | string
+        | null;
+      nicNumber?: StringFilter<'TradesmanVerification'> | string;
+      addressLine?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      city?: StringNullableFilter<'TradesmanVerification'> | string | null;
+      district?: StringNullableFilter<'TradesmanVerification'> | string | null;
+      primaryTrade?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      yearsExperience?: IntFilter<'TradesmanVerification'> | number;
+      nicFrontKey?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      nicBackKey?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      photoKey?: StringNullableFilter<'TradesmanVerification'> | string | null;
+      gramaNiladhariKey?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      licenceKey?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      licenceNumber?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      policeClearanceKey?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      serviceRadiusKm?: IntFilter<'TradesmanVerification'> | number;
+      crewType?: StringNullableFilter<'TradesmanVerification'> | string | null;
+      helperCount?: IntNullableFilter<'TradesmanVerification'> | number | null;
+      portfolioKeys?: JsonNullableFilter<'TradesmanVerification'>;
+      guarantorName?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      guarantorNic?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      voiceIntroKey?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      payoutAccountHolder?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      payoutBank?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      payoutBranch?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      payoutAccountNumber?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      reviewedById?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      reviewedAt?:
+        | DateTimeNullableFilter<'TradesmanVerification'>
+        | Date
+        | string
+        | null;
+      rejectionReason?:
+        | StringNullableFilter<'TradesmanVerification'>
+        | string
+        | null;
+      createdAt?: DateTimeFilter<'TradesmanVerification'> | Date | string;
+      updatedAt?: DateTimeFilter<'TradesmanVerification'> | Date | string;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+      reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null;
+    },
+    'id' | 'userId'
+  >;
+
+  export type TradesmanVerificationOrderByWithAggregationInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    status?: SortOrder;
+    fullName?: SortOrder;
+    gender?: SortOrderInput | SortOrder;
+    dateOfBirth?: SortOrderInput | SortOrder;
+    nicNumber?: SortOrder;
+    addressLine?: SortOrderInput | SortOrder;
+    city?: SortOrderInput | SortOrder;
+    district?: SortOrderInput | SortOrder;
+    primaryTrade?: SortOrderInput | SortOrder;
+    yearsExperience?: SortOrder;
+    nicFrontKey?: SortOrderInput | SortOrder;
+    nicBackKey?: SortOrderInput | SortOrder;
+    photoKey?: SortOrderInput | SortOrder;
+    gramaNiladhariKey?: SortOrderInput | SortOrder;
+    licenceKey?: SortOrderInput | SortOrder;
+    licenceNumber?: SortOrderInput | SortOrder;
+    policeClearanceKey?: SortOrderInput | SortOrder;
+    serviceRadiusKm?: SortOrder;
+    crewType?: SortOrderInput | SortOrder;
+    helperCount?: SortOrderInput | SortOrder;
+    portfolioKeys?: SortOrderInput | SortOrder;
+    guarantorName?: SortOrderInput | SortOrder;
+    guarantorNic?: SortOrderInput | SortOrder;
+    voiceIntroKey?: SortOrderInput | SortOrder;
+    payoutAccountHolder?: SortOrderInput | SortOrder;
+    payoutBank?: SortOrderInput | SortOrder;
+    payoutBranch?: SortOrderInput | SortOrder;
+    payoutAccountNumber?: SortOrderInput | SortOrder;
+    reviewedById?: SortOrderInput | SortOrder;
+    reviewedAt?: SortOrderInput | SortOrder;
+    rejectionReason?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: TradesmanVerificationCountOrderByAggregateInput;
+    _avg?: TradesmanVerificationAvgOrderByAggregateInput;
+    _max?: TradesmanVerificationMaxOrderByAggregateInput;
+    _min?: TradesmanVerificationMinOrderByAggregateInput;
+    _sum?: TradesmanVerificationSumOrderByAggregateInput;
+  };
+
+  export type TradesmanVerificationScalarWhereWithAggregatesInput = {
+    AND?:
+      | TradesmanVerificationScalarWhereWithAggregatesInput
+      | TradesmanVerificationScalarWhereWithAggregatesInput[];
+    OR?: TradesmanVerificationScalarWhereWithAggregatesInput[];
+    NOT?:
+      | TradesmanVerificationScalarWhereWithAggregatesInput
+      | TradesmanVerificationScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'TradesmanVerification'> | string;
+    userId?: StringWithAggregatesFilter<'TradesmanVerification'> | string;
+    status?:
+      | EnumVerificationStatusWithAggregatesFilter<'TradesmanVerification'>
+      | $Enums.VerificationStatus;
+    fullName?: StringWithAggregatesFilter<'TradesmanVerification'> | string;
+    gender?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    dateOfBirth?:
+      | DateTimeNullableWithAggregatesFilter<'TradesmanVerification'>
+      | Date
+      | string
+      | null;
+    nicNumber?: StringWithAggregatesFilter<'TradesmanVerification'> | string;
+    addressLine?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    city?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    district?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    primaryTrade?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    yearsExperience?: IntWithAggregatesFilter<'TradesmanVerification'> | number;
+    nicFrontKey?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    nicBackKey?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    photoKey?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    gramaNiladhariKey?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    licenceKey?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    licenceNumber?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    policeClearanceKey?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    serviceRadiusKm?: IntWithAggregatesFilter<'TradesmanVerification'> | number;
+    crewType?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    helperCount?:
+      | IntNullableWithAggregatesFilter<'TradesmanVerification'>
+      | number
+      | null;
+    portfolioKeys?: JsonNullableWithAggregatesFilter<'TradesmanVerification'>;
+    guarantorName?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    guarantorNic?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    voiceIntroKey?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutAccountHolder?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutBank?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutBranch?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutAccountNumber?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    reviewedById?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    reviewedAt?:
+      | DateTimeNullableWithAggregatesFilter<'TradesmanVerification'>
+      | Date
+      | string
+      | null;
+    rejectionReason?:
+      | StringNullableWithAggregatesFilter<'TradesmanVerification'>
+      | string
+      | null;
+    createdAt?:
+      | DateTimeWithAggregatesFilter<'TradesmanVerification'>
+      | Date
+      | string;
+    updatedAt?:
+      | DateTimeWithAggregatesFilter<'TradesmanVerification'>
+      | Date
+      | string;
+  };
+
   export type ConversationWhereInput = {
     AND?: ConversationWhereInput | ConversationWhereInput[];
     OR?: ConversationWhereInput[];
@@ -42072,6 +44620,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -42111,6 +44661,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUpdateInput = {
@@ -42167,6 +44719,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -42223,6 +44777,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -44542,6 +47098,358 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type TradesmanVerificationCreateInput = {
+    id?: string;
+    status?: $Enums.VerificationStatus;
+    fullName: string;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    nicNumber: string;
+    addressLine?: string | null;
+    city?: string | null;
+    district?: string | null;
+    primaryTrade?: string | null;
+    yearsExperience?: number;
+    nicFrontKey?: string | null;
+    nicBackKey?: string | null;
+    photoKey?: string | null;
+    gramaNiladhariKey?: string | null;
+    licenceKey?: string | null;
+    licenceNumber?: string | null;
+    policeClearanceKey?: string | null;
+    serviceRadiusKm?: number;
+    crewType?: string | null;
+    helperCount?: number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: string | null;
+    guarantorNic?: string | null;
+    voiceIntroKey?: string | null;
+    payoutAccountHolder?: string | null;
+    payoutBank?: string | null;
+    payoutBranch?: string | null;
+    payoutAccountNumber?: string | null;
+    reviewedAt?: Date | string | null;
+    rejectionReason?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutVerificationInput;
+    reviewedBy?: UserCreateNestedOneWithoutReviewedVerificationsInput;
+  };
+
+  export type TradesmanVerificationUncheckedCreateInput = {
+    id?: string;
+    userId: string;
+    status?: $Enums.VerificationStatus;
+    fullName: string;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    nicNumber: string;
+    addressLine?: string | null;
+    city?: string | null;
+    district?: string | null;
+    primaryTrade?: string | null;
+    yearsExperience?: number;
+    nicFrontKey?: string | null;
+    nicBackKey?: string | null;
+    photoKey?: string | null;
+    gramaNiladhariKey?: string | null;
+    licenceKey?: string | null;
+    licenceNumber?: string | null;
+    policeClearanceKey?: string | null;
+    serviceRadiusKm?: number;
+    crewType?: string | null;
+    helperCount?: number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: string | null;
+    guarantorNic?: string | null;
+    voiceIntroKey?: string | null;
+    payoutAccountHolder?: string | null;
+    payoutBank?: string | null;
+    payoutBranch?: string | null;
+    payoutAccountNumber?: string | null;
+    reviewedById?: string | null;
+    reviewedAt?: Date | string | null;
+    rejectionReason?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type TradesmanVerificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumVerificationStatusFieldUpdateOperationsInput
+      | $Enums.VerificationStatus;
+    fullName?: StringFieldUpdateOperationsInput | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFieldUpdateOperationsInput | string;
+    addressLine?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    primaryTrade?: NullableStringFieldUpdateOperationsInput | string | null;
+    yearsExperience?: IntFieldUpdateOperationsInput | number;
+    nicFrontKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    nicBackKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    photoKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    gramaNiladhariKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    licenceKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    licenceNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    policeClearanceKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    serviceRadiusKm?: IntFieldUpdateOperationsInput | number;
+    crewType?: NullableStringFieldUpdateOperationsInput | string | null;
+    helperCount?: NullableIntFieldUpdateOperationsInput | number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: NullableStringFieldUpdateOperationsInput | string | null;
+    guarantorNic?: NullableStringFieldUpdateOperationsInput | string | null;
+    voiceIntroKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountHolder?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    payoutBank?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutBranch?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountNumber?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    reviewedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutVerificationNestedInput;
+    reviewedBy?: UserUpdateOneWithoutReviewedVerificationsNestedInput;
+  };
+
+  export type TradesmanVerificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumVerificationStatusFieldUpdateOperationsInput
+      | $Enums.VerificationStatus;
+    fullName?: StringFieldUpdateOperationsInput | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFieldUpdateOperationsInput | string;
+    addressLine?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    primaryTrade?: NullableStringFieldUpdateOperationsInput | string | null;
+    yearsExperience?: IntFieldUpdateOperationsInput | number;
+    nicFrontKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    nicBackKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    photoKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    gramaNiladhariKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    licenceKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    licenceNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    policeClearanceKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    serviceRadiusKm?: IntFieldUpdateOperationsInput | number;
+    crewType?: NullableStringFieldUpdateOperationsInput | string | null;
+    helperCount?: NullableIntFieldUpdateOperationsInput | number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: NullableStringFieldUpdateOperationsInput | string | null;
+    guarantorNic?: NullableStringFieldUpdateOperationsInput | string | null;
+    voiceIntroKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountHolder?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    payoutBank?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutBranch?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountNumber?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null;
+    reviewedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type TradesmanVerificationCreateManyInput = {
+    id?: string;
+    userId: string;
+    status?: $Enums.VerificationStatus;
+    fullName: string;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    nicNumber: string;
+    addressLine?: string | null;
+    city?: string | null;
+    district?: string | null;
+    primaryTrade?: string | null;
+    yearsExperience?: number;
+    nicFrontKey?: string | null;
+    nicBackKey?: string | null;
+    photoKey?: string | null;
+    gramaNiladhariKey?: string | null;
+    licenceKey?: string | null;
+    licenceNumber?: string | null;
+    policeClearanceKey?: string | null;
+    serviceRadiusKm?: number;
+    crewType?: string | null;
+    helperCount?: number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: string | null;
+    guarantorNic?: string | null;
+    voiceIntroKey?: string | null;
+    payoutAccountHolder?: string | null;
+    payoutBank?: string | null;
+    payoutBranch?: string | null;
+    payoutAccountNumber?: string | null;
+    reviewedById?: string | null;
+    reviewedAt?: Date | string | null;
+    rejectionReason?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type TradesmanVerificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumVerificationStatusFieldUpdateOperationsInput
+      | $Enums.VerificationStatus;
+    fullName?: StringFieldUpdateOperationsInput | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFieldUpdateOperationsInput | string;
+    addressLine?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    primaryTrade?: NullableStringFieldUpdateOperationsInput | string | null;
+    yearsExperience?: IntFieldUpdateOperationsInput | number;
+    nicFrontKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    nicBackKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    photoKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    gramaNiladhariKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    licenceKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    licenceNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    policeClearanceKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    serviceRadiusKm?: IntFieldUpdateOperationsInput | number;
+    crewType?: NullableStringFieldUpdateOperationsInput | string | null;
+    helperCount?: NullableIntFieldUpdateOperationsInput | number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: NullableStringFieldUpdateOperationsInput | string | null;
+    guarantorNic?: NullableStringFieldUpdateOperationsInput | string | null;
+    voiceIntroKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountHolder?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    payoutBank?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutBranch?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountNumber?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    reviewedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type TradesmanVerificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumVerificationStatusFieldUpdateOperationsInput
+      | $Enums.VerificationStatus;
+    fullName?: StringFieldUpdateOperationsInput | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFieldUpdateOperationsInput | string;
+    addressLine?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    primaryTrade?: NullableStringFieldUpdateOperationsInput | string | null;
+    yearsExperience?: IntFieldUpdateOperationsInput | number;
+    nicFrontKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    nicBackKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    photoKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    gramaNiladhariKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    licenceKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    licenceNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    policeClearanceKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    serviceRadiusKm?: IntFieldUpdateOperationsInput | number;
+    crewType?: NullableStringFieldUpdateOperationsInput | string | null;
+    helperCount?: NullableIntFieldUpdateOperationsInput | number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: NullableStringFieldUpdateOperationsInput | string | null;
+    guarantorNic?: NullableStringFieldUpdateOperationsInput | string | null;
+    voiceIntroKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountHolder?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    payoutBank?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutBranch?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountNumber?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null;
+    reviewedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type ConversationCreateInput = {
     id?: string;
     type?: $Enums.ConversationType;
@@ -45397,6 +48305,17 @@ export namespace Prisma {
     none?: JobEscrowWhereInput;
   };
 
+  export type TradesmanVerificationNullableScalarRelationFilter = {
+    is?: TradesmanVerificationWhereInput | null;
+    isNot?: TradesmanVerificationWhereInput | null;
+  };
+
+  export type TradesmanVerificationListRelationFilter = {
+    every?: TradesmanVerificationWhereInput;
+    some?: TradesmanVerificationWhereInput;
+    none?: TradesmanVerificationWhereInput;
+  };
+
   export type SortOrderInput = {
     sort: SortOrder;
     nulls?: NullsOrder;
@@ -45443,6 +48362,10 @@ export namespace Prisma {
   };
 
   export type JobEscrowOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type TradesmanVerificationOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -46966,6 +49889,191 @@ export namespace Prisma {
     _max?: NestedEnumEscrowTransactionTypeFilter<$PrismaModel>;
   };
 
+  export type EnumVerificationStatusFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.VerificationStatus
+      | EnumVerificationStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.VerificationStatus[]
+      | ListEnumVerificationStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.VerificationStatus[]
+      | ListEnumVerificationStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumVerificationStatusFilter<$PrismaModel>
+      | $Enums.VerificationStatus;
+  };
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null;
+  };
+
+  export type TradesmanVerificationCountOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    status?: SortOrder;
+    fullName?: SortOrder;
+    gender?: SortOrder;
+    dateOfBirth?: SortOrder;
+    nicNumber?: SortOrder;
+    addressLine?: SortOrder;
+    city?: SortOrder;
+    district?: SortOrder;
+    primaryTrade?: SortOrder;
+    yearsExperience?: SortOrder;
+    nicFrontKey?: SortOrder;
+    nicBackKey?: SortOrder;
+    photoKey?: SortOrder;
+    gramaNiladhariKey?: SortOrder;
+    licenceKey?: SortOrder;
+    licenceNumber?: SortOrder;
+    policeClearanceKey?: SortOrder;
+    serviceRadiusKm?: SortOrder;
+    crewType?: SortOrder;
+    helperCount?: SortOrder;
+    portfolioKeys?: SortOrder;
+    guarantorName?: SortOrder;
+    guarantorNic?: SortOrder;
+    voiceIntroKey?: SortOrder;
+    payoutAccountHolder?: SortOrder;
+    payoutBank?: SortOrder;
+    payoutBranch?: SortOrder;
+    payoutAccountNumber?: SortOrder;
+    reviewedById?: SortOrder;
+    reviewedAt?: SortOrder;
+    rejectionReason?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type TradesmanVerificationAvgOrderByAggregateInput = {
+    yearsExperience?: SortOrder;
+    serviceRadiusKm?: SortOrder;
+    helperCount?: SortOrder;
+  };
+
+  export type TradesmanVerificationMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    status?: SortOrder;
+    fullName?: SortOrder;
+    gender?: SortOrder;
+    dateOfBirth?: SortOrder;
+    nicNumber?: SortOrder;
+    addressLine?: SortOrder;
+    city?: SortOrder;
+    district?: SortOrder;
+    primaryTrade?: SortOrder;
+    yearsExperience?: SortOrder;
+    nicFrontKey?: SortOrder;
+    nicBackKey?: SortOrder;
+    photoKey?: SortOrder;
+    gramaNiladhariKey?: SortOrder;
+    licenceKey?: SortOrder;
+    licenceNumber?: SortOrder;
+    policeClearanceKey?: SortOrder;
+    serviceRadiusKm?: SortOrder;
+    crewType?: SortOrder;
+    helperCount?: SortOrder;
+    guarantorName?: SortOrder;
+    guarantorNic?: SortOrder;
+    voiceIntroKey?: SortOrder;
+    payoutAccountHolder?: SortOrder;
+    payoutBank?: SortOrder;
+    payoutBranch?: SortOrder;
+    payoutAccountNumber?: SortOrder;
+    reviewedById?: SortOrder;
+    reviewedAt?: SortOrder;
+    rejectionReason?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type TradesmanVerificationMinOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    status?: SortOrder;
+    fullName?: SortOrder;
+    gender?: SortOrder;
+    dateOfBirth?: SortOrder;
+    nicNumber?: SortOrder;
+    addressLine?: SortOrder;
+    city?: SortOrder;
+    district?: SortOrder;
+    primaryTrade?: SortOrder;
+    yearsExperience?: SortOrder;
+    nicFrontKey?: SortOrder;
+    nicBackKey?: SortOrder;
+    photoKey?: SortOrder;
+    gramaNiladhariKey?: SortOrder;
+    licenceKey?: SortOrder;
+    licenceNumber?: SortOrder;
+    policeClearanceKey?: SortOrder;
+    serviceRadiusKm?: SortOrder;
+    crewType?: SortOrder;
+    helperCount?: SortOrder;
+    guarantorName?: SortOrder;
+    guarantorNic?: SortOrder;
+    voiceIntroKey?: SortOrder;
+    payoutAccountHolder?: SortOrder;
+    payoutBank?: SortOrder;
+    payoutBranch?: SortOrder;
+    payoutAccountNumber?: SortOrder;
+    reviewedById?: SortOrder;
+    reviewedAt?: SortOrder;
+    rejectionReason?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type TradesmanVerificationSumOrderByAggregateInput = {
+    yearsExperience?: SortOrder;
+    serviceRadiusKm?: SortOrder;
+    helperCount?: SortOrder;
+  };
+
+  export type EnumVerificationStatusWithAggregatesFilter<$PrismaModel = never> =
+    {
+      equals?:
+        | $Enums.VerificationStatus
+        | EnumVerificationStatusFieldRefInput<$PrismaModel>;
+      in?:
+        | $Enums.VerificationStatus[]
+        | ListEnumVerificationStatusFieldRefInput<$PrismaModel>;
+      notIn?:
+        | $Enums.VerificationStatus[]
+        | ListEnumVerificationStatusFieldRefInput<$PrismaModel>;
+      not?:
+        | NestedEnumVerificationStatusWithAggregatesFilter<$PrismaModel>
+        | $Enums.VerificationStatus;
+      _count?: NestedIntFilter<$PrismaModel>;
+      _min?: NestedEnumVerificationStatusFilter<$PrismaModel>;
+      _max?: NestedEnumVerificationStatusFilter<$PrismaModel>;
+    };
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _avg?: NestedFloatNullableFilter<$PrismaModel>;
+    _sum?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedIntNullableFilter<$PrismaModel>;
+    _max?: NestedIntNullableFilter<$PrismaModel>;
+  };
+
   export type EnumConversationTypeFilter<$PrismaModel = never> = {
     equals?:
       | $Enums.ConversationType
@@ -47740,6 +50848,32 @@ export namespace Prisma {
     connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
   };
 
+  export type TradesmanVerificationCreateNestedOneWithoutUserInput = {
+    create?: XOR<
+      TradesmanVerificationCreateWithoutUserInput,
+      TradesmanVerificationUncheckedCreateWithoutUserInput
+    >;
+    connectOrCreate?: TradesmanVerificationCreateOrConnectWithoutUserInput;
+    connect?: TradesmanVerificationWhereUniqueInput;
+  };
+
+  export type TradesmanVerificationCreateNestedManyWithoutReviewedByInput = {
+    create?:
+      | XOR<
+          TradesmanVerificationCreateWithoutReviewedByInput,
+          TradesmanVerificationUncheckedCreateWithoutReviewedByInput
+        >
+      | TradesmanVerificationCreateWithoutReviewedByInput[]
+      | TradesmanVerificationUncheckedCreateWithoutReviewedByInput[];
+    connectOrCreate?:
+      | TradesmanVerificationCreateOrConnectWithoutReviewedByInput
+      | TradesmanVerificationCreateOrConnectWithoutReviewedByInput[];
+    createMany?: TradesmanVerificationCreateManyReviewedByInputEnvelope;
+    connect?:
+      | TradesmanVerificationWhereUniqueInput
+      | TradesmanVerificationWhereUniqueInput[];
+  };
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<
@@ -48003,6 +51137,33 @@ export namespace Prisma {
     createMany?: JobEscrowCreateManyTradesmanInputEnvelope;
     connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
   };
+
+  export type TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<
+      TradesmanVerificationCreateWithoutUserInput,
+      TradesmanVerificationUncheckedCreateWithoutUserInput
+    >;
+    connectOrCreate?: TradesmanVerificationCreateOrConnectWithoutUserInput;
+    connect?: TradesmanVerificationWhereUniqueInput;
+  };
+
+  export type TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput =
+    {
+      create?:
+        | XOR<
+            TradesmanVerificationCreateWithoutReviewedByInput,
+            TradesmanVerificationUncheckedCreateWithoutReviewedByInput
+          >
+        | TradesmanVerificationCreateWithoutReviewedByInput[]
+        | TradesmanVerificationUncheckedCreateWithoutReviewedByInput[];
+      connectOrCreate?:
+        | TradesmanVerificationCreateOrConnectWithoutReviewedByInput
+        | TradesmanVerificationCreateOrConnectWithoutReviewedByInput[];
+      createMany?: TradesmanVerificationCreateManyReviewedByInputEnvelope;
+      connect?:
+        | TradesmanVerificationWhereUniqueInput
+        | TradesmanVerificationWhereUniqueInput[];
+    };
 
   export type StringFieldUpdateOperationsInput = {
     set?: string;
@@ -48542,6 +51703,63 @@ export namespace Prisma {
     deleteMany?: JobEscrowScalarWhereInput | JobEscrowScalarWhereInput[];
   };
 
+  export type TradesmanVerificationUpdateOneWithoutUserNestedInput = {
+    create?: XOR<
+      TradesmanVerificationCreateWithoutUserInput,
+      TradesmanVerificationUncheckedCreateWithoutUserInput
+    >;
+    connectOrCreate?: TradesmanVerificationCreateOrConnectWithoutUserInput;
+    upsert?: TradesmanVerificationUpsertWithoutUserInput;
+    disconnect?: TradesmanVerificationWhereInput | boolean;
+    delete?: TradesmanVerificationWhereInput | boolean;
+    connect?: TradesmanVerificationWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TradesmanVerificationUpdateToOneWithWhereWithoutUserInput,
+        TradesmanVerificationUpdateWithoutUserInput
+      >,
+      TradesmanVerificationUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type TradesmanVerificationUpdateManyWithoutReviewedByNestedInput = {
+    create?:
+      | XOR<
+          TradesmanVerificationCreateWithoutReviewedByInput,
+          TradesmanVerificationUncheckedCreateWithoutReviewedByInput
+        >
+      | TradesmanVerificationCreateWithoutReviewedByInput[]
+      | TradesmanVerificationUncheckedCreateWithoutReviewedByInput[];
+    connectOrCreate?:
+      | TradesmanVerificationCreateOrConnectWithoutReviewedByInput
+      | TradesmanVerificationCreateOrConnectWithoutReviewedByInput[];
+    upsert?:
+      | TradesmanVerificationUpsertWithWhereUniqueWithoutReviewedByInput
+      | TradesmanVerificationUpsertWithWhereUniqueWithoutReviewedByInput[];
+    createMany?: TradesmanVerificationCreateManyReviewedByInputEnvelope;
+    set?:
+      | TradesmanVerificationWhereUniqueInput
+      | TradesmanVerificationWhereUniqueInput[];
+    disconnect?:
+      | TradesmanVerificationWhereUniqueInput
+      | TradesmanVerificationWhereUniqueInput[];
+    delete?:
+      | TradesmanVerificationWhereUniqueInput
+      | TradesmanVerificationWhereUniqueInput[];
+    connect?:
+      | TradesmanVerificationWhereUniqueInput
+      | TradesmanVerificationWhereUniqueInput[];
+    update?:
+      | TradesmanVerificationUpdateWithWhereUniqueWithoutReviewedByInput
+      | TradesmanVerificationUpdateWithWhereUniqueWithoutReviewedByInput[];
+    updateMany?:
+      | TradesmanVerificationUpdateManyWithWhereWithoutReviewedByInput
+      | TradesmanVerificationUpdateManyWithWhereWithoutReviewedByInput[];
+    deleteMany?:
+      | TradesmanVerificationScalarWhereInput
+      | TradesmanVerificationScalarWhereInput[];
+  };
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<
@@ -49049,6 +52267,64 @@ export namespace Prisma {
       | JobEscrowUpdateManyWithWhereWithoutTradesmanInput[];
     deleteMany?: JobEscrowScalarWhereInput | JobEscrowScalarWhereInput[];
   };
+
+  export type TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<
+      TradesmanVerificationCreateWithoutUserInput,
+      TradesmanVerificationUncheckedCreateWithoutUserInput
+    >;
+    connectOrCreate?: TradesmanVerificationCreateOrConnectWithoutUserInput;
+    upsert?: TradesmanVerificationUpsertWithoutUserInput;
+    disconnect?: TradesmanVerificationWhereInput | boolean;
+    delete?: TradesmanVerificationWhereInput | boolean;
+    connect?: TradesmanVerificationWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        TradesmanVerificationUpdateToOneWithWhereWithoutUserInput,
+        TradesmanVerificationUpdateWithoutUserInput
+      >,
+      TradesmanVerificationUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput =
+    {
+      create?:
+        | XOR<
+            TradesmanVerificationCreateWithoutReviewedByInput,
+            TradesmanVerificationUncheckedCreateWithoutReviewedByInput
+          >
+        | TradesmanVerificationCreateWithoutReviewedByInput[]
+        | TradesmanVerificationUncheckedCreateWithoutReviewedByInput[];
+      connectOrCreate?:
+        | TradesmanVerificationCreateOrConnectWithoutReviewedByInput
+        | TradesmanVerificationCreateOrConnectWithoutReviewedByInput[];
+      upsert?:
+        | TradesmanVerificationUpsertWithWhereUniqueWithoutReviewedByInput
+        | TradesmanVerificationUpsertWithWhereUniqueWithoutReviewedByInput[];
+      createMany?: TradesmanVerificationCreateManyReviewedByInputEnvelope;
+      set?:
+        | TradesmanVerificationWhereUniqueInput
+        | TradesmanVerificationWhereUniqueInput[];
+      disconnect?:
+        | TradesmanVerificationWhereUniqueInput
+        | TradesmanVerificationWhereUniqueInput[];
+      delete?:
+        | TradesmanVerificationWhereUniqueInput
+        | TradesmanVerificationWhereUniqueInput[];
+      connect?:
+        | TradesmanVerificationWhereUniqueInput
+        | TradesmanVerificationWhereUniqueInput[];
+      update?:
+        | TradesmanVerificationUpdateWithWhereUniqueWithoutReviewedByInput
+        | TradesmanVerificationUpdateWithWhereUniqueWithoutReviewedByInput[];
+      updateMany?:
+        | TradesmanVerificationUpdateManyWithWhereWithoutReviewedByInput
+        | TradesmanVerificationUpdateManyWithWhereWithoutReviewedByInput[];
+      deleteMany?:
+        | TradesmanVerificationScalarWhereInput
+        | TradesmanVerificationScalarWhereInput[];
+    };
 
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<
@@ -51136,6 +54412,72 @@ export namespace Prisma {
     >;
   };
 
+  export type UserCreateNestedOneWithoutVerificationInput = {
+    create?: XOR<
+      UserCreateWithoutVerificationInput,
+      UserUncheckedCreateWithoutVerificationInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutVerificationInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutReviewedVerificationsInput = {
+    create?: XOR<
+      UserCreateWithoutReviewedVerificationsInput,
+      UserUncheckedCreateWithoutReviewedVerificationsInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedVerificationsInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type EnumVerificationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.VerificationStatus;
+  };
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null;
+    increment?: number;
+    decrement?: number;
+    multiply?: number;
+    divide?: number;
+  };
+
+  export type UserUpdateOneRequiredWithoutVerificationNestedInput = {
+    create?: XOR<
+      UserCreateWithoutVerificationInput,
+      UserUncheckedCreateWithoutVerificationInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutVerificationInput;
+    upsert?: UserUpsertWithoutVerificationInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutVerificationInput,
+        UserUpdateWithoutVerificationInput
+      >,
+      UserUncheckedUpdateWithoutVerificationInput
+    >;
+  };
+
+  export type UserUpdateOneWithoutReviewedVerificationsNestedInput = {
+    create?: XOR<
+      UserCreateWithoutReviewedVerificationsInput,
+      UserUncheckedCreateWithoutReviewedVerificationsInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedVerificationsInput;
+    upsert?: UserUpsertWithoutReviewedVerificationsInput;
+    disconnect?: UserWhereInput | boolean;
+    delete?: UserWhereInput | boolean;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutReviewedVerificationsInput,
+        UserUpdateWithoutReviewedVerificationsInput
+      >,
+      UserUncheckedUpdateWithoutReviewedVerificationsInput
+    >;
+  };
+
   export type JobCreateNestedOneWithoutConversationsInput = {
     create?: XOR<
       JobCreateWithoutConversationsInput,
@@ -52622,6 +55964,68 @@ export namespace Prisma {
     _max?: NestedEnumEscrowTransactionTypeFilter<$PrismaModel>;
   };
 
+  export type NestedEnumVerificationStatusFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.VerificationStatus
+      | EnumVerificationStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.VerificationStatus[]
+      | ListEnumVerificationStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.VerificationStatus[]
+      | ListEnumVerificationStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumVerificationStatusFilter<$PrismaModel>
+      | $Enums.VerificationStatus;
+  };
+
+  export type NestedEnumVerificationStatusWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?:
+      | $Enums.VerificationStatus
+      | EnumVerificationStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.VerificationStatus[]
+      | ListEnumVerificationStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.VerificationStatus[]
+      | ListEnumVerificationStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumVerificationStatusWithAggregatesFilter<$PrismaModel>
+      | $Enums.VerificationStatus;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumVerificationStatusFilter<$PrismaModel>;
+    _max?: NestedEnumVerificationStatusFilter<$PrismaModel>;
+  };
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _avg?: NestedFloatNullableFilter<$PrismaModel>;
+    _sum?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedIntNullableFilter<$PrismaModel>;
+    _max?: NestedIntNullableFilter<$PrismaModel>;
+  };
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null;
+    lt?: number | FloatFieldRefInput<$PrismaModel>;
+    lte?: number | FloatFieldRefInput<$PrismaModel>;
+    gt?: number | FloatFieldRefInput<$PrismaModel>;
+    gte?: number | FloatFieldRefInput<$PrismaModel>;
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null;
+  };
+
   export type NestedEnumConversationTypeFilter<$PrismaModel = never> = {
     equals?:
       | $Enums.ConversationType
@@ -53665,6 +57069,177 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type TradesmanVerificationCreateWithoutUserInput = {
+    id?: string;
+    status?: $Enums.VerificationStatus;
+    fullName: string;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    nicNumber: string;
+    addressLine?: string | null;
+    city?: string | null;
+    district?: string | null;
+    primaryTrade?: string | null;
+    yearsExperience?: number;
+    nicFrontKey?: string | null;
+    nicBackKey?: string | null;
+    photoKey?: string | null;
+    gramaNiladhariKey?: string | null;
+    licenceKey?: string | null;
+    licenceNumber?: string | null;
+    policeClearanceKey?: string | null;
+    serviceRadiusKm?: number;
+    crewType?: string | null;
+    helperCount?: number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: string | null;
+    guarantorNic?: string | null;
+    voiceIntroKey?: string | null;
+    payoutAccountHolder?: string | null;
+    payoutBank?: string | null;
+    payoutBranch?: string | null;
+    payoutAccountNumber?: string | null;
+    reviewedAt?: Date | string | null;
+    rejectionReason?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    reviewedBy?: UserCreateNestedOneWithoutReviewedVerificationsInput;
+  };
+
+  export type TradesmanVerificationUncheckedCreateWithoutUserInput = {
+    id?: string;
+    status?: $Enums.VerificationStatus;
+    fullName: string;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    nicNumber: string;
+    addressLine?: string | null;
+    city?: string | null;
+    district?: string | null;
+    primaryTrade?: string | null;
+    yearsExperience?: number;
+    nicFrontKey?: string | null;
+    nicBackKey?: string | null;
+    photoKey?: string | null;
+    gramaNiladhariKey?: string | null;
+    licenceKey?: string | null;
+    licenceNumber?: string | null;
+    policeClearanceKey?: string | null;
+    serviceRadiusKm?: number;
+    crewType?: string | null;
+    helperCount?: number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: string | null;
+    guarantorNic?: string | null;
+    voiceIntroKey?: string | null;
+    payoutAccountHolder?: string | null;
+    payoutBank?: string | null;
+    payoutBranch?: string | null;
+    payoutAccountNumber?: string | null;
+    reviewedById?: string | null;
+    reviewedAt?: Date | string | null;
+    rejectionReason?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type TradesmanVerificationCreateOrConnectWithoutUserInput = {
+    where: TradesmanVerificationWhereUniqueInput;
+    create: XOR<
+      TradesmanVerificationCreateWithoutUserInput,
+      TradesmanVerificationUncheckedCreateWithoutUserInput
+    >;
+  };
+
+  export type TradesmanVerificationCreateWithoutReviewedByInput = {
+    id?: string;
+    status?: $Enums.VerificationStatus;
+    fullName: string;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    nicNumber: string;
+    addressLine?: string | null;
+    city?: string | null;
+    district?: string | null;
+    primaryTrade?: string | null;
+    yearsExperience?: number;
+    nicFrontKey?: string | null;
+    nicBackKey?: string | null;
+    photoKey?: string | null;
+    gramaNiladhariKey?: string | null;
+    licenceKey?: string | null;
+    licenceNumber?: string | null;
+    policeClearanceKey?: string | null;
+    serviceRadiusKm?: number;
+    crewType?: string | null;
+    helperCount?: number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: string | null;
+    guarantorNic?: string | null;
+    voiceIntroKey?: string | null;
+    payoutAccountHolder?: string | null;
+    payoutBank?: string | null;
+    payoutBranch?: string | null;
+    payoutAccountNumber?: string | null;
+    reviewedAt?: Date | string | null;
+    rejectionReason?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutVerificationInput;
+  };
+
+  export type TradesmanVerificationUncheckedCreateWithoutReviewedByInput = {
+    id?: string;
+    userId: string;
+    status?: $Enums.VerificationStatus;
+    fullName: string;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    nicNumber: string;
+    addressLine?: string | null;
+    city?: string | null;
+    district?: string | null;
+    primaryTrade?: string | null;
+    yearsExperience?: number;
+    nicFrontKey?: string | null;
+    nicBackKey?: string | null;
+    photoKey?: string | null;
+    gramaNiladhariKey?: string | null;
+    licenceKey?: string | null;
+    licenceNumber?: string | null;
+    policeClearanceKey?: string | null;
+    serviceRadiusKm?: number;
+    crewType?: string | null;
+    helperCount?: number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: string | null;
+    guarantorNic?: string | null;
+    voiceIntroKey?: string | null;
+    payoutAccountHolder?: string | null;
+    payoutBank?: string | null;
+    payoutBranch?: string | null;
+    payoutAccountNumber?: string | null;
+    reviewedAt?: Date | string | null;
+    rejectionReason?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type TradesmanVerificationCreateOrConnectWithoutReviewedByInput = {
+    where: TradesmanVerificationWhereUniqueInput;
+    create: XOR<
+      TradesmanVerificationCreateWithoutReviewedByInput,
+      TradesmanVerificationUncheckedCreateWithoutReviewedByInput
+    >;
+  };
+
+  export type TradesmanVerificationCreateManyReviewedByInputEnvelope = {
+    data:
+      | TradesmanVerificationCreateManyReviewedByInput
+      | TradesmanVerificationCreateManyReviewedByInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput;
     update: XOR<
@@ -54582,6 +58157,265 @@ export namespace Prisma {
     >;
   };
 
+  export type TradesmanVerificationUpsertWithoutUserInput = {
+    update: XOR<
+      TradesmanVerificationUpdateWithoutUserInput,
+      TradesmanVerificationUncheckedUpdateWithoutUserInput
+    >;
+    create: XOR<
+      TradesmanVerificationCreateWithoutUserInput,
+      TradesmanVerificationUncheckedCreateWithoutUserInput
+    >;
+    where?: TradesmanVerificationWhereInput;
+  };
+
+  export type TradesmanVerificationUpdateToOneWithWhereWithoutUserInput = {
+    where?: TradesmanVerificationWhereInput;
+    data: XOR<
+      TradesmanVerificationUpdateWithoutUserInput,
+      TradesmanVerificationUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type TradesmanVerificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumVerificationStatusFieldUpdateOperationsInput
+      | $Enums.VerificationStatus;
+    fullName?: StringFieldUpdateOperationsInput | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFieldUpdateOperationsInput | string;
+    addressLine?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    primaryTrade?: NullableStringFieldUpdateOperationsInput | string | null;
+    yearsExperience?: IntFieldUpdateOperationsInput | number;
+    nicFrontKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    nicBackKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    photoKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    gramaNiladhariKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    licenceKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    licenceNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    policeClearanceKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    serviceRadiusKm?: IntFieldUpdateOperationsInput | number;
+    crewType?: NullableStringFieldUpdateOperationsInput | string | null;
+    helperCount?: NullableIntFieldUpdateOperationsInput | number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: NullableStringFieldUpdateOperationsInput | string | null;
+    guarantorNic?: NullableStringFieldUpdateOperationsInput | string | null;
+    voiceIntroKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountHolder?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    payoutBank?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutBranch?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountNumber?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    reviewedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    reviewedBy?: UserUpdateOneWithoutReviewedVerificationsNestedInput;
+  };
+
+  export type TradesmanVerificationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumVerificationStatusFieldUpdateOperationsInput
+      | $Enums.VerificationStatus;
+    fullName?: StringFieldUpdateOperationsInput | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFieldUpdateOperationsInput | string;
+    addressLine?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    primaryTrade?: NullableStringFieldUpdateOperationsInput | string | null;
+    yearsExperience?: IntFieldUpdateOperationsInput | number;
+    nicFrontKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    nicBackKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    photoKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    gramaNiladhariKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    licenceKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    licenceNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    policeClearanceKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    serviceRadiusKm?: IntFieldUpdateOperationsInput | number;
+    crewType?: NullableStringFieldUpdateOperationsInput | string | null;
+    helperCount?: NullableIntFieldUpdateOperationsInput | number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: NullableStringFieldUpdateOperationsInput | string | null;
+    guarantorNic?: NullableStringFieldUpdateOperationsInput | string | null;
+    voiceIntroKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountHolder?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    payoutBank?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutBranch?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountNumber?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null;
+    reviewedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type TradesmanVerificationUpsertWithWhereUniqueWithoutReviewedByInput =
+    {
+      where: TradesmanVerificationWhereUniqueInput;
+      update: XOR<
+        TradesmanVerificationUpdateWithoutReviewedByInput,
+        TradesmanVerificationUncheckedUpdateWithoutReviewedByInput
+      >;
+      create: XOR<
+        TradesmanVerificationCreateWithoutReviewedByInput,
+        TradesmanVerificationUncheckedCreateWithoutReviewedByInput
+      >;
+    };
+
+  export type TradesmanVerificationUpdateWithWhereUniqueWithoutReviewedByInput =
+    {
+      where: TradesmanVerificationWhereUniqueInput;
+      data: XOR<
+        TradesmanVerificationUpdateWithoutReviewedByInput,
+        TradesmanVerificationUncheckedUpdateWithoutReviewedByInput
+      >;
+    };
+
+  export type TradesmanVerificationUpdateManyWithWhereWithoutReviewedByInput = {
+    where: TradesmanVerificationScalarWhereInput;
+    data: XOR<
+      TradesmanVerificationUpdateManyMutationInput,
+      TradesmanVerificationUncheckedUpdateManyWithoutReviewedByInput
+    >;
+  };
+
+  export type TradesmanVerificationScalarWhereInput = {
+    AND?:
+      | TradesmanVerificationScalarWhereInput
+      | TradesmanVerificationScalarWhereInput[];
+    OR?: TradesmanVerificationScalarWhereInput[];
+    NOT?:
+      | TradesmanVerificationScalarWhereInput
+      | TradesmanVerificationScalarWhereInput[];
+    id?: StringFilter<'TradesmanVerification'> | string;
+    userId?: StringFilter<'TradesmanVerification'> | string;
+    status?:
+      | EnumVerificationStatusFilter<'TradesmanVerification'>
+      | $Enums.VerificationStatus;
+    fullName?: StringFilter<'TradesmanVerification'> | string;
+    gender?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    dateOfBirth?:
+      | DateTimeNullableFilter<'TradesmanVerification'>
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFilter<'TradesmanVerification'> | string;
+    addressLine?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    city?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    district?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    primaryTrade?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    yearsExperience?: IntFilter<'TradesmanVerification'> | number;
+    nicFrontKey?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    nicBackKey?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    photoKey?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    gramaNiladhariKey?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    licenceKey?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    licenceNumber?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    policeClearanceKey?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    serviceRadiusKm?: IntFilter<'TradesmanVerification'> | number;
+    crewType?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    helperCount?: IntNullableFilter<'TradesmanVerification'> | number | null;
+    portfolioKeys?: JsonNullableFilter<'TradesmanVerification'>;
+    guarantorName?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    guarantorNic?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    voiceIntroKey?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutAccountHolder?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutBank?: StringNullableFilter<'TradesmanVerification'> | string | null;
+    payoutBranch?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    payoutAccountNumber?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    reviewedById?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    reviewedAt?:
+      | DateTimeNullableFilter<'TradesmanVerification'>
+      | Date
+      | string
+      | null;
+    rejectionReason?:
+      | StringNullableFilter<'TradesmanVerification'>
+      | string
+      | null;
+    createdAt?: DateTimeFilter<'TradesmanVerification'> | Date | string;
+    updatedAt?: DateTimeFilter<'TradesmanVerification'> | Date | string;
+  };
+
   export type UserCreateWithoutAccountsInput = {
     id?: string;
     name: string;
@@ -54618,6 +58452,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -54656,6 +58492,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -54739,6 +58577,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -54794,6 +58634,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserCreateWithoutSessionsInput = {
@@ -54832,6 +58674,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -54870,6 +58714,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -54953,6 +58799,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -55008,6 +58856,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserCreateWithoutConsentsInput = {
@@ -55046,6 +58896,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutConsentsInput = {
@@ -55084,6 +58936,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutConsentsInput = {
@@ -55167,6 +59021,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConsentsInput = {
@@ -55222,6 +59078,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserCreateWithoutHomeownerProfileInput = {
@@ -55260,6 +59118,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutHomeownerProfileInput = {
@@ -55298,6 +59158,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutHomeownerProfileInput = {
@@ -55381,6 +59243,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutHomeownerProfileInput = {
@@ -55436,6 +59300,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserCreateWithoutTradesmanProfileInput = {
@@ -55474,6 +59340,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutTradesmanProfileInput = {
@@ -55512,6 +59380,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutTradesmanProfileInput = {
@@ -55624,6 +59494,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTradesmanProfileInput = {
@@ -55679,6 +59551,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type TradesmanSkillUpsertWithWhereUniqueWithoutTradesmanProfileInput =
@@ -56710,6 +60584,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutPostedJobsInput = {
@@ -56748,6 +60624,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutPostedJobsInput = {
@@ -56874,6 +60752,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutAssignedJobsInput = {
@@ -56912,6 +60792,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutAssignedJobsInput = {
@@ -57323,6 +61205,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPostedJobsInput = {
@@ -57378,6 +61262,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type ServiceCategoryUpsertWithoutJobsInput = {
@@ -57558,6 +61444,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutAssignedJobsInput = {
@@ -57613,6 +61501,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type QuoteUpsertWithoutAcceptedForJobInput = {
@@ -58509,6 +62399,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutQuotesInput = {
@@ -58547,6 +62439,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutQuotesInput = {
@@ -58939,6 +62833,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutQuotesInput = {
@@ -58994,6 +62890,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type JobUpsertWithoutAcceptedQuoteInput = {
@@ -59479,6 +63377,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutEscrowsAsHomeownerInput = {
@@ -59517,6 +63417,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutEscrowsAsHomeownerInput = {
@@ -59563,6 +63465,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutEscrowsAsTradesmanInput = {
@@ -59601,6 +63505,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutEscrowsAsTradesmanInput = {
@@ -60018,6 +63924,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutEscrowsAsHomeownerInput = {
@@ -60073,6 +63981,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUpsertWithoutEscrowsAsTradesmanInput = {
@@ -60148,6 +64058,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutEscrowsAsTradesmanInput = {
@@ -60203,6 +64115,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type EscrowTransactionUpsertWithWhereUniqueWithoutEscrowInput = {
@@ -60454,6 +64368,450 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserCreateWithoutVerificationInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountCreateNestedManyWithoutUserInput;
+    sessions?: SessionCreateNestedManyWithoutUserInput;
+    consents?: UserConsentCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileCreateNestedOneWithoutUserInput;
+    postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
+  };
+
+  export type UserUncheckedCreateWithoutVerificationInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
+    consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileUncheckedCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileUncheckedCreateNestedOneWithoutUserInput;
+    postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewUncheckedCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportUncheckedCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
+  };
+
+  export type UserCreateOrConnectWithoutVerificationInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutVerificationInput,
+      UserUncheckedCreateWithoutVerificationInput
+    >;
+  };
+
+  export type UserCreateWithoutReviewedVerificationsInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountCreateNestedManyWithoutUserInput;
+    sessions?: SessionCreateNestedManyWithoutUserInput;
+    consents?: UserConsentCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileCreateNestedOneWithoutUserInput;
+    postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutReviewedVerificationsInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
+    consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileUncheckedCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileUncheckedCreateNestedOneWithoutUserInput;
+    postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewUncheckedCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportUncheckedCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutReviewedVerificationsInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutReviewedVerificationsInput,
+      UserUncheckedCreateWithoutReviewedVerificationsInput
+    >;
+  };
+
+  export type UserUpsertWithoutVerificationInput = {
+    update: XOR<
+      UserUpdateWithoutVerificationInput,
+      UserUncheckedUpdateWithoutVerificationInput
+    >;
+    create: XOR<
+      UserCreateWithoutVerificationInput,
+      UserUncheckedCreateWithoutVerificationInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutVerificationInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutVerificationInput,
+      UserUncheckedUpdateWithoutVerificationInput
+    >;
+  };
+
+  export type UserUpdateWithoutVerificationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutVerificationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUncheckedUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUncheckedUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUncheckedUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUncheckedUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
+  };
+
+  export type UserUpsertWithoutReviewedVerificationsInput = {
+    update: XOR<
+      UserUpdateWithoutReviewedVerificationsInput,
+      UserUncheckedUpdateWithoutReviewedVerificationsInput
+    >;
+    create: XOR<
+      UserCreateWithoutReviewedVerificationsInput,
+      UserUncheckedCreateWithoutReviewedVerificationsInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutReviewedVerificationsInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutReviewedVerificationsInput,
+      UserUncheckedUpdateWithoutReviewedVerificationsInput
+    >;
+  };
+
+  export type UserUpdateWithoutReviewedVerificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutReviewedVerificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUncheckedUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUncheckedUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUncheckedUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUncheckedUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
   };
 
   export type JobCreateWithoutConversationsInput = {
@@ -60904,6 +65262,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutConversationLinksInput = {
@@ -60942,6 +65302,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutConversationLinksInput = {
@@ -61077,6 +65439,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationLinksInput = {
@@ -61132,6 +65496,8 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type ConversationCreateWithoutMessagesInput = {
@@ -61198,6 +65564,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -61236,6 +65604,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -61282,6 +65652,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutReceivedMessagesInput = {
@@ -61320,6 +65692,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutReceivedMessagesInput = {
@@ -61500,6 +65874,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -61555,6 +65931,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUpsertWithoutReceivedMessagesInput = {
@@ -61630,6 +66008,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
@@ -61685,6 +66065,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type ReportUpsertWithWhereUniqueWithoutMessageInput = {
@@ -61827,6 +66209,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutReviewsGivenInput = {
@@ -61865,6 +66249,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutReviewsGivenInput = {
@@ -61911,6 +66297,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutReviewsReceivedInput = {
@@ -61949,6 +66337,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutReviewsReceivedInput = {
@@ -62256,6 +66646,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutReviewsGivenInput = {
@@ -62311,6 +66703,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUpsertWithoutReviewsReceivedInput = {
@@ -62386,6 +66780,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutReviewsReceivedInput = {
@@ -62441,6 +66837,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type ReportUpsertWithWhereUniqueWithoutReviewInput = {
@@ -62583,6 +66981,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutRecommendationsInput = {
@@ -62621,6 +67021,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutRecommendationsInput = {
@@ -62883,6 +67285,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutRecommendationsInput = {
@@ -62938,6 +67342,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserCreateWithoutCreatedReportsInput = {
@@ -62976,6 +67382,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutCreatedReportsInput = {
@@ -63014,6 +67422,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutCreatedReportsInput = {
@@ -63060,6 +67470,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserUncheckedCreateWithoutAssignedReportsInput = {
@@ -63098,6 +67510,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
     escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
     escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
   };
 
   export type UserCreateOrConnectWithoutAssignedReportsInput = {
@@ -63327,6 +67741,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutCreatedReportsInput = {
@@ -63382,6 +67798,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUpsertWithoutAssignedReportsInput = {
@@ -63457,6 +67875,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutAssignedReportsInput = {
@@ -63512,6 +67932,8 @@ export namespace Prisma {
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
     escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
     escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
   };
 
   export type JobUpsertWithoutReportsInput = {
@@ -64037,6 +68459,43 @@ export namespace Prisma {
     workCompletedAt?: Date | string | null;
     releasedAt?: Date | string | null;
     refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type TradesmanVerificationCreateManyReviewedByInput = {
+    id?: string;
+    userId: string;
+    status?: $Enums.VerificationStatus;
+    fullName: string;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    nicNumber: string;
+    addressLine?: string | null;
+    city?: string | null;
+    district?: string | null;
+    primaryTrade?: string | null;
+    yearsExperience?: number;
+    nicFrontKey?: string | null;
+    nicBackKey?: string | null;
+    photoKey?: string | null;
+    gramaNiladhariKey?: string | null;
+    licenceKey?: string | null;
+    licenceNumber?: string | null;
+    policeClearanceKey?: string | null;
+    serviceRadiusKm?: number;
+    crewType?: string | null;
+    helperCount?: number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: string | null;
+    guarantorNic?: string | null;
+    voiceIntroKey?: string | null;
+    payoutAccountHolder?: string | null;
+    payoutBank?: string | null;
+    payoutBranch?: string | null;
+    payoutAccountNumber?: string | null;
+    reviewedAt?: Date | string | null;
+    rejectionReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -65551,6 +70010,183 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type TradesmanVerificationUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumVerificationStatusFieldUpdateOperationsInput
+      | $Enums.VerificationStatus;
+    fullName?: StringFieldUpdateOperationsInput | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFieldUpdateOperationsInput | string;
+    addressLine?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    primaryTrade?: NullableStringFieldUpdateOperationsInput | string | null;
+    yearsExperience?: IntFieldUpdateOperationsInput | number;
+    nicFrontKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    nicBackKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    photoKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    gramaNiladhariKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    licenceKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    licenceNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    policeClearanceKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    serviceRadiusKm?: IntFieldUpdateOperationsInput | number;
+    crewType?: NullableStringFieldUpdateOperationsInput | string | null;
+    helperCount?: NullableIntFieldUpdateOperationsInput | number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: NullableStringFieldUpdateOperationsInput | string | null;
+    guarantorNic?: NullableStringFieldUpdateOperationsInput | string | null;
+    voiceIntroKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountHolder?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    payoutBank?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutBranch?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountNumber?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    reviewedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutVerificationNestedInput;
+  };
+
+  export type TradesmanVerificationUncheckedUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumVerificationStatusFieldUpdateOperationsInput
+      | $Enums.VerificationStatus;
+    fullName?: StringFieldUpdateOperationsInput | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFieldUpdateOperationsInput | string;
+    addressLine?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    primaryTrade?: NullableStringFieldUpdateOperationsInput | string | null;
+    yearsExperience?: IntFieldUpdateOperationsInput | number;
+    nicFrontKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    nicBackKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    photoKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    gramaNiladhariKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    licenceKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    licenceNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    policeClearanceKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    serviceRadiusKm?: IntFieldUpdateOperationsInput | number;
+    crewType?: NullableStringFieldUpdateOperationsInput | string | null;
+    helperCount?: NullableIntFieldUpdateOperationsInput | number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: NullableStringFieldUpdateOperationsInput | string | null;
+    guarantorNic?: NullableStringFieldUpdateOperationsInput | string | null;
+    voiceIntroKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountHolder?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    payoutBank?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutBranch?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountNumber?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    reviewedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type TradesmanVerificationUncheckedUpdateManyWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumVerificationStatusFieldUpdateOperationsInput
+      | $Enums.VerificationStatus;
+    fullName?: StringFieldUpdateOperationsInput | string;
+    gender?: NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    nicNumber?: StringFieldUpdateOperationsInput | string;
+    addressLine?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    primaryTrade?: NullableStringFieldUpdateOperationsInput | string | null;
+    yearsExperience?: IntFieldUpdateOperationsInput | number;
+    nicFrontKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    nicBackKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    photoKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    gramaNiladhariKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    licenceKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    licenceNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    policeClearanceKey?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    serviceRadiusKm?: IntFieldUpdateOperationsInput | number;
+    crewType?: NullableStringFieldUpdateOperationsInput | string | null;
+    helperCount?: NullableIntFieldUpdateOperationsInput | number | null;
+    portfolioKeys?: NullableJsonNullValueInput | InputJsonValue;
+    guarantorName?: NullableStringFieldUpdateOperationsInput | string | null;
+    guarantorNic?: NullableStringFieldUpdateOperationsInput | string | null;
+    voiceIntroKey?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountHolder?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    payoutBank?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutBranch?: NullableStringFieldUpdateOperationsInput | string | null;
+    payoutAccountNumber?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    reviewedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };

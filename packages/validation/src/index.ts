@@ -200,6 +200,46 @@ export const FundEscrowSchema = z.object({
   paymentMethod: EscrowPaymentMethodSchema.default('card'),
 });
 
+// --- Tradesman verification (KYC onboarding) ---
+// Document fields hold storage references (keys/URLs); the binary upload is a
+// separate concern. Only identity essentials are required so a tradesman can
+// resubmit incrementally.
+const docKey = () => z.string().trim().max(500).optional();
+
+export const SubmitVerificationSchema = z.object({
+  fullName: z.string().trim().min(2).max(120),
+  gender: z.string().trim().max(20).optional(),
+  dateOfBirth: z.coerce.date().optional(),
+  nicNumber: z.string().trim().min(5).max(20),
+  addressLine: optionalText(200),
+  city: optionalText(80),
+  district: optionalText(80),
+  primaryTrade: optionalText(80),
+  yearsExperience: z.coerce.number().int().min(0).max(80).default(0),
+  nicFrontKey: docKey(),
+  nicBackKey: docKey(),
+  photoKey: docKey(),
+  gramaNiladhariKey: docKey(),
+  licenceKey: docKey(),
+  licenceNumber: optionalText(80),
+  policeClearanceKey: docKey(),
+  serviceRadiusKm: z.coerce.number().int().min(0).max(500).default(15),
+  crewType: z.enum(['solo', 'team']).optional(),
+  helperCount: z.coerce.number().int().min(0).max(50).optional(),
+  portfolioKeys: z.array(z.string().trim().max(500)).max(10).optional(),
+  guarantorName: optionalText(120),
+  guarantorNic: optionalText(20),
+  voiceIntroKey: docKey(),
+  payoutAccountHolder: optionalText(120),
+  payoutBank: optionalText(80),
+  payoutBranch: optionalText(80),
+  payoutAccountNumber: optionalText(40),
+});
+
+export const RejectVerificationSchema = z.object({
+  reason: z.string().trim().min(3).max(1000),
+});
+
 // --- Reviews (marketplace, job-linked) ---
 export const CreateReviewSchema = z.object({
   jobId: id,
@@ -259,6 +299,8 @@ export type UpdateJobInput = z.infer<typeof UpdateJobSchema>;
 export type CreateQuoteInput = z.infer<typeof CreateQuoteSchema>;
 export type FundEscrowInput = z.infer<typeof FundEscrowSchema>;
 export type EscrowPaymentMethod = z.infer<typeof EscrowPaymentMethodSchema>;
+export type SubmitVerificationInput = z.infer<typeof SubmitVerificationSchema>;
+export type RejectVerificationInput = z.infer<typeof RejectVerificationSchema>;
 export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;
 export type UpdateReviewInput = z.infer<typeof UpdateReviewSchema>;
 export type StartConversationInput = z.infer<typeof StartConversationSchema>;
