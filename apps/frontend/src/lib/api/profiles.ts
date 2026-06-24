@@ -95,3 +95,58 @@ export function listSkills(categoryId?: string) {
   const q = categoryId ? `?categoryId=${encodeURIComponent(categoryId)}` : '';
   return apiFetch<Skill[]>(`/skills${q}`);
 }
+
+// ─── Public tradesman directory ─────────────────────────────────────────────
+
+export type TradesmanListItem = {
+  userId: string;
+  name: string;
+  image: string | null;
+  bio: string | null;
+  city: string | null;
+  district: string | null;
+  yearsExperience: number;
+  avgRating: number;
+  ratingCount: number;
+  jobsCompleted: number;
+  isVerified: boolean;
+  skills: Array<{ id: string; nameEn: string }>;
+};
+
+export type TradesmanPublicProfile = TradesmanListItem & {
+  locationText: string | null;
+  hourlyRate: number | null;
+  serviceRadiusKm: number;
+  responseTimeMinutes: number;
+  isAvailable: boolean;
+};
+
+export type TradesmenQuery = {
+  page?: number;
+  limit?: number;
+  district?: string;
+  categoryId?: string;
+  skillId?: string;
+};
+
+export type Paginated<T> = {
+  data: T[];
+  meta: { total: number; page: number; limit: number; lastPage: number };
+};
+
+export function browseTradesmen(query: TradesmenQuery = {}) {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (value != null && value !== '') params.set(key, String(value));
+  }
+  const qs = params.toString();
+  return apiFetch<Paginated<TradesmanListItem>>(
+    `/profiles/tradesmen${qs ? `?${qs}` : ''}`,
+  );
+}
+
+export function getTradesmanPublic(userId: string) {
+  return apiFetch<TradesmanPublicProfile>(
+    `/profiles/tradesmen/${encodeURIComponent(userId)}`,
+  );
+}

@@ -1,8 +1,10 @@
 {
   "header": {
     "findTrades": "Find trades",
+    "browseJobs": "Browse jobs",
     "postJob": "Post a job",
     "quotes": "Quotes",
+    "myJobs": "My jobs",
     "messages": "Messages",
     "signIn": "Sign in",
     "getStarted": "Get started",
@@ -516,5 +518,77 @@
       "noExport": "No export is ready yet. Request one above and wait for the email.",
       "downloadError": "Unable to fetch download link"
     }
+  },
+  "trades": {
+    "title": "Find a trusted tradesman",
+    "subtitle": "Browse verified tradespeople near you — see their ratings, completed work and skills.",
+    "filters": {
+      "category": "Category",
+      "allCategories": "All categories",
+      "district": "District",
+      "districtPlaceholder": "Any district"
+    },
+    "empty": "No verified tradespeople match your filters yet.",
+    "jobsCompleted": "{count} completed",
+    "viewProfile": "View profile",
+    "profile": {
+      "back": "All trades",
+      "verified": "Verified tradesman",
+      "available": "Available now",
+      "unavailable": "Not taking jobs right now",
+      "about": "About",
+      "noBio": "This tradesman hasn't added a bio yet.",
+      "skills": "Skills",
+      "noSkills": "No skills listed yet.",
+      "stats": {
+        "rating": "Rating",
+        "completed": "Jobs completed",
+        "experience": "Experience",
+        "response": "Avg. response"
+      },
+      "years": "{count} yrs",
+      "minutes": "{count} min",
+      "hourlyRate": "Hourly rate",
+      "serviceRadius": "Service radius",
+      "km": "{count} km",
+      "message": "Message",
+      "notFound": "We couldn't find this tradesman."
+    }
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "updated": "Last updated 24 June 2026",
+    "intro": "These terms govern your use of Crafty Bass. By creating an account or using the service you agree to them.",
+    "sections": [
+      {
+        "heading": "1. About Crafty Bass",
+        "body": "Crafty Bass is a marketplace that connects homeowners with verified tradespeople in Sri Lanka. We help you find, compare and hire — but the work itself is agreed directly between the homeowner and the tradesman. We are not a party to that agreement."
+      },
+      {
+        "heading": "2. Accounts and verification",
+        "body": "You must give accurate details when you sign up and keep them up to date. Tradespeople are verified manually against their NIC, trade credentials, address and bank details. Only verified tradespeople can receive jobs or send quotes."
+      },
+      {
+        "heading": "3. Jobs, quotes and hiring",
+        "body": "Homeowners describe a job; tradespeople submit quotes. Accepting a quote forms an agreement between you and that tradesman to carry out the work for the quoted price, subject to any changes you both agree."
+      },
+      {
+        "heading": "4. Payments and escrow",
+        "body": "Where a materials deposit is requested, you pay Crafty Bass — not the tradesman — and we hold the funds in escrow. Deposits are refundable until work begins. The balance is released to the tradesman when you approve the completed work."
+      },
+      {
+        "heading": "5. Conduct",
+        "body": "Treat other users with respect. Don't post false information, harass others, or attempt to take payments off-platform to avoid protections. We may suspend accounts that break these rules."
+      },
+      {
+        "heading": "6. Liability",
+        "body": "Crafty Bass provides the platform but does not perform the work and does not guarantee outcomes. To the extent permitted by law, our liability is limited to the fees we have charged you."
+      },
+      {
+        "heading": "7. Changes to these terms",
+        "body": "We may update these terms from time to time. We'll show the date of the latest version above and, for significant changes, let you know in the app."
+      }
+    ],
+    "backHome": "Back to home"
   }
 }

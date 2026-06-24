@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service.js';
+import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import type {
+  BrowseTradesmenDto,
   UpsertHomeownerProfileDto,
   UpsertTradesmanProfileDto,
 } from './dto/index.js';
@@ -97,6 +99,51 @@ export class ProfilesService {
     });
   }
 
+  // Public directory of verified, available tradesmen. Decimals are coerced to
+  // numbers so the JSON the directory page consumes matches its typed client.
+  async listTradesmen(query: BrowseTradesmenDto) {
+    const { page, limit, district, categoryId, skillId } = query;
+    const skip = (page - 1) * limit;
+    const where = {
+      isVerified: true,
+      isAvailable: true,
+      ...(district ? { district } : {}),
+      ...(skillId ? { skills: { some: { skillId } } } : {}),
+      ...(categoryId ? { skills: { some: { skill: { categoryId } } } } : {}),
+    };
+
+    const [rows, total] = await Promise.all([
+      this.prisma.tradesmanProfile.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: [{ avgRating: 'desc' }, { jobsCompleted: 'desc' }],
+        include: {
+          user: { select: { id: true, name: true, image: true } },
+          skills: { include: { skill: true } },
+        },
+      }),
+      this.prisma.tradesmanProfile.count({ where }),
+    ]);
+
+    const data = rows.map((p) => ({
+      userId: p.userId,
+      name: p.user.name,
+      image: p.user.image,
+      bio: p.bio,
+      city: p.city,
+      district: p.district,
+      yearsExperience: p.yearsExperience,
+      avgRating: Number(p.avgRating),
+      ratingCount: p.ratingCount,
+      jobsCompleted: p.jobsCompleted,
+      isVerified: p.isVerified,
+      skills: p.skills.map((s) => ({ id: s.skill.id, nameEn: s.skill.nameEn })),
+    }));
+
+    return { data, meta: buildPaginationMeta(total, page, limit) };
+  }
+
   async getTradesmanPublic(userId: string) {
     const profile = await this.prisma.tradesmanProfile.findUnique({
       where: { userId },
@@ -106,6 +153,28 @@ export class ProfilesService {
       },
     });
     if (!profile) throw new NotFoundException('Tradesman profile not found');
-    return profile;
+    return {
+      userId: profile.userId,
+      name: profile.user.name,
+      image: profile.user.image,
+      bio: profile.bio,
+      city: profile.city,
+      district: profile.district,
+      locationText: profile.locationText,
+      yearsExperience: profile.yearsExperience,
+      hourlyRate:
+        profile.hourlyRate != null ? Number(profile.hourlyRate) : null,
+      serviceRadiusKm: profile.serviceRadiusKm,
+      avgRating: Number(profile.avgRating),
+      ratingCount: profile.ratingCount,
+      jobsCompleted: profile.jobsCompleted,
+      responseTimeMinutes: profile.responseTimeMinutes,
+      isVerified: profile.isVerified,
+      isAvailable: profile.isAvailable,
+      skills: profile.skills.map((s) => ({
+        id: s.skill.id,
+        nameEn: s.skill.nameEn,
+      })),
+    };
   }
 }
