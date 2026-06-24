@@ -87,6 +87,17 @@ export type JobSkill = $Result.DefaultSelection<Prisma.$JobSkillPayload>;
  */
 export type Quote = $Result.DefaultSelection<Prisma.$QuotePayload>;
 /**
+ * Model JobEscrow
+ *
+ */
+export type JobEscrow = $Result.DefaultSelection<Prisma.$JobEscrowPayload>;
+/**
+ * Model EscrowTransaction
+ *
+ */
+export type EscrowTransaction =
+  $Result.DefaultSelection<Prisma.$EscrowTransactionPayload>;
+/**
  * Model Conversation
  *
  */
@@ -183,6 +194,28 @@ export namespace $Enums {
 
   export type QuoteStatus = (typeof QuoteStatus)[keyof typeof QuoteStatus];
 
+  export const EscrowStatus: {
+    REQUESTED: 'REQUESTED';
+    FUNDED: 'FUNDED';
+    MATERIALS_RELEASED: 'MATERIALS_RELEASED';
+    WORK_COMPLETED: 'WORK_COMPLETED';
+    RELEASED: 'RELEASED';
+    REFUNDED: 'REFUNDED';
+    CANCELLED: 'CANCELLED';
+  };
+
+  export type EscrowStatus = (typeof EscrowStatus)[keyof typeof EscrowStatus];
+
+  export const EscrowTransactionType: {
+    FUND: 'FUND';
+    RELEASE_MATERIALS: 'RELEASE_MATERIALS';
+    RELEASE_BALANCE: 'RELEASE_BALANCE';
+    REFUND: 'REFUND';
+  };
+
+  export type EscrowTransactionType =
+    (typeof EscrowTransactionType)[keyof typeof EscrowTransactionType];
+
   export const ConversationType: {
     JOB_DIRECT: 'JOB_DIRECT';
     DIRECT: 'DIRECT';
@@ -257,6 +290,14 @@ export const JobUrgency: typeof $Enums.JobUrgency;
 export type QuoteStatus = $Enums.QuoteStatus;
 
 export const QuoteStatus: typeof $Enums.QuoteStatus;
+
+export type EscrowStatus = $Enums.EscrowStatus;
+
+export const EscrowStatus: typeof $Enums.EscrowStatus;
+
+export type EscrowTransactionType = $Enums.EscrowTransactionType;
+
+export const EscrowTransactionType: typeof $Enums.EscrowTransactionType;
 
 export type ConversationType = $Enums.ConversationType;
 
@@ -590,6 +631,29 @@ export class PrismaClient<
    * ```
    */
   get quote(): Prisma.QuoteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.jobEscrow`: Exposes CRUD operations for the **JobEscrow** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more JobEscrows
+   * const jobEscrows = await prisma.jobEscrow.findMany()
+   * ```
+   */
+  get jobEscrow(): Prisma.JobEscrowDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.escrowTransaction`: Exposes CRUD operations for the **EscrowTransaction** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more EscrowTransactions
+   * const escrowTransactions = await prisma.escrowTransaction.findMany()
+   * ```
+   */
+  get escrowTransaction(): Prisma.EscrowTransactionDelegate<
+    ExtArgs,
+    ClientOptions
+  >;
 
   /**
    * `prisma.conversation`: Exposes CRUD operations for the **Conversation** model.
@@ -1132,6 +1196,8 @@ export namespace Prisma {
     Job: 'Job';
     JobSkill: 'JobSkill';
     Quote: 'Quote';
+    JobEscrow: 'JobEscrow';
+    EscrowTransaction: 'EscrowTransaction';
     Conversation: 'Conversation';
     ConversationParticipant: 'ConversationParticipant';
     Message: 'Message';
@@ -1176,6 +1242,8 @@ export namespace Prisma {
         | 'job'
         | 'jobSkill'
         | 'quote'
+        | 'jobEscrow'
+        | 'escrowTransaction'
         | 'conversation'
         | 'conversationParticipant'
         | 'message'
@@ -2234,6 +2302,156 @@ export namespace Prisma {
           };
         };
       };
+      JobEscrow: {
+        payload: Prisma.$JobEscrowPayload<ExtArgs>;
+        fields: Prisma.JobEscrowFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.JobEscrowFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.JobEscrowFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload>;
+          };
+          findFirst: {
+            args: Prisma.JobEscrowFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.JobEscrowFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload>;
+          };
+          findMany: {
+            args: Prisma.JobEscrowFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload>[];
+          };
+          create: {
+            args: Prisma.JobEscrowCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload>;
+          };
+          createMany: {
+            args: Prisma.JobEscrowCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.JobEscrowCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload>[];
+          };
+          delete: {
+            args: Prisma.JobEscrowDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload>;
+          };
+          update: {
+            args: Prisma.JobEscrowUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload>;
+          };
+          deleteMany: {
+            args: Prisma.JobEscrowDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.JobEscrowUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.JobEscrowUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload>[];
+          };
+          upsert: {
+            args: Prisma.JobEscrowUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$JobEscrowPayload>;
+          };
+          aggregate: {
+            args: Prisma.JobEscrowAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateJobEscrow>;
+          };
+          groupBy: {
+            args: Prisma.JobEscrowGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<JobEscrowGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.JobEscrowCountArgs<ExtArgs>;
+            result: $Utils.Optional<JobEscrowCountAggregateOutputType> | number;
+          };
+        };
+      };
+      EscrowTransaction: {
+        payload: Prisma.$EscrowTransactionPayload<ExtArgs>;
+        fields: Prisma.EscrowTransactionFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.EscrowTransactionFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.EscrowTransactionFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>;
+          };
+          findFirst: {
+            args: Prisma.EscrowTransactionFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.EscrowTransactionFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>;
+          };
+          findMany: {
+            args: Prisma.EscrowTransactionFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>[];
+          };
+          create: {
+            args: Prisma.EscrowTransactionCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>;
+          };
+          createMany: {
+            args: Prisma.EscrowTransactionCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.EscrowTransactionCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>[];
+          };
+          delete: {
+            args: Prisma.EscrowTransactionDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>;
+          };
+          update: {
+            args: Prisma.EscrowTransactionUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>;
+          };
+          deleteMany: {
+            args: Prisma.EscrowTransactionDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.EscrowTransactionUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.EscrowTransactionUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>[];
+          };
+          upsert: {
+            args: Prisma.EscrowTransactionUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>;
+          };
+          aggregate: {
+            args: Prisma.EscrowTransactionAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateEscrowTransaction>;
+          };
+          groupBy: {
+            args: Prisma.EscrowTransactionGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<EscrowTransactionGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.EscrowTransactionCountArgs<ExtArgs>;
+            result:
+              | $Utils.Optional<EscrowTransactionCountAggregateOutputType>
+              | number;
+          };
+        };
+      };
       Conversation: {
         payload: Prisma.$ConversationPayload<ExtArgs>;
         fields: Prisma.ConversationFieldRefs;
@@ -2886,6 +3104,8 @@ export namespace Prisma {
     job?: JobOmit;
     jobSkill?: JobSkillOmit;
     quote?: QuoteOmit;
+    jobEscrow?: JobEscrowOmit;
+    escrowTransaction?: EscrowTransactionOmit;
     conversation?: ConversationOmit;
     conversationParticipant?: ConversationParticipantOmit;
     message?: MessageOmit;
@@ -2989,6 +3209,8 @@ export namespace Prisma {
     assignedReports: number;
     recommendations: number;
     conversationLinks: number;
+    escrowsAsHomeowner: number;
+    escrowsAsTradesman: number;
   };
 
   export type UserCountOutputTypeSelect<
@@ -3008,6 +3230,12 @@ export namespace Prisma {
     assignedReports?: boolean | UserCountOutputTypeCountAssignedReportsArgs;
     recommendations?: boolean | UserCountOutputTypeCountRecommendationsArgs;
     conversationLinks?: boolean | UserCountOutputTypeCountConversationLinksArgs;
+    escrowsAsHomeowner?:
+      | boolean
+      | UserCountOutputTypeCountEscrowsAsHomeownerArgs;
+    escrowsAsTradesman?:
+      | boolean
+      | UserCountOutputTypeCountEscrowsAsTradesmanArgs;
   };
 
   // Custom InputTypes
@@ -3147,6 +3375,24 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: ConversationParticipantWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEscrowsAsHomeownerArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: JobEscrowWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEscrowsAsTradesmanArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: JobEscrowWhereInput;
   };
 
   /**
@@ -3392,6 +3638,42 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: ReportWhereInput;
+  };
+
+  /**
+   * Count Type JobEscrowCountOutputType
+   */
+
+  export type JobEscrowCountOutputType = {
+    transactions: number;
+  };
+
+  export type JobEscrowCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    transactions?: boolean | JobEscrowCountOutputTypeCountTransactionsArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * JobEscrowCountOutputType without action
+   */
+  export type JobEscrowCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrowCountOutputType
+     */
+    select?: JobEscrowCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * JobEscrowCountOutputType without action
+   */
+  export type JobEscrowCountOutputTypeCountTransactionsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EscrowTransactionWhereInput;
   };
 
   /**
@@ -3804,6 +4086,8 @@ export namespace Prisma {
       assignedReports?: boolean | User$assignedReportsArgs<ExtArgs>;
       recommendations?: boolean | User$recommendationsArgs<ExtArgs>;
       conversationLinks?: boolean | User$conversationLinksArgs<ExtArgs>;
+      escrowsAsHomeowner?: boolean | User$escrowsAsHomeownerArgs<ExtArgs>;
+      escrowsAsTradesman?: boolean | User$escrowsAsTradesmanArgs<ExtArgs>;
       _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['user']
@@ -3924,6 +4208,8 @@ export namespace Prisma {
     assignedReports?: boolean | User$assignedReportsArgs<ExtArgs>;
     recommendations?: boolean | User$recommendationsArgs<ExtArgs>;
     conversationLinks?: boolean | User$conversationLinksArgs<ExtArgs>;
+    escrowsAsHomeowner?: boolean | User$escrowsAsHomeownerArgs<ExtArgs>;
+    escrowsAsTradesman?: boolean | User$escrowsAsTradesmanArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -3954,6 +4240,8 @@ export namespace Prisma {
       assignedReports: Prisma.$ReportPayload<ExtArgs>[];
       recommendations: Prisma.$JobRecommendationPayload<ExtArgs>[];
       conversationLinks: Prisma.$ConversationParticipantPayload<ExtArgs>[];
+      escrowsAsHomeowner: Prisma.$JobEscrowPayload<ExtArgs>[];
+      escrowsAsTradesman: Prisma.$JobEscrowPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -4694,6 +4982,28 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       | $Result.GetResult<
           Prisma.$ConversationParticipantPayload<ExtArgs>,
+          T,
+          'findMany',
+          GlobalOmitOptions
+        >
+      | Null
+    >;
+    escrowsAsHomeowner<T extends User$escrowsAsHomeownerArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$escrowsAsHomeownerArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$JobEscrowPayload<ExtArgs>,
+          T,
+          'findMany',
+          GlobalOmitOptions
+        >
+      | Null
+    >;
+    escrowsAsTradesman<T extends User$escrowsAsTradesmanArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$escrowsAsTradesmanArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$JobEscrowPayload<ExtArgs>,
           T,
           'findMany',
           GlobalOmitOptions
@@ -5599,6 +5909,62 @@ export namespace Prisma {
     distinct?:
       | ConversationParticipantScalarFieldEnum
       | ConversationParticipantScalarFieldEnum[];
+  };
+
+  /**
+   * User.escrowsAsHomeowner
+   */
+  export type User$escrowsAsHomeownerArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    where?: JobEscrowWhereInput;
+    orderBy?:
+      | JobEscrowOrderByWithRelationInput
+      | JobEscrowOrderByWithRelationInput[];
+    cursor?: JobEscrowWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: JobEscrowScalarFieldEnum | JobEscrowScalarFieldEnum[];
+  };
+
+  /**
+   * User.escrowsAsTradesman
+   */
+  export type User$escrowsAsTradesmanArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    where?: JobEscrowWhereInput;
+    orderBy?:
+      | JobEscrowOrderByWithRelationInput
+      | JobEscrowOrderByWithRelationInput[];
+    cursor?: JobEscrowWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: JobEscrowScalarFieldEnum | JobEscrowScalarFieldEnum[];
   };
 
   /**
@@ -13701,6 +14067,7 @@ export namespace Prisma {
     jobsCancelled: number | null;
     responseTimeMinutes: number | null;
     isVerified: boolean | null;
+    backgroundChecked: boolean | null;
     isAvailable: boolean | null;
     preferredLanguage: $Enums.LanguageCode | null;
     createdAt: Date | null;
@@ -13725,6 +14092,7 @@ export namespace Prisma {
     jobsCancelled: number | null;
     responseTimeMinutes: number | null;
     isVerified: boolean | null;
+    backgroundChecked: boolean | null;
     isAvailable: boolean | null;
     preferredLanguage: $Enums.LanguageCode | null;
     createdAt: Date | null;
@@ -13749,6 +14117,7 @@ export namespace Prisma {
     jobsCancelled: number;
     responseTimeMinutes: number;
     isVerified: number;
+    backgroundChecked: number;
     isAvailable: number;
     preferredLanguage: number;
     createdAt: number;
@@ -13800,6 +14169,7 @@ export namespace Prisma {
     jobsCancelled?: true;
     responseTimeMinutes?: true;
     isVerified?: true;
+    backgroundChecked?: true;
     isAvailable?: true;
     preferredLanguage?: true;
     createdAt?: true;
@@ -13824,6 +14194,7 @@ export namespace Prisma {
     jobsCancelled?: true;
     responseTimeMinutes?: true;
     isVerified?: true;
+    backgroundChecked?: true;
     isAvailable?: true;
     preferredLanguage?: true;
     createdAt?: true;
@@ -13848,6 +14219,7 @@ export namespace Prisma {
     jobsCancelled?: true;
     responseTimeMinutes?: true;
     isVerified?: true;
+    backgroundChecked?: true;
     isAvailable?: true;
     preferredLanguage?: true;
     createdAt?: true;
@@ -13968,6 +14340,7 @@ export namespace Prisma {
     jobsCancelled: number;
     responseTimeMinutes: number;
     isVerified: boolean;
+    backgroundChecked: boolean;
     isAvailable: boolean;
     preferredLanguage: $Enums.LanguageCode;
     createdAt: Date;
@@ -14015,6 +14388,7 @@ export namespace Prisma {
       jobsCancelled?: boolean;
       responseTimeMinutes?: boolean;
       isVerified?: boolean;
+      backgroundChecked?: boolean;
       isAvailable?: boolean;
       preferredLanguage?: boolean;
       createdAt?: boolean;
@@ -14047,6 +14421,7 @@ export namespace Prisma {
       jobsCancelled?: boolean;
       responseTimeMinutes?: boolean;
       isVerified?: boolean;
+      backgroundChecked?: boolean;
       isAvailable?: boolean;
       preferredLanguage?: boolean;
       createdAt?: boolean;
@@ -14077,6 +14452,7 @@ export namespace Prisma {
       jobsCancelled?: boolean;
       responseTimeMinutes?: boolean;
       isVerified?: boolean;
+      backgroundChecked?: boolean;
       isAvailable?: boolean;
       preferredLanguage?: boolean;
       createdAt?: boolean;
@@ -14104,6 +14480,7 @@ export namespace Prisma {
     jobsCancelled?: boolean;
     responseTimeMinutes?: boolean;
     isVerified?: boolean;
+    backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: boolean;
     createdAt?: boolean;
@@ -14130,6 +14507,7 @@ export namespace Prisma {
     | 'jobsCancelled'
     | 'responseTimeMinutes'
     | 'isVerified'
+    | 'backgroundChecked'
     | 'isAvailable'
     | 'preferredLanguage'
     | 'createdAt'
@@ -14181,6 +14559,7 @@ export namespace Prisma {
         jobsCancelled: number;
         responseTimeMinutes: number;
         isVerified: boolean;
+        backgroundChecked: boolean;
         isAvailable: boolean;
         preferredLanguage: $Enums.LanguageCode;
         createdAt: Date;
@@ -14817,6 +15196,7 @@ export namespace Prisma {
     readonly jobsCancelled: FieldRef<'TradesmanProfile', 'Int'>;
     readonly responseTimeMinutes: FieldRef<'TradesmanProfile', 'Int'>;
     readonly isVerified: FieldRef<'TradesmanProfile', 'Boolean'>;
+    readonly backgroundChecked: FieldRef<'TradesmanProfile', 'Boolean'>;
     readonly isAvailable: FieldRef<'TradesmanProfile', 'Boolean'>;
     readonly preferredLanguage: FieldRef<'TradesmanProfile', 'LanguageCode'>;
     readonly createdAt: FieldRef<'TradesmanProfile', 'DateTime'>;
@@ -20130,6 +20510,7 @@ export namespace Prisma {
       reviews?: boolean | Job$reviewsArgs<ExtArgs>;
       recommendations?: boolean | Job$recommendationsArgs<ExtArgs>;
       reports?: boolean | Job$reportsArgs<ExtArgs>;
+      escrow?: boolean | Job$escrowArgs<ExtArgs>;
       _count?: boolean | JobCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['job']
@@ -20283,6 +20664,7 @@ export namespace Prisma {
     reviews?: boolean | Job$reviewsArgs<ExtArgs>;
     recommendations?: boolean | Job$recommendationsArgs<ExtArgs>;
     reports?: boolean | Job$reportsArgs<ExtArgs>;
+    escrow?: boolean | Job$escrowArgs<ExtArgs>;
     _count?: boolean | JobCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type JobIncludeCreateManyAndReturn<
@@ -20320,6 +20702,7 @@ export namespace Prisma {
       reviews: Prisma.$ReviewPayload<ExtArgs>[];
       recommendations: Prisma.$JobRecommendationPayload<ExtArgs>[];
       reports: Prisma.$ReportPayload<ExtArgs>[];
+      escrow: Prisma.$JobEscrowPayload<ExtArgs> | null;
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -21024,6 +21407,19 @@ export namespace Prisma {
           GlobalOmitOptions
         >
       | Null
+    >;
+    escrow<T extends Job$escrowArgs<ExtArgs> = {}>(
+      args?: Subset<T, Job$escrowArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -21763,6 +22159,27 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: ReportScalarFieldEnum | ReportScalarFieldEnum[];
+  };
+
+  /**
+   * Job.escrow
+   */
+  export type Job$escrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    where?: JobEscrowWhereInput;
   };
 
   /**
@@ -23153,10 +23570,14 @@ export namespace Prisma {
 
   export type QuoteAvgAggregateOutputType = {
     amount: Decimal | null;
+    materialsAmount: Decimal | null;
+    depositRequested: Decimal | null;
   };
 
   export type QuoteSumAggregateOutputType = {
     amount: Decimal | null;
+    materialsAmount: Decimal | null;
+    depositRequested: Decimal | null;
   };
 
   export type QuoteMinAggregateOutputType = {
@@ -23164,6 +23585,8 @@ export namespace Prisma {
     jobId: string | null;
     tradesmanId: string | null;
     amount: Decimal | null;
+    materialsAmount: Decimal | null;
+    depositRequested: Decimal | null;
     currency: string | null;
     message: string | null;
     estimatedStart: Date | null;
@@ -23180,6 +23603,8 @@ export namespace Prisma {
     jobId: string | null;
     tradesmanId: string | null;
     amount: Decimal | null;
+    materialsAmount: Decimal | null;
+    depositRequested: Decimal | null;
     currency: string | null;
     message: string | null;
     estimatedStart: Date | null;
@@ -23196,6 +23621,8 @@ export namespace Prisma {
     jobId: number;
     tradesmanId: number;
     amount: number;
+    materialsAmount: number;
+    depositRequested: number;
     currency: number;
     message: number;
     estimatedStart: number;
@@ -23210,10 +23637,14 @@ export namespace Prisma {
 
   export type QuoteAvgAggregateInputType = {
     amount?: true;
+    materialsAmount?: true;
+    depositRequested?: true;
   };
 
   export type QuoteSumAggregateInputType = {
     amount?: true;
+    materialsAmount?: true;
+    depositRequested?: true;
   };
 
   export type QuoteMinAggregateInputType = {
@@ -23221,6 +23652,8 @@ export namespace Prisma {
     jobId?: true;
     tradesmanId?: true;
     amount?: true;
+    materialsAmount?: true;
+    depositRequested?: true;
     currency?: true;
     message?: true;
     estimatedStart?: true;
@@ -23237,6 +23670,8 @@ export namespace Prisma {
     jobId?: true;
     tradesmanId?: true;
     amount?: true;
+    materialsAmount?: true;
+    depositRequested?: true;
     currency?: true;
     message?: true;
     estimatedStart?: true;
@@ -23253,6 +23688,8 @@ export namespace Prisma {
     jobId?: true;
     tradesmanId?: true;
     amount?: true;
+    materialsAmount?: true;
+    depositRequested?: true;
     currency?: true;
     message?: true;
     estimatedStart?: true;
@@ -23359,6 +23796,8 @@ export namespace Prisma {
     jobId: string;
     tradesmanId: string;
     amount: Decimal;
+    materialsAmount: Decimal | null;
+    depositRequested: Decimal | null;
     currency: string;
     message: string | null;
     estimatedStart: Date | null;
@@ -23396,6 +23835,8 @@ export namespace Prisma {
       jobId?: boolean;
       tradesmanId?: boolean;
       amount?: boolean;
+      materialsAmount?: boolean;
+      depositRequested?: boolean;
       currency?: boolean;
       message?: boolean;
       estimatedStart?: boolean;
@@ -23408,6 +23849,7 @@ export namespace Prisma {
       job?: boolean | JobDefaultArgs<ExtArgs>;
       tradesman?: boolean | UserDefaultArgs<ExtArgs>;
       acceptedForJob?: boolean | Quote$acceptedForJobArgs<ExtArgs>;
+      escrow?: boolean | Quote$escrowArgs<ExtArgs>;
     },
     ExtArgs['result']['quote']
   >;
@@ -23420,6 +23862,8 @@ export namespace Prisma {
       jobId?: boolean;
       tradesmanId?: boolean;
       amount?: boolean;
+      materialsAmount?: boolean;
+      depositRequested?: boolean;
       currency?: boolean;
       message?: boolean;
       estimatedStart?: boolean;
@@ -23443,6 +23887,8 @@ export namespace Prisma {
       jobId?: boolean;
       tradesmanId?: boolean;
       amount?: boolean;
+      materialsAmount?: boolean;
+      depositRequested?: boolean;
       currency?: boolean;
       message?: boolean;
       estimatedStart?: boolean;
@@ -23463,6 +23909,8 @@ export namespace Prisma {
     jobId?: boolean;
     tradesmanId?: boolean;
     amount?: boolean;
+    materialsAmount?: boolean;
+    depositRequested?: boolean;
     currency?: boolean;
     message?: boolean;
     estimatedStart?: boolean;
@@ -23481,6 +23929,8 @@ export namespace Prisma {
     | 'jobId'
     | 'tradesmanId'
     | 'amount'
+    | 'materialsAmount'
+    | 'depositRequested'
     | 'currency'
     | 'message'
     | 'estimatedStart'
@@ -23498,6 +23948,7 @@ export namespace Prisma {
     job?: boolean | JobDefaultArgs<ExtArgs>;
     tradesman?: boolean | UserDefaultArgs<ExtArgs>;
     acceptedForJob?: boolean | Quote$acceptedForJobArgs<ExtArgs>;
+    escrow?: boolean | Quote$escrowArgs<ExtArgs>;
   };
   export type QuoteIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
@@ -23520,6 +23971,7 @@ export namespace Prisma {
       job: Prisma.$JobPayload<ExtArgs>;
       tradesman: Prisma.$UserPayload<ExtArgs>;
       acceptedForJob: Prisma.$JobPayload<ExtArgs> | null;
+      escrow: Prisma.$JobEscrowPayload<ExtArgs> | null;
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -23527,6 +23979,8 @@ export namespace Prisma {
         jobId: string;
         tradesmanId: string;
         amount: Prisma.Decimal;
+        materialsAmount: Prisma.Decimal | null;
+        depositRequested: Prisma.Decimal | null;
         currency: string;
         message: string | null;
         estimatedStart: Date | null;
@@ -24123,6 +24577,19 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >;
+    escrow<T extends Quote$escrowArgs<ExtArgs> = {}>(
+      args?: Subset<T, Quote$escrowArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -24167,6 +24634,8 @@ export namespace Prisma {
     readonly jobId: FieldRef<'Quote', 'String'>;
     readonly tradesmanId: FieldRef<'Quote', 'String'>;
     readonly amount: FieldRef<'Quote', 'Decimal'>;
+    readonly materialsAmount: FieldRef<'Quote', 'Decimal'>;
+    readonly depositRequested: FieldRef<'Quote', 'Decimal'>;
     readonly currency: FieldRef<'Quote', 'String'>;
     readonly message: FieldRef<'Quote', 'String'>;
     readonly estimatedStart: FieldRef<'Quote', 'DateTime'>;
@@ -24625,6 +25094,27 @@ export namespace Prisma {
   };
 
   /**
+   * Quote.escrow
+   */
+  export type Quote$escrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    where?: JobEscrowWhereInput;
+  };
+
+  /**
    * Quote without action
    */
   export type QuoteDefaultArgs<
@@ -24642,6 +25132,3079 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: QuoteInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model JobEscrow
+   */
+
+  export type AggregateJobEscrow = {
+    _count: JobEscrowCountAggregateOutputType | null;
+    _avg: JobEscrowAvgAggregateOutputType | null;
+    _sum: JobEscrowSumAggregateOutputType | null;
+    _min: JobEscrowMinAggregateOutputType | null;
+    _max: JobEscrowMaxAggregateOutputType | null;
+  };
+
+  export type JobEscrowAvgAggregateOutputType = {
+    quoteTotal: Decimal | null;
+    materialsAmount: Decimal | null;
+    depositAmount: Decimal | null;
+    balanceAmount: Decimal | null;
+  };
+
+  export type JobEscrowSumAggregateOutputType = {
+    quoteTotal: Decimal | null;
+    materialsAmount: Decimal | null;
+    depositAmount: Decimal | null;
+    balanceAmount: Decimal | null;
+  };
+
+  export type JobEscrowMinAggregateOutputType = {
+    id: string | null;
+    jobId: string | null;
+    quoteId: string | null;
+    homeownerId: string | null;
+    tradesmanId: string | null;
+    currency: string | null;
+    quoteTotal: Decimal | null;
+    materialsAmount: Decimal | null;
+    depositAmount: Decimal | null;
+    balanceAmount: Decimal | null;
+    status: $Enums.EscrowStatus | null;
+    paymentMethod: string | null;
+    paymentRef: string | null;
+    fundedAt: Date | null;
+    materialsReleasedAt: Date | null;
+    workCompletedAt: Date | null;
+    releasedAt: Date | null;
+    refundedAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type JobEscrowMaxAggregateOutputType = {
+    id: string | null;
+    jobId: string | null;
+    quoteId: string | null;
+    homeownerId: string | null;
+    tradesmanId: string | null;
+    currency: string | null;
+    quoteTotal: Decimal | null;
+    materialsAmount: Decimal | null;
+    depositAmount: Decimal | null;
+    balanceAmount: Decimal | null;
+    status: $Enums.EscrowStatus | null;
+    paymentMethod: string | null;
+    paymentRef: string | null;
+    fundedAt: Date | null;
+    materialsReleasedAt: Date | null;
+    workCompletedAt: Date | null;
+    releasedAt: Date | null;
+    refundedAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type JobEscrowCountAggregateOutputType = {
+    id: number;
+    jobId: number;
+    quoteId: number;
+    homeownerId: number;
+    tradesmanId: number;
+    currency: number;
+    quoteTotal: number;
+    materialsAmount: number;
+    depositAmount: number;
+    balanceAmount: number;
+    status: number;
+    paymentMethod: number;
+    paymentRef: number;
+    fundedAt: number;
+    materialsReleasedAt: number;
+    workCompletedAt: number;
+    releasedAt: number;
+    refundedAt: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type JobEscrowAvgAggregateInputType = {
+    quoteTotal?: true;
+    materialsAmount?: true;
+    depositAmount?: true;
+    balanceAmount?: true;
+  };
+
+  export type JobEscrowSumAggregateInputType = {
+    quoteTotal?: true;
+    materialsAmount?: true;
+    depositAmount?: true;
+    balanceAmount?: true;
+  };
+
+  export type JobEscrowMinAggregateInputType = {
+    id?: true;
+    jobId?: true;
+    quoteId?: true;
+    homeownerId?: true;
+    tradesmanId?: true;
+    currency?: true;
+    quoteTotal?: true;
+    materialsAmount?: true;
+    depositAmount?: true;
+    balanceAmount?: true;
+    status?: true;
+    paymentMethod?: true;
+    paymentRef?: true;
+    fundedAt?: true;
+    materialsReleasedAt?: true;
+    workCompletedAt?: true;
+    releasedAt?: true;
+    refundedAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type JobEscrowMaxAggregateInputType = {
+    id?: true;
+    jobId?: true;
+    quoteId?: true;
+    homeownerId?: true;
+    tradesmanId?: true;
+    currency?: true;
+    quoteTotal?: true;
+    materialsAmount?: true;
+    depositAmount?: true;
+    balanceAmount?: true;
+    status?: true;
+    paymentMethod?: true;
+    paymentRef?: true;
+    fundedAt?: true;
+    materialsReleasedAt?: true;
+    workCompletedAt?: true;
+    releasedAt?: true;
+    refundedAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type JobEscrowCountAggregateInputType = {
+    id?: true;
+    jobId?: true;
+    quoteId?: true;
+    homeownerId?: true;
+    tradesmanId?: true;
+    currency?: true;
+    quoteTotal?: true;
+    materialsAmount?: true;
+    depositAmount?: true;
+    balanceAmount?: true;
+    status?: true;
+    paymentMethod?: true;
+    paymentRef?: true;
+    fundedAt?: true;
+    materialsReleasedAt?: true;
+    workCompletedAt?: true;
+    releasedAt?: true;
+    refundedAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type JobEscrowAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which JobEscrow to aggregate.
+     */
+    where?: JobEscrowWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of JobEscrows to fetch.
+     */
+    orderBy?:
+      | JobEscrowOrderByWithRelationInput
+      | JobEscrowOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: JobEscrowWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` JobEscrows from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` JobEscrows.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned JobEscrows
+     **/
+    _count?: true | JobEscrowCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: JobEscrowAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: JobEscrowSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: JobEscrowMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: JobEscrowMaxAggregateInputType;
+  };
+
+  export type GetJobEscrowAggregateType<T extends JobEscrowAggregateArgs> = {
+    [P in keyof T & keyof AggregateJobEscrow]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateJobEscrow[P]>
+      : GetScalarType<T[P], AggregateJobEscrow[P]>;
+  };
+
+  export type JobEscrowGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: JobEscrowWhereInput;
+    orderBy?:
+      | JobEscrowOrderByWithAggregationInput
+      | JobEscrowOrderByWithAggregationInput[];
+    by: JobEscrowScalarFieldEnum[] | JobEscrowScalarFieldEnum;
+    having?: JobEscrowScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: JobEscrowCountAggregateInputType | true;
+    _avg?: JobEscrowAvgAggregateInputType;
+    _sum?: JobEscrowSumAggregateInputType;
+    _min?: JobEscrowMinAggregateInputType;
+    _max?: JobEscrowMaxAggregateInputType;
+  };
+
+  export type JobEscrowGroupByOutputType = {
+    id: string;
+    jobId: string;
+    quoteId: string;
+    homeownerId: string;
+    tradesmanId: string;
+    currency: string;
+    quoteTotal: Decimal;
+    materialsAmount: Decimal;
+    depositAmount: Decimal;
+    balanceAmount: Decimal;
+    status: $Enums.EscrowStatus;
+    paymentMethod: string | null;
+    paymentRef: string | null;
+    fundedAt: Date | null;
+    materialsReleasedAt: Date | null;
+    workCompletedAt: Date | null;
+    releasedAt: Date | null;
+    refundedAt: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: JobEscrowCountAggregateOutputType | null;
+    _avg: JobEscrowAvgAggregateOutputType | null;
+    _sum: JobEscrowSumAggregateOutputType | null;
+    _min: JobEscrowMinAggregateOutputType | null;
+    _max: JobEscrowMaxAggregateOutputType | null;
+  };
+
+  type GetJobEscrowGroupByPayload<T extends JobEscrowGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<JobEscrowGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof JobEscrowGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], JobEscrowGroupByOutputType[P]>
+            : GetScalarType<T[P], JobEscrowGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type JobEscrowSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      jobId?: boolean;
+      quoteId?: boolean;
+      homeownerId?: boolean;
+      tradesmanId?: boolean;
+      currency?: boolean;
+      quoteTotal?: boolean;
+      materialsAmount?: boolean;
+      depositAmount?: boolean;
+      balanceAmount?: boolean;
+      status?: boolean;
+      paymentMethod?: boolean;
+      paymentRef?: boolean;
+      fundedAt?: boolean;
+      materialsReleasedAt?: boolean;
+      workCompletedAt?: boolean;
+      releasedAt?: boolean;
+      refundedAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      job?: boolean | JobDefaultArgs<ExtArgs>;
+      quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+      homeowner?: boolean | UserDefaultArgs<ExtArgs>;
+      tradesman?: boolean | UserDefaultArgs<ExtArgs>;
+      transactions?: boolean | JobEscrow$transactionsArgs<ExtArgs>;
+      _count?: boolean | JobEscrowCountOutputTypeDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['jobEscrow']
+  >;
+
+  export type JobEscrowSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      jobId?: boolean;
+      quoteId?: boolean;
+      homeownerId?: boolean;
+      tradesmanId?: boolean;
+      currency?: boolean;
+      quoteTotal?: boolean;
+      materialsAmount?: boolean;
+      depositAmount?: boolean;
+      balanceAmount?: boolean;
+      status?: boolean;
+      paymentMethod?: boolean;
+      paymentRef?: boolean;
+      fundedAt?: boolean;
+      materialsReleasedAt?: boolean;
+      workCompletedAt?: boolean;
+      releasedAt?: boolean;
+      refundedAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      job?: boolean | JobDefaultArgs<ExtArgs>;
+      quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+      homeowner?: boolean | UserDefaultArgs<ExtArgs>;
+      tradesman?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['jobEscrow']
+  >;
+
+  export type JobEscrowSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      jobId?: boolean;
+      quoteId?: boolean;
+      homeownerId?: boolean;
+      tradesmanId?: boolean;
+      currency?: boolean;
+      quoteTotal?: boolean;
+      materialsAmount?: boolean;
+      depositAmount?: boolean;
+      balanceAmount?: boolean;
+      status?: boolean;
+      paymentMethod?: boolean;
+      paymentRef?: boolean;
+      fundedAt?: boolean;
+      materialsReleasedAt?: boolean;
+      workCompletedAt?: boolean;
+      releasedAt?: boolean;
+      refundedAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      job?: boolean | JobDefaultArgs<ExtArgs>;
+      quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+      homeowner?: boolean | UserDefaultArgs<ExtArgs>;
+      tradesman?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['jobEscrow']
+  >;
+
+  export type JobEscrowSelectScalar = {
+    id?: boolean;
+    jobId?: boolean;
+    quoteId?: boolean;
+    homeownerId?: boolean;
+    tradesmanId?: boolean;
+    currency?: boolean;
+    quoteTotal?: boolean;
+    materialsAmount?: boolean;
+    depositAmount?: boolean;
+    balanceAmount?: boolean;
+    status?: boolean;
+    paymentMethod?: boolean;
+    paymentRef?: boolean;
+    fundedAt?: boolean;
+    materialsReleasedAt?: boolean;
+    workCompletedAt?: boolean;
+    releasedAt?: boolean;
+    refundedAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type JobEscrowOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | 'id'
+    | 'jobId'
+    | 'quoteId'
+    | 'homeownerId'
+    | 'tradesmanId'
+    | 'currency'
+    | 'quoteTotal'
+    | 'materialsAmount'
+    | 'depositAmount'
+    | 'balanceAmount'
+    | 'status'
+    | 'paymentMethod'
+    | 'paymentRef'
+    | 'fundedAt'
+    | 'materialsReleasedAt'
+    | 'workCompletedAt'
+    | 'releasedAt'
+    | 'refundedAt'
+    | 'createdAt'
+    | 'updatedAt',
+    ExtArgs['result']['jobEscrow']
+  >;
+  export type JobEscrowInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    job?: boolean | JobDefaultArgs<ExtArgs>;
+    quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+    homeowner?: boolean | UserDefaultArgs<ExtArgs>;
+    tradesman?: boolean | UserDefaultArgs<ExtArgs>;
+    transactions?: boolean | JobEscrow$transactionsArgs<ExtArgs>;
+    _count?: boolean | JobEscrowCountOutputTypeDefaultArgs<ExtArgs>;
+  };
+  export type JobEscrowIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    job?: boolean | JobDefaultArgs<ExtArgs>;
+    quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+    homeowner?: boolean | UserDefaultArgs<ExtArgs>;
+    tradesman?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type JobEscrowIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    job?: boolean | JobDefaultArgs<ExtArgs>;
+    quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+    homeowner?: boolean | UserDefaultArgs<ExtArgs>;
+    tradesman?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $JobEscrowPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'JobEscrow';
+    objects: {
+      job: Prisma.$JobPayload<ExtArgs>;
+      quote: Prisma.$QuotePayload<ExtArgs>;
+      homeowner: Prisma.$UserPayload<ExtArgs>;
+      tradesman: Prisma.$UserPayload<ExtArgs>;
+      transactions: Prisma.$EscrowTransactionPayload<ExtArgs>[];
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        jobId: string;
+        quoteId: string;
+        homeownerId: string;
+        tradesmanId: string;
+        currency: string;
+        quoteTotal: Prisma.Decimal;
+        materialsAmount: Prisma.Decimal;
+        depositAmount: Prisma.Decimal;
+        balanceAmount: Prisma.Decimal;
+        status: $Enums.EscrowStatus;
+        paymentMethod: string | null;
+        paymentRef: string | null;
+        fundedAt: Date | null;
+        materialsReleasedAt: Date | null;
+        workCompletedAt: Date | null;
+        releasedAt: Date | null;
+        refundedAt: Date | null;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['jobEscrow']
+    >;
+    composites: {};
+  };
+
+  type JobEscrowGetPayload<
+    S extends boolean | null | undefined | JobEscrowDefaultArgs,
+  > = $Result.GetResult<Prisma.$JobEscrowPayload, S>;
+
+  type JobEscrowCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    JobEscrowFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit'
+  > & {
+    select?: JobEscrowCountAggregateInputType | true;
+  };
+
+  export interface JobEscrowDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['JobEscrow'];
+      meta: { name: 'JobEscrow' };
+    };
+    /**
+     * Find zero or one JobEscrow that matches the filter.
+     * @param {JobEscrowFindUniqueArgs} args - Arguments to find a JobEscrow
+     * @example
+     * // Get one JobEscrow
+     * const jobEscrow = await prisma.jobEscrow.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends JobEscrowFindUniqueArgs>(
+      args: SelectSubset<T, JobEscrowFindUniqueArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one JobEscrow that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {JobEscrowFindUniqueOrThrowArgs} args - Arguments to find a JobEscrow
+     * @example
+     * // Get one JobEscrow
+     * const jobEscrow = await prisma.jobEscrow.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends JobEscrowFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, JobEscrowFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first JobEscrow that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobEscrowFindFirstArgs} args - Arguments to find a JobEscrow
+     * @example
+     * // Get one JobEscrow
+     * const jobEscrow = await prisma.jobEscrow.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends JobEscrowFindFirstArgs>(
+      args?: SelectSubset<T, JobEscrowFindFirstArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first JobEscrow that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobEscrowFindFirstOrThrowArgs} args - Arguments to find a JobEscrow
+     * @example
+     * // Get one JobEscrow
+     * const jobEscrow = await prisma.jobEscrow.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends JobEscrowFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, JobEscrowFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more JobEscrows that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobEscrowFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all JobEscrows
+     * const jobEscrows = await prisma.jobEscrow.findMany()
+     *
+     * // Get first 10 JobEscrows
+     * const jobEscrows = await prisma.jobEscrow.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const jobEscrowWithIdOnly = await prisma.jobEscrow.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends JobEscrowFindManyArgs>(
+      args?: SelectSubset<T, JobEscrowFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create a JobEscrow.
+     * @param {JobEscrowCreateArgs} args - Arguments to create a JobEscrow.
+     * @example
+     * // Create one JobEscrow
+     * const JobEscrow = await prisma.jobEscrow.create({
+     *   data: {
+     *     // ... data to create a JobEscrow
+     *   }
+     * })
+     *
+     */
+    create<T extends JobEscrowCreateArgs>(
+      args: SelectSubset<T, JobEscrowCreateArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'create',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many JobEscrows.
+     * @param {JobEscrowCreateManyArgs} args - Arguments to create many JobEscrows.
+     * @example
+     * // Create many JobEscrows
+     * const jobEscrow = await prisma.jobEscrow.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends JobEscrowCreateManyArgs>(
+      args?: SelectSubset<T, JobEscrowCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many JobEscrows and returns the data saved in the database.
+     * @param {JobEscrowCreateManyAndReturnArgs} args - Arguments to create many JobEscrows.
+     * @example
+     * // Create many JobEscrows
+     * const jobEscrow = await prisma.jobEscrow.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many JobEscrows and only return the `id`
+     * const jobEscrowWithIdOnly = await prisma.jobEscrow.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends JobEscrowCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, JobEscrowCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a JobEscrow.
+     * @param {JobEscrowDeleteArgs} args - Arguments to delete one JobEscrow.
+     * @example
+     * // Delete one JobEscrow
+     * const JobEscrow = await prisma.jobEscrow.delete({
+     *   where: {
+     *     // ... filter to delete one JobEscrow
+     *   }
+     * })
+     *
+     */
+    delete<T extends JobEscrowDeleteArgs>(
+      args: SelectSubset<T, JobEscrowDeleteArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'delete',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one JobEscrow.
+     * @param {JobEscrowUpdateArgs} args - Arguments to update one JobEscrow.
+     * @example
+     * // Update one JobEscrow
+     * const jobEscrow = await prisma.jobEscrow.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends JobEscrowUpdateArgs>(
+      args: SelectSubset<T, JobEscrowUpdateArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'update',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more JobEscrows.
+     * @param {JobEscrowDeleteManyArgs} args - Arguments to filter JobEscrows to delete.
+     * @example
+     * // Delete a few JobEscrows
+     * const { count } = await prisma.jobEscrow.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends JobEscrowDeleteManyArgs>(
+      args?: SelectSubset<T, JobEscrowDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more JobEscrows.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobEscrowUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many JobEscrows
+     * const jobEscrow = await prisma.jobEscrow.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends JobEscrowUpdateManyArgs>(
+      args: SelectSubset<T, JobEscrowUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more JobEscrows and returns the data updated in the database.
+     * @param {JobEscrowUpdateManyAndReturnArgs} args - Arguments to update many JobEscrows.
+     * @example
+     * // Update many JobEscrows
+     * const jobEscrow = await prisma.jobEscrow.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more JobEscrows and only return the `id`
+     * const jobEscrowWithIdOnly = await prisma.jobEscrow.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends JobEscrowUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, JobEscrowUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one JobEscrow.
+     * @param {JobEscrowUpsertArgs} args - Arguments to update or create a JobEscrow.
+     * @example
+     * // Update or create a JobEscrow
+     * const jobEscrow = await prisma.jobEscrow.upsert({
+     *   create: {
+     *     // ... data to create a JobEscrow
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the JobEscrow we want to update
+     *   }
+     * })
+     */
+    upsert<T extends JobEscrowUpsertArgs>(
+      args: SelectSubset<T, JobEscrowUpsertArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      $Result.GetResult<
+        Prisma.$JobEscrowPayload<ExtArgs>,
+        T,
+        'upsert',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of JobEscrows.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobEscrowCountArgs} args - Arguments to filter JobEscrows to count.
+     * @example
+     * // Count the number of JobEscrows
+     * const count = await prisma.jobEscrow.count({
+     *   where: {
+     *     // ... the filter for the JobEscrows we want to count
+     *   }
+     * })
+     **/
+    count<T extends JobEscrowCountArgs>(
+      args?: Subset<T, JobEscrowCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], JobEscrowCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a JobEscrow.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobEscrowAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends JobEscrowAggregateArgs>(
+      args: Subset<T, JobEscrowAggregateArgs>,
+    ): Prisma.PrismaPromise<GetJobEscrowAggregateType<T>>;
+
+    /**
+     * Group by JobEscrow.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JobEscrowGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends JobEscrowGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: JobEscrowGroupByArgs['orderBy'] }
+        : { orderBy?: JobEscrowGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T['orderBy']>>
+      >,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      'Field ',
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, JobEscrowGroupByArgs, OrderByArg> &
+        InputErrors,
+    ): {} extends InputErrors
+      ? GetJobEscrowGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the JobEscrow model
+     */
+    readonly fields: JobEscrowFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for JobEscrow.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__JobEscrowClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    job<T extends JobDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, JobDefaultArgs<ExtArgs>>,
+    ): Prisma__JobClient<
+      | $Result.GetResult<
+          Prisma.$JobPayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    quote<T extends QuoteDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, QuoteDefaultArgs<ExtArgs>>,
+    ): Prisma__QuoteClient<
+      | $Result.GetResult<
+          Prisma.$QuotePayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    homeowner<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    tradesman<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    transactions<T extends JobEscrow$transactionsArgs<ExtArgs> = {}>(
+      args?: Subset<T, JobEscrow$transactionsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$EscrowTransactionPayload<ExtArgs>,
+          T,
+          'findMany',
+          GlobalOmitOptions
+        >
+      | Null
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the JobEscrow model
+   */
+  interface JobEscrowFieldRefs {
+    readonly id: FieldRef<'JobEscrow', 'String'>;
+    readonly jobId: FieldRef<'JobEscrow', 'String'>;
+    readonly quoteId: FieldRef<'JobEscrow', 'String'>;
+    readonly homeownerId: FieldRef<'JobEscrow', 'String'>;
+    readonly tradesmanId: FieldRef<'JobEscrow', 'String'>;
+    readonly currency: FieldRef<'JobEscrow', 'String'>;
+    readonly quoteTotal: FieldRef<'JobEscrow', 'Decimal'>;
+    readonly materialsAmount: FieldRef<'JobEscrow', 'Decimal'>;
+    readonly depositAmount: FieldRef<'JobEscrow', 'Decimal'>;
+    readonly balanceAmount: FieldRef<'JobEscrow', 'Decimal'>;
+    readonly status: FieldRef<'JobEscrow', 'EscrowStatus'>;
+    readonly paymentMethod: FieldRef<'JobEscrow', 'String'>;
+    readonly paymentRef: FieldRef<'JobEscrow', 'String'>;
+    readonly fundedAt: FieldRef<'JobEscrow', 'DateTime'>;
+    readonly materialsReleasedAt: FieldRef<'JobEscrow', 'DateTime'>;
+    readonly workCompletedAt: FieldRef<'JobEscrow', 'DateTime'>;
+    readonly releasedAt: FieldRef<'JobEscrow', 'DateTime'>;
+    readonly refundedAt: FieldRef<'JobEscrow', 'DateTime'>;
+    readonly createdAt: FieldRef<'JobEscrow', 'DateTime'>;
+    readonly updatedAt: FieldRef<'JobEscrow', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * JobEscrow findUnique
+   */
+  export type JobEscrowFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    /**
+     * Filter, which JobEscrow to fetch.
+     */
+    where: JobEscrowWhereUniqueInput;
+  };
+
+  /**
+   * JobEscrow findUniqueOrThrow
+   */
+  export type JobEscrowFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    /**
+     * Filter, which JobEscrow to fetch.
+     */
+    where: JobEscrowWhereUniqueInput;
+  };
+
+  /**
+   * JobEscrow findFirst
+   */
+  export type JobEscrowFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    /**
+     * Filter, which JobEscrow to fetch.
+     */
+    where?: JobEscrowWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of JobEscrows to fetch.
+     */
+    orderBy?:
+      | JobEscrowOrderByWithRelationInput
+      | JobEscrowOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for JobEscrows.
+     */
+    cursor?: JobEscrowWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` JobEscrows from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` JobEscrows.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of JobEscrows.
+     */
+    distinct?: JobEscrowScalarFieldEnum | JobEscrowScalarFieldEnum[];
+  };
+
+  /**
+   * JobEscrow findFirstOrThrow
+   */
+  export type JobEscrowFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    /**
+     * Filter, which JobEscrow to fetch.
+     */
+    where?: JobEscrowWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of JobEscrows to fetch.
+     */
+    orderBy?:
+      | JobEscrowOrderByWithRelationInput
+      | JobEscrowOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for JobEscrows.
+     */
+    cursor?: JobEscrowWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` JobEscrows from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` JobEscrows.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of JobEscrows.
+     */
+    distinct?: JobEscrowScalarFieldEnum | JobEscrowScalarFieldEnum[];
+  };
+
+  /**
+   * JobEscrow findMany
+   */
+  export type JobEscrowFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    /**
+     * Filter, which JobEscrows to fetch.
+     */
+    where?: JobEscrowWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of JobEscrows to fetch.
+     */
+    orderBy?:
+      | JobEscrowOrderByWithRelationInput
+      | JobEscrowOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing JobEscrows.
+     */
+    cursor?: JobEscrowWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` JobEscrows from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` JobEscrows.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of JobEscrows.
+     */
+    distinct?: JobEscrowScalarFieldEnum | JobEscrowScalarFieldEnum[];
+  };
+
+  /**
+   * JobEscrow create
+   */
+  export type JobEscrowCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a JobEscrow.
+     */
+    data: XOR<JobEscrowCreateInput, JobEscrowUncheckedCreateInput>;
+  };
+
+  /**
+   * JobEscrow createMany
+   */
+  export type JobEscrowCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many JobEscrows.
+     */
+    data: JobEscrowCreateManyInput | JobEscrowCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * JobEscrow createManyAndReturn
+   */
+  export type JobEscrowCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * The data used to create many JobEscrows.
+     */
+    data: JobEscrowCreateManyInput | JobEscrowCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * JobEscrow update
+   */
+  export type JobEscrowUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a JobEscrow.
+     */
+    data: XOR<JobEscrowUpdateInput, JobEscrowUncheckedUpdateInput>;
+    /**
+     * Choose, which JobEscrow to update.
+     */
+    where: JobEscrowWhereUniqueInput;
+  };
+
+  /**
+   * JobEscrow updateMany
+   */
+  export type JobEscrowUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update JobEscrows.
+     */
+    data: XOR<
+      JobEscrowUpdateManyMutationInput,
+      JobEscrowUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which JobEscrows to update
+     */
+    where?: JobEscrowWhereInput;
+    /**
+     * Limit how many JobEscrows to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * JobEscrow updateManyAndReturn
+   */
+  export type JobEscrowUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * The data used to update JobEscrows.
+     */
+    data: XOR<
+      JobEscrowUpdateManyMutationInput,
+      JobEscrowUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which JobEscrows to update
+     */
+    where?: JobEscrowWhereInput;
+    /**
+     * Limit how many JobEscrows to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * JobEscrow upsert
+   */
+  export type JobEscrowUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the JobEscrow to update in case it exists.
+     */
+    where: JobEscrowWhereUniqueInput;
+    /**
+     * In case the JobEscrow found by the `where` argument doesn't exist, create a new JobEscrow with this data.
+     */
+    create: XOR<JobEscrowCreateInput, JobEscrowUncheckedCreateInput>;
+    /**
+     * In case the JobEscrow was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<JobEscrowUpdateInput, JobEscrowUncheckedUpdateInput>;
+  };
+
+  /**
+   * JobEscrow delete
+   */
+  export type JobEscrowDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+    /**
+     * Filter which JobEscrow to delete.
+     */
+    where: JobEscrowWhereUniqueInput;
+  };
+
+  /**
+   * JobEscrow deleteMany
+   */
+  export type JobEscrowDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which JobEscrows to delete
+     */
+    where?: JobEscrowWhereInput;
+    /**
+     * Limit how many JobEscrows to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * JobEscrow.transactions
+   */
+  export type JobEscrow$transactionsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    where?: EscrowTransactionWhereInput;
+    orderBy?:
+      | EscrowTransactionOrderByWithRelationInput
+      | EscrowTransactionOrderByWithRelationInput[];
+    cursor?: EscrowTransactionWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?:
+      | EscrowTransactionScalarFieldEnum
+      | EscrowTransactionScalarFieldEnum[];
+  };
+
+  /**
+   * JobEscrow without action
+   */
+  export type JobEscrowDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the JobEscrow
+     */
+    select?: JobEscrowSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the JobEscrow
+     */
+    omit?: JobEscrowOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobEscrowInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model EscrowTransaction
+   */
+
+  export type AggregateEscrowTransaction = {
+    _count: EscrowTransactionCountAggregateOutputType | null;
+    _avg: EscrowTransactionAvgAggregateOutputType | null;
+    _sum: EscrowTransactionSumAggregateOutputType | null;
+    _min: EscrowTransactionMinAggregateOutputType | null;
+    _max: EscrowTransactionMaxAggregateOutputType | null;
+  };
+
+  export type EscrowTransactionAvgAggregateOutputType = {
+    amount: Decimal | null;
+  };
+
+  export type EscrowTransactionSumAggregateOutputType = {
+    amount: Decimal | null;
+  };
+
+  export type EscrowTransactionMinAggregateOutputType = {
+    id: string | null;
+    escrowId: string | null;
+    type: $Enums.EscrowTransactionType | null;
+    amount: Decimal | null;
+    note: string | null;
+    createdAt: Date | null;
+  };
+
+  export type EscrowTransactionMaxAggregateOutputType = {
+    id: string | null;
+    escrowId: string | null;
+    type: $Enums.EscrowTransactionType | null;
+    amount: Decimal | null;
+    note: string | null;
+    createdAt: Date | null;
+  };
+
+  export type EscrowTransactionCountAggregateOutputType = {
+    id: number;
+    escrowId: number;
+    type: number;
+    amount: number;
+    note: number;
+    createdAt: number;
+    _all: number;
+  };
+
+  export type EscrowTransactionAvgAggregateInputType = {
+    amount?: true;
+  };
+
+  export type EscrowTransactionSumAggregateInputType = {
+    amount?: true;
+  };
+
+  export type EscrowTransactionMinAggregateInputType = {
+    id?: true;
+    escrowId?: true;
+    type?: true;
+    amount?: true;
+    note?: true;
+    createdAt?: true;
+  };
+
+  export type EscrowTransactionMaxAggregateInputType = {
+    id?: true;
+    escrowId?: true;
+    type?: true;
+    amount?: true;
+    note?: true;
+    createdAt?: true;
+  };
+
+  export type EscrowTransactionCountAggregateInputType = {
+    id?: true;
+    escrowId?: true;
+    type?: true;
+    amount?: true;
+    note?: true;
+    createdAt?: true;
+    _all?: true;
+  };
+
+  export type EscrowTransactionAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which EscrowTransaction to aggregate.
+     */
+    where?: EscrowTransactionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EscrowTransactions to fetch.
+     */
+    orderBy?:
+      | EscrowTransactionOrderByWithRelationInput
+      | EscrowTransactionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: EscrowTransactionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EscrowTransactions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EscrowTransactions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned EscrowTransactions
+     **/
+    _count?: true | EscrowTransactionCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: EscrowTransactionAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: EscrowTransactionSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: EscrowTransactionMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: EscrowTransactionMaxAggregateInputType;
+  };
+
+  export type GetEscrowTransactionAggregateType<
+    T extends EscrowTransactionAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateEscrowTransaction]: P extends
+      | '_count'
+      | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEscrowTransaction[P]>
+      : GetScalarType<T[P], AggregateEscrowTransaction[P]>;
+  };
+
+  export type EscrowTransactionGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: EscrowTransactionWhereInput;
+    orderBy?:
+      | EscrowTransactionOrderByWithAggregationInput
+      | EscrowTransactionOrderByWithAggregationInput[];
+    by: EscrowTransactionScalarFieldEnum[] | EscrowTransactionScalarFieldEnum;
+    having?: EscrowTransactionScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: EscrowTransactionCountAggregateInputType | true;
+    _avg?: EscrowTransactionAvgAggregateInputType;
+    _sum?: EscrowTransactionSumAggregateInputType;
+    _min?: EscrowTransactionMinAggregateInputType;
+    _max?: EscrowTransactionMaxAggregateInputType;
+  };
+
+  export type EscrowTransactionGroupByOutputType = {
+    id: string;
+    escrowId: string;
+    type: $Enums.EscrowTransactionType;
+    amount: Decimal;
+    note: string | null;
+    createdAt: Date;
+    _count: EscrowTransactionCountAggregateOutputType | null;
+    _avg: EscrowTransactionAvgAggregateOutputType | null;
+    _sum: EscrowTransactionSumAggregateOutputType | null;
+    _min: EscrowTransactionMinAggregateOutputType | null;
+    _max: EscrowTransactionMaxAggregateOutputType | null;
+  };
+
+  type GetEscrowTransactionGroupByPayload<
+    T extends EscrowTransactionGroupByArgs,
+  > = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EscrowTransactionGroupByOutputType, T['by']> & {
+        [P in keyof T &
+          keyof EscrowTransactionGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], EscrowTransactionGroupByOutputType[P]>
+          : GetScalarType<T[P], EscrowTransactionGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type EscrowTransactionSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      escrowId?: boolean;
+      type?: boolean;
+      amount?: boolean;
+      note?: boolean;
+      createdAt?: boolean;
+      escrow?: boolean | JobEscrowDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['escrowTransaction']
+  >;
+
+  export type EscrowTransactionSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      escrowId?: boolean;
+      type?: boolean;
+      amount?: boolean;
+      note?: boolean;
+      createdAt?: boolean;
+      escrow?: boolean | JobEscrowDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['escrowTransaction']
+  >;
+
+  export type EscrowTransactionSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      escrowId?: boolean;
+      type?: boolean;
+      amount?: boolean;
+      note?: boolean;
+      createdAt?: boolean;
+      escrow?: boolean | JobEscrowDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['escrowTransaction']
+  >;
+
+  export type EscrowTransactionSelectScalar = {
+    id?: boolean;
+    escrowId?: boolean;
+    type?: boolean;
+    amount?: boolean;
+    note?: boolean;
+    createdAt?: boolean;
+  };
+
+  export type EscrowTransactionOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    'id' | 'escrowId' | 'type' | 'amount' | 'note' | 'createdAt',
+    ExtArgs['result']['escrowTransaction']
+  >;
+  export type EscrowTransactionInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    escrow?: boolean | JobEscrowDefaultArgs<ExtArgs>;
+  };
+  export type EscrowTransactionIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    escrow?: boolean | JobEscrowDefaultArgs<ExtArgs>;
+  };
+  export type EscrowTransactionIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    escrow?: boolean | JobEscrowDefaultArgs<ExtArgs>;
+  };
+
+  export type $EscrowTransactionPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'EscrowTransaction';
+    objects: {
+      escrow: Prisma.$JobEscrowPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        escrowId: string;
+        type: $Enums.EscrowTransactionType;
+        amount: Prisma.Decimal;
+        note: string | null;
+        createdAt: Date;
+      },
+      ExtArgs['result']['escrowTransaction']
+    >;
+    composites: {};
+  };
+
+  type EscrowTransactionGetPayload<
+    S extends boolean | null | undefined | EscrowTransactionDefaultArgs,
+  > = $Result.GetResult<Prisma.$EscrowTransactionPayload, S>;
+
+  type EscrowTransactionCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    EscrowTransactionFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit'
+  > & {
+    select?: EscrowTransactionCountAggregateInputType | true;
+  };
+
+  export interface EscrowTransactionDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['EscrowTransaction'];
+      meta: { name: 'EscrowTransaction' };
+    };
+    /**
+     * Find zero or one EscrowTransaction that matches the filter.
+     * @param {EscrowTransactionFindUniqueArgs} args - Arguments to find a EscrowTransaction
+     * @example
+     * // Get one EscrowTransaction
+     * const escrowTransaction = await prisma.escrowTransaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EscrowTransactionFindUniqueArgs>(
+      args: SelectSubset<T, EscrowTransactionFindUniqueArgs<ExtArgs>>,
+    ): Prisma__EscrowTransactionClient<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one EscrowTransaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EscrowTransactionFindUniqueOrThrowArgs} args - Arguments to find a EscrowTransaction
+     * @example
+     * // Get one EscrowTransaction
+     * const escrowTransaction = await prisma.escrowTransaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EscrowTransactionFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, EscrowTransactionFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__EscrowTransactionClient<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first EscrowTransaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EscrowTransactionFindFirstArgs} args - Arguments to find a EscrowTransaction
+     * @example
+     * // Get one EscrowTransaction
+     * const escrowTransaction = await prisma.escrowTransaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EscrowTransactionFindFirstArgs>(
+      args?: SelectSubset<T, EscrowTransactionFindFirstArgs<ExtArgs>>,
+    ): Prisma__EscrowTransactionClient<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first EscrowTransaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EscrowTransactionFindFirstOrThrowArgs} args - Arguments to find a EscrowTransaction
+     * @example
+     * // Get one EscrowTransaction
+     * const escrowTransaction = await prisma.escrowTransaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EscrowTransactionFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, EscrowTransactionFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__EscrowTransactionClient<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more EscrowTransactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EscrowTransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EscrowTransactions
+     * const escrowTransactions = await prisma.escrowTransaction.findMany()
+     *
+     * // Get first 10 EscrowTransactions
+     * const escrowTransactions = await prisma.escrowTransaction.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const escrowTransactionWithIdOnly = await prisma.escrowTransaction.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends EscrowTransactionFindManyArgs>(
+      args?: SelectSubset<T, EscrowTransactionFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create a EscrowTransaction.
+     * @param {EscrowTransactionCreateArgs} args - Arguments to create a EscrowTransaction.
+     * @example
+     * // Create one EscrowTransaction
+     * const EscrowTransaction = await prisma.escrowTransaction.create({
+     *   data: {
+     *     // ... data to create a EscrowTransaction
+     *   }
+     * })
+     *
+     */
+    create<T extends EscrowTransactionCreateArgs>(
+      args: SelectSubset<T, EscrowTransactionCreateArgs<ExtArgs>>,
+    ): Prisma__EscrowTransactionClient<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'create',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many EscrowTransactions.
+     * @param {EscrowTransactionCreateManyArgs} args - Arguments to create many EscrowTransactions.
+     * @example
+     * // Create many EscrowTransactions
+     * const escrowTransaction = await prisma.escrowTransaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends EscrowTransactionCreateManyArgs>(
+      args?: SelectSubset<T, EscrowTransactionCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many EscrowTransactions and returns the data saved in the database.
+     * @param {EscrowTransactionCreateManyAndReturnArgs} args - Arguments to create many EscrowTransactions.
+     * @example
+     * // Create many EscrowTransactions
+     * const escrowTransaction = await prisma.escrowTransaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many EscrowTransactions and only return the `id`
+     * const escrowTransactionWithIdOnly = await prisma.escrowTransaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends EscrowTransactionCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, EscrowTransactionCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a EscrowTransaction.
+     * @param {EscrowTransactionDeleteArgs} args - Arguments to delete one EscrowTransaction.
+     * @example
+     * // Delete one EscrowTransaction
+     * const EscrowTransaction = await prisma.escrowTransaction.delete({
+     *   where: {
+     *     // ... filter to delete one EscrowTransaction
+     *   }
+     * })
+     *
+     */
+    delete<T extends EscrowTransactionDeleteArgs>(
+      args: SelectSubset<T, EscrowTransactionDeleteArgs<ExtArgs>>,
+    ): Prisma__EscrowTransactionClient<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'delete',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one EscrowTransaction.
+     * @param {EscrowTransactionUpdateArgs} args - Arguments to update one EscrowTransaction.
+     * @example
+     * // Update one EscrowTransaction
+     * const escrowTransaction = await prisma.escrowTransaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends EscrowTransactionUpdateArgs>(
+      args: SelectSubset<T, EscrowTransactionUpdateArgs<ExtArgs>>,
+    ): Prisma__EscrowTransactionClient<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'update',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more EscrowTransactions.
+     * @param {EscrowTransactionDeleteManyArgs} args - Arguments to filter EscrowTransactions to delete.
+     * @example
+     * // Delete a few EscrowTransactions
+     * const { count } = await prisma.escrowTransaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends EscrowTransactionDeleteManyArgs>(
+      args?: SelectSubset<T, EscrowTransactionDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more EscrowTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EscrowTransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EscrowTransactions
+     * const escrowTransaction = await prisma.escrowTransaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends EscrowTransactionUpdateManyArgs>(
+      args: SelectSubset<T, EscrowTransactionUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more EscrowTransactions and returns the data updated in the database.
+     * @param {EscrowTransactionUpdateManyAndReturnArgs} args - Arguments to update many EscrowTransactions.
+     * @example
+     * // Update many EscrowTransactions
+     * const escrowTransaction = await prisma.escrowTransaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more EscrowTransactions and only return the `id`
+     * const escrowTransactionWithIdOnly = await prisma.escrowTransaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends EscrowTransactionUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, EscrowTransactionUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one EscrowTransaction.
+     * @param {EscrowTransactionUpsertArgs} args - Arguments to update or create a EscrowTransaction.
+     * @example
+     * // Update or create a EscrowTransaction
+     * const escrowTransaction = await prisma.escrowTransaction.upsert({
+     *   create: {
+     *     // ... data to create a EscrowTransaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EscrowTransaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EscrowTransactionUpsertArgs>(
+      args: SelectSubset<T, EscrowTransactionUpsertArgs<ExtArgs>>,
+    ): Prisma__EscrowTransactionClient<
+      $Result.GetResult<
+        Prisma.$EscrowTransactionPayload<ExtArgs>,
+        T,
+        'upsert',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of EscrowTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EscrowTransactionCountArgs} args - Arguments to filter EscrowTransactions to count.
+     * @example
+     * // Count the number of EscrowTransactions
+     * const count = await prisma.escrowTransaction.count({
+     *   where: {
+     *     // ... the filter for the EscrowTransactions we want to count
+     *   }
+     * })
+     **/
+    count<T extends EscrowTransactionCountArgs>(
+      args?: Subset<T, EscrowTransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<
+              T['select'],
+              EscrowTransactionCountAggregateOutputType
+            >
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a EscrowTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EscrowTransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends EscrowTransactionAggregateArgs>(
+      args: Subset<T, EscrowTransactionAggregateArgs>,
+    ): Prisma.PrismaPromise<GetEscrowTransactionAggregateType<T>>;
+
+    /**
+     * Group by EscrowTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EscrowTransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends EscrowTransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EscrowTransactionGroupByArgs['orderBy'] }
+        : { orderBy?: EscrowTransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T['orderBy']>>
+      >,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      'Field ',
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, EscrowTransactionGroupByArgs, OrderByArg> &
+        InputErrors,
+    ): {} extends InputErrors
+      ? GetEscrowTransactionGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the EscrowTransaction model
+     */
+    readonly fields: EscrowTransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EscrowTransaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EscrowTransactionClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    escrow<T extends JobEscrowDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, JobEscrowDefaultArgs<ExtArgs>>,
+    ): Prisma__JobEscrowClient<
+      | $Result.GetResult<
+          Prisma.$JobEscrowPayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the EscrowTransaction model
+   */
+  interface EscrowTransactionFieldRefs {
+    readonly id: FieldRef<'EscrowTransaction', 'String'>;
+    readonly escrowId: FieldRef<'EscrowTransaction', 'String'>;
+    readonly type: FieldRef<'EscrowTransaction', 'EscrowTransactionType'>;
+    readonly amount: FieldRef<'EscrowTransaction', 'Decimal'>;
+    readonly note: FieldRef<'EscrowTransaction', 'String'>;
+    readonly createdAt: FieldRef<'EscrowTransaction', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * EscrowTransaction findUnique
+   */
+  export type EscrowTransactionFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which EscrowTransaction to fetch.
+     */
+    where: EscrowTransactionWhereUniqueInput;
+  };
+
+  /**
+   * EscrowTransaction findUniqueOrThrow
+   */
+  export type EscrowTransactionFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which EscrowTransaction to fetch.
+     */
+    where: EscrowTransactionWhereUniqueInput;
+  };
+
+  /**
+   * EscrowTransaction findFirst
+   */
+  export type EscrowTransactionFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which EscrowTransaction to fetch.
+     */
+    where?: EscrowTransactionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EscrowTransactions to fetch.
+     */
+    orderBy?:
+      | EscrowTransactionOrderByWithRelationInput
+      | EscrowTransactionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for EscrowTransactions.
+     */
+    cursor?: EscrowTransactionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EscrowTransactions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EscrowTransactions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EscrowTransactions.
+     */
+    distinct?:
+      | EscrowTransactionScalarFieldEnum
+      | EscrowTransactionScalarFieldEnum[];
+  };
+
+  /**
+   * EscrowTransaction findFirstOrThrow
+   */
+  export type EscrowTransactionFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which EscrowTransaction to fetch.
+     */
+    where?: EscrowTransactionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EscrowTransactions to fetch.
+     */
+    orderBy?:
+      | EscrowTransactionOrderByWithRelationInput
+      | EscrowTransactionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for EscrowTransactions.
+     */
+    cursor?: EscrowTransactionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EscrowTransactions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EscrowTransactions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EscrowTransactions.
+     */
+    distinct?:
+      | EscrowTransactionScalarFieldEnum
+      | EscrowTransactionScalarFieldEnum[];
+  };
+
+  /**
+   * EscrowTransaction findMany
+   */
+  export type EscrowTransactionFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter, which EscrowTransactions to fetch.
+     */
+    where?: EscrowTransactionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of EscrowTransactions to fetch.
+     */
+    orderBy?:
+      | EscrowTransactionOrderByWithRelationInput
+      | EscrowTransactionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing EscrowTransactions.
+     */
+    cursor?: EscrowTransactionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` EscrowTransactions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` EscrowTransactions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of EscrowTransactions.
+     */
+    distinct?:
+      | EscrowTransactionScalarFieldEnum
+      | EscrowTransactionScalarFieldEnum[];
+  };
+
+  /**
+   * EscrowTransaction create
+   */
+  export type EscrowTransactionCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a EscrowTransaction.
+     */
+    data: XOR<
+      EscrowTransactionCreateInput,
+      EscrowTransactionUncheckedCreateInput
+    >;
+  };
+
+  /**
+   * EscrowTransaction createMany
+   */
+  export type EscrowTransactionCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many EscrowTransactions.
+     */
+    data: EscrowTransactionCreateManyInput | EscrowTransactionCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * EscrowTransaction createManyAndReturn
+   */
+  export type EscrowTransactionCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * The data used to create many EscrowTransactions.
+     */
+    data: EscrowTransactionCreateManyInput | EscrowTransactionCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * EscrowTransaction update
+   */
+  export type EscrowTransactionUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a EscrowTransaction.
+     */
+    data: XOR<
+      EscrowTransactionUpdateInput,
+      EscrowTransactionUncheckedUpdateInput
+    >;
+    /**
+     * Choose, which EscrowTransaction to update.
+     */
+    where: EscrowTransactionWhereUniqueInput;
+  };
+
+  /**
+   * EscrowTransaction updateMany
+   */
+  export type EscrowTransactionUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update EscrowTransactions.
+     */
+    data: XOR<
+      EscrowTransactionUpdateManyMutationInput,
+      EscrowTransactionUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which EscrowTransactions to update
+     */
+    where?: EscrowTransactionWhereInput;
+    /**
+     * Limit how many EscrowTransactions to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * EscrowTransaction updateManyAndReturn
+   */
+  export type EscrowTransactionUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * The data used to update EscrowTransactions.
+     */
+    data: XOR<
+      EscrowTransactionUpdateManyMutationInput,
+      EscrowTransactionUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which EscrowTransactions to update
+     */
+    where?: EscrowTransactionWhereInput;
+    /**
+     * Limit how many EscrowTransactions to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * EscrowTransaction upsert
+   */
+  export type EscrowTransactionUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the EscrowTransaction to update in case it exists.
+     */
+    where: EscrowTransactionWhereUniqueInput;
+    /**
+     * In case the EscrowTransaction found by the `where` argument doesn't exist, create a new EscrowTransaction with this data.
+     */
+    create: XOR<
+      EscrowTransactionCreateInput,
+      EscrowTransactionUncheckedCreateInput
+    >;
+    /**
+     * In case the EscrowTransaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<
+      EscrowTransactionUpdateInput,
+      EscrowTransactionUncheckedUpdateInput
+    >;
+  };
+
+  /**
+   * EscrowTransaction delete
+   */
+  export type EscrowTransactionDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
+    /**
+     * Filter which EscrowTransaction to delete.
+     */
+    where: EscrowTransactionWhereUniqueInput;
+  };
+
+  /**
+   * EscrowTransaction deleteMany
+   */
+  export type EscrowTransactionDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which EscrowTransactions to delete
+     */
+    where?: EscrowTransactionWhereInput;
+    /**
+     * Limit how many EscrowTransactions to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * EscrowTransaction without action
+   */
+  export type EscrowTransactionDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the EscrowTransaction
+     */
+    select?: EscrowTransactionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the EscrowTransaction
+     */
+    omit?: EscrowTransactionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EscrowTransactionInclude<ExtArgs> | null;
   };
 
   /**
@@ -34906,6 +38469,7 @@ export namespace Prisma {
     jobsCancelled: 'jobsCancelled';
     responseTimeMinutes: 'responseTimeMinutes';
     isVerified: 'isVerified';
+    backgroundChecked: 'backgroundChecked';
     isAvailable: 'isAvailable';
     preferredLanguage: 'preferredLanguage';
     createdAt: 'createdAt';
@@ -35002,6 +38566,8 @@ export namespace Prisma {
     jobId: 'jobId';
     tradesmanId: 'tradesmanId';
     amount: 'amount';
+    materialsAmount: 'materialsAmount';
+    depositRequested: 'depositRequested';
     currency: 'currency';
     message: 'message';
     estimatedStart: 'estimatedStart';
@@ -35015,6 +38581,44 @@ export namespace Prisma {
 
   export type QuoteScalarFieldEnum =
     (typeof QuoteScalarFieldEnum)[keyof typeof QuoteScalarFieldEnum];
+
+  export const JobEscrowScalarFieldEnum: {
+    id: 'id';
+    jobId: 'jobId';
+    quoteId: 'quoteId';
+    homeownerId: 'homeownerId';
+    tradesmanId: 'tradesmanId';
+    currency: 'currency';
+    quoteTotal: 'quoteTotal';
+    materialsAmount: 'materialsAmount';
+    depositAmount: 'depositAmount';
+    balanceAmount: 'balanceAmount';
+    status: 'status';
+    paymentMethod: 'paymentMethod';
+    paymentRef: 'paymentRef';
+    fundedAt: 'fundedAt';
+    materialsReleasedAt: 'materialsReleasedAt';
+    workCompletedAt: 'workCompletedAt';
+    releasedAt: 'releasedAt';
+    refundedAt: 'refundedAt';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type JobEscrowScalarFieldEnum =
+    (typeof JobEscrowScalarFieldEnum)[keyof typeof JobEscrowScalarFieldEnum];
+
+  export const EscrowTransactionScalarFieldEnum: {
+    id: 'id';
+    escrowId: 'escrowId';
+    type: 'type';
+    amount: 'amount';
+    note: 'note';
+    createdAt: 'createdAt';
+  };
+
+  export type EscrowTransactionScalarFieldEnum =
+    (typeof EscrowTransactionScalarFieldEnum)[keyof typeof EscrowTransactionScalarFieldEnum];
 
   export const ConversationScalarFieldEnum: {
     id: 'id';
@@ -35350,6 +38954,32 @@ export namespace Prisma {
     FieldRefInputType<$PrismaModel, 'QuoteStatus[]'>;
 
   /**
+   * Reference to a field of type 'EscrowStatus'
+   */
+  export type EnumEscrowStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'EscrowStatus'
+  >;
+
+  /**
+   * Reference to a field of type 'EscrowStatus[]'
+   */
+  export type ListEnumEscrowStatusFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'EscrowStatus[]'>;
+
+  /**
+   * Reference to a field of type 'EscrowTransactionType'
+   */
+  export type EnumEscrowTransactionTypeFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'EscrowTransactionType'>;
+
+  /**
+   * Reference to a field of type 'EscrowTransactionType[]'
+   */
+  export type ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'EscrowTransactionType[]'>;
+
+  /**
    * Reference to a field of type 'ConversationType'
    */
   export type EnumConversationTypeFieldRefInput<$PrismaModel> =
@@ -35477,6 +39107,8 @@ export namespace Prisma {
     assignedReports?: ReportListRelationFilter;
     recommendations?: JobRecommendationListRelationFilter;
     conversationLinks?: ConversationParticipantListRelationFilter;
+    escrowsAsHomeowner?: JobEscrowListRelationFilter;
+    escrowsAsTradesman?: JobEscrowListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -35514,6 +39146,8 @@ export namespace Prisma {
     assignedReports?: ReportOrderByRelationAggregateInput;
     recommendations?: JobRecommendationOrderByRelationAggregateInput;
     conversationLinks?: ConversationParticipantOrderByRelationAggregateInput;
+    escrowsAsHomeowner?: JobEscrowOrderByRelationAggregateInput;
+    escrowsAsTradesman?: JobEscrowOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -35565,6 +39199,8 @@ export namespace Prisma {
       assignedReports?: ReportListRelationFilter;
       recommendations?: JobRecommendationListRelationFilter;
       conversationLinks?: ConversationParticipantListRelationFilter;
+      escrowsAsHomeowner?: JobEscrowListRelationFilter;
+      escrowsAsTradesman?: JobEscrowListRelationFilter;
     },
     'id' | 'email' | 'stripeCustomerId' | 'phoneNumber'
   >;
@@ -36221,6 +39857,7 @@ export namespace Prisma {
     jobsCancelled?: IntFilter<'TradesmanProfile'> | number;
     responseTimeMinutes?: IntFilter<'TradesmanProfile'> | number;
     isVerified?: BoolFilter<'TradesmanProfile'> | boolean;
+    backgroundChecked?: BoolFilter<'TradesmanProfile'> | boolean;
     isAvailable?: BoolFilter<'TradesmanProfile'> | boolean;
     preferredLanguage?:
       | EnumLanguageCodeFilter<'TradesmanProfile'>
@@ -36249,6 +39886,7 @@ export namespace Prisma {
     jobsCancelled?: SortOrder;
     responseTimeMinutes?: SortOrder;
     isVerified?: SortOrder;
+    backgroundChecked?: SortOrder;
     isAvailable?: SortOrder;
     preferredLanguage?: SortOrder;
     createdAt?: SortOrder;
@@ -36302,6 +39940,7 @@ export namespace Prisma {
       jobsCancelled?: IntFilter<'TradesmanProfile'> | number;
       responseTimeMinutes?: IntFilter<'TradesmanProfile'> | number;
       isVerified?: BoolFilter<'TradesmanProfile'> | boolean;
+      backgroundChecked?: BoolFilter<'TradesmanProfile'> | boolean;
       isAvailable?: BoolFilter<'TradesmanProfile'> | boolean;
       preferredLanguage?:
         | EnumLanguageCodeFilter<'TradesmanProfile'>
@@ -36332,6 +39971,7 @@ export namespace Prisma {
     jobsCancelled?: SortOrder;
     responseTimeMinutes?: SortOrder;
     isVerified?: SortOrder;
+    backgroundChecked?: SortOrder;
     isAvailable?: SortOrder;
     preferredLanguage?: SortOrder;
     createdAt?: SortOrder;
@@ -36403,6 +40043,7 @@ export namespace Prisma {
     jobsCancelled?: IntWithAggregatesFilter<'TradesmanProfile'> | number;
     responseTimeMinutes?: IntWithAggregatesFilter<'TradesmanProfile'> | number;
     isVerified?: BoolWithAggregatesFilter<'TradesmanProfile'> | boolean;
+    backgroundChecked?: BoolWithAggregatesFilter<'TradesmanProfile'> | boolean;
     isAvailable?: BoolWithAggregatesFilter<'TradesmanProfile'> | boolean;
     preferredLanguage?:
       | EnumLanguageCodeWithAggregatesFilter<'TradesmanProfile'>
@@ -36779,6 +40420,10 @@ export namespace Prisma {
     reviews?: ReviewListRelationFilter;
     recommendations?: JobRecommendationListRelationFilter;
     reports?: ReportListRelationFilter;
+    escrow?: XOR<
+      JobEscrowNullableScalarRelationFilter,
+      JobEscrowWhereInput
+    > | null;
   };
 
   export type JobOrderByWithRelationInput = {
@@ -36818,6 +40463,7 @@ export namespace Prisma {
     reviews?: ReviewOrderByRelationAggregateInput;
     recommendations?: JobRecommendationOrderByRelationAggregateInput;
     reports?: ReportOrderByRelationAggregateInput;
+    escrow?: JobEscrowOrderByWithRelationInput;
   };
 
   export type JobWhereUniqueInput = Prisma.AtLeast<
@@ -36903,6 +40549,10 @@ export namespace Prisma {
       reviews?: ReviewListRelationFilter;
       recommendations?: JobRecommendationListRelationFilter;
       reports?: ReportListRelationFilter;
+      escrow?: XOR<
+        JobEscrowNullableScalarRelationFilter,
+        JobEscrowWhereInput
+      > | null;
     },
     'id' | 'acceptedQuoteId'
   >;
@@ -37111,6 +40761,20 @@ export namespace Prisma {
     jobId?: StringFilter<'Quote'> | string;
     tradesmanId?: StringFilter<'Quote'> | string;
     amount?: DecimalFilter<'Quote'> | Decimal | DecimalJsLike | number | string;
+    materialsAmount?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFilter<'Quote'> | string;
     message?: StringNullableFilter<'Quote'> | string | null;
     estimatedStart?: DateTimeNullableFilter<'Quote'> | Date | string | null;
@@ -37127,6 +40791,10 @@ export namespace Prisma {
     job?: XOR<JobScalarRelationFilter, JobWhereInput>;
     tradesman?: XOR<UserScalarRelationFilter, UserWhereInput>;
     acceptedForJob?: XOR<JobNullableScalarRelationFilter, JobWhereInput> | null;
+    escrow?: XOR<
+      JobEscrowNullableScalarRelationFilter,
+      JobEscrowWhereInput
+    > | null;
   };
 
   export type QuoteOrderByWithRelationInput = {
@@ -37134,6 +40802,8 @@ export namespace Prisma {
     jobId?: SortOrder;
     tradesmanId?: SortOrder;
     amount?: SortOrder;
+    materialsAmount?: SortOrderInput | SortOrder;
+    depositRequested?: SortOrderInput | SortOrder;
     currency?: SortOrder;
     message?: SortOrderInput | SortOrder;
     estimatedStart?: SortOrderInput | SortOrder;
@@ -37146,6 +40816,7 @@ export namespace Prisma {
     job?: JobOrderByWithRelationInput;
     tradesman?: UserOrderByWithRelationInput;
     acceptedForJob?: JobOrderByWithRelationInput;
+    escrow?: JobEscrowOrderByWithRelationInput;
   };
 
   export type QuoteWhereUniqueInput = Prisma.AtLeast<
@@ -37163,6 +40834,20 @@ export namespace Prisma {
         | DecimalJsLike
         | number
         | string;
+      materialsAmount?:
+        | DecimalNullableFilter<'Quote'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string
+        | null;
+      depositRequested?:
+        | DecimalNullableFilter<'Quote'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string
+        | null;
       currency?: StringFilter<'Quote'> | string;
       message?: StringNullableFilter<'Quote'> | string | null;
       estimatedStart?: DateTimeNullableFilter<'Quote'> | Date | string | null;
@@ -37182,6 +40867,10 @@ export namespace Prisma {
         JobNullableScalarRelationFilter,
         JobWhereInput
       > | null;
+      escrow?: XOR<
+        JobEscrowNullableScalarRelationFilter,
+        JobEscrowWhereInput
+      > | null;
     },
     'id' | 'jobId_tradesmanId'
   >;
@@ -37191,6 +40880,8 @@ export namespace Prisma {
     jobId?: SortOrder;
     tradesmanId?: SortOrder;
     amount?: SortOrder;
+    materialsAmount?: SortOrderInput | SortOrder;
+    depositRequested?: SortOrderInput | SortOrder;
     currency?: SortOrder;
     message?: SortOrderInput | SortOrder;
     estimatedStart?: SortOrderInput | SortOrder;
@@ -37224,6 +40915,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | DecimalNullableWithAggregatesFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | DecimalNullableWithAggregatesFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringWithAggregatesFilter<'Quote'> | string;
     message?: StringNullableWithAggregatesFilter<'Quote'> | string | null;
     estimatedStart?:
@@ -37249,6 +40954,357 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeWithAggregatesFilter<'Quote'> | Date | string;
     updatedAt?: DateTimeWithAggregatesFilter<'Quote'> | Date | string;
+  };
+
+  export type JobEscrowWhereInput = {
+    AND?: JobEscrowWhereInput | JobEscrowWhereInput[];
+    OR?: JobEscrowWhereInput[];
+    NOT?: JobEscrowWhereInput | JobEscrowWhereInput[];
+    id?: StringFilter<'JobEscrow'> | string;
+    jobId?: StringFilter<'JobEscrow'> | string;
+    quoteId?: StringFilter<'JobEscrow'> | string;
+    homeownerId?: StringFilter<'JobEscrow'> | string;
+    tradesmanId?: StringFilter<'JobEscrow'> | string;
+    currency?: StringFilter<'JobEscrow'> | string;
+    quoteTotal?:
+      | DecimalFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFilter<'JobEscrow'> | $Enums.EscrowStatus;
+    paymentMethod?: StringNullableFilter<'JobEscrow'> | string | null;
+    paymentRef?: StringNullableFilter<'JobEscrow'> | string | null;
+    fundedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
+    materialsReleasedAt?:
+      | DateTimeNullableFilter<'JobEscrow'>
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | DateTimeNullableFilter<'JobEscrow'>
+      | Date
+      | string
+      | null;
+    releasedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
+    refundedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
+    createdAt?: DateTimeFilter<'JobEscrow'> | Date | string;
+    updatedAt?: DateTimeFilter<'JobEscrow'> | Date | string;
+    job?: XOR<JobScalarRelationFilter, JobWhereInput>;
+    quote?: XOR<QuoteScalarRelationFilter, QuoteWhereInput>;
+    homeowner?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    tradesman?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    transactions?: EscrowTransactionListRelationFilter;
+  };
+
+  export type JobEscrowOrderByWithRelationInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    quoteId?: SortOrder;
+    homeownerId?: SortOrder;
+    tradesmanId?: SortOrder;
+    currency?: SortOrder;
+    quoteTotal?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositAmount?: SortOrder;
+    balanceAmount?: SortOrder;
+    status?: SortOrder;
+    paymentMethod?: SortOrderInput | SortOrder;
+    paymentRef?: SortOrderInput | SortOrder;
+    fundedAt?: SortOrderInput | SortOrder;
+    materialsReleasedAt?: SortOrderInput | SortOrder;
+    workCompletedAt?: SortOrderInput | SortOrder;
+    releasedAt?: SortOrderInput | SortOrder;
+    refundedAt?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    job?: JobOrderByWithRelationInput;
+    quote?: QuoteOrderByWithRelationInput;
+    homeowner?: UserOrderByWithRelationInput;
+    tradesman?: UserOrderByWithRelationInput;
+    transactions?: EscrowTransactionOrderByRelationAggregateInput;
+  };
+
+  export type JobEscrowWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      jobId?: string;
+      quoteId?: string;
+      AND?: JobEscrowWhereInput | JobEscrowWhereInput[];
+      OR?: JobEscrowWhereInput[];
+      NOT?: JobEscrowWhereInput | JobEscrowWhereInput[];
+      homeownerId?: StringFilter<'JobEscrow'> | string;
+      tradesmanId?: StringFilter<'JobEscrow'> | string;
+      currency?: StringFilter<'JobEscrow'> | string;
+      quoteTotal?:
+        | DecimalFilter<'JobEscrow'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string;
+      materialsAmount?:
+        | DecimalFilter<'JobEscrow'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string;
+      depositAmount?:
+        | DecimalFilter<'JobEscrow'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string;
+      balanceAmount?:
+        | DecimalFilter<'JobEscrow'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string;
+      status?: EnumEscrowStatusFilter<'JobEscrow'> | $Enums.EscrowStatus;
+      paymentMethod?: StringNullableFilter<'JobEscrow'> | string | null;
+      paymentRef?: StringNullableFilter<'JobEscrow'> | string | null;
+      fundedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
+      materialsReleasedAt?:
+        | DateTimeNullableFilter<'JobEscrow'>
+        | Date
+        | string
+        | null;
+      workCompletedAt?:
+        | DateTimeNullableFilter<'JobEscrow'>
+        | Date
+        | string
+        | null;
+      releasedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
+      refundedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
+      createdAt?: DateTimeFilter<'JobEscrow'> | Date | string;
+      updatedAt?: DateTimeFilter<'JobEscrow'> | Date | string;
+      job?: XOR<JobScalarRelationFilter, JobWhereInput>;
+      quote?: XOR<QuoteScalarRelationFilter, QuoteWhereInput>;
+      homeowner?: XOR<UserScalarRelationFilter, UserWhereInput>;
+      tradesman?: XOR<UserScalarRelationFilter, UserWhereInput>;
+      transactions?: EscrowTransactionListRelationFilter;
+    },
+    'id' | 'jobId' | 'quoteId'
+  >;
+
+  export type JobEscrowOrderByWithAggregationInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    quoteId?: SortOrder;
+    homeownerId?: SortOrder;
+    tradesmanId?: SortOrder;
+    currency?: SortOrder;
+    quoteTotal?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositAmount?: SortOrder;
+    balanceAmount?: SortOrder;
+    status?: SortOrder;
+    paymentMethod?: SortOrderInput | SortOrder;
+    paymentRef?: SortOrderInput | SortOrder;
+    fundedAt?: SortOrderInput | SortOrder;
+    materialsReleasedAt?: SortOrderInput | SortOrder;
+    workCompletedAt?: SortOrderInput | SortOrder;
+    releasedAt?: SortOrderInput | SortOrder;
+    refundedAt?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: JobEscrowCountOrderByAggregateInput;
+    _avg?: JobEscrowAvgOrderByAggregateInput;
+    _max?: JobEscrowMaxOrderByAggregateInput;
+    _min?: JobEscrowMinOrderByAggregateInput;
+    _sum?: JobEscrowSumOrderByAggregateInput;
+  };
+
+  export type JobEscrowScalarWhereWithAggregatesInput = {
+    AND?:
+      | JobEscrowScalarWhereWithAggregatesInput
+      | JobEscrowScalarWhereWithAggregatesInput[];
+    OR?: JobEscrowScalarWhereWithAggregatesInput[];
+    NOT?:
+      | JobEscrowScalarWhereWithAggregatesInput
+      | JobEscrowScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'JobEscrow'> | string;
+    jobId?: StringWithAggregatesFilter<'JobEscrow'> | string;
+    quoteId?: StringWithAggregatesFilter<'JobEscrow'> | string;
+    homeownerId?: StringWithAggregatesFilter<'JobEscrow'> | string;
+    tradesmanId?: StringWithAggregatesFilter<'JobEscrow'> | string;
+    currency?: StringWithAggregatesFilter<'JobEscrow'> | string;
+    quoteTotal?:
+      | DecimalWithAggregatesFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalWithAggregatesFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalWithAggregatesFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalWithAggregatesFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?:
+      | EnumEscrowStatusWithAggregatesFilter<'JobEscrow'>
+      | $Enums.EscrowStatus;
+    paymentMethod?:
+      | StringNullableWithAggregatesFilter<'JobEscrow'>
+      | string
+      | null;
+    paymentRef?:
+      | StringNullableWithAggregatesFilter<'JobEscrow'>
+      | string
+      | null;
+    fundedAt?:
+      | DateTimeNullableWithAggregatesFilter<'JobEscrow'>
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | DateTimeNullableWithAggregatesFilter<'JobEscrow'>
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | DateTimeNullableWithAggregatesFilter<'JobEscrow'>
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | DateTimeNullableWithAggregatesFilter<'JobEscrow'>
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | DateTimeNullableWithAggregatesFilter<'JobEscrow'>
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeWithAggregatesFilter<'JobEscrow'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'JobEscrow'> | Date | string;
+  };
+
+  export type EscrowTransactionWhereInput = {
+    AND?: EscrowTransactionWhereInput | EscrowTransactionWhereInput[];
+    OR?: EscrowTransactionWhereInput[];
+    NOT?: EscrowTransactionWhereInput | EscrowTransactionWhereInput[];
+    id?: StringFilter<'EscrowTransaction'> | string;
+    escrowId?: StringFilter<'EscrowTransaction'> | string;
+    type?:
+      | EnumEscrowTransactionTypeFilter<'EscrowTransaction'>
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalFilter<'EscrowTransaction'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?: StringNullableFilter<'EscrowTransaction'> | string | null;
+    createdAt?: DateTimeFilter<'EscrowTransaction'> | Date | string;
+    escrow?: XOR<JobEscrowScalarRelationFilter, JobEscrowWhereInput>;
+  };
+
+  export type EscrowTransactionOrderByWithRelationInput = {
+    id?: SortOrder;
+    escrowId?: SortOrder;
+    type?: SortOrder;
+    amount?: SortOrder;
+    note?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    escrow?: JobEscrowOrderByWithRelationInput;
+  };
+
+  export type EscrowTransactionWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: EscrowTransactionWhereInput | EscrowTransactionWhereInput[];
+      OR?: EscrowTransactionWhereInput[];
+      NOT?: EscrowTransactionWhereInput | EscrowTransactionWhereInput[];
+      escrowId?: StringFilter<'EscrowTransaction'> | string;
+      type?:
+        | EnumEscrowTransactionTypeFilter<'EscrowTransaction'>
+        | $Enums.EscrowTransactionType;
+      amount?:
+        | DecimalFilter<'EscrowTransaction'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string;
+      note?: StringNullableFilter<'EscrowTransaction'> | string | null;
+      createdAt?: DateTimeFilter<'EscrowTransaction'> | Date | string;
+      escrow?: XOR<JobEscrowScalarRelationFilter, JobEscrowWhereInput>;
+    },
+    'id'
+  >;
+
+  export type EscrowTransactionOrderByWithAggregationInput = {
+    id?: SortOrder;
+    escrowId?: SortOrder;
+    type?: SortOrder;
+    amount?: SortOrder;
+    note?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    _count?: EscrowTransactionCountOrderByAggregateInput;
+    _avg?: EscrowTransactionAvgOrderByAggregateInput;
+    _max?: EscrowTransactionMaxOrderByAggregateInput;
+    _min?: EscrowTransactionMinOrderByAggregateInput;
+    _sum?: EscrowTransactionSumOrderByAggregateInput;
+  };
+
+  export type EscrowTransactionScalarWhereWithAggregatesInput = {
+    AND?:
+      | EscrowTransactionScalarWhereWithAggregatesInput
+      | EscrowTransactionScalarWhereWithAggregatesInput[];
+    OR?: EscrowTransactionScalarWhereWithAggregatesInput[];
+    NOT?:
+      | EscrowTransactionScalarWhereWithAggregatesInput
+      | EscrowTransactionScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'EscrowTransaction'> | string;
+    escrowId?: StringWithAggregatesFilter<'EscrowTransaction'> | string;
+    type?:
+      | EnumEscrowTransactionTypeWithAggregatesFilter<'EscrowTransaction'>
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalWithAggregatesFilter<'EscrowTransaction'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?:
+      | StringNullableWithAggregatesFilter<'EscrowTransaction'>
+      | string
+      | null;
+    createdAt?:
+      | DateTimeWithAggregatesFilter<'EscrowTransaction'>
+      | Date
+      | string;
   };
 
   export type ConversationWhereInput = {
@@ -38014,6 +42070,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -38051,6 +42109,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUpdateInput = {
@@ -38105,6 +42165,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -38159,6 +42221,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -38826,6 +42890,7 @@ export namespace Prisma {
     jobsCancelled?: number;
     responseTimeMinutes?: number;
     isVerified?: boolean;
+    backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
     createdAt?: Date | string;
@@ -38852,6 +42917,7 @@ export namespace Prisma {
     jobsCancelled?: number;
     responseTimeMinutes?: number;
     isVerified?: boolean;
+    backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
     createdAt?: Date | string;
@@ -38899,6 +42965,7 @@ export namespace Prisma {
     jobsCancelled?: IntFieldUpdateOperationsInput | number;
     responseTimeMinutes?: IntFieldUpdateOperationsInput | number;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    backgroundChecked?: BoolFieldUpdateOperationsInput | boolean;
     isAvailable?: BoolFieldUpdateOperationsInput | boolean;
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
@@ -38950,6 +43017,7 @@ export namespace Prisma {
     jobsCancelled?: IntFieldUpdateOperationsInput | number;
     responseTimeMinutes?: IntFieldUpdateOperationsInput | number;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    backgroundChecked?: BoolFieldUpdateOperationsInput | boolean;
     isAvailable?: BoolFieldUpdateOperationsInput | boolean;
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
@@ -38977,6 +43045,7 @@ export namespace Prisma {
     jobsCancelled?: number;
     responseTimeMinutes?: number;
     isVerified?: boolean;
+    backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
     createdAt?: Date | string;
@@ -39023,6 +43092,7 @@ export namespace Prisma {
     jobsCancelled?: IntFieldUpdateOperationsInput | number;
     responseTimeMinutes?: IntFieldUpdateOperationsInput | number;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    backgroundChecked?: BoolFieldUpdateOperationsInput | boolean;
     isAvailable?: BoolFieldUpdateOperationsInput | boolean;
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
@@ -39072,6 +43142,7 @@ export namespace Prisma {
     jobsCancelled?: IntFieldUpdateOperationsInput | number;
     responseTimeMinutes?: IntFieldUpdateOperationsInput | number;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    backgroundChecked?: BoolFieldUpdateOperationsInput | boolean;
     isAvailable?: BoolFieldUpdateOperationsInput | boolean;
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
@@ -39356,6 +43427,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateInput = {
@@ -39390,6 +43462,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobUpdateInput = {
@@ -39468,6 +43541,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateInput = {
@@ -39549,6 +43623,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type JobCreateManyInput = {
@@ -39795,6 +43870,8 @@ export namespace Prisma {
   export type QuoteCreateInput = {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -39807,6 +43884,7 @@ export namespace Prisma {
     job: JobCreateNestedOneWithoutQuotesInput;
     tradesman: UserCreateNestedOneWithoutQuotesInput;
     acceptedForJob?: JobCreateNestedOneWithoutAcceptedQuoteInput;
+    escrow?: JobEscrowCreateNestedOneWithoutQuoteInput;
   };
 
   export type QuoteUncheckedCreateInput = {
@@ -39814,6 +43892,8 @@ export namespace Prisma {
     jobId: string;
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -39824,6 +43904,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     acceptedForJob?: JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutQuoteInput;
   };
 
   export type QuoteUpdateInput = {
@@ -39834,6 +43915,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -39862,6 +43957,7 @@ export namespace Prisma {
     job?: JobUpdateOneRequiredWithoutQuotesNestedInput;
     tradesman?: UserUpdateOneRequiredWithoutQuotesNestedInput;
     acceptedForJob?: JobUpdateOneWithoutAcceptedQuoteNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateInput = {
@@ -39874,6 +43970,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -39900,6 +44010,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     acceptedForJob?: JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
   };
 
   export type QuoteCreateManyInput = {
@@ -39907,6 +44018,8 @@ export namespace Prisma {
     jobId: string;
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -39926,6 +44039,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -39963,6 +44090,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -39988,6 +44129,417 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type JobEscrowCreateInput = {
+    id?: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    job: JobCreateNestedOneWithoutEscrowInput;
+    quote: QuoteCreateNestedOneWithoutEscrowInput;
+    homeowner: UserCreateNestedOneWithoutEscrowsAsHomeownerInput;
+    tradesman: UserCreateNestedOneWithoutEscrowsAsTradesmanInput;
+    transactions?: EscrowTransactionCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowUncheckedCreateInput = {
+    id?: string;
+    jobId: string;
+    quoteId: string;
+    homeownerId: string;
+    tradesmanId: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    transactions?: EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    job?: JobUpdateOneRequiredWithoutEscrowNestedInput;
+    quote?: QuoteUpdateOneRequiredWithoutEscrowNestedInput;
+    homeowner?: UserUpdateOneRequiredWithoutEscrowsAsHomeownerNestedInput;
+    tradesman?: UserUpdateOneRequiredWithoutEscrowsAsTradesmanNestedInput;
+    transactions?: EscrowTransactionUpdateManyWithoutEscrowNestedInput;
+  };
+
+  export type JobEscrowUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    homeownerId?: StringFieldUpdateOperationsInput | string;
+    tradesmanId?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    transactions?: EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput;
+  };
+
+  export type JobEscrowCreateManyInput = {
+    id?: string;
+    jobId: string;
+    quoteId: string;
+    homeownerId: string;
+    tradesmanId: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type JobEscrowUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type JobEscrowUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    homeownerId?: StringFieldUpdateOperationsInput | string;
+    tradesmanId?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EscrowTransactionCreateInput = {
+    id?: string;
+    type: $Enums.EscrowTransactionType;
+    amount: Decimal | DecimalJsLike | number | string;
+    note?: string | null;
+    createdAt?: Date | string;
+    escrow: JobEscrowCreateNestedOneWithoutTransactionsInput;
+  };
+
+  export type EscrowTransactionUncheckedCreateInput = {
+    id?: string;
+    escrowId: string;
+    type: $Enums.EscrowTransactionType;
+    amount: Decimal | DecimalJsLike | number | string;
+    note?: string | null;
+    createdAt?: Date | string;
+  };
+
+  export type EscrowTransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?:
+      | EnumEscrowTransactionTypeFieldUpdateOperationsInput
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    escrow?: JobEscrowUpdateOneRequiredWithoutTransactionsNestedInput;
+  };
+
+  export type EscrowTransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    escrowId?: StringFieldUpdateOperationsInput | string;
+    type?:
+      | EnumEscrowTransactionTypeFieldUpdateOperationsInput
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EscrowTransactionCreateManyInput = {
+    id?: string;
+    escrowId: string;
+    type: $Enums.EscrowTransactionType;
+    amount: Decimal | DecimalJsLike | number | string;
+    note?: string | null;
+    createdAt?: Date | string;
+  };
+
+  export type EscrowTransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?:
+      | EnumEscrowTransactionTypeFieldUpdateOperationsInput
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EscrowTransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    escrowId?: StringFieldUpdateOperationsInput | string;
+    type?:
+      | EnumEscrowTransactionTypeFieldUpdateOperationsInput
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type ConversationCreateInput = {
@@ -40839,6 +45391,12 @@ export namespace Prisma {
     none?: ConversationParticipantWhereInput;
   };
 
+  export type JobEscrowListRelationFilter = {
+    every?: JobEscrowWhereInput;
+    some?: JobEscrowWhereInput;
+    none?: JobEscrowWhereInput;
+  };
+
   export type SortOrderInput = {
     sort: SortOrder;
     nulls?: NullsOrder;
@@ -40881,6 +45439,10 @@ export namespace Prisma {
   };
 
   export type ConversationParticipantOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type JobEscrowOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -41459,6 +46021,7 @@ export namespace Prisma {
     jobsCancelled?: SortOrder;
     responseTimeMinutes?: SortOrder;
     isVerified?: SortOrder;
+    backgroundChecked?: SortOrder;
     isAvailable?: SortOrder;
     preferredLanguage?: SortOrder;
     createdAt?: SortOrder;
@@ -41496,6 +46059,7 @@ export namespace Prisma {
     jobsCancelled?: SortOrder;
     responseTimeMinutes?: SortOrder;
     isVerified?: SortOrder;
+    backgroundChecked?: SortOrder;
     isAvailable?: SortOrder;
     preferredLanguage?: SortOrder;
     createdAt?: SortOrder;
@@ -41520,6 +46084,7 @@ export namespace Prisma {
     jobsCancelled?: SortOrder;
     responseTimeMinutes?: SortOrder;
     isVerified?: SortOrder;
+    backgroundChecked?: SortOrder;
     isAvailable?: SortOrder;
     preferredLanguage?: SortOrder;
     createdAt?: SortOrder;
@@ -41889,6 +46454,11 @@ export namespace Prisma {
     none?: ConversationWhereInput;
   };
 
+  export type JobEscrowNullableScalarRelationFilter = {
+    is?: JobEscrowWhereInput | null;
+    isNot?: JobEscrowWhereInput | null;
+  };
+
   export type ConversationOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -42121,6 +46691,8 @@ export namespace Prisma {
     jobId?: SortOrder;
     tradesmanId?: SortOrder;
     amount?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositRequested?: SortOrder;
     currency?: SortOrder;
     message?: SortOrder;
     estimatedStart?: SortOrder;
@@ -42134,6 +46706,8 @@ export namespace Prisma {
 
   export type QuoteAvgOrderByAggregateInput = {
     amount?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositRequested?: SortOrder;
   };
 
   export type QuoteMaxOrderByAggregateInput = {
@@ -42141,6 +46715,8 @@ export namespace Prisma {
     jobId?: SortOrder;
     tradesmanId?: SortOrder;
     amount?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositRequested?: SortOrder;
     currency?: SortOrder;
     message?: SortOrder;
     estimatedStart?: SortOrder;
@@ -42157,6 +46733,8 @@ export namespace Prisma {
     jobId?: SortOrder;
     tradesmanId?: SortOrder;
     amount?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositRequested?: SortOrder;
     currency?: SortOrder;
     message?: SortOrder;
     estimatedStart?: SortOrder;
@@ -42170,6 +46748,8 @@ export namespace Prisma {
 
   export type QuoteSumOrderByAggregateInput = {
     amount?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositRequested?: SortOrder;
   };
 
   export type EnumQuoteStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -42184,6 +46764,206 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumQuoteStatusFilter<$PrismaModel>;
     _max?: NestedEnumQuoteStatusFilter<$PrismaModel>;
+  };
+
+  export type EnumEscrowStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EscrowStatus | EnumEscrowStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.EscrowStatus[]
+      | ListEnumEscrowStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.EscrowStatus[]
+      | ListEnumEscrowStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumEscrowStatusFilter<$PrismaModel> | $Enums.EscrowStatus;
+  };
+
+  export type QuoteScalarRelationFilter = {
+    is?: QuoteWhereInput;
+    isNot?: QuoteWhereInput;
+  };
+
+  export type EscrowTransactionListRelationFilter = {
+    every?: EscrowTransactionWhereInput;
+    some?: EscrowTransactionWhereInput;
+    none?: EscrowTransactionWhereInput;
+  };
+
+  export type EscrowTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type JobEscrowCountOrderByAggregateInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    quoteId?: SortOrder;
+    homeownerId?: SortOrder;
+    tradesmanId?: SortOrder;
+    currency?: SortOrder;
+    quoteTotal?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositAmount?: SortOrder;
+    balanceAmount?: SortOrder;
+    status?: SortOrder;
+    paymentMethod?: SortOrder;
+    paymentRef?: SortOrder;
+    fundedAt?: SortOrder;
+    materialsReleasedAt?: SortOrder;
+    workCompletedAt?: SortOrder;
+    releasedAt?: SortOrder;
+    refundedAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type JobEscrowAvgOrderByAggregateInput = {
+    quoteTotal?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositAmount?: SortOrder;
+    balanceAmount?: SortOrder;
+  };
+
+  export type JobEscrowMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    quoteId?: SortOrder;
+    homeownerId?: SortOrder;
+    tradesmanId?: SortOrder;
+    currency?: SortOrder;
+    quoteTotal?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositAmount?: SortOrder;
+    balanceAmount?: SortOrder;
+    status?: SortOrder;
+    paymentMethod?: SortOrder;
+    paymentRef?: SortOrder;
+    fundedAt?: SortOrder;
+    materialsReleasedAt?: SortOrder;
+    workCompletedAt?: SortOrder;
+    releasedAt?: SortOrder;
+    refundedAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type JobEscrowMinOrderByAggregateInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    quoteId?: SortOrder;
+    homeownerId?: SortOrder;
+    tradesmanId?: SortOrder;
+    currency?: SortOrder;
+    quoteTotal?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositAmount?: SortOrder;
+    balanceAmount?: SortOrder;
+    status?: SortOrder;
+    paymentMethod?: SortOrder;
+    paymentRef?: SortOrder;
+    fundedAt?: SortOrder;
+    materialsReleasedAt?: SortOrder;
+    workCompletedAt?: SortOrder;
+    releasedAt?: SortOrder;
+    refundedAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type JobEscrowSumOrderByAggregateInput = {
+    quoteTotal?: SortOrder;
+    materialsAmount?: SortOrder;
+    depositAmount?: SortOrder;
+    balanceAmount?: SortOrder;
+  };
+
+  export type EnumEscrowStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EscrowStatus | EnumEscrowStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.EscrowStatus[]
+      | ListEnumEscrowStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.EscrowStatus[]
+      | ListEnumEscrowStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumEscrowStatusWithAggregatesFilter<$PrismaModel>
+      | $Enums.EscrowStatus;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumEscrowStatusFilter<$PrismaModel>;
+    _max?: NestedEnumEscrowStatusFilter<$PrismaModel>;
+  };
+
+  export type EnumEscrowTransactionTypeFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.EscrowTransactionType
+      | EnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.EscrowTransactionType[]
+      | ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.EscrowTransactionType[]
+      | ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumEscrowTransactionTypeFilter<$PrismaModel>
+      | $Enums.EscrowTransactionType;
+  };
+
+  export type JobEscrowScalarRelationFilter = {
+    is?: JobEscrowWhereInput;
+    isNot?: JobEscrowWhereInput;
+  };
+
+  export type EscrowTransactionCountOrderByAggregateInput = {
+    id?: SortOrder;
+    escrowId?: SortOrder;
+    type?: SortOrder;
+    amount?: SortOrder;
+    note?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type EscrowTransactionAvgOrderByAggregateInput = {
+    amount?: SortOrder;
+  };
+
+  export type EscrowTransactionMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    escrowId?: SortOrder;
+    type?: SortOrder;
+    amount?: SortOrder;
+    note?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type EscrowTransactionMinOrderByAggregateInput = {
+    id?: SortOrder;
+    escrowId?: SortOrder;
+    type?: SortOrder;
+    amount?: SortOrder;
+    note?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type EscrowTransactionSumOrderByAggregateInput = {
+    amount?: SortOrder;
+  };
+
+  export type EnumEscrowTransactionTypeWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?:
+      | $Enums.EscrowTransactionType
+      | EnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.EscrowTransactionType[]
+      | ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.EscrowTransactionType[]
+      | ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumEscrowTransactionTypeWithAggregatesFilter<$PrismaModel>
+      | $Enums.EscrowTransactionType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumEscrowTransactionTypeFilter<$PrismaModel>;
+    _max?: NestedEnumEscrowTransactionTypeFilter<$PrismaModel>;
   };
 
   export type EnumConversationTypeFilter<$PrismaModel = never> = {
@@ -42930,6 +47710,36 @@ export namespace Prisma {
       | ConversationParticipantWhereUniqueInput[];
   };
 
+  export type JobEscrowCreateNestedManyWithoutHomeownerInput = {
+    create?:
+      | XOR<
+          JobEscrowCreateWithoutHomeownerInput,
+          JobEscrowUncheckedCreateWithoutHomeownerInput
+        >
+      | JobEscrowCreateWithoutHomeownerInput[]
+      | JobEscrowUncheckedCreateWithoutHomeownerInput[];
+    connectOrCreate?:
+      | JobEscrowCreateOrConnectWithoutHomeownerInput
+      | JobEscrowCreateOrConnectWithoutHomeownerInput[];
+    createMany?: JobEscrowCreateManyHomeownerInputEnvelope;
+    connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+  };
+
+  export type JobEscrowCreateNestedManyWithoutTradesmanInput = {
+    create?:
+      | XOR<
+          JobEscrowCreateWithoutTradesmanInput,
+          JobEscrowUncheckedCreateWithoutTradesmanInput
+        >
+      | JobEscrowCreateWithoutTradesmanInput[]
+      | JobEscrowUncheckedCreateWithoutTradesmanInput[];
+    connectOrCreate?:
+      | JobEscrowCreateOrConnectWithoutTradesmanInput
+      | JobEscrowCreateOrConnectWithoutTradesmanInput[];
+    createMany?: JobEscrowCreateManyTradesmanInputEnvelope;
+    connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+  };
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<
@@ -43163,6 +47973,36 @@ export namespace Prisma {
         | ConversationParticipantWhereUniqueInput
         | ConversationParticipantWhereUniqueInput[];
     };
+
+  export type JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput = {
+    create?:
+      | XOR<
+          JobEscrowCreateWithoutHomeownerInput,
+          JobEscrowUncheckedCreateWithoutHomeownerInput
+        >
+      | JobEscrowCreateWithoutHomeownerInput[]
+      | JobEscrowUncheckedCreateWithoutHomeownerInput[];
+    connectOrCreate?:
+      | JobEscrowCreateOrConnectWithoutHomeownerInput
+      | JobEscrowCreateOrConnectWithoutHomeownerInput[];
+    createMany?: JobEscrowCreateManyHomeownerInputEnvelope;
+    connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+  };
+
+  export type JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput = {
+    create?:
+      | XOR<
+          JobEscrowCreateWithoutTradesmanInput,
+          JobEscrowUncheckedCreateWithoutTradesmanInput
+        >
+      | JobEscrowCreateWithoutTradesmanInput[]
+      | JobEscrowUncheckedCreateWithoutTradesmanInput[];
+    connectOrCreate?:
+      | JobEscrowCreateOrConnectWithoutTradesmanInput
+      | JobEscrowCreateOrConnectWithoutTradesmanInput[];
+    createMany?: JobEscrowCreateManyTradesmanInputEnvelope;
+    connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+  };
 
   export type StringFieldUpdateOperationsInput = {
     set?: string;
@@ -43646,6 +48486,62 @@ export namespace Prisma {
       | ConversationParticipantScalarWhereInput[];
   };
 
+  export type JobEscrowUpdateManyWithoutHomeownerNestedInput = {
+    create?:
+      | XOR<
+          JobEscrowCreateWithoutHomeownerInput,
+          JobEscrowUncheckedCreateWithoutHomeownerInput
+        >
+      | JobEscrowCreateWithoutHomeownerInput[]
+      | JobEscrowUncheckedCreateWithoutHomeownerInput[];
+    connectOrCreate?:
+      | JobEscrowCreateOrConnectWithoutHomeownerInput
+      | JobEscrowCreateOrConnectWithoutHomeownerInput[];
+    upsert?:
+      | JobEscrowUpsertWithWhereUniqueWithoutHomeownerInput
+      | JobEscrowUpsertWithWhereUniqueWithoutHomeownerInput[];
+    createMany?: JobEscrowCreateManyHomeownerInputEnvelope;
+    set?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    disconnect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    delete?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    update?:
+      | JobEscrowUpdateWithWhereUniqueWithoutHomeownerInput
+      | JobEscrowUpdateWithWhereUniqueWithoutHomeownerInput[];
+    updateMany?:
+      | JobEscrowUpdateManyWithWhereWithoutHomeownerInput
+      | JobEscrowUpdateManyWithWhereWithoutHomeownerInput[];
+    deleteMany?: JobEscrowScalarWhereInput | JobEscrowScalarWhereInput[];
+  };
+
+  export type JobEscrowUpdateManyWithoutTradesmanNestedInput = {
+    create?:
+      | XOR<
+          JobEscrowCreateWithoutTradesmanInput,
+          JobEscrowUncheckedCreateWithoutTradesmanInput
+        >
+      | JobEscrowCreateWithoutTradesmanInput[]
+      | JobEscrowUncheckedCreateWithoutTradesmanInput[];
+    connectOrCreate?:
+      | JobEscrowCreateOrConnectWithoutTradesmanInput
+      | JobEscrowCreateOrConnectWithoutTradesmanInput[];
+    upsert?:
+      | JobEscrowUpsertWithWhereUniqueWithoutTradesmanInput
+      | JobEscrowUpsertWithWhereUniqueWithoutTradesmanInput[];
+    createMany?: JobEscrowCreateManyTradesmanInputEnvelope;
+    set?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    disconnect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    delete?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    update?:
+      | JobEscrowUpdateWithWhereUniqueWithoutTradesmanInput
+      | JobEscrowUpdateWithWhereUniqueWithoutTradesmanInput[];
+    updateMany?:
+      | JobEscrowUpdateManyWithWhereWithoutTradesmanInput
+      | JobEscrowUpdateManyWithWhereWithoutTradesmanInput[];
+    deleteMany?: JobEscrowScalarWhereInput | JobEscrowScalarWhereInput[];
+  };
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<
@@ -44097,6 +48993,62 @@ export namespace Prisma {
         | ConversationParticipantScalarWhereInput
         | ConversationParticipantScalarWhereInput[];
     };
+
+  export type JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput = {
+    create?:
+      | XOR<
+          JobEscrowCreateWithoutHomeownerInput,
+          JobEscrowUncheckedCreateWithoutHomeownerInput
+        >
+      | JobEscrowCreateWithoutHomeownerInput[]
+      | JobEscrowUncheckedCreateWithoutHomeownerInput[];
+    connectOrCreate?:
+      | JobEscrowCreateOrConnectWithoutHomeownerInput
+      | JobEscrowCreateOrConnectWithoutHomeownerInput[];
+    upsert?:
+      | JobEscrowUpsertWithWhereUniqueWithoutHomeownerInput
+      | JobEscrowUpsertWithWhereUniqueWithoutHomeownerInput[];
+    createMany?: JobEscrowCreateManyHomeownerInputEnvelope;
+    set?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    disconnect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    delete?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    update?:
+      | JobEscrowUpdateWithWhereUniqueWithoutHomeownerInput
+      | JobEscrowUpdateWithWhereUniqueWithoutHomeownerInput[];
+    updateMany?:
+      | JobEscrowUpdateManyWithWhereWithoutHomeownerInput
+      | JobEscrowUpdateManyWithWhereWithoutHomeownerInput[];
+    deleteMany?: JobEscrowScalarWhereInput | JobEscrowScalarWhereInput[];
+  };
+
+  export type JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput = {
+    create?:
+      | XOR<
+          JobEscrowCreateWithoutTradesmanInput,
+          JobEscrowUncheckedCreateWithoutTradesmanInput
+        >
+      | JobEscrowCreateWithoutTradesmanInput[]
+      | JobEscrowUncheckedCreateWithoutTradesmanInput[];
+    connectOrCreate?:
+      | JobEscrowCreateOrConnectWithoutTradesmanInput
+      | JobEscrowCreateOrConnectWithoutTradesmanInput[];
+    upsert?:
+      | JobEscrowUpsertWithWhereUniqueWithoutTradesmanInput
+      | JobEscrowUpsertWithWhereUniqueWithoutTradesmanInput[];
+    createMany?: JobEscrowCreateManyTradesmanInputEnvelope;
+    set?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    disconnect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    delete?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    connect?: JobEscrowWhereUniqueInput | JobEscrowWhereUniqueInput[];
+    update?:
+      | JobEscrowUpdateWithWhereUniqueWithoutTradesmanInput
+      | JobEscrowUpdateWithWhereUniqueWithoutTradesmanInput[];
+    updateMany?:
+      | JobEscrowUpdateManyWithWhereWithoutTradesmanInput
+      | JobEscrowUpdateManyWithWhereWithoutTradesmanInput[];
+    deleteMany?: JobEscrowScalarWhereInput | JobEscrowScalarWhereInput[];
+  };
 
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<
@@ -45138,6 +50090,15 @@ export namespace Prisma {
     connect?: ReportWhereUniqueInput | ReportWhereUniqueInput[];
   };
 
+  export type JobEscrowCreateNestedOneWithoutJobInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutJobInput,
+      JobEscrowUncheckedCreateWithoutJobInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutJobInput;
+    connect?: JobEscrowWhereUniqueInput;
+  };
+
   export type QuoteUncheckedCreateNestedManyWithoutJobInput = {
     create?:
       | XOR<QuoteCreateWithoutJobInput, QuoteUncheckedCreateWithoutJobInput>
@@ -45219,6 +50180,15 @@ export namespace Prisma {
       | ReportCreateOrConnectWithoutJobInput[];
     createMany?: ReportCreateManyJobInputEnvelope;
     connect?: ReportWhereUniqueInput | ReportWhereUniqueInput[];
+  };
+
+  export type JobEscrowUncheckedCreateNestedOneWithoutJobInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutJobInput,
+      JobEscrowUncheckedCreateWithoutJobInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutJobInput;
+    connect?: JobEscrowWhereUniqueInput;
   };
 
   export type EnumJobUrgencyFieldUpdateOperationsInput = {
@@ -45491,6 +50461,25 @@ export namespace Prisma {
     deleteMany?: ReportScalarWhereInput | ReportScalarWhereInput[];
   };
 
+  export type JobEscrowUpdateOneWithoutJobNestedInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutJobInput,
+      JobEscrowUncheckedCreateWithoutJobInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutJobInput;
+    upsert?: JobEscrowUpsertWithoutJobInput;
+    disconnect?: JobEscrowWhereInput | boolean;
+    delete?: JobEscrowWhereInput | boolean;
+    connect?: JobEscrowWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        JobEscrowUpdateToOneWithWhereWithoutJobInput,
+        JobEscrowUpdateWithoutJobInput
+      >,
+      JobEscrowUncheckedUpdateWithoutJobInput
+    >;
+  };
+
   export type QuoteUncheckedUpdateManyWithoutJobNestedInput = {
     create?:
       | XOR<QuoteCreateWithoutJobInput, QuoteUncheckedCreateWithoutJobInput>
@@ -45660,6 +50649,25 @@ export namespace Prisma {
     deleteMany?: ReportScalarWhereInput | ReportScalarWhereInput[];
   };
 
+  export type JobEscrowUncheckedUpdateOneWithoutJobNestedInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutJobInput,
+      JobEscrowUncheckedCreateWithoutJobInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutJobInput;
+    upsert?: JobEscrowUpsertWithoutJobInput;
+    disconnect?: JobEscrowWhereInput | boolean;
+    delete?: JobEscrowWhereInput | boolean;
+    connect?: JobEscrowWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        JobEscrowUpdateToOneWithWhereWithoutJobInput,
+        JobEscrowUpdateWithoutJobInput
+      >,
+      JobEscrowUncheckedUpdateWithoutJobInput
+    >;
+  };
+
   export type JobCreateNestedOneWithoutSkillsInput = {
     create?: XOR<
       JobCreateWithoutSkillsInput,
@@ -45739,6 +50747,15 @@ export namespace Prisma {
     connect?: JobWhereUniqueInput;
   };
 
+  export type JobEscrowCreateNestedOneWithoutQuoteInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutQuoteInput,
+      JobEscrowUncheckedCreateWithoutQuoteInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutQuoteInput;
+    connect?: JobEscrowWhereUniqueInput;
+  };
+
   export type JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput = {
     create?: XOR<
       JobCreateWithoutAcceptedQuoteInput,
@@ -45746,6 +50763,15 @@ export namespace Prisma {
     >;
     connectOrCreate?: JobCreateOrConnectWithoutAcceptedQuoteInput;
     connect?: JobWhereUniqueInput;
+  };
+
+  export type JobEscrowUncheckedCreateNestedOneWithoutQuoteInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutQuoteInput,
+      JobEscrowUncheckedCreateWithoutQuoteInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutQuoteInput;
+    connect?: JobEscrowWhereUniqueInput;
   };
 
   export type EnumQuoteStatusFieldUpdateOperationsInput = {
@@ -45805,6 +50831,25 @@ export namespace Prisma {
     >;
   };
 
+  export type JobEscrowUpdateOneWithoutQuoteNestedInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutQuoteInput,
+      JobEscrowUncheckedCreateWithoutQuoteInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutQuoteInput;
+    upsert?: JobEscrowUpsertWithoutQuoteInput;
+    disconnect?: JobEscrowWhereInput | boolean;
+    delete?: JobEscrowWhereInput | boolean;
+    connect?: JobEscrowWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        JobEscrowUpdateToOneWithWhereWithoutQuoteInput,
+        JobEscrowUpdateWithoutQuoteInput
+      >,
+      JobEscrowUncheckedUpdateWithoutQuoteInput
+    >;
+  };
+
   export type JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput = {
     create?: XOR<
       JobCreateWithoutAcceptedQuoteInput,
@@ -45821,6 +50866,273 @@ export namespace Prisma {
         JobUpdateWithoutAcceptedQuoteInput
       >,
       JobUncheckedUpdateWithoutAcceptedQuoteInput
+    >;
+  };
+
+  export type JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutQuoteInput,
+      JobEscrowUncheckedCreateWithoutQuoteInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutQuoteInput;
+    upsert?: JobEscrowUpsertWithoutQuoteInput;
+    disconnect?: JobEscrowWhereInput | boolean;
+    delete?: JobEscrowWhereInput | boolean;
+    connect?: JobEscrowWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        JobEscrowUpdateToOneWithWhereWithoutQuoteInput,
+        JobEscrowUpdateWithoutQuoteInput
+      >,
+      JobEscrowUncheckedUpdateWithoutQuoteInput
+    >;
+  };
+
+  export type JobCreateNestedOneWithoutEscrowInput = {
+    create?: XOR<
+      JobCreateWithoutEscrowInput,
+      JobUncheckedCreateWithoutEscrowInput
+    >;
+    connectOrCreate?: JobCreateOrConnectWithoutEscrowInput;
+    connect?: JobWhereUniqueInput;
+  };
+
+  export type QuoteCreateNestedOneWithoutEscrowInput = {
+    create?: XOR<
+      QuoteCreateWithoutEscrowInput,
+      QuoteUncheckedCreateWithoutEscrowInput
+    >;
+    connectOrCreate?: QuoteCreateOrConnectWithoutEscrowInput;
+    connect?: QuoteWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutEscrowsAsHomeownerInput = {
+    create?: XOR<
+      UserCreateWithoutEscrowsAsHomeownerInput,
+      UserUncheckedCreateWithoutEscrowsAsHomeownerInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEscrowsAsHomeownerInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutEscrowsAsTradesmanInput = {
+    create?: XOR<
+      UserCreateWithoutEscrowsAsTradesmanInput,
+      UserUncheckedCreateWithoutEscrowsAsTradesmanInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEscrowsAsTradesmanInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type EscrowTransactionCreateNestedManyWithoutEscrowInput = {
+    create?:
+      | XOR<
+          EscrowTransactionCreateWithoutEscrowInput,
+          EscrowTransactionUncheckedCreateWithoutEscrowInput
+        >
+      | EscrowTransactionCreateWithoutEscrowInput[]
+      | EscrowTransactionUncheckedCreateWithoutEscrowInput[];
+    connectOrCreate?:
+      | EscrowTransactionCreateOrConnectWithoutEscrowInput
+      | EscrowTransactionCreateOrConnectWithoutEscrowInput[];
+    createMany?: EscrowTransactionCreateManyEscrowInputEnvelope;
+    connect?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+  };
+
+  export type EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput = {
+    create?:
+      | XOR<
+          EscrowTransactionCreateWithoutEscrowInput,
+          EscrowTransactionUncheckedCreateWithoutEscrowInput
+        >
+      | EscrowTransactionCreateWithoutEscrowInput[]
+      | EscrowTransactionUncheckedCreateWithoutEscrowInput[];
+    connectOrCreate?:
+      | EscrowTransactionCreateOrConnectWithoutEscrowInput
+      | EscrowTransactionCreateOrConnectWithoutEscrowInput[];
+    createMany?: EscrowTransactionCreateManyEscrowInputEnvelope;
+    connect?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+  };
+
+  export type EnumEscrowStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EscrowStatus;
+  };
+
+  export type JobUpdateOneRequiredWithoutEscrowNestedInput = {
+    create?: XOR<
+      JobCreateWithoutEscrowInput,
+      JobUncheckedCreateWithoutEscrowInput
+    >;
+    connectOrCreate?: JobCreateOrConnectWithoutEscrowInput;
+    upsert?: JobUpsertWithoutEscrowInput;
+    connect?: JobWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        JobUpdateToOneWithWhereWithoutEscrowInput,
+        JobUpdateWithoutEscrowInput
+      >,
+      JobUncheckedUpdateWithoutEscrowInput
+    >;
+  };
+
+  export type QuoteUpdateOneRequiredWithoutEscrowNestedInput = {
+    create?: XOR<
+      QuoteCreateWithoutEscrowInput,
+      QuoteUncheckedCreateWithoutEscrowInput
+    >;
+    connectOrCreate?: QuoteCreateOrConnectWithoutEscrowInput;
+    upsert?: QuoteUpsertWithoutEscrowInput;
+    connect?: QuoteWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        QuoteUpdateToOneWithWhereWithoutEscrowInput,
+        QuoteUpdateWithoutEscrowInput
+      >,
+      QuoteUncheckedUpdateWithoutEscrowInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutEscrowsAsHomeownerNestedInput = {
+    create?: XOR<
+      UserCreateWithoutEscrowsAsHomeownerInput,
+      UserUncheckedCreateWithoutEscrowsAsHomeownerInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEscrowsAsHomeownerInput;
+    upsert?: UserUpsertWithoutEscrowsAsHomeownerInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutEscrowsAsHomeownerInput,
+        UserUpdateWithoutEscrowsAsHomeownerInput
+      >,
+      UserUncheckedUpdateWithoutEscrowsAsHomeownerInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutEscrowsAsTradesmanNestedInput = {
+    create?: XOR<
+      UserCreateWithoutEscrowsAsTradesmanInput,
+      UserUncheckedCreateWithoutEscrowsAsTradesmanInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutEscrowsAsTradesmanInput;
+    upsert?: UserUpsertWithoutEscrowsAsTradesmanInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutEscrowsAsTradesmanInput,
+        UserUpdateWithoutEscrowsAsTradesmanInput
+      >,
+      UserUncheckedUpdateWithoutEscrowsAsTradesmanInput
+    >;
+  };
+
+  export type EscrowTransactionUpdateManyWithoutEscrowNestedInput = {
+    create?:
+      | XOR<
+          EscrowTransactionCreateWithoutEscrowInput,
+          EscrowTransactionUncheckedCreateWithoutEscrowInput
+        >
+      | EscrowTransactionCreateWithoutEscrowInput[]
+      | EscrowTransactionUncheckedCreateWithoutEscrowInput[];
+    connectOrCreate?:
+      | EscrowTransactionCreateOrConnectWithoutEscrowInput
+      | EscrowTransactionCreateOrConnectWithoutEscrowInput[];
+    upsert?:
+      | EscrowTransactionUpsertWithWhereUniqueWithoutEscrowInput
+      | EscrowTransactionUpsertWithWhereUniqueWithoutEscrowInput[];
+    createMany?: EscrowTransactionCreateManyEscrowInputEnvelope;
+    set?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+    disconnect?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+    delete?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+    connect?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+    update?:
+      | EscrowTransactionUpdateWithWhereUniqueWithoutEscrowInput
+      | EscrowTransactionUpdateWithWhereUniqueWithoutEscrowInput[];
+    updateMany?:
+      | EscrowTransactionUpdateManyWithWhereWithoutEscrowInput
+      | EscrowTransactionUpdateManyWithWhereWithoutEscrowInput[];
+    deleteMany?:
+      | EscrowTransactionScalarWhereInput
+      | EscrowTransactionScalarWhereInput[];
+  };
+
+  export type EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput = {
+    create?:
+      | XOR<
+          EscrowTransactionCreateWithoutEscrowInput,
+          EscrowTransactionUncheckedCreateWithoutEscrowInput
+        >
+      | EscrowTransactionCreateWithoutEscrowInput[]
+      | EscrowTransactionUncheckedCreateWithoutEscrowInput[];
+    connectOrCreate?:
+      | EscrowTransactionCreateOrConnectWithoutEscrowInput
+      | EscrowTransactionCreateOrConnectWithoutEscrowInput[];
+    upsert?:
+      | EscrowTransactionUpsertWithWhereUniqueWithoutEscrowInput
+      | EscrowTransactionUpsertWithWhereUniqueWithoutEscrowInput[];
+    createMany?: EscrowTransactionCreateManyEscrowInputEnvelope;
+    set?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+    disconnect?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+    delete?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+    connect?:
+      | EscrowTransactionWhereUniqueInput
+      | EscrowTransactionWhereUniqueInput[];
+    update?:
+      | EscrowTransactionUpdateWithWhereUniqueWithoutEscrowInput
+      | EscrowTransactionUpdateWithWhereUniqueWithoutEscrowInput[];
+    updateMany?:
+      | EscrowTransactionUpdateManyWithWhereWithoutEscrowInput
+      | EscrowTransactionUpdateManyWithWhereWithoutEscrowInput[];
+    deleteMany?:
+      | EscrowTransactionScalarWhereInput
+      | EscrowTransactionScalarWhereInput[];
+  };
+
+  export type JobEscrowCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutTransactionsInput,
+      JobEscrowUncheckedCreateWithoutTransactionsInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutTransactionsInput;
+    connect?: JobEscrowWhereUniqueInput;
+  };
+
+  export type EnumEscrowTransactionTypeFieldUpdateOperationsInput = {
+    set?: $Enums.EscrowTransactionType;
+  };
+
+  export type JobEscrowUpdateOneRequiredWithoutTransactionsNestedInput = {
+    create?: XOR<
+      JobEscrowCreateWithoutTransactionsInput,
+      JobEscrowUncheckedCreateWithoutTransactionsInput
+    >;
+    connectOrCreate?: JobEscrowCreateOrConnectWithoutTransactionsInput;
+    upsert?: JobEscrowUpsertWithoutTransactionsInput;
+    connect?: JobEscrowWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        JobEscrowUpdateToOneWithWhereWithoutTransactionsInput,
+        JobEscrowUpdateWithoutTransactionsInput
+      >,
+      JobEscrowUncheckedUpdateWithoutTransactionsInput
     >;
   };
 
@@ -47245,6 +52557,71 @@ export namespace Prisma {
       _max?: NestedEnumQuoteStatusFilter<$PrismaModel>;
     };
 
+  export type NestedEnumEscrowStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EscrowStatus | EnumEscrowStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.EscrowStatus[]
+      | ListEnumEscrowStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.EscrowStatus[]
+      | ListEnumEscrowStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumEscrowStatusFilter<$PrismaModel> | $Enums.EscrowStatus;
+  };
+
+  export type NestedEnumEscrowStatusWithAggregatesFilter<$PrismaModel = never> =
+    {
+      equals?:
+        | $Enums.EscrowStatus
+        | EnumEscrowStatusFieldRefInput<$PrismaModel>;
+      in?:
+        | $Enums.EscrowStatus[]
+        | ListEnumEscrowStatusFieldRefInput<$PrismaModel>;
+      notIn?:
+        | $Enums.EscrowStatus[]
+        | ListEnumEscrowStatusFieldRefInput<$PrismaModel>;
+      not?:
+        | NestedEnumEscrowStatusWithAggregatesFilter<$PrismaModel>
+        | $Enums.EscrowStatus;
+      _count?: NestedIntFilter<$PrismaModel>;
+      _min?: NestedEnumEscrowStatusFilter<$PrismaModel>;
+      _max?: NestedEnumEscrowStatusFilter<$PrismaModel>;
+    };
+
+  export type NestedEnumEscrowTransactionTypeFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.EscrowTransactionType
+      | EnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.EscrowTransactionType[]
+      | ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.EscrowTransactionType[]
+      | ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumEscrowTransactionTypeFilter<$PrismaModel>
+      | $Enums.EscrowTransactionType;
+  };
+
+  export type NestedEnumEscrowTransactionTypeWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?:
+      | $Enums.EscrowTransactionType
+      | EnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.EscrowTransactionType[]
+      | ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.EscrowTransactionType[]
+      | ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumEscrowTransactionTypeWithAggregatesFilter<$PrismaModel>
+      | $Enums.EscrowTransactionType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumEscrowTransactionTypeFilter<$PrismaModel>;
+    _max?: NestedEnumEscrowTransactionTypeFilter<$PrismaModel>;
+  };
+
   export type NestedEnumConversationTypeFilter<$PrismaModel = never> = {
     equals?:
       | $Enums.ConversationType
@@ -47598,6 +52975,7 @@ export namespace Prisma {
     jobsCancelled?: number;
     responseTimeMinutes?: number;
     isVerified?: boolean;
+    backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
     createdAt?: Date | string;
@@ -47622,6 +53000,7 @@ export namespace Prisma {
     jobsCancelled?: number;
     responseTimeMinutes?: number;
     isVerified?: boolean;
+    backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
     createdAt?: Date | string;
@@ -47668,6 +53047,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutHomeownerInput = {
@@ -47701,6 +53081,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutHomeownerInput = {
@@ -47747,6 +53128,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutAssignedTradesmanInput = {
@@ -47780,6 +53162,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutAssignedTradesmanInput = {
@@ -47800,6 +53183,8 @@ export namespace Prisma {
   export type QuoteCreateWithoutTradesmanInput = {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -47811,12 +53196,15 @@ export namespace Prisma {
     updatedAt?: Date | string;
     job: JobCreateNestedOneWithoutQuotesInput;
     acceptedForJob?: JobCreateNestedOneWithoutAcceptedQuoteInput;
+    escrow?: JobEscrowCreateNestedOneWithoutQuoteInput;
   };
 
   export type QuoteUncheckedCreateWithoutTradesmanInput = {
     id?: string;
     jobId: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -47827,6 +53215,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     acceptedForJob?: JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutQuoteInput;
   };
 
   export type QuoteCreateOrConnectWithoutTradesmanInput = {
@@ -48154,6 +53543,128 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type JobEscrowCreateWithoutHomeownerInput = {
+    id?: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    job: JobCreateNestedOneWithoutEscrowInput;
+    quote: QuoteCreateNestedOneWithoutEscrowInput;
+    tradesman: UserCreateNestedOneWithoutEscrowsAsTradesmanInput;
+    transactions?: EscrowTransactionCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowUncheckedCreateWithoutHomeownerInput = {
+    id?: string;
+    jobId: string;
+    quoteId: string;
+    tradesmanId: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    transactions?: EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowCreateOrConnectWithoutHomeownerInput = {
+    where: JobEscrowWhereUniqueInput;
+    create: XOR<
+      JobEscrowCreateWithoutHomeownerInput,
+      JobEscrowUncheckedCreateWithoutHomeownerInput
+    >;
+  };
+
+  export type JobEscrowCreateManyHomeownerInputEnvelope = {
+    data:
+      | JobEscrowCreateManyHomeownerInput
+      | JobEscrowCreateManyHomeownerInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type JobEscrowCreateWithoutTradesmanInput = {
+    id?: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    job: JobCreateNestedOneWithoutEscrowInput;
+    quote: QuoteCreateNestedOneWithoutEscrowInput;
+    homeowner: UserCreateNestedOneWithoutEscrowsAsHomeownerInput;
+    transactions?: EscrowTransactionCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowUncheckedCreateWithoutTradesmanInput = {
+    id?: string;
+    jobId: string;
+    quoteId: string;
+    homeownerId: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    transactions?: EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowCreateOrConnectWithoutTradesmanInput = {
+    where: JobEscrowWhereUniqueInput;
+    create: XOR<
+      JobEscrowCreateWithoutTradesmanInput,
+      JobEscrowUncheckedCreateWithoutTradesmanInput
+    >;
+  };
+
+  export type JobEscrowCreateManyTradesmanInputEnvelope = {
+    data:
+      | JobEscrowCreateManyTradesmanInput
+      | JobEscrowCreateManyTradesmanInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput;
     update: XOR<
@@ -48401,6 +53912,7 @@ export namespace Prisma {
     jobsCancelled?: IntFieldUpdateOperationsInput | number;
     responseTimeMinutes?: IntFieldUpdateOperationsInput | number;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    backgroundChecked?: BoolFieldUpdateOperationsInput | boolean;
     isAvailable?: BoolFieldUpdateOperationsInput | boolean;
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
@@ -48450,6 +53962,7 @@ export namespace Prisma {
     jobsCancelled?: IntFieldUpdateOperationsInput | number;
     responseTimeMinutes?: IntFieldUpdateOperationsInput | number;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    backgroundChecked?: BoolFieldUpdateOperationsInput | boolean;
     isAvailable?: BoolFieldUpdateOperationsInput | boolean;
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
@@ -48612,6 +54125,20 @@ export namespace Prisma {
     jobId?: StringFilter<'Quote'> | string;
     tradesmanId?: StringFilter<'Quote'> | string;
     amount?: DecimalFilter<'Quote'> | Decimal | DecimalJsLike | number | string;
+    materialsAmount?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFilter<'Quote'> | string;
     message?: StringNullableFilter<'Quote'> | string | null;
     estimatedStart?: DateTimeNullableFilter<'Quote'> | Date | string | null;
@@ -48945,6 +54472,116 @@ export namespace Prisma {
       | null;
   };
 
+  export type JobEscrowUpsertWithWhereUniqueWithoutHomeownerInput = {
+    where: JobEscrowWhereUniqueInput;
+    update: XOR<
+      JobEscrowUpdateWithoutHomeownerInput,
+      JobEscrowUncheckedUpdateWithoutHomeownerInput
+    >;
+    create: XOR<
+      JobEscrowCreateWithoutHomeownerInput,
+      JobEscrowUncheckedCreateWithoutHomeownerInput
+    >;
+  };
+
+  export type JobEscrowUpdateWithWhereUniqueWithoutHomeownerInput = {
+    where: JobEscrowWhereUniqueInput;
+    data: XOR<
+      JobEscrowUpdateWithoutHomeownerInput,
+      JobEscrowUncheckedUpdateWithoutHomeownerInput
+    >;
+  };
+
+  export type JobEscrowUpdateManyWithWhereWithoutHomeownerInput = {
+    where: JobEscrowScalarWhereInput;
+    data: XOR<
+      JobEscrowUpdateManyMutationInput,
+      JobEscrowUncheckedUpdateManyWithoutHomeownerInput
+    >;
+  };
+
+  export type JobEscrowScalarWhereInput = {
+    AND?: JobEscrowScalarWhereInput | JobEscrowScalarWhereInput[];
+    OR?: JobEscrowScalarWhereInput[];
+    NOT?: JobEscrowScalarWhereInput | JobEscrowScalarWhereInput[];
+    id?: StringFilter<'JobEscrow'> | string;
+    jobId?: StringFilter<'JobEscrow'> | string;
+    quoteId?: StringFilter<'JobEscrow'> | string;
+    homeownerId?: StringFilter<'JobEscrow'> | string;
+    tradesmanId?: StringFilter<'JobEscrow'> | string;
+    currency?: StringFilter<'JobEscrow'> | string;
+    quoteTotal?:
+      | DecimalFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFilter<'JobEscrow'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFilter<'JobEscrow'> | $Enums.EscrowStatus;
+    paymentMethod?: StringNullableFilter<'JobEscrow'> | string | null;
+    paymentRef?: StringNullableFilter<'JobEscrow'> | string | null;
+    fundedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
+    materialsReleasedAt?:
+      | DateTimeNullableFilter<'JobEscrow'>
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | DateTimeNullableFilter<'JobEscrow'>
+      | Date
+      | string
+      | null;
+    releasedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
+    refundedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
+    createdAt?: DateTimeFilter<'JobEscrow'> | Date | string;
+    updatedAt?: DateTimeFilter<'JobEscrow'> | Date | string;
+  };
+
+  export type JobEscrowUpsertWithWhereUniqueWithoutTradesmanInput = {
+    where: JobEscrowWhereUniqueInput;
+    update: XOR<
+      JobEscrowUpdateWithoutTradesmanInput,
+      JobEscrowUncheckedUpdateWithoutTradesmanInput
+    >;
+    create: XOR<
+      JobEscrowCreateWithoutTradesmanInput,
+      JobEscrowUncheckedCreateWithoutTradesmanInput
+    >;
+  };
+
+  export type JobEscrowUpdateWithWhereUniqueWithoutTradesmanInput = {
+    where: JobEscrowWhereUniqueInput;
+    data: XOR<
+      JobEscrowUpdateWithoutTradesmanInput,
+      JobEscrowUncheckedUpdateWithoutTradesmanInput
+    >;
+  };
+
+  export type JobEscrowUpdateManyWithWhereWithoutTradesmanInput = {
+    where: JobEscrowScalarWhereInput;
+    data: XOR<
+      JobEscrowUpdateManyMutationInput,
+      JobEscrowUncheckedUpdateManyWithoutTradesmanInput
+    >;
+  };
+
   export type UserCreateWithoutAccountsInput = {
     id?: string;
     name: string;
@@ -48979,6 +54616,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -49015,6 +54654,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -49096,6 +54737,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -49149,6 +54792,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserCreateWithoutSessionsInput = {
@@ -49185,6 +54830,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -49221,6 +54868,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -49302,6 +54951,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -49355,6 +55006,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserCreateWithoutConsentsInput = {
@@ -49391,6 +55044,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutConsentsInput = {
@@ -49427,6 +55082,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutConsentsInput = {
@@ -49508,6 +55165,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConsentsInput = {
@@ -49561,6 +55220,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserCreateWithoutHomeownerProfileInput = {
@@ -49597,6 +55258,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutHomeownerProfileInput = {
@@ -49633,6 +55296,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutHomeownerProfileInput = {
@@ -49714,6 +55379,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutHomeownerProfileInput = {
@@ -49767,6 +55434,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserCreateWithoutTradesmanProfileInput = {
@@ -49803,6 +55472,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutTradesmanProfileInput = {
@@ -49839,6 +55510,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutTradesmanProfileInput = {
@@ -49949,6 +55622,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTradesmanProfileInput = {
@@ -50002,6 +55677,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type TradesmanSkillUpsertWithWhereUniqueWithoutTradesmanProfileInput =
@@ -50163,6 +55840,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutCategoryInput = {
@@ -50196,6 +55874,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutCategoryInput = {
@@ -50242,6 +55921,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutAiCategoryInput = {
@@ -50275,6 +55955,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutAiCategoryInput = {
@@ -50756,6 +56437,7 @@ export namespace Prisma {
     jobsCancelled?: number;
     responseTimeMinutes?: number;
     isVerified?: boolean;
+    backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
     createdAt?: Date | string;
@@ -50781,6 +56463,7 @@ export namespace Prisma {
     jobsCancelled?: number;
     responseTimeMinutes?: number;
     isVerified?: boolean;
+    backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
     createdAt?: Date | string;
@@ -50887,6 +56570,7 @@ export namespace Prisma {
     jobsCancelled?: IntFieldUpdateOperationsInput | number;
     responseTimeMinutes?: IntFieldUpdateOperationsInput | number;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    backgroundChecked?: BoolFieldUpdateOperationsInput | boolean;
     isAvailable?: BoolFieldUpdateOperationsInput | boolean;
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
@@ -50937,6 +56621,7 @@ export namespace Prisma {
     jobsCancelled?: IntFieldUpdateOperationsInput | number;
     responseTimeMinutes?: IntFieldUpdateOperationsInput | number;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    backgroundChecked?: BoolFieldUpdateOperationsInput | boolean;
     isAvailable?: BoolFieldUpdateOperationsInput | boolean;
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
@@ -51023,6 +56708,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutPostedJobsInput = {
@@ -51059,6 +56746,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutPostedJobsInput = {
@@ -51183,6 +56872,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutAssignedJobsInput = {
@@ -51219,6 +56910,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutAssignedJobsInput = {
@@ -51232,6 +56925,8 @@ export namespace Prisma {
   export type QuoteCreateWithoutAcceptedForJobInput = {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -51243,6 +56938,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     job: JobCreateNestedOneWithoutQuotesInput;
     tradesman: UserCreateNestedOneWithoutQuotesInput;
+    escrow?: JobEscrowCreateNestedOneWithoutQuoteInput;
   };
 
   export type QuoteUncheckedCreateWithoutAcceptedForJobInput = {
@@ -51250,6 +56946,8 @@ export namespace Prisma {
     jobId: string;
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -51259,6 +56957,7 @@ export namespace Prisma {
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutQuoteInput;
   };
 
   export type QuoteCreateOrConnectWithoutAcceptedForJobInput = {
@@ -51272,6 +56971,8 @@ export namespace Prisma {
   export type QuoteCreateWithoutJobInput = {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -51283,12 +56984,15 @@ export namespace Prisma {
     updatedAt?: Date | string;
     tradesman: UserCreateNestedOneWithoutQuotesInput;
     acceptedForJob?: JobCreateNestedOneWithoutAcceptedQuoteInput;
+    escrow?: JobEscrowCreateNestedOneWithoutQuoteInput;
   };
 
   export type QuoteUncheckedCreateWithoutJobInput = {
     id?: string;
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -51299,6 +57003,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     acceptedForJob?: JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutQuoteInput;
   };
 
   export type QuoteCreateOrConnectWithoutJobInput = {
@@ -51491,6 +57196,60 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type JobEscrowCreateWithoutJobInput = {
+    id?: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    quote: QuoteCreateNestedOneWithoutEscrowInput;
+    homeowner: UserCreateNestedOneWithoutEscrowsAsHomeownerInput;
+    tradesman: UserCreateNestedOneWithoutEscrowsAsTradesmanInput;
+    transactions?: EscrowTransactionCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowUncheckedCreateWithoutJobInput = {
+    id?: string;
+    quoteId: string;
+    homeownerId: string;
+    tradesmanId: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    transactions?: EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowCreateOrConnectWithoutJobInput = {
+    where: JobEscrowWhereUniqueInput;
+    create: XOR<
+      JobEscrowCreateWithoutJobInput,
+      JobEscrowUncheckedCreateWithoutJobInput
+    >;
+  };
+
   export type UserUpsertWithoutPostedJobsInput = {
     update: XOR<
       UserUpdateWithoutPostedJobsInput,
@@ -51562,6 +57321,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutPostedJobsInput = {
@@ -51615,6 +57376,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type ServiceCategoryUpsertWithoutJobsInput = {
@@ -51793,6 +57556,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutAssignedJobsInput = {
@@ -51846,6 +57611,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type QuoteUpsertWithoutAcceptedForJobInput = {
@@ -51876,6 +57643,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -51903,6 +57684,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     job?: JobUpdateOneRequiredWithoutQuotesNestedInput;
     tradesman?: UserUpdateOneRequiredWithoutQuotesNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateWithoutAcceptedForJobInput = {
@@ -51915,6 +57697,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -51940,6 +57736,7 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
   };
 
   export type QuoteUpsertWithWhereUniqueWithoutJobInput = {
@@ -52123,6 +57920,152 @@ export namespace Prisma {
     >;
   };
 
+  export type JobEscrowUpsertWithoutJobInput = {
+    update: XOR<
+      JobEscrowUpdateWithoutJobInput,
+      JobEscrowUncheckedUpdateWithoutJobInput
+    >;
+    create: XOR<
+      JobEscrowCreateWithoutJobInput,
+      JobEscrowUncheckedCreateWithoutJobInput
+    >;
+    where?: JobEscrowWhereInput;
+  };
+
+  export type JobEscrowUpdateToOneWithWhereWithoutJobInput = {
+    where?: JobEscrowWhereInput;
+    data: XOR<
+      JobEscrowUpdateWithoutJobInput,
+      JobEscrowUncheckedUpdateWithoutJobInput
+    >;
+  };
+
+  export type JobEscrowUpdateWithoutJobInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    quote?: QuoteUpdateOneRequiredWithoutEscrowNestedInput;
+    homeowner?: UserUpdateOneRequiredWithoutEscrowsAsHomeownerNestedInput;
+    tradesman?: UserUpdateOneRequiredWithoutEscrowsAsTradesmanNestedInput;
+    transactions?: EscrowTransactionUpdateManyWithoutEscrowNestedInput;
+  };
+
+  export type JobEscrowUncheckedUpdateWithoutJobInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    homeownerId?: StringFieldUpdateOperationsInput | string;
+    tradesmanId?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    transactions?: EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput;
+  };
+
   export type JobCreateWithoutSkillsInput = {
     id?: string;
     title: string;
@@ -52154,6 +58097,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutSkillsInput = {
@@ -52187,6 +58131,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutSkillsInput = {
@@ -52324,6 +58269,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutSkillsInput = {
@@ -52404,6 +58350,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type SkillUpsertWithoutJobsInput = {
@@ -52481,6 +58428,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutQuotesInput = {
@@ -52514,6 +58462,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutQuotesInput = {
@@ -52558,6 +58507,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutQuotesInput = {
@@ -52594,6 +58545,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutQuotesInput = {
@@ -52635,6 +58588,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutAcceptedQuoteInput = {
@@ -52668,6 +58622,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutAcceptedQuoteInput = {
@@ -52675,6 +58630,60 @@ export namespace Prisma {
     create: XOR<
       JobCreateWithoutAcceptedQuoteInput,
       JobUncheckedCreateWithoutAcceptedQuoteInput
+    >;
+  };
+
+  export type JobEscrowCreateWithoutQuoteInput = {
+    id?: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    job: JobCreateNestedOneWithoutEscrowInput;
+    homeowner: UserCreateNestedOneWithoutEscrowsAsHomeownerInput;
+    tradesman: UserCreateNestedOneWithoutEscrowsAsTradesmanInput;
+    transactions?: EscrowTransactionCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowUncheckedCreateWithoutQuoteInput = {
+    id?: string;
+    jobId: string;
+    homeownerId: string;
+    tradesmanId: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    transactions?: EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput;
+  };
+
+  export type JobEscrowCreateOrConnectWithoutQuoteInput = {
+    where: JobEscrowWhereUniqueInput;
+    create: XOR<
+      JobEscrowCreateWithoutQuoteInput,
+      JobEscrowUncheckedCreateWithoutQuoteInput
     >;
   };
 
@@ -52773,6 +58782,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutQuotesInput = {
@@ -52853,6 +58863,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type UserUpsertWithoutQuotesInput = {
@@ -52926,6 +58937,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutQuotesInput = {
@@ -52979,6 +58992,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type JobUpsertWithoutAcceptedQuoteInput = {
@@ -53076,6 +59091,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutAcceptedQuoteInput = {
@@ -53156,6 +59172,1288 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+  };
+
+  export type JobEscrowUpsertWithoutQuoteInput = {
+    update: XOR<
+      JobEscrowUpdateWithoutQuoteInput,
+      JobEscrowUncheckedUpdateWithoutQuoteInput
+    >;
+    create: XOR<
+      JobEscrowCreateWithoutQuoteInput,
+      JobEscrowUncheckedCreateWithoutQuoteInput
+    >;
+    where?: JobEscrowWhereInput;
+  };
+
+  export type JobEscrowUpdateToOneWithWhereWithoutQuoteInput = {
+    where?: JobEscrowWhereInput;
+    data: XOR<
+      JobEscrowUpdateWithoutQuoteInput,
+      JobEscrowUncheckedUpdateWithoutQuoteInput
+    >;
+  };
+
+  export type JobEscrowUpdateWithoutQuoteInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    job?: JobUpdateOneRequiredWithoutEscrowNestedInput;
+    homeowner?: UserUpdateOneRequiredWithoutEscrowsAsHomeownerNestedInput;
+    tradesman?: UserUpdateOneRequiredWithoutEscrowsAsTradesmanNestedInput;
+    transactions?: EscrowTransactionUpdateManyWithoutEscrowNestedInput;
+  };
+
+  export type JobEscrowUncheckedUpdateWithoutQuoteInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    homeownerId?: StringFieldUpdateOperationsInput | string;
+    tradesmanId?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    transactions?: EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput;
+  };
+
+  export type JobCreateWithoutEscrowInput = {
+    id?: string;
+    title: string;
+    description: string;
+    descriptionLanguage?: $Enums.LanguageCode;
+    aiConfidence?: Decimal | DecimalJsLike | number | string | null;
+    aiSuggestedTags?: NullableJsonNullValueInput | InputJsonValue;
+    locationText?: string | null;
+    city?: string | null;
+    district?: string | null;
+    latitude?: Decimal | DecimalJsLike | number | string | null;
+    longitude?: Decimal | DecimalJsLike | number | string | null;
+    budgetMin?: Decimal | DecimalJsLike | number | string | null;
+    budgetMax?: Decimal | DecimalJsLike | number | string | null;
+    scheduledFor?: Date | string | null;
+    urgency?: $Enums.JobUrgency;
+    status?: $Enums.JobStatus;
+    completedAt?: Date | string | null;
+    cancelledAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    homeowner: UserCreateNestedOneWithoutPostedJobsInput;
+    category?: ServiceCategoryCreateNestedOneWithoutJobsInput;
+    aiCategory?: ServiceCategoryCreateNestedOneWithoutAiClassifiedJobsInput;
+    assignedTradesman?: UserCreateNestedOneWithoutAssignedJobsInput;
+    acceptedQuote?: QuoteCreateNestedOneWithoutAcceptedForJobInput;
+    quotes?: QuoteCreateNestedManyWithoutJobInput;
+    skills?: JobSkillCreateNestedManyWithoutJobInput;
+    conversations?: ConversationCreateNestedManyWithoutJobInput;
+    reviews?: ReviewCreateNestedManyWithoutJobInput;
+    recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
+    reports?: ReportCreateNestedManyWithoutJobInput;
+  };
+
+  export type JobUncheckedCreateWithoutEscrowInput = {
+    id?: string;
+    homeownerId: string;
+    title: string;
+    description: string;
+    descriptionLanguage?: $Enums.LanguageCode;
+    categoryId?: string | null;
+    aiCategoryId?: string | null;
+    aiConfidence?: Decimal | DecimalJsLike | number | string | null;
+    aiSuggestedTags?: NullableJsonNullValueInput | InputJsonValue;
+    locationText?: string | null;
+    city?: string | null;
+    district?: string | null;
+    latitude?: Decimal | DecimalJsLike | number | string | null;
+    longitude?: Decimal | DecimalJsLike | number | string | null;
+    budgetMin?: Decimal | DecimalJsLike | number | string | null;
+    budgetMax?: Decimal | DecimalJsLike | number | string | null;
+    scheduledFor?: Date | string | null;
+    urgency?: $Enums.JobUrgency;
+    status?: $Enums.JobStatus;
+    assignedTradesmanId?: string | null;
+    acceptedQuoteId?: string | null;
+    completedAt?: Date | string | null;
+    cancelledAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
+    skills?: JobSkillUncheckedCreateNestedManyWithoutJobInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutJobInput;
+    reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
+    recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
+    reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+  };
+
+  export type JobCreateOrConnectWithoutEscrowInput = {
+    where: JobWhereUniqueInput;
+    create: XOR<
+      JobCreateWithoutEscrowInput,
+      JobUncheckedCreateWithoutEscrowInput
+    >;
+  };
+
+  export type QuoteCreateWithoutEscrowInput = {
+    id?: string;
+    amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    message?: string | null;
+    estimatedStart?: Date | string | null;
+    estimatedCompletion?: Date | string | null;
+    status?: $Enums.QuoteStatus;
+    respondedAt?: Date | string | null;
+    withdrawnAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    job: JobCreateNestedOneWithoutQuotesInput;
+    tradesman: UserCreateNestedOneWithoutQuotesInput;
+    acceptedForJob?: JobCreateNestedOneWithoutAcceptedQuoteInput;
+  };
+
+  export type QuoteUncheckedCreateWithoutEscrowInput = {
+    id?: string;
+    jobId: string;
+    tradesmanId: string;
+    amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    message?: string | null;
+    estimatedStart?: Date | string | null;
+    estimatedCompletion?: Date | string | null;
+    status?: $Enums.QuoteStatus;
+    respondedAt?: Date | string | null;
+    withdrawnAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    acceptedForJob?: JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput;
+  };
+
+  export type QuoteCreateOrConnectWithoutEscrowInput = {
+    where: QuoteWhereUniqueInput;
+    create: XOR<
+      QuoteCreateWithoutEscrowInput,
+      QuoteUncheckedCreateWithoutEscrowInput
+    >;
+  };
+
+  export type UserCreateWithoutEscrowsAsHomeownerInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountCreateNestedManyWithoutUserInput;
+    sessions?: SessionCreateNestedManyWithoutUserInput;
+    consents?: UserConsentCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileCreateNestedOneWithoutUserInput;
+    postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+  };
+
+  export type UserUncheckedCreateWithoutEscrowsAsHomeownerInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
+    consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileUncheckedCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileUncheckedCreateNestedOneWithoutUserInput;
+    postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewUncheckedCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportUncheckedCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+  };
+
+  export type UserCreateOrConnectWithoutEscrowsAsHomeownerInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutEscrowsAsHomeownerInput,
+      UserUncheckedCreateWithoutEscrowsAsHomeownerInput
+    >;
+  };
+
+  export type UserCreateWithoutEscrowsAsTradesmanInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountCreateNestedManyWithoutUserInput;
+    sessions?: SessionCreateNestedManyWithoutUserInput;
+    consents?: UserConsentCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileCreateNestedOneWithoutUserInput;
+    postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+  };
+
+  export type UserUncheckedCreateWithoutEscrowsAsTradesmanInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
+    consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileUncheckedCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileUncheckedCreateNestedOneWithoutUserInput;
+    postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewUncheckedCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportUncheckedCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+  };
+
+  export type UserCreateOrConnectWithoutEscrowsAsTradesmanInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutEscrowsAsTradesmanInput,
+      UserUncheckedCreateWithoutEscrowsAsTradesmanInput
+    >;
+  };
+
+  export type EscrowTransactionCreateWithoutEscrowInput = {
+    id?: string;
+    type: $Enums.EscrowTransactionType;
+    amount: Decimal | DecimalJsLike | number | string;
+    note?: string | null;
+    createdAt?: Date | string;
+  };
+
+  export type EscrowTransactionUncheckedCreateWithoutEscrowInput = {
+    id?: string;
+    type: $Enums.EscrowTransactionType;
+    amount: Decimal | DecimalJsLike | number | string;
+    note?: string | null;
+    createdAt?: Date | string;
+  };
+
+  export type EscrowTransactionCreateOrConnectWithoutEscrowInput = {
+    where: EscrowTransactionWhereUniqueInput;
+    create: XOR<
+      EscrowTransactionCreateWithoutEscrowInput,
+      EscrowTransactionUncheckedCreateWithoutEscrowInput
+    >;
+  };
+
+  export type EscrowTransactionCreateManyEscrowInputEnvelope = {
+    data:
+      | EscrowTransactionCreateManyEscrowInput
+      | EscrowTransactionCreateManyEscrowInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type JobUpsertWithoutEscrowInput = {
+    update: XOR<
+      JobUpdateWithoutEscrowInput,
+      JobUncheckedUpdateWithoutEscrowInput
+    >;
+    create: XOR<
+      JobCreateWithoutEscrowInput,
+      JobUncheckedCreateWithoutEscrowInput
+    >;
+    where?: JobWhereInput;
+  };
+
+  export type JobUpdateToOneWithWhereWithoutEscrowInput = {
+    where?: JobWhereInput;
+    data: XOR<
+      JobUpdateWithoutEscrowInput,
+      JobUncheckedUpdateWithoutEscrowInput
+    >;
+  };
+
+  export type JobUpdateWithoutEscrowInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    descriptionLanguage?:
+      | EnumLanguageCodeFieldUpdateOperationsInput
+      | $Enums.LanguageCode;
+    aiConfidence?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    aiSuggestedTags?: NullableJsonNullValueInput | InputJsonValue;
+    locationText?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    latitude?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    longitude?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    budgetMin?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    budgetMax?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    scheduledFor?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    cancelledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
+    category?: ServiceCategoryUpdateOneWithoutJobsNestedInput;
+    aiCategory?: ServiceCategoryUpdateOneWithoutAiClassifiedJobsNestedInput;
+    assignedTradesman?: UserUpdateOneWithoutAssignedJobsNestedInput;
+    acceptedQuote?: QuoteUpdateOneWithoutAcceptedForJobNestedInput;
+    quotes?: QuoteUpdateManyWithoutJobNestedInput;
+    skills?: JobSkillUpdateManyWithoutJobNestedInput;
+    conversations?: ConversationUpdateManyWithoutJobNestedInput;
+    reviews?: ReviewUpdateManyWithoutJobNestedInput;
+    recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
+    reports?: ReportUpdateManyWithoutJobNestedInput;
+  };
+
+  export type JobUncheckedUpdateWithoutEscrowInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    homeownerId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    descriptionLanguage?:
+      | EnumLanguageCodeFieldUpdateOperationsInput
+      | $Enums.LanguageCode;
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null;
+    aiCategoryId?: NullableStringFieldUpdateOperationsInput | string | null;
+    aiConfidence?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    aiSuggestedTags?: NullableJsonNullValueInput | InputJsonValue;
+    locationText?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    latitude?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    longitude?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    budgetMin?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    budgetMax?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    scheduledFor?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    assignedTradesmanId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    cancelledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
+    skills?: JobSkillUncheckedUpdateManyWithoutJobNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutJobNestedInput;
+    reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
+    recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
+    reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+  };
+
+  export type QuoteUpsertWithoutEscrowInput = {
+    update: XOR<
+      QuoteUpdateWithoutEscrowInput,
+      QuoteUncheckedUpdateWithoutEscrowInput
+    >;
+    create: XOR<
+      QuoteCreateWithoutEscrowInput,
+      QuoteUncheckedCreateWithoutEscrowInput
+    >;
+    where?: QuoteWhereInput;
+  };
+
+  export type QuoteUpdateToOneWithWhereWithoutEscrowInput = {
+    where?: QuoteWhereInput;
+    data: XOR<
+      QuoteUpdateWithoutEscrowInput,
+      QuoteUncheckedUpdateWithoutEscrowInput
+    >;
+  };
+
+  export type QuoteUpdateWithoutEscrowInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    message?: NullableStringFieldUpdateOperationsInput | string | null;
+    estimatedStart?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    withdrawnAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    job?: JobUpdateOneRequiredWithoutQuotesNestedInput;
+    tradesman?: UserUpdateOneRequiredWithoutQuotesNestedInput;
+    acceptedForJob?: JobUpdateOneWithoutAcceptedQuoteNestedInput;
+  };
+
+  export type QuoteUncheckedUpdateWithoutEscrowInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    tradesmanId?: StringFieldUpdateOperationsInput | string;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    message?: NullableStringFieldUpdateOperationsInput | string | null;
+    estimatedStart?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    withdrawnAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    acceptedForJob?: JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput;
+  };
+
+  export type UserUpsertWithoutEscrowsAsHomeownerInput = {
+    update: XOR<
+      UserUpdateWithoutEscrowsAsHomeownerInput,
+      UserUncheckedUpdateWithoutEscrowsAsHomeownerInput
+    >;
+    create: XOR<
+      UserCreateWithoutEscrowsAsHomeownerInput,
+      UserUncheckedCreateWithoutEscrowsAsHomeownerInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutEscrowsAsHomeownerInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutEscrowsAsHomeownerInput,
+      UserUncheckedUpdateWithoutEscrowsAsHomeownerInput
+    >;
+  };
+
+  export type UserUpdateWithoutEscrowsAsHomeownerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutEscrowsAsHomeownerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUncheckedUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUncheckedUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUncheckedUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUncheckedUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+  };
+
+  export type UserUpsertWithoutEscrowsAsTradesmanInput = {
+    update: XOR<
+      UserUpdateWithoutEscrowsAsTradesmanInput,
+      UserUncheckedUpdateWithoutEscrowsAsTradesmanInput
+    >;
+    create: XOR<
+      UserCreateWithoutEscrowsAsTradesmanInput,
+      UserUncheckedCreateWithoutEscrowsAsTradesmanInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutEscrowsAsTradesmanInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutEscrowsAsTradesmanInput,
+      UserUncheckedUpdateWithoutEscrowsAsTradesmanInput
+    >;
+  };
+
+  export type UserUpdateWithoutEscrowsAsTradesmanInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutEscrowsAsTradesmanInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUncheckedUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUncheckedUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUncheckedUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUncheckedUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+  };
+
+  export type EscrowTransactionUpsertWithWhereUniqueWithoutEscrowInput = {
+    where: EscrowTransactionWhereUniqueInput;
+    update: XOR<
+      EscrowTransactionUpdateWithoutEscrowInput,
+      EscrowTransactionUncheckedUpdateWithoutEscrowInput
+    >;
+    create: XOR<
+      EscrowTransactionCreateWithoutEscrowInput,
+      EscrowTransactionUncheckedCreateWithoutEscrowInput
+    >;
+  };
+
+  export type EscrowTransactionUpdateWithWhereUniqueWithoutEscrowInput = {
+    where: EscrowTransactionWhereUniqueInput;
+    data: XOR<
+      EscrowTransactionUpdateWithoutEscrowInput,
+      EscrowTransactionUncheckedUpdateWithoutEscrowInput
+    >;
+  };
+
+  export type EscrowTransactionUpdateManyWithWhereWithoutEscrowInput = {
+    where: EscrowTransactionScalarWhereInput;
+    data: XOR<
+      EscrowTransactionUpdateManyMutationInput,
+      EscrowTransactionUncheckedUpdateManyWithoutEscrowInput
+    >;
+  };
+
+  export type EscrowTransactionScalarWhereInput = {
+    AND?:
+      | EscrowTransactionScalarWhereInput
+      | EscrowTransactionScalarWhereInput[];
+    OR?: EscrowTransactionScalarWhereInput[];
+    NOT?:
+      | EscrowTransactionScalarWhereInput
+      | EscrowTransactionScalarWhereInput[];
+    id?: StringFilter<'EscrowTransaction'> | string;
+    escrowId?: StringFilter<'EscrowTransaction'> | string;
+    type?:
+      | EnumEscrowTransactionTypeFilter<'EscrowTransaction'>
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalFilter<'EscrowTransaction'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?: StringNullableFilter<'EscrowTransaction'> | string | null;
+    createdAt?: DateTimeFilter<'EscrowTransaction'> | Date | string;
+  };
+
+  export type JobEscrowCreateWithoutTransactionsInput = {
+    id?: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    job: JobCreateNestedOneWithoutEscrowInput;
+    quote: QuoteCreateNestedOneWithoutEscrowInput;
+    homeowner: UserCreateNestedOneWithoutEscrowsAsHomeownerInput;
+    tradesman: UserCreateNestedOneWithoutEscrowsAsTradesmanInput;
+  };
+
+  export type JobEscrowUncheckedCreateWithoutTransactionsInput = {
+    id?: string;
+    jobId: string;
+    quoteId: string;
+    homeownerId: string;
+    tradesmanId: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type JobEscrowCreateOrConnectWithoutTransactionsInput = {
+    where: JobEscrowWhereUniqueInput;
+    create: XOR<
+      JobEscrowCreateWithoutTransactionsInput,
+      JobEscrowUncheckedCreateWithoutTransactionsInput
+    >;
+  };
+
+  export type JobEscrowUpsertWithoutTransactionsInput = {
+    update: XOR<
+      JobEscrowUpdateWithoutTransactionsInput,
+      JobEscrowUncheckedUpdateWithoutTransactionsInput
+    >;
+    create: XOR<
+      JobEscrowCreateWithoutTransactionsInput,
+      JobEscrowUncheckedCreateWithoutTransactionsInput
+    >;
+    where?: JobEscrowWhereInput;
+  };
+
+  export type JobEscrowUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: JobEscrowWhereInput;
+    data: XOR<
+      JobEscrowUpdateWithoutTransactionsInput,
+      JobEscrowUncheckedUpdateWithoutTransactionsInput
+    >;
+  };
+
+  export type JobEscrowUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    job?: JobUpdateOneRequiredWithoutEscrowNestedInput;
+    quote?: QuoteUpdateOneRequiredWithoutEscrowNestedInput;
+    homeowner?: UserUpdateOneRequiredWithoutEscrowsAsHomeownerNestedInput;
+    tradesman?: UserUpdateOneRequiredWithoutEscrowsAsTradesmanNestedInput;
+  };
+
+  export type JobEscrowUncheckedUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    homeownerId?: StringFieldUpdateOperationsInput | string;
+    tradesmanId?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type JobCreateWithoutConversationsInput = {
@@ -53189,6 +60487,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutConversationsInput = {
@@ -53222,6 +60521,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutConversationsInput = {
@@ -53397,6 +60697,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutConversationsInput = {
@@ -53477,6 +60778,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutConversationInput =
@@ -53600,6 +60902,8 @@ export namespace Prisma {
     createdReports?: ReportCreateNestedManyWithoutReporterInput;
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutConversationLinksInput = {
@@ -53636,6 +60940,8 @@ export namespace Prisma {
     createdReports?: ReportUncheckedCreateNestedManyWithoutReporterInput;
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutConversationLinksInput = {
@@ -53769,6 +61075,8 @@ export namespace Prisma {
     createdReports?: ReportUpdateManyWithoutReporterNestedInput;
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConversationLinksInput = {
@@ -53822,6 +61130,8 @@ export namespace Prisma {
     createdReports?: ReportUncheckedUpdateManyWithoutReporterNestedInput;
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type ConversationCreateWithoutMessagesInput = {
@@ -53886,6 +61196,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -53922,6 +61234,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -53966,6 +61280,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutReceivedMessagesInput = {
@@ -54002,6 +61318,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutReceivedMessagesInput = {
@@ -54180,6 +61498,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -54233,6 +61553,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUpsertWithoutReceivedMessagesInput = {
@@ -54306,6 +61628,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
@@ -54359,6 +61683,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type ReportUpsertWithWhereUniqueWithoutMessageInput = {
@@ -54420,6 +61746,7 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutReviewsInput = {
@@ -54453,6 +61780,7 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutReviewsInput = {
@@ -54497,6 +61825,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutReviewsGivenInput = {
@@ -54533,6 +61863,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutReviewsGivenInput = {
@@ -54577,6 +61909,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutReviewsReceivedInput = {
@@ -54613,6 +61947,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutReviewsReceivedInput = {
@@ -54763,6 +62099,7 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutReviewsInput = {
@@ -54843,6 +62180,7 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type UserUpsertWithoutReviewsGivenInput = {
@@ -54916,6 +62254,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutReviewsGivenInput = {
@@ -54969,6 +62309,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUpsertWithoutReviewsReceivedInput = {
@@ -55042,6 +62384,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutReviewsReceivedInput = {
@@ -55095,6 +62439,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type ReportUpsertWithWhereUniqueWithoutReviewInput = {
@@ -55156,6 +62502,7 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutJobInput;
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutRecommendationsInput = {
@@ -55189,6 +62536,7 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutJobInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutRecommendationsInput = {
@@ -55233,6 +62581,8 @@ export namespace Prisma {
     createdReports?: ReportCreateNestedManyWithoutReporterInput;
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutRecommendationsInput = {
@@ -55269,6 +62619,8 @@ export namespace Prisma {
     createdReports?: ReportUncheckedCreateNestedManyWithoutReporterInput;
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutRecommendationsInput = {
@@ -55374,6 +62726,7 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutJobNestedInput;
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutRecommendationsInput = {
@@ -55454,6 +62807,7 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutJobNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type UserUpsertWithoutRecommendationsInput = {
@@ -55527,6 +62881,8 @@ export namespace Prisma {
     createdReports?: ReportUpdateManyWithoutReporterNestedInput;
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutRecommendationsInput = {
@@ -55580,6 +62936,8 @@ export namespace Prisma {
     createdReports?: ReportUncheckedUpdateManyWithoutReporterNestedInput;
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserCreateWithoutCreatedReportsInput = {
@@ -55616,6 +62974,8 @@ export namespace Prisma {
     assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutCreatedReportsInput = {
@@ -55652,6 +63012,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutCreatedReportsInput = {
@@ -55696,6 +63058,8 @@ export namespace Prisma {
     createdReports?: ReportCreateNestedManyWithoutReporterInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserUncheckedCreateWithoutAssignedReportsInput = {
@@ -55732,6 +63096,8 @@ export namespace Prisma {
     createdReports?: ReportUncheckedCreateNestedManyWithoutReporterInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
     conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
   };
 
   export type UserCreateOrConnectWithoutAssignedReportsInput = {
@@ -55773,6 +63139,7 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutJobInput;
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutReportsInput = {
@@ -55806,6 +63173,7 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutJobInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutReportsInput = {
@@ -55957,6 +63325,8 @@ export namespace Prisma {
     assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutCreatedReportsInput = {
@@ -56010,6 +63380,8 @@ export namespace Prisma {
     assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUpsertWithoutAssignedReportsInput = {
@@ -56083,6 +63455,8 @@ export namespace Prisma {
     createdReports?: ReportUpdateManyWithoutReporterNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutAssignedReportsInput = {
@@ -56136,6 +63510,8 @@ export namespace Prisma {
     createdReports?: ReportUncheckedUpdateManyWithoutReporterNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
     conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
   };
 
   export type JobUpsertWithoutReportsInput = {
@@ -56233,6 +63609,7 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutJobNestedInput;
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutReportsInput = {
@@ -56313,6 +63690,7 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutJobNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type MessageUpsertWithoutReportsInput = {
@@ -56508,6 +63886,8 @@ export namespace Prisma {
     id?: string;
     jobId: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -56615,6 +63995,50 @@ export namespace Prisma {
     conversationId: string;
     joinedAt?: Date | string;
     lastReadAt?: Date | string | null;
+  };
+
+  export type JobEscrowCreateManyHomeownerInput = {
+    id?: string;
+    jobId: string;
+    quoteId: string;
+    tradesmanId: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type JobEscrowCreateManyTradesmanInput = {
+    id?: string;
+    jobId: string;
+    quoteId: string;
+    homeownerId: string;
+    currency?: string;
+    quoteTotal: Decimal | DecimalJsLike | number | string;
+    materialsAmount: Decimal | DecimalJsLike | number | string;
+    depositAmount: Decimal | DecimalJsLike | number | string;
+    balanceAmount: Decimal | DecimalJsLike | number | string;
+    status?: $Enums.EscrowStatus;
+    paymentMethod?: string | null;
+    paymentRef?: string | null;
+    fundedAt?: Date | string | null;
+    materialsReleasedAt?: Date | string | null;
+    workCompletedAt?: Date | string | null;
+    releasedAt?: Date | string | null;
+    refundedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
   };
 
   export type AccountUpdateWithoutUserInput = {
@@ -56839,6 +64263,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutHomeownerInput = {
@@ -56919,6 +64344,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateManyWithoutHomeownerInput = {
@@ -57070,6 +64496,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutAssignedTradesmanInput = {
@@ -57147,6 +64574,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateManyWithoutAssignedTradesmanInput = {
@@ -57228,6 +64656,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -57255,6 +64697,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     job?: JobUpdateOneRequiredWithoutQuotesNestedInput;
     acceptedForJob?: JobUpdateOneWithoutAcceptedQuoteNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateWithoutTradesmanInput = {
@@ -57266,6 +64709,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -57292,6 +64749,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     acceptedForJob?: JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateManyWithoutTradesmanInput = {
@@ -57303,6 +64761,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -57707,6 +65179,382 @@ export namespace Prisma {
       | null;
   };
 
+  export type JobEscrowUpdateWithoutHomeownerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    job?: JobUpdateOneRequiredWithoutEscrowNestedInput;
+    quote?: QuoteUpdateOneRequiredWithoutEscrowNestedInput;
+    tradesman?: UserUpdateOneRequiredWithoutEscrowsAsTradesmanNestedInput;
+    transactions?: EscrowTransactionUpdateManyWithoutEscrowNestedInput;
+  };
+
+  export type JobEscrowUncheckedUpdateWithoutHomeownerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    tradesmanId?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    transactions?: EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput;
+  };
+
+  export type JobEscrowUncheckedUpdateManyWithoutHomeownerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    tradesmanId?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type JobEscrowUpdateWithoutTradesmanInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    job?: JobUpdateOneRequiredWithoutEscrowNestedInput;
+    quote?: QuoteUpdateOneRequiredWithoutEscrowNestedInput;
+    homeowner?: UserUpdateOneRequiredWithoutEscrowsAsHomeownerNestedInput;
+    transactions?: EscrowTransactionUpdateManyWithoutEscrowNestedInput;
+  };
+
+  export type JobEscrowUncheckedUpdateWithoutTradesmanInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    homeownerId?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    transactions?: EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput;
+  };
+
+  export type JobEscrowUncheckedUpdateManyWithoutTradesmanInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    homeownerId?: StringFieldUpdateOperationsInput | string;
+    currency?: StringFieldUpdateOperationsInput | string;
+    quoteTotal?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    depositAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    balanceAmount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
+    paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    fundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    materialsReleasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    workCompletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    releasedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    refundedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type TradesmanSkillCreateManyTradesmanProfileInput = {
     skillId: string;
     yearsExperience?: number;
@@ -57930,6 +65778,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutCategoryInput = {
@@ -58010,6 +65859,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateManyWithoutCategoryInput = {
@@ -58161,6 +66011,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutAiCategoryInput = {
@@ -58241,6 +66092,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateManyWithoutAiCategoryInput = {
@@ -58425,6 +66277,8 @@ export namespace Prisma {
     id?: string;
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
@@ -58496,6 +66350,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -58523,6 +66391,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     tradesman?: UserUpdateOneRequiredWithoutQuotesNestedInput;
     acceptedForJob?: JobUpdateOneWithoutAcceptedQuoteNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateWithoutJobInput = {
@@ -58534,6 +66403,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -58560,6 +66443,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     acceptedForJob?: JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateManyWithoutJobInput = {
@@ -58571,6 +66455,20 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     currency?: StringFieldUpdateOperationsInput | string;
     message?: NullableStringFieldUpdateOperationsInput | string | null;
     estimatedStart?:
@@ -58827,6 +66725,59 @@ export namespace Prisma {
     reviewId?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EscrowTransactionCreateManyEscrowInput = {
+    id?: string;
+    type: $Enums.EscrowTransactionType;
+    amount: Decimal | DecimalJsLike | number | string;
+    note?: string | null;
+    createdAt?: Date | string;
+  };
+
+  export type EscrowTransactionUpdateWithoutEscrowInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?:
+      | EnumEscrowTransactionTypeFieldUpdateOperationsInput
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EscrowTransactionUncheckedUpdateWithoutEscrowInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?:
+      | EnumEscrowTransactionTypeFieldUpdateOperationsInput
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type EscrowTransactionUncheckedUpdateManyWithoutEscrowInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?:
+      | EnumEscrowTransactionTypeFieldUpdateOperationsInput
+      | $Enums.EscrowTransactionType;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    note?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type ConversationParticipantCreateManyConversationInput = {
