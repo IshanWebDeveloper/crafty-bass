@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Skeleton } from '@repo/ui';
+import { ShieldAlert, ShieldCheck } from 'lucide-react';
+import { Badge, Button, Skeleton, VerifiedBadge, cn } from '@repo/ui';
 import {
   Card,
   CardContent,
@@ -13,9 +15,16 @@ import {
 import { getMyProfile } from '@/lib/api/profiles';
 import { HomeownerProfileForm } from './homeowner-profile-form';
 import { TradesmanProfileForm } from './tradesman-profile-form';
+import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
-export function ProfileView({ dict }: { dict: Dictionary }) {
+export function ProfileView({
+  locale,
+  dict,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+}) {
   const t = dict.profile;
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile', 'me'],
@@ -56,24 +65,98 @@ export function ProfileView({ dict }: { dict: Dictionary }) {
     );
   }
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          {role === 'HOMEOWNER' ? t.homeowner.heading : t.tradesman.heading}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {role === 'HOMEOWNER' ? (
+  if (role === 'HOMEOWNER') {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{t.homeowner.heading}</CardTitle>
+        </CardHeader>
+        <CardContent>
           <HomeownerProfileForm
             initial={profile.homeownerProfile}
             dict={dict}
           />
-        ) : (
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <VerificationCard
+        verified={profile.tradesmanProfile?.isVerified ?? false}
+        locale={locale}
+        dict={dict}
+      />
+      <Card>
+        <CardHeader>
+          <CardTitle>{t.tradesman.heading}</CardTitle>
+        </CardHeader>
+        <CardContent>
           <TradesmanProfileForm
             initial={profile.tradesmanProfile}
             dict={dict}
           />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function VerificationCard({
+  verified,
+  locale,
+  dict,
+}: {
+  verified: boolean;
+  locale: Locale;
+  dict: Dictionary;
+}) {
+  const t = dict.profile.verification;
+  return (
+    <Card>
+      <CardContent className="flex items-center gap-4 py-5">
+        <span
+          className={cn(
+            'inline-flex size-10 shrink-0 items-center justify-center rounded-full',
+            verified
+              ? 'bg-success-subtle text-success'
+              : 'bg-warning-subtle text-warning-foreground',
+          )}
+        >
+          {verified ? (
+            <ShieldCheck className="size-5" aria-hidden />
+          ) : (
+            <ShieldAlert className="size-5" aria-hidden />
+          )}
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="flex items-center gap-2 text-base font-semibold">
+            {verified ? (
+              <>
+                {t.verifiedTitle}
+                <VerifiedBadge size={16} />
+              </>
+            ) : (
+              t.unverifiedTitle
+            )}
+          </p>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            {verified ? t.verifiedBody : t.unverifiedBody}
+          </p>
+        </div>
+        {verified ? (
+          <Badge variant="success" className="shrink-0">
+            {t.verifiedBadge}
+          </Badge>
+        ) : (
+          <Button
+            size="sm"
+            nativeButton={false}
+            render={<Link href={`/${locale}/account/get-verified`} />}
+          >
+            {t.continue}
+          </Button>
         )}
       </CardContent>
     </Card>

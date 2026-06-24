@@ -260,7 +260,14 @@
         "apply": "Apply filters"
       },
       "empty": "No open jobs match your filters right now.",
-      "loadMore": "Load more"
+      "loadMore": "Load more",
+      "quote": "Quote",
+      "gate": {
+        "title": "You can't send quotes until you're verified",
+        "body": "Browse freely — but quoting unlocks once an admin approves your verification.",
+        "cta": "Continue verification",
+        "quoteLocked": "Get verified to quote"
+      }
     }
   },
   "myQuotes": {
@@ -343,6 +350,14 @@
     "subtitle": "Tell people how to find you and what you can offer.",
     "loading": "Loading your profile…",
     "saved": "Profile saved",
+    "verification": {
+      "verifiedTitle": "Verified",
+      "verifiedBody": "You can receive jobs and send quotes.",
+      "unverifiedTitle": "Verification required",
+      "unverifiedBody": "You can't receive jobs or send quotes until an admin approves your details.",
+      "verifiedBadge": "Verified",
+      "continue": "Continue verification"
+    },
     "chooseRole": {
       "heading": "How will you use Crafty Bass?",
       "subtitle": "Pick the role that fits your activity. You can update later from this page.",

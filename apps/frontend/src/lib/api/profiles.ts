@@ -23,6 +23,7 @@ export type TradesmanProfile = {
   district: string | null;
   serviceRadiusKm: number;
   preferredLanguage: LanguageCode;
+  isVerified: boolean;
   avgRating: number;
   ratingCount: number;
   jobsCompleted: number;

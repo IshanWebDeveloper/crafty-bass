@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
+import { Lock, ShieldAlert } from 'lucide-react';
 import { Button, Input, Skeleton } from '@repo/ui';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { NativeSelect } from '@/components/ui/select';
 import { browseJobs, type JobListQuery, type JobUrgency } from '@/lib/api/jobs';
 import { listCategories } from '@/lib/api/categories';
+import { getMyProfile } from '@/lib/api/profiles';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -24,6 +26,16 @@ export function BrowseJobsView({
   const t = dict.jobs;
   const [filters, setFilters] = useState<JobListQuery>({ limit: 20 });
 
+  // A tradesman can browse freely but can't quote until an admin verifies them.
+  const { data: profile } = useQuery({
+    queryKey: ['profile', 'me'],
+    queryFn: getMyProfile,
+    staleTime: 60_000,
+    retry: false,
+  });
+  const gated =
+    profile?.userType === 'TRADESMAN' && !profile.tradesmanProfile?.isVerified;
+
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: listCategories,
@@ -38,6 +50,22 @@ export function BrowseJobsView({
 
   return (
     <div className="space-y-6">
+      {gated ? (
+        <div className="flex flex-wrap items-center gap-3.5 rounded-lg bg-warning-subtle px-4 py-3.5 text-warning-foreground">
+          <ShieldAlert className="size-5 shrink-0" aria-hidden />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold">{t.browse.gate.title}</p>
+            <p className="mt-0.5 text-xs">{t.browse.gate.body}</p>
+          </div>
+          <Button
+            size="sm"
+            nativeButton={false}
+            render={<Link href={`/${locale}/account/get-verified`} />}
+          >
+            {t.browse.gate.cta}
+          </Button>
+        </div>
+      ) : null}
       <Card>
         <CardContent className="grid gap-4 p-5 sm:grid-cols-4">
           <div className="space-y-1.5">
@@ -134,13 +162,26 @@ export function BrowseJobsView({
                       {job.description}
                     </p>
                   </div>
-                  <Button
-                    size="sm"
-                    nativeButton={false}
-                    render={<Link href={`/${locale}/jobs/${job.id}`} />}
-                  >
-                    {t.detail.quotesHeading.split(' ')[0]}
-                  </Button>
+                  {gated ? (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled
+                      title={t.browse.gate.quoteLocked}
+                      className="shrink-0"
+                    >
+                      <Lock className="size-3.5" aria-hidden />
+                      {t.browse.quote}
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      nativeButton={false}
+                      render={<Link href={`/${locale}/jobs/${job.id}`} />}
+                    >
+                      {t.browse.quote}
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             </li>
