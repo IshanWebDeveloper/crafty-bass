@@ -1,3 +1,9 @@
+// The dev-only seed script (packages/db/prisma/seed-users.ts) dynamically
+// imports @repo/auth, creating a build-time @repo/db -> @repo/auth edge that is
+// silenced there. That makes the essential @repo/auth -> @repo/db import below a
+// cycle at the Nx graph level; silence the matching edge here too so linting the
+// auth project doesn't re-flag the same intentional dev-time cycle.
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { prisma } from '@repo/db';
 import { APIError, betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
