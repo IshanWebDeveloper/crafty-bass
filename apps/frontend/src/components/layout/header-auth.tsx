@@ -3,6 +3,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
+  ChevronDown,
+  LayoutDashboard,
+  LogOut,
+  MessageSquare,
+  ShieldCheck,
+  User,
+} from 'lucide-react';
+import {
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -11,6 +19,7 @@ import {
   cn,
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -80,7 +89,7 @@ export function HeaderAuth({
         render={
           <Button
             variant="ghost"
-            className="h-10 gap-2 rounded-full pl-1 pr-3"
+            className="h-10 gap-2 rounded-full pl-1 pr-2.5"
           />
         }
       >
@@ -91,26 +100,45 @@ export function HeaderAuth({
         <span className="hidden text-sm font-medium md:inline">
           {user.name}
         </span>
+        <ChevronDown
+          className="size-4 text-muted-foreground transition-transform group-aria-expanded/button:rotate-180"
+          aria-hidden
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel className="flex flex-col">
-          <span className="text-sm font-medium">{user.name}</span>
-          <span className="truncate text-xs text-muted-foreground">
-            {user.email}
-          </span>
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="flex flex-col gap-0.5">
+            <span className="text-sm font-medium text-foreground">
+              {user.name}
+            </span>
+            <span className="truncate text-xs font-normal text-muted-foreground">
+              {user.email}
+            </span>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem render={<Link href={`/${locale}/dashboard`} />}>
+          <LayoutDashboard />
           {h.dashboard}
         </DropdownMenuItem>
+        <DropdownMenuItem render={<Link href={`/${locale}/messages`} />}>
+          <MessageSquare />
+          {h.messages}
+        </DropdownMenuItem>
         <DropdownMenuItem render={<Link href={`/${locale}/account/profile`} />}>
+          <User />
           {h.profile}
         </DropdownMenuItem>
         <DropdownMenuItem render={<Link href={`/${locale}/account/privacy`} />}>
+          <ShieldCheck />
           {h.privacy}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => void handleSignOut()}>
+        <DropdownMenuItem
+          variant="destructive"
+          onClick={() => void handleSignOut()}
+        >
+          <LogOut />
           {h.signOut}
         </DropdownMenuItem>
       </DropdownMenuContent>
