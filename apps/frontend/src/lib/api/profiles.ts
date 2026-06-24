@@ -24,6 +24,7 @@ export type TradesmanProfile = {
   serviceRadiusKm: number;
   preferredLanguage: LanguageCode;
   isVerified: boolean;
+  backgroundChecked: boolean;
   avgRating: number;
   ratingCount: number;
   jobsCompleted: number;

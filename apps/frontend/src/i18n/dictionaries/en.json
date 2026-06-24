@@ -163,19 +163,88 @@
     }
   },
   "escrow": {
-    "heading": "Escrow",
-    "subtitle": "Crafty Bass holds the funds and releases them on agreed milestones.",
+    "heading": "Materials deposit",
+    "subtitle": "Crafty Bass holds the deposit and releases it on agreed milestones.",
     "steps": {
-      "deposit": "Deposit funded",
-      "inProgress": "Work in progress",
-      "released": "Balance released"
+      "funded": { "label": "Funded", "note": "Held by Crafty Bass" },
+      "materials": { "label": "Materials", "note": "Released to buy parts" },
+      "workDone": { "label": "Work done", "note": "Job marked complete" },
+      "released": { "label": "Released", "note": "Balance paid out" }
     },
-    "heldInEscrow": "Held in escrow",
-    "depositReleased": "Deposit released",
-    "balanceToRelease": "Balance to release",
-    "fundCta": "Fund deposit",
-    "approveCta": "Approve & release",
-    "todo": "Payments aren't wired up yet."
+    "amounts": {
+      "deposit": "Materials deposit",
+      "balance": "Balance on completion",
+      "total": "Quote total",
+      "inEscrow": "in escrow · refundable until work begins",
+      "balancePending": "released when you approve the work"
+    },
+    "status": {
+      "REQUESTED": "Awaiting deposit",
+      "FUNDED": "Held in escrow",
+      "MATERIALS_RELEASED": "Work in progress",
+      "WORK_COMPLETED": "Awaiting approval",
+      "RELEASED": "Completed & released",
+      "REFUNDED": "Deposit refunded",
+      "CANCELLED": "Cancelled"
+    },
+    "actions": {
+      "fund": "Fund deposit",
+      "funding": "Redirecting…",
+      "startWork": "Start work & release materials",
+      "starting": "Starting…",
+      "markDone": "Mark work done",
+      "marking": "Saving…",
+      "approve": "Approve & release balance",
+      "approving": "Releasing…",
+      "refund": "Refund deposit",
+      "refunding": "Refunding…",
+      "approveConfirm": "Approve the work and release the balance to the tradesman?",
+      "refundConfirm": "Refund the held deposit to the homeowner?"
+    },
+    "methods": {
+      "card": { "label": "Card", "note": "Visa & Mastercard" },
+      "paypal": { "label": "PayPal", "note": "Pay with balance" },
+      "local": { "label": "Local", "note": "PayHere & LankaQR" }
+    },
+    "eligibility": {
+      "title": "Materials deposit",
+      "tier": "{tier} tier",
+      "upTo": "Up to {pct}% of the job total, capped at {cap}.",
+      "locked": "Locked until you're verified.",
+      "youCanRequest": "You can request",
+      "tiers": {
+        "none": "Not yet eligible",
+        "verified": "Verified",
+        "trusted": "Trusted",
+        "background": "Background-checked"
+      },
+      "next": {
+        "none": "Get verified to request materials deposits.",
+        "verified": "Reach a 4.5★ rating and 20 completed jobs to unlock 30% (up to LKR 40,000).",
+        "trusted": "Add a police clearance report (Background-checked tier) to unlock 40% (up to LKR 75,000).",
+        "background": "You're at the highest deposit tier."
+      }
+    },
+    "fund": {
+      "title": "Fund the materials deposit",
+      "subtitle": "Your tradesman asked for a materials deposit so they can buy parts and start. You pay Crafty Bass — not the tradesman — and we hold it in escrow.",
+      "jobLabel": "Job",
+      "protectionHeading": "How your money is protected",
+      "protection1": "Crafty Bass holds the deposit — the tradesman can't touch it until you confirm work has started.",
+      "protection2": "Fully refundable if the job never begins or you cancel before work starts.",
+      "protection3": "If something goes wrong, our team mediates before any money is released.",
+      "payNow": "Pay now",
+      "method": "Payment method",
+      "payCta": "Fund {amount} in escrow",
+      "secured": "Secured by {processor} · funds held by Crafty Bass, not the tradesman",
+      "success": "Deposit funded and held in escrow",
+      "notFound": "There's no deposit awaiting funding for this job.",
+      "back": "Back to job"
+    },
+    "startedToast": "Materials released — job in progress",
+    "doneToast": "Marked complete — awaiting approval",
+    "approvedToast": "Approved — balance released",
+    "refundedToast": "Deposit refunded"
   },
   "dashboard": {
     "title": "Your dashboard",
@@ -451,7 +520,14 @@
       "subtitle": "Let the homeowner know your price and timing.",
       "submit": "Submit quote",
       "submitting": "Submitting…",
-      "success": "Quote submitted"
+      "success": "Quote submitted",
+      "currency": "Currency",
+      "materials": "Of which materials",
+      "requestDeposit": "Request a materials deposit",
+      "requestDepositHint": "The homeowner funds this into escrow up front so you can buy parts. You receive it when you start — Crafty Bass releases it, the homeowner never hands you cash.",
+      "depositToRequest": "Deposit to request",
+      "depositMax": "Max {amount}",
+      "depositPercent": "{pct}% of your quote · balance {balance} paid on completion."
     }
   },
   "hero": {

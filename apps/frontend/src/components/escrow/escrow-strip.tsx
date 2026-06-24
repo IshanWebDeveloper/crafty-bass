@@ -1,10 +1,13 @@
 import { Check } from 'lucide-react';
 import { cn } from '@repo/ui';
 
+export type EscrowStep = { label: string; note?: string };
+
 /**
- * Escrow lifecycle stepper: deposit funded → work in progress → balance
- * released. `current` is the active step index (0–2); earlier steps render as
- * complete. Presentational — pass localized `steps` labels from the dictionary.
+ * Escrow lifecycle stepper mirroring the design milestone strip:
+ * Funded → Materials → Work done → Released. `current` is the number of
+ * completed steps (0–steps.length); the step at `current` renders as active.
+ * Presentational — pass localized `steps` from the dictionary.
  */
 export function EscrowStrip({
   current,
@@ -12,45 +15,56 @@ export function EscrowStrip({
   className,
 }: {
   current: number;
-  steps: [string, string, string];
+  steps: EscrowStep[];
   className?: string;
 }) {
   return (
-    <ol className={cn('flex items-center', className)}>
-      {steps.map((label, i) => {
+    <ol className={cn('flex items-start', className)}>
+      {steps.map((step, i) => {
         const done = i < current;
         const active = i === current;
         const reached = done || active;
         return (
           <li
-            key={label}
+            key={step.label}
             className={cn(
-              'flex items-center gap-2',
+              'flex items-start gap-2',
               i < steps.length - 1 && 'flex-1',
             )}
           >
-            <span
-              className={cn(
-                'inline-flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold',
-                done && 'border-transparent bg-success text-success-foreground',
-                active && 'border-primary bg-primary text-primary-foreground',
-                !reached && 'border-border bg-background text-muted-foreground',
-              )}
-            >
-              {done ? <Check className="size-3.5" aria-hidden /> : i + 1}
-            </span>
-            <span
-              className={cn(
-                'text-xs font-medium whitespace-nowrap',
-                reached ? 'text-foreground' : 'text-muted-foreground',
-              )}
-            >
-              {label}
-            </span>
+            <div className="flex flex-col items-center gap-1.5">
+              <span
+                className={cn(
+                  'inline-flex size-8 shrink-0 items-center justify-center rounded-full border text-xs font-semibold',
+                  done &&
+                    'border-transparent bg-success text-success-foreground',
+                  active &&
+                    'border-transparent bg-primary text-primary-foreground',
+                  !reached && 'border-border bg-muted text-muted-foreground',
+                )}
+              >
+                {done ? <Check className="size-4" aria-hidden /> : i + 1}
+              </span>
+              <span className="max-w-24 text-center leading-tight">
+                <span
+                  className={cn(
+                    'block text-xs font-semibold',
+                    reached ? 'text-foreground' : 'text-muted-foreground',
+                  )}
+                >
+                  {step.label}
+                </span>
+                {step.note ? (
+                  <span className="mt-0.5 block text-[11px] text-muted-foreground">
+                    {step.note}
+                  </span>
+                ) : null}
+              </span>
+            </div>
             {i < steps.length - 1 ? (
               <span
                 className={cn(
-                  'mx-2 hidden h-px flex-1 sm:block',
+                  'mt-4 h-0.5 flex-1 rounded',
                   done ? 'bg-success' : 'bg-border',
                 )}
               />
