@@ -147,6 +147,58 @@
     "submitting": "Submitting…",
     "submitted": "Submitted for verification"
   },
+  "onboarding": {
+    "stages": ["Profile", "Documents", "Details", "Payout"],
+    "back": "Back",
+    "continue": "Continue",
+    "submit": "Submit for verification",
+    "submitting": "Submitting…",
+    "stepOf": "{current} / {total}",
+    "profile": {
+      "title": "Tell us your trade",
+      "sub": "Just the basics — you can do the rest later.",
+      "trade": "Primary trade",
+      "district": "Base location"
+    },
+    "documents": {
+      "title": "Upload your documents",
+      "sub": "Clear photos are fine. We check each one by hand.",
+      "provided": "Provided",
+      "optional": "Optional",
+      "gramaNiladhari": "Grama Niladhari certificate",
+      "police": "Police clearance report",
+      "policeNote": "Adds the Background-checked tier to your badge."
+    },
+    "details": {
+      "title": "A few work details",
+      "sub": "This helps us match you to the right jobs.",
+      "radius": "How far will you travel?",
+      "radiusVal": "Within {n} km of your base",
+      "crew": "Who shows up?",
+      "solo": "Just me",
+      "team": "I bring a team",
+      "helpers": "Helpers (Golayo)",
+      "guarantor": "Guarantor",
+      "guarantorName": "Guarantor's name",
+      "guarantorNic": "Guarantor's NIC",
+      "guarantorHint": "A relative or someone who can vouch for you."
+    },
+    "rejected": {
+      "heading": "Resubmission needed"
+    },
+    "submitted": {
+      "title": "Submitted for review",
+      "sub": "An admin checks every tradesman by hand — most are done within 1–2 business days. We'll text you when you're approved.",
+      "tiers": "Your verification badge",
+      "tier1": "Verified",
+      "tier1desc": "Identity, trade and address confirmed.",
+      "tier2": "Background checked",
+      "tier2desc": "Verified, plus a clean police clearance report.",
+      "active": "Active",
+      "locked": "Locked",
+      "browse": "Browse jobs while you wait"
+    }
+  },
   "notifications": {
     "title": "Notifications",
     "subtitle": "Your escrow, quotes, messages and account updates.",
