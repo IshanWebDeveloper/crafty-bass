@@ -22,7 +22,7 @@ export default async function ProfilePage({
             <h1 className="text-3xl font-semibold tracking-tight">{t.title}</h1>
             <p className="text-sm text-muted-foreground">{t.subtitle}</p>
           </div>
-          <ProfileView dict={dict} />
+          <ProfileView locale={locale} dict={dict} />
           <div className="mt-8">
             <ReviewsReceivedPanel locale={locale} dict={dict} />
           </div>
