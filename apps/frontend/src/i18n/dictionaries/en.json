@@ -197,7 +197,27 @@
       "subtitle": "Describe the work and we'll match you with verified tradespeople.",
       "submit": "Post job",
       "submitting": "Posting…",
-      "success": "Your job has been posted"
+      "success": "Your job has been posted",
+      "ai": {
+        "hint": "Our AI reads this as you type to detect the right category.",
+        "detected": "Detected",
+        "suggested": "suggested skills",
+        "confidence": "{n}% confidence"
+      },
+      "photos": {
+        "label": "Photos",
+        "add": "Add photo",
+        "remove": "Remove photo",
+        "hint": "Add up to 8 photos so tradespeople can assess the work and quote accurately."
+      },
+      "location": {
+        "label": "Location pin",
+        "optional": "(optional)",
+        "share": "Share my location pin",
+        "getting": "Getting your location…",
+        "remove": "Remove pin",
+        "hint": "Quoters see your area only — the exact pin is shared with the tradesman you hire."
+      }
     },
     "fields": {
       "title": "Job title",
