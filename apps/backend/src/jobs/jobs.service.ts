@@ -43,6 +43,8 @@ export class JobsService {
         locationText: dto.locationText ?? null,
         city: dto.city ?? null,
         district: dto.district ?? null,
+        latitude: dto.latitude ?? null,
+        longitude: dto.longitude ?? null,
         budgetMin: dto.budgetMin ?? null,
         budgetMax: dto.budgetMax ?? null,
         scheduledFor: dto.scheduledFor ?? null,

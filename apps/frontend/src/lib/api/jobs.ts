@@ -50,6 +50,8 @@ export type CreateJobBody = {
   locationText?: string;
   city?: string;
   district?: string;
+  latitude?: number;
+  longitude?: number;
   budgetMin?: number;
   budgetMax?: number;
   scheduledFor?: string;

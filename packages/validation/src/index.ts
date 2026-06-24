@@ -73,6 +73,8 @@ export const CreateJobSchema = z
     locationText: optionalText(200),
     city: optionalText(80),
     district: optionalText(80),
+    latitude: z.coerce.number().min(-90).max(90).optional(),
+    longitude: z.coerce.number().min(-180).max(180).optional(),
     budgetMin: z.coerce.number().nonnegative().max(100_000_000).optional(),
     budgetMax: z.coerce.number().nonnegative().max(100_000_000).optional(),
     scheduledFor: z.coerce.date().optional(),
