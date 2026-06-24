@@ -42,6 +42,12 @@ const stripeClient = stripeSecretKey ? new Stripe(stripeSecretKey) : undefined;
 
 const frontendURL = process.env.FRONTEND_URL ?? 'http://localhost:3000';
 
+// Dev-only fixed OTP so seeded/test accounts can sign in without reading the
+// console. Disabled in production (see verifyOTP wiring below). Override with
+// DEV_PHONE_OTP.
+const isProduction = process.env.NODE_ENV === 'production';
+const devPhoneOtp = process.env.DEV_PHONE_OTP ?? '123456';
+
 const parseSeconds = (value: string | undefined, fallback: number) => {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
@@ -85,8 +91,10 @@ const plugins = [
     // Phone is the primary credential for the marketplace. In dev we log the
     // code; wire an SMS provider (e.g. Notify.lk / Twilio) for production.
     sendOTP: async ({ phoneNumber: to, code }) => {
-      if (process.env.NODE_ENV !== 'production') {
-        console.log(`[DEV] Crafty Bass OTP for ${to}: ${code}`);
+      if (!isProduction) {
+        console.log(
+          `[DEV] Crafty Bass OTP for ${to}: ${code} (or use static ${devPhoneOtp})`,
+        );
         return;
       }
       // TODO: integrate an SMS provider here.
@@ -94,6 +102,20 @@ const plugins = [
         '⚠️ No SMS provider configured — phone OTP not sent in production.',
       );
     },
+    // Dev only: accept a fixed OTP (or the real one) so seeded accounts are
+    // trivial to test. Omitted in production, so the plugin's built-in
+    // attempt-limited verification stays in force there.
+    ...(isProduction
+      ? {}
+      : {
+          verifyOTP: async ({ phoneNumber: to, code }, ctx) => {
+            if (code === devPhoneOtp) return true;
+            const stored =
+              await ctx?.context.internalAdapter.findVerificationValue(to);
+            if (!stored || stored.expiresAt < new Date()) return false;
+            return stored.value.split(':')[0] === code;
+          },
+        }),
     // Verifying an OTP for an unknown number creates the account. The sign-up
     // form then patches the real name + recovery email onto it.
     signUpOnVerification: {
