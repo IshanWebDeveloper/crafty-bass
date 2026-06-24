@@ -64,3 +64,4 @@ vitest.config.*.timestamp*
 SECURITY_AUDIT.md
 .pr-bodies/
 apps/backend/swagger-error-debug.txt
+apps/admin/next-env.d.ts
