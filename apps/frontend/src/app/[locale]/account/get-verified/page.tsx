@@ -1,5 +1,5 @@
 import { SiteHeader } from '@/components/layout/site-header';
-import { GetVerifiedForm } from '@/components/verification/get-verified-form';
+import { OnboardingWizard } from '@/components/verification/onboarding-wizard';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
 
@@ -21,7 +21,7 @@ export default async function GetVerifiedPage({
             <h1 className="text-3xl font-semibold tracking-tight">{t.title}</h1>
             <p className="mt-1.5 text-sm text-muted-foreground">{t.subtitle}</p>
           </div>
-          <GetVerifiedForm dict={dict} />
+          <OnboardingWizard locale={locale} dict={dict} />
         </div>
       </main>
     </div>
