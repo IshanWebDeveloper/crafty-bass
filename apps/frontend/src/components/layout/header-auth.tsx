@@ -14,7 +14,6 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-  Button,
   buttonVariants,
   cn,
   DropdownMenu,
@@ -86,12 +85,10 @@ export function HeaderAuth({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={
-          <Button
-            variant="ghost"
-            className="h-10 gap-2 rounded-full pl-1 pr-2.5"
-          />
-        }
+        className={cn(
+          buttonVariants({ variant: 'ghost' }),
+          'h-10 gap-2 rounded-full pl-1 pr-2.5',
+        )}
       >
         <Avatar className="h-8 w-8">
           {user.image ? <AvatarImage src={user.image} alt={user.name} /> : null}
