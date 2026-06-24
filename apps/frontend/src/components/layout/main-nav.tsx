@@ -8,9 +8,10 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
 /**
- * Role-aware primary navigation. Signed-out visitors see a light marketing nav;
- * homeowners and tradesmen each get the nav the design specifies for their role
- * (homeowners also get a "Post a job" CTA — see {@link HeaderActions}).
+ * Role-aware primary navigation. Signed-out visitors see a light marketing nav
+ * (browse trades only — posting a job requires an account, so it isn't offered
+ * here); homeowners and tradesmen each get the nav the design specifies for
+ * their role (homeowners also get a "Post a job" CTA — see {@link HeaderActions}).
  */
 export function MainNav({
   locale,
@@ -24,10 +25,7 @@ export function MainNav({
   const h = dict.header;
   const base = `/${locale}`;
 
-  const guest = [
-    { label: h.findTrades, href: `${base}/trades` },
-    { label: h.postJob, href: `${base}/jobs/new` },
-  ];
+  const guest = [{ label: h.findTrades, href: `${base}/trades` }];
   const homeowner = [
     { label: h.findTrades, href: `${base}/trades` },
     { label: h.myJobs, href: `${base}/jobs/mine` },

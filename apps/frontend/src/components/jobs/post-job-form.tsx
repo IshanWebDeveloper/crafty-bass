@@ -15,6 +15,8 @@ import { NativeSelect } from '@/components/ui/select';
 import { createJob, type JobUrgency, type LanguageCode } from '@/lib/api/jobs';
 import { listCategories, type ServiceCategory } from '@/lib/api/categories';
 import { ApiError } from '@/lib/api';
+import { useSession } from '@/lib/auth-client';
+import { useMe } from '@/lib/hooks/use-me';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -159,6 +161,25 @@ export function PostJobForm({
   const t = dict.jobs;
   const [submitting, setSubmitting] = useState(false);
 
+  // Posting a job is for homeowners. Mirror the backend rule (jobs.service):
+  // guests must sign in; tradesmen are bounced (they can't post); a homeowner
+  // or a brand-new user with no userType yet (auto-promoted on first post) may
+  // proceed. We guard here because the route itself is otherwise public.
+  const { data: session, isPending: sessionPending } = useSession();
+  const { data: me, isLoading: meLoading } = useMe();
+  const isTradesman = me?.userType === 'TRADESMAN';
+  const authzReady = !sessionPending && !!session && !meLoading && !isTradesman;
+  useEffect(() => {
+    if (sessionPending) return;
+    if (!session) {
+      router.replace(`/${locale}/sign-in`);
+      return;
+    }
+    if (isTradesman) {
+      router.replace(`/${locale}/jobs`);
+    }
+  }, [session, sessionPending, isTradesman, router, locale]);
+
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: listCategories,
@@ -289,6 +310,19 @@ export function PostJobForm({
     if (locale === 'ta' && category.nameTa) return category.nameTa;
     return category.nameEn;
   };
+
+  // While we resolve the session/role (or redirect a guest/tradesman away), show
+  // a spinner instead of the form so it never flashes for someone who can't post.
+  if (!authzReady) {
+    return (
+      <div className="flex min-h-48 items-center justify-center">
+        <Loader2
+          className="size-6 animate-spin text-muted-foreground"
+          aria-hidden
+        />
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
