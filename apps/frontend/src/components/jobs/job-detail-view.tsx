@@ -13,17 +13,11 @@ import {
   VerifiedBadge,
 } from '@repo/ui';
 import { toast } from 'sonner';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJob, cancelJob, type Job } from '@/lib/api/jobs';
 import { statusVariant } from '@/lib/status';
-import { formatBudgetRange, formatLKR } from '@/lib/currency';
-import { EscrowStrip } from '@/components/escrow/escrow-strip';
+import { formatBudgetRange } from '@/lib/currency';
+import { EscrowSection } from '@/components/escrow/escrow-section';
 import {
   listQuotesForJob,
   acceptQuote,
@@ -177,8 +171,15 @@ export function JobDetailView({
         <SubmitQuotePanel jobId={job.id} dict={dict} />
       ) : null}
 
-      {isOwner && job.status !== 'OPEN' ? (
-        <EscrowCard job={job} quotes={quotes} dict={dict} />
+      {session &&
+      job.status !== 'OPEN' &&
+      (isOwner || session.user.id === job.assignedTradesmanId) ? (
+        <EscrowSection
+          jobId={job.id}
+          userId={session.user.id}
+          locale={locale}
+          dict={dict}
+        />
       ) : null}
 
       {isOwner && job.status === 'OPEN' ? (
@@ -243,66 +244,6 @@ export function JobDetailView({
         </>
       ) : null}
     </div>
-  );
-}
-
-function EscrowCard({
-  job,
-  quotes,
-  dict,
-}: {
-  job: Job;
-  quotes: Quote[] | undefined;
-  dict: Dictionary;
-}) {
-  const te = dict.escrow;
-  // TODO(backend): escrow amounts/lifecycle aren't modelled yet (plan Gap #2).
-  // Deposit is derived from the accepted quote as a placeholder (30%).
-  const accepted = quotes?.find((q) => q.status === 'ACCEPTED');
-  const amount = accepted?.amount ?? 0;
-  const deposit = Math.round(0.3 * amount);
-  const balance = amount - deposit;
-  const step =
-    job.status === 'COMPLETED' ? 2 : job.status === 'IN_PROGRESS' ? 1 : 0;
-  const steps: [string, string, string] = [
-    te.steps.deposit,
-    te.steps.inProgress,
-    te.steps.released,
-  ];
-  const summaryLabel =
-    step === 2
-      ? te.balanceToRelease
-      : step === 1
-        ? te.depositReleased
-        : te.heldInEscrow;
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">{te.heading}</CardTitle>
-        <CardDescription>{te.subtitle}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-5">
-        <EscrowStrip current={step} steps={steps} />
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 text-sm text-muted-foreground">
-          <span>
-            {summaryLabel}:{' '}
-            <span className="font-mono font-semibold text-foreground">
-              {formatLKR(step === 2 ? balance : deposit)}
-            </span>
-          </span>
-          {step === 0 ? (
-            <Button size="sm" onClick={() => toast.info(te.todo)}>
-              {te.fundCta}
-            </Button>
-          ) : step === 2 ? (
-            <Button size="sm" onClick={() => toast.info(te.todo)}>
-              {te.approveCta}
-            </Button>
-          ) : null}
-        </div>
-      </CardContent>
-    </Card>
   );
 }
 

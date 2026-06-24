@@ -12,6 +12,8 @@ export type Quote = {
   jobId: string;
   tradesmanId: string;
   amount: number;
+  materialsAmount: number | null;
+  depositRequested: number | null;
   currency: string;
   message: string | null;
   estimatedStart: string | null;
@@ -35,6 +37,8 @@ export type Quote = {
 
 export type CreateQuoteBody = {
   amount: number;
+  materialsAmount?: number;
+  depositRequested?: number;
   currency: string;
   message?: string;
   estimatedStart?: string;
