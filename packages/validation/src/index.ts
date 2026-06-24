@@ -107,12 +107,97 @@ export const UpdateJobSchema = z
   .partial();
 
 // --- Quotes ---
-export const CreateQuoteSchema = z.object({
-  amount: z.coerce.number().positive().max(100_000_000),
-  currency: z.string().trim().length(3).default('LKR'),
-  message: optionalText(2000),
-  estimatedStart: z.coerce.date().optional(),
-  estimatedCompletion: z.coerce.date().optional(),
+export const CreateQuoteSchema = z
+  .object({
+    amount: z.coerce.number().positive().max(100_000_000),
+    materialsAmount: z.coerce
+      .number()
+      .nonnegative()
+      .max(100_000_000)
+      .optional(),
+    depositRequested: z.coerce
+      .number()
+      .nonnegative()
+      .max(100_000_000)
+      .optional(),
+    currency: z.string().trim().length(3).default('LKR'),
+    message: optionalText(2000),
+    estimatedStart: z.coerce.date().optional(),
+    estimatedCompletion: z.coerce.date().optional(),
+  })
+  .refine(
+    (v) => v.materialsAmount === undefined || v.materialsAmount <= v.amount,
+    {
+      message: 'Materials cannot exceed the quote total',
+      path: ['materialsAmount'],
+    },
+  )
+  .refine(
+    (v) =>
+      v.depositRequested === undefined ||
+      v.depositRequested <= (v.materialsAmount ?? 0),
+    {
+      message: 'Deposit cannot exceed the materials line',
+      path: ['depositRequested'],
+    },
+  );
+
+// --- Escrow / materials deposit ---
+// Trust ladder mirrored from the design system (escrow.jsx): how large a
+// materials deposit a tradesman may request. The deposit is always escrowed and
+// capped both by the tier and by the quoted materials line. Shared so the
+// frontend eligibility UI and the backend guard agree exactly.
+export type DepositTierKey = 'none' | 'verified' | 'trusted' | 'background';
+
+export interface DepositTier {
+  key: DepositTierKey;
+  label: string;
+  pct: number;
+  cap: number;
+}
+
+export interface TradesmanTrust {
+  verified: boolean;
+  rating: number;
+  completed: number;
+  bgChecked: boolean;
+}
+
+export function depositTier({
+  verified,
+  rating,
+  completed,
+  bgChecked,
+}: TradesmanTrust): DepositTier {
+  if (!verified)
+    return { key: 'none', label: 'Not yet eligible', pct: 0, cap: 0 };
+  if (bgChecked && rating >= 4.7 && completed >= 50)
+    return {
+      key: 'background',
+      label: 'Background-checked',
+      pct: 40,
+      cap: 75_000,
+    };
+  if (rating >= 4.5 && completed >= 20)
+    return { key: 'trusted', label: 'Trusted', pct: 30, cap: 40_000 };
+  return { key: 'verified', label: 'Verified', pct: 20, cap: 15_000 };
+}
+
+// The largest deposit this tradesman may request on this quote: tier % of the
+// quote total, capped by the tier, and never above the materials line.
+export function maxDeposit(
+  trust: TradesmanTrust,
+  quoteTotal: number,
+  materialsAmount: number,
+): number {
+  const tier = depositTier(trust);
+  const byTier = Math.min(Math.round((tier.pct / 100) * quoteTotal), tier.cap);
+  return Math.max(0, Math.min(byTier, materialsAmount));
+}
+
+export const EscrowPaymentMethodSchema = z.enum(['card', 'paypal', 'local']);
+export const FundEscrowSchema = z.object({
+  paymentMethod: EscrowPaymentMethodSchema.default('card'),
 });
 
 // --- Reviews (marketplace, job-linked) ---
@@ -172,6 +257,8 @@ export type TradesmanProfileInput = z.infer<typeof TradesmanProfileSchema>;
 export type CreateJobInput = z.infer<typeof CreateJobSchema>;
 export type UpdateJobInput = z.infer<typeof UpdateJobSchema>;
 export type CreateQuoteInput = z.infer<typeof CreateQuoteSchema>;
+export type FundEscrowInput = z.infer<typeof FundEscrowSchema>;
+export type EscrowPaymentMethod = z.infer<typeof EscrowPaymentMethodSchema>;
 export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;
 export type UpdateReviewInput = z.infer<typeof UpdateReviewSchema>;
 export type StartConversationInput = z.infer<typeof StartConversationSchema>;

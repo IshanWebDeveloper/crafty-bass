@@ -3,7 +3,9 @@ import {
   NotFoundException,
   ForbiddenException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
+import { maxDeposit } from '@repo/validation';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import type { CreateQuoteDto } from './dto/index.js';
 
@@ -39,7 +41,17 @@ export class QuotesService {
 
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: { userType: true },
+      select: {
+        userType: true,
+        tradesmanProfile: {
+          select: {
+            isVerified: true,
+            avgRating: true,
+            jobsCompleted: true,
+            backgroundChecked: true,
+          },
+        },
+      },
     });
     if (user?.userType === 'HOMEOWNER') {
       throw new ForbiddenException('Homeowners cannot submit quotes');
@@ -58,11 +70,35 @@ export class QuotesService {
       throw new ConflictException('You have already quoted on this job');
     }
 
+    // A requested materials deposit must sit within the tradesman's trust tier
+    // and never exceed the materials line on the quote.
+    const depositRequested = dto.depositRequested ?? 0;
+    if (depositRequested > 0) {
+      const profile = user?.tradesmanProfile;
+      const allowed = maxDeposit(
+        {
+          verified: profile?.isVerified ?? false,
+          rating: profile ? Number(profile.avgRating) : 0,
+          completed: profile?.jobsCompleted ?? 0,
+          bgChecked: profile?.backgroundChecked ?? false,
+        },
+        dto.amount,
+        dto.materialsAmount ?? 0,
+      );
+      if (depositRequested > allowed) {
+        throw new BadRequestException(
+          `Requested deposit exceeds your allowed maximum of ${allowed}`,
+        );
+      }
+    }
+
     return this.prisma.quote.create({
       data: {
         jobId,
         tradesmanId: userId,
         amount: dto.amount,
+        materialsAmount: dto.materialsAmount ?? null,
+        depositRequested: dto.depositRequested ?? null,
         currency: dto.currency,
         message: dto.message ?? null,
         estimatedStart: dto.estimatedStart ?? null,
@@ -123,6 +159,11 @@ export class QuotesService {
       throw new ConflictException('Quote is not pending');
     }
 
+    // Snapshot the deposit amounts now so later edits can't move money.
+    const deposit = quote.depositRequested ? Number(quote.depositRequested) : 0;
+    const total = Number(quote.amount);
+    const materials = quote.materialsAmount ? Number(quote.materialsAmount) : 0;
+
     return this.prisma.$transaction(async (tx) => {
       const accepted = await tx.quote.update({
         where: { id: quoteId },
@@ -140,6 +181,21 @@ export class QuotesService {
           acceptedQuoteId: quoteId,
         },
       });
+      if (deposit > 0) {
+        await tx.jobEscrow.create({
+          data: {
+            jobId: quote.jobId,
+            quoteId,
+            homeownerId: quote.job.homeownerId,
+            tradesmanId: quote.tradesmanId,
+            currency: quote.currency,
+            quoteTotal: total,
+            materialsAmount: materials,
+            depositAmount: deposit,
+            balanceAmount: total - deposit,
+          },
+        });
+      }
       return accepted;
     });
   }
