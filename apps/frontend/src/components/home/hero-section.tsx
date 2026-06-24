@@ -19,13 +19,15 @@ export function HeroSection({
   ];
 
   return (
-    <section className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-12 lg:grid-cols-2 lg:gap-16 lg:px-14 lg:py-16">
+    <section className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-14 lg:py-16">
       <div className="flex flex-col">
-        <Badge variant="highlight">{hero.badge}</Badge>
-        <h1 className="mt-8 max-w-[650px] text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-[52px] lg:leading-[1.1]">
+        <Badge variant="highlight" className="w-fit">
+          {hero.badge}
+        </Badge>
+        <h1 className="mt-8 max-w-[560px] text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-[52px] lg:leading-[1.1]">
           {hero.title}
         </h1>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+        <p className="mt-6 max-w-[460px] text-lg leading-relaxed text-muted-foreground sm:text-xl">
           {hero.subtitle}
         </p>
         <div className="mt-8 flex flex-wrap gap-4">
