@@ -1,4 +1,3 @@
-
 generator client {
   provider     = "prisma-client"
   output       = "../src/generated/prisma"
@@ -60,6 +59,28 @@ enum QuoteStatus {
   EXPIRED
 }
 
+// Materials-deposit escrow lifecycle. Mirrors the homeowner-facing milestone
+// strip: FUNDED (held) -> MATERIALS_RELEASED (paid out to buy parts when work
+// starts) -> WORK_COMPLETED (job done) -> RELEASED (balance paid out). REQUESTED
+// is the pre-funding state (tradesman asked on the quote); REFUNDED/CANCELLED are
+// the exits before release.
+enum EscrowStatus {
+  REQUESTED
+  FUNDED
+  MATERIALS_RELEASED
+  WORK_COMPLETED
+  RELEASED
+  REFUNDED
+  CANCELLED
+}
+
+enum EscrowTransactionType {
+  FUND
+  RELEASE_MATERIALS
+  RELEASE_BALANCE
+  REFUND
+}
+
 enum ConversationType {
   JOB_DIRECT
   DIRECT
@@ -106,31 +127,33 @@ model User {
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @updatedAt
 
-  accounts          Account[]
-  sessions          Session[]
-  consents          UserConsent[]
-  homeownerProfile  HomeownerProfile?
-  tradesmanProfile  TradesmanProfile?
-  postedJobs        Job[]                     @relation("HomeownerJobs")
-  assignedJobs      Job[]                     @relation("AssignedTradesman")
-  quotes            Quote[]                   @relation("TradesmanQuotes")
-  sentMessages      Message[]                 @relation("SentMessages")
-  receivedMessages  Message[]                 @relation("ReceivedMessages")
-  reviewsGiven      Review[]                  @relation("ReviewsGiven")
-  reviewsReceived   Review[]                  @relation("ReviewsReceived")
-  createdReports    Report[]                  @relation("ReportsCreated")
-  assignedReports   Report[]                  @relation("ReportsAssigned")
-  recommendations   JobRecommendation[]       @relation("RecommendedTradesman")
-  conversationLinks ConversationParticipant[]
+  accounts           Account[]
+  sessions           Session[]
+  consents           UserConsent[]
+  homeownerProfile   HomeownerProfile?
+  tradesmanProfile   TradesmanProfile?
+  postedJobs         Job[]                     @relation("HomeownerJobs")
+  assignedJobs       Job[]                     @relation("AssignedTradesman")
+  quotes             Quote[]                   @relation("TradesmanQuotes")
+  sentMessages       Message[]                 @relation("SentMessages")
+  receivedMessages   Message[]                 @relation("ReceivedMessages")
+  reviewsGiven       Review[]                  @relation("ReviewsGiven")
+  reviewsReceived    Review[]                  @relation("ReviewsReceived")
+  createdReports     Report[]                  @relation("ReportsCreated")
+  assignedReports    Report[]                  @relation("ReportsAssigned")
+  recommendations    JobRecommendation[]       @relation("RecommendedTradesman")
+  conversationLinks  ConversationParticipant[]
+  escrowsAsHomeowner JobEscrow[]               @relation("EscrowHomeowner")
+  escrowsAsTradesman JobEscrow[]               @relation("EscrowTradesman")
 
   phoneNumber         String?
   phoneNumberVerified Boolean?
 
+  @@unique([phoneNumber])
   @@index([role])
   @@index([userType])
   @@index([createdAt])
   @@map("user")
-  @@unique([phoneNumber])
 }
 
 model Account {
@@ -252,6 +275,7 @@ model TradesmanProfile {
   jobsCancelled       Int          @default(0)
   responseTimeMinutes Int          @default(0)
   isVerified          Boolean      @default(false)
+  backgroundChecked   Boolean      @default(false)
   isAvailable         Boolean      @default(true)
   preferredLanguage   LanguageCode @default(EN)
   createdAt           DateTime     @default(now())
@@ -356,6 +380,7 @@ model Job {
   reviews           Review[]
   recommendations   JobRecommendation[]
   reports           Report[]
+  escrow            JobEscrow?
 
   @@index([homeownerId, status])
   @@index([status, categoryId])
@@ -382,6 +407,8 @@ model Quote {
   jobId               String
   tradesmanId         String
   amount              Decimal     @db.Decimal(10, 2)
+  materialsAmount     Decimal?    @db.Decimal(10, 2)
+  depositRequested    Decimal?    @db.Decimal(10, 2)
   currency            String      @default("LKR")
   message             String?     @db.Text
   estimatedStart      DateTime?
@@ -392,13 +419,64 @@ model Quote {
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
 
-  job            Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  tradesman      User @relation("TradesmanQuotes", fields: [tradesmanId], references: [id], onDelete: Cascade)
-  acceptedForJob Job? @relation("AcceptedQuote")
+  job            Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  tradesman      User       @relation("TradesmanQuotes", fields: [tradesmanId], references: [id], onDelete: Cascade)
+  acceptedForJob Job?       @relation("AcceptedQuote")
+  escrow         JobEscrow?
 
   @@unique([jobId, tradesmanId])
   @@index([tradesmanId, status])
   @@index([jobId, status])
+}
+
+// One escrow per accepted quote that requested a materials deposit. Crafty Bass
+// holds the deposit (never the tradesman); the balance is settled on completion.
+// Amounts are snapshotted from the quote at acceptance so later quote edits can't
+// move money. The transactions[] ledger is the audit trail of fund/release/refund.
+model JobEscrow {
+  id                  String       @id @default(cuid())
+  jobId               String       @unique
+  quoteId             String       @unique
+  homeownerId         String
+  tradesmanId         String
+  currency            String       @default("LKR")
+  quoteTotal          Decimal      @db.Decimal(10, 2)
+  materialsAmount     Decimal      @db.Decimal(10, 2)
+  depositAmount       Decimal      @db.Decimal(10, 2)
+  balanceAmount       Decimal      @db.Decimal(10, 2)
+  status              EscrowStatus @default(REQUESTED)
+  paymentMethod       String?
+  paymentRef          String?
+  fundedAt            DateTime?
+  materialsReleasedAt DateTime?
+  workCompletedAt     DateTime?
+  releasedAt          DateTime?
+  refundedAt          DateTime?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  job          Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  quote        Quote               @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  homeowner    User                @relation("EscrowHomeowner", fields: [homeownerId], references: [id], onDelete: Cascade)
+  tradesman    User                @relation("EscrowTradesman", fields: [tradesmanId], references: [id], onDelete: Cascade)
+  transactions EscrowTransaction[]
+
+  @@index([homeownerId])
+  @@index([tradesmanId])
+  @@index([status])
+}
+
+model EscrowTransaction {
+  id        String                @id @default(cuid())
+  escrowId  String
+  type      EscrowTransactionType
+  amount    Decimal               @db.Decimal(10, 2)
+  note      String?
+  createdAt DateTime              @default(now())
+
+  escrow JobEscrow @relation(fields: [escrowId], references: [id], onDelete: Cascade)
+
+  @@index([escrowId])
 }
 
 model Conversation {

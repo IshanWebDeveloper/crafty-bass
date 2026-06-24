@@ -224,6 +224,7 @@ exports.Prisma.TradesmanProfileScalarFieldEnum = {
   jobsCancelled: 'jobsCancelled',
   responseTimeMinutes: 'responseTimeMinutes',
   isVerified: 'isVerified',
+  backgroundChecked: 'backgroundChecked',
   isAvailable: 'isAvailable',
   preferredLanguage: 'preferredLanguage',
   createdAt: 'createdAt',
@@ -302,6 +303,8 @@ exports.Prisma.QuoteScalarFieldEnum = {
   jobId: 'jobId',
   tradesmanId: 'tradesmanId',
   amount: 'amount',
+  materialsAmount: 'materialsAmount',
+  depositRequested: 'depositRequested',
   currency: 'currency',
   message: 'message',
   estimatedStart: 'estimatedStart',
@@ -311,6 +314,38 @@ exports.Prisma.QuoteScalarFieldEnum = {
   withdrawnAt: 'withdrawnAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+};
+
+exports.Prisma.JobEscrowScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  quoteId: 'quoteId',
+  homeownerId: 'homeownerId',
+  tradesmanId: 'tradesmanId',
+  currency: 'currency',
+  quoteTotal: 'quoteTotal',
+  materialsAmount: 'materialsAmount',
+  depositAmount: 'depositAmount',
+  balanceAmount: 'balanceAmount',
+  status: 'status',
+  paymentMethod: 'paymentMethod',
+  paymentRef: 'paymentRef',
+  fundedAt: 'fundedAt',
+  materialsReleasedAt: 'materialsReleasedAt',
+  workCompletedAt: 'workCompletedAt',
+  releasedAt: 'releasedAt',
+  refundedAt: 'refundedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.EscrowTransactionScalarFieldEnum = {
+  id: 'id',
+  escrowId: 'escrowId',
+  type: 'type',
+  amount: 'amount',
+  note: 'note',
+  createdAt: 'createdAt',
 };
 
 exports.Prisma.ConversationScalarFieldEnum = {
@@ -466,6 +501,23 @@ exports.QuoteStatus = exports.$Enums.QuoteStatus = {
   EXPIRED: 'EXPIRED',
 };
 
+exports.EscrowStatus = exports.$Enums.EscrowStatus = {
+  REQUESTED: 'REQUESTED',
+  FUNDED: 'FUNDED',
+  MATERIALS_RELEASED: 'MATERIALS_RELEASED',
+  WORK_COMPLETED: 'WORK_COMPLETED',
+  RELEASED: 'RELEASED',
+  REFUNDED: 'REFUNDED',
+  CANCELLED: 'CANCELLED',
+};
+
+exports.EscrowTransactionType = exports.$Enums.EscrowTransactionType = {
+  FUND: 'FUND',
+  RELEASE_MATERIALS: 'RELEASE_MATERIALS',
+  RELEASE_BALANCE: 'RELEASE_BALANCE',
+  REFUND: 'REFUND',
+};
+
 exports.ConversationType = exports.$Enums.ConversationType = {
   JOB_DIRECT: 'JOB_DIRECT',
   DIRECT: 'DIRECT',
@@ -518,6 +570,8 @@ exports.Prisma.ModelName = {
   Job: 'Job',
   JobSkill: 'JobSkill',
   Quote: 'Quote',
+  JobEscrow: 'JobEscrow',
+  EscrowTransaction: 'EscrowTransaction',
   Conversation: 'Conversation',
   ConversationParticipant: 'ConversationParticipant',
   Message: 'Message',
