@@ -146,6 +146,48 @@ export const auth = betterAuth({
     provider: 'postgresql',
   }),
   user: {
+    changeEmail: {
+      enabled: true,
+      // better-auth applies the change directly when the *current* email is
+      // unverified (the case for phone sign-up's temp `…@phone.craftybass.lk`
+      // address), so the recovery email entered at sign-up is set immediately.
+      // This handler only fires when changing away from an already-verified
+      // address: it emails an approval link to the current address.
+      sendChangeEmailVerification: async ({ user, newEmail, url }) => {
+        if (!resend) {
+          console.warn(
+            '⚠️ RESEND_API_KEY not configured — change-email verification not sent.',
+          );
+          return;
+        }
+        if (process.env.NODE_ENV !== 'production') {
+          console.log(
+            `[DEV] Change-email approval URL for ${user.email} → ${newEmail}: ${url}`,
+          );
+        }
+        const safeName = escapeHtml(user.name);
+        const safeUrl = escapeHtml(url);
+        const safeNewEmail = escapeHtml(newEmail);
+        await resend.emails.send({
+          to: user.email,
+          from: emailFrom,
+          subject: 'Approve your email change — Crafty Bass',
+          html: `
+          <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2>Confirm your new email address</h2>
+            <p>Hi ${safeName},</p>
+            <p>We received a request to change your account email to <strong>${safeNewEmail}</strong>. Click the button below to approve it:</p>
+            <p style="text-align: center; margin: 32px 0;">
+              <a href="${safeUrl}" style="background-color: #0f172a; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                Approve email change
+              </a>
+            </p>
+            <p style="color: #64748b; font-size: 14px;">If you didn't request this, you can safely ignore this email and your address won't change.</p>
+          </div>
+        `,
+        });
+      },
+    },
     additionalFields: {
       role: {
         type: 'string',
@@ -165,8 +207,15 @@ export const auth = betterAuth({
         required: false,
       },
       privacyPolicyAcceptedAt: {
+        // Not `required` at the API-input layer: phone sign-up
+        // (signUpOnVerification) never supplies it, and better-auth enforces
+        // required additionalFields *before* databaseHooks run — which would
+        // reject the verify call before the create hook below can default it.
+        // The DB column stays NOT NULL; the user.create.before hook guarantees
+        // a value on both the phone path (defaulted) and /sign-up/email
+        // (validated + rejected if missing).
         type: 'date',
-        required: true,
+        required: false,
       },
     },
   },
