@@ -26,6 +26,7 @@ import {
   Skeleton,
 } from '@repo/ui';
 import { signOut, useSession } from '@/lib/auth-client';
+import { useMounted } from '@/lib/hooks/use-mounted';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -38,9 +39,12 @@ export function HeaderAuth({
 }) {
   const router = useRouter();
   const { data: session, isPending } = useSession();
+  // Until mounted, the server (no session) and client (session may resolve
+  // synchronously) would disagree; render the skeleton on both — see useMounted.
+  const mounted = useMounted();
   const h = dict.header;
 
-  if (isPending) {
+  if (!mounted || isPending) {
     return <Skeleton className="h-10 w-32 rounded-md" />;
   }
 
