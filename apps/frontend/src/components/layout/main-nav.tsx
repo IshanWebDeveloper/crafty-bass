@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@repo/ui';
 import { useMe } from '@/lib/hooks/use-me';
+import { useMounted } from '@/lib/hooks/use-mounted';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -22,6 +23,9 @@ export function MainNav({
 }) {
   const pathname = usePathname();
   const { data: me } = useMe();
+  // The session resolves only on the client; render the guest nav until mounted
+  // so SSR and the first client paint agree (avoids a hydration mismatch).
+  const mounted = useMounted();
   const h = dict.header;
   const base = `/${locale}`;
 
@@ -38,9 +42,9 @@ export function MainNav({
   ];
 
   const items =
-    me?.userType === 'TRADESMAN'
+    mounted && me?.userType === 'TRADESMAN'
       ? tradesman
-      : me?.userType === 'HOMEOWNER'
+      : mounted && me?.userType === 'HOMEOWNER'
         ? homeowner
         : guest;
 
