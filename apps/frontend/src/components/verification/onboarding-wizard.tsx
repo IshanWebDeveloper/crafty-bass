@@ -15,8 +15,9 @@ import {
   ShieldCheck,
   UserRound,
 } from 'lucide-react';
-import { Badge, Button, Input, buttonVariants, cn } from '@repo/ui';
+import { Badge, Button, DatePicker, Input, buttonVariants, cn } from '@repo/ui';
 import { toast } from 'sonner';
+import { parseDateInput, formatDateInput } from '@/lib/date';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { NativeSelect } from '@/components/ui/select';
@@ -49,6 +50,11 @@ const BANKS = [
 ];
 
 const PLACEHOLDER_KEY = 'uploaded'; // stand-in reference (real upload deferred)
+
+// Date-of-birth picker bounds: today back to 100 years ago, so the year
+// dropdown spans a realistic range instead of paging month by month.
+const DOB_MAX = new Date();
+const DOB_MIN = new Date(DOB_MAX.getFullYear() - 100, 0);
 
 type Form = {
   fullName: string;
@@ -340,11 +346,14 @@ function Profile({ t, tv, form, set }: StepProps) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="o-dob">{tv.fields.dob}</Label>
-          <Input
+          <DatePicker
             id="o-dob"
-            type="date"
-            value={form.dateOfBirth}
-            onChange={(e) => set('dateOfBirth', e.target.value)}
+            value={parseDateInput(form.dateOfBirth)}
+            onChange={(date) => set('dateOfBirth', formatDateInput(date))}
+            captionLayout="dropdown"
+            startMonth={DOB_MIN}
+            endMonth={DOB_MAX}
+            disabledDates={{ after: DOB_MAX }}
           />
         </div>
       </div>
