@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Input } from '@repo/ui';
+import { Button, DatePicker, Input } from '@repo/ui';
 import { maxDeposit } from '@repo/validation';
 import { toast } from 'sonner';
 import {
@@ -22,6 +22,7 @@ import { getMyProfile } from '@/lib/api/profiles';
 import { DepositEligibility } from '@/components/escrow/deposit-eligibility';
 import { formatLKR } from '@/lib/currency';
 import { ApiError } from '@/lib/api';
+import { parseDateInput, formatDateInput } from '@/lib/date';
 import type { Dictionary } from '@/i18n/dictionaries';
 
 const SubmitQuoteSchema = z.object({
@@ -55,6 +56,7 @@ export function SubmitQuotePanel({
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<SubmitQuoteValues>({
@@ -179,18 +181,28 @@ export function SubmitQuotePanel({
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="quote-start">{t.estimatedStart}</Label>
-              <Input
+              <DatePicker
                 id="quote-start"
-                type="date"
-                {...register('estimatedStart')}
+                value={parseDateInput(watch('estimatedStart'))}
+                onChange={(date) =>
+                  setValue('estimatedStart', formatDateInput(date), {
+                    shouldValidate: true,
+                  })
+                }
+                disabledDates={{ before: new Date() }}
               />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="quote-completion">{t.estimatedCompletion}</Label>
-              <Input
+              <DatePicker
                 id="quote-completion"
-                type="date"
-                {...register('estimatedCompletion')}
+                value={parseDateInput(watch('estimatedCompletion'))}
+                onChange={(date) =>
+                  setValue('estimatedCompletion', formatDateInput(date), {
+                    shouldValidate: true,
+                  })
+                }
+                disabledDates={{ before: new Date() }}
               />
             </div>
           </div>

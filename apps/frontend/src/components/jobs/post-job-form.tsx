@@ -7,9 +7,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
 import { Camera, Loader2, Lock, MapPin, Sparkles, X } from 'lucide-react';
-import { Badge, Button, Input } from '@repo/ui';
+import { Badge, Button, DatePicker, Input } from '@repo/ui';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
+import { parseDateInput, formatDateInput } from '@/lib/date';
 import { Textarea } from '@/components/ui/textarea';
 import { NativeSelect } from '@/components/ui/select';
 import { createJob, type JobUrgency, type LanguageCode } from '@/lib/api/jobs';
@@ -535,7 +536,16 @@ export function PostJobForm({
 
       <div className="space-y-1.5">
         <Label htmlFor="scheduledFor">{t.fields.scheduledFor}</Label>
-        <Input id="scheduledFor" type="date" {...register('scheduledFor')} />
+        <DatePicker
+          id="scheduledFor"
+          value={parseDateInput(watch('scheduledFor'))}
+          onChange={(date) =>
+            setValue('scheduledFor', formatDateInput(date), {
+              shouldValidate: true,
+            })
+          }
+          disabledDates={{ before: new Date() }}
+        />
       </div>
 
       <Button type="submit" className="w-full" disabled={submitting}>
