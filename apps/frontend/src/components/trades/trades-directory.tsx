@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { MapPin, ChevronDown, Users, Languages } from 'lucide-react';
 import {
@@ -24,6 +25,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import {
   browseTradesmen,
+  getMyProfile,
   type TradesmanListItem,
   type TradesmenQuery,
 } from '@/lib/api/profiles';
@@ -53,7 +55,13 @@ export function TradesDirectory({
   dict: Dictionary;
 }) {
   const t = dict.trades;
+  const searchParams = useSearchParams();
+  const categorySlug = searchParams.get('category');
+  const districtParam = searchParams.get('district');
   const [filters, setFilters] = useState<TradesmenQuery>({ limit: 24 });
+  // Tracks which filters the visitor has changed themselves; once touched, their
+  // choice wins over the URL/profile seed below.
+  const [touched, setTouched] = useState({ category: false, district: false });
 
   const { data: categories } = useQuery({
     queryKey: ['categories'],
@@ -61,13 +69,40 @@ export function TradesDirectory({
     staleTime: 5 * 60_000,
   });
 
+  // Used only to default the district to the visitor's own when they arrive
+  // without one in the URL (e.g. from a homepage category card).
+  const profileQuery = useQuery({
+    queryKey: ['profile', 'me'],
+    queryFn: getMyProfile,
+    staleTime: 60_000,
+    retry: false,
+  });
+
+  // Seed the filters from the URL (category slug + district), falling back to
+  // the visitor's profile district — derived during render so there's no
+  // setState-in-effect. The seed applies until the visitor edits that filter.
+  const seedCategoryId = categorySlug
+    ? categories?.find((c) => c.slug === categorySlug)?.id
+    : undefined;
+  const profileDistrict =
+    profileQuery.data?.homeownerProfile?.district ??
+    profileQuery.data?.tradesmanProfile?.district ??
+    undefined;
+
+  const categoryId = touched.category ? filters.categoryId : seedCategoryId;
+  const district = touched.district
+    ? filters.district
+    : (districtParam ?? profileDistrict ?? undefined);
+
+  const queryFilters: TradesmenQuery = { ...filters, categoryId, district };
+
   const { data, isLoading } = useQuery({
-    queryKey: ['tradesmen', filters],
-    queryFn: () => browseTradesmen(filters),
+    queryKey: ['tradesmen', queryFilters],
+    queryFn: () => browseTradesmen(queryFilters),
     placeholderData: (prev) => prev,
   });
 
-  const selectedCategory = categories?.find((c) => c.id === filters.categoryId);
+  const selectedCategory = categories?.find((c) => c.id === categoryId);
 
   return (
     <div className="space-y-6">
@@ -102,13 +137,14 @@ export function TradesDirectory({
               />
               <DropdownMenuContent className="min-w-(--anchor-width)">
                 <DropdownMenuRadioGroup
-                  value={filters.categoryId ?? ''}
-                  onValueChange={(value) =>
+                  value={categoryId ?? ''}
+                  onValueChange={(value) => {
+                    setTouched((s) => ({ ...s, category: true }));
                     setFilters((f) => ({
                       ...f,
                       categoryId: (value as string) || undefined,
-                    }))
-                  }
+                    }));
+                  }}
                 >
                   <DropdownMenuRadioItem value="">
                     {t.filters.allCategories}
@@ -132,10 +168,11 @@ export function TradesDirectory({
             <Combobox
               id="trades-district"
               items={DISTRICT_OPTIONS}
-              value={filters.district ?? null}
-              onValueChange={(value) =>
-                setFilters((f) => ({ ...f, district: value ?? undefined }))
-              }
+              value={district ?? null}
+              onValueChange={(value) => {
+                setTouched((s) => ({ ...s, district: true }));
+                setFilters((f) => ({ ...f, district: value ?? undefined }));
+              }}
               placeholder={t.filters.districtPlaceholder}
               emptyText={t.filters.districtEmpty}
             />

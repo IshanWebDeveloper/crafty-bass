@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { SiteHeader } from '@/components/layout/site-header';
 import { TradesDirectory } from '@/components/trades/trades-directory';
 import { getDictionary } from '@/i18n/dictionaries';
@@ -21,7 +22,9 @@ export default async function TradesPage({
             <h1 className="text-3xl font-semibold tracking-tight">{t.title}</h1>
             <p className="mt-1.5 text-sm text-muted-foreground">{t.subtitle}</p>
           </div>
-          <TradesDirectory locale={locale} dict={dict} />
+          <Suspense fallback={null}>
+            <TradesDirectory locale={locale} dict={dict} />
+          </Suspense>
         </div>
       </main>
     </div>
