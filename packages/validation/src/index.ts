@@ -158,6 +158,15 @@ export const CreateQuoteSchema = z
     },
   );
 
+// --- Mid-job material requests ---
+// The assigned tradesman asks the homeowner for extra materials/tools partway
+// through a job; estimatedCost is an optional figure for the homeowner's context.
+export const CreateMaterialRequestSchema = z.object({
+  note: z.string().trim().min(3).max(1000),
+  estimatedCost: z.coerce.number().nonnegative().max(100_000_000).optional(),
+  currency: z.string().trim().length(3).default('LKR'),
+});
+
 // --- Escrow / materials deposit ---
 // Trust ladder mirrored from the design system (escrow.jsx): how large a
 // materials deposit a tradesman may request. The deposit is always escrowed and
@@ -313,6 +322,9 @@ export type TradesmanProfileInput = z.infer<typeof TradesmanProfileSchema>;
 export type CreateJobInput = z.infer<typeof CreateJobSchema>;
 export type UpdateJobInput = z.infer<typeof UpdateJobSchema>;
 export type CreateQuoteInput = z.infer<typeof CreateQuoteSchema>;
+export type CreateMaterialRequestInput = z.infer<
+  typeof CreateMaterialRequestSchema
+>;
 export type FundEscrowInput = z.infer<typeof FundEscrowSchema>;
 export type EscrowPaymentMethod = z.infer<typeof EscrowPaymentMethodSchema>;
 export type SubmitVerificationInput = z.infer<typeof SubmitVerificationSchema>;
