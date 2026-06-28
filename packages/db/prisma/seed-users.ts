@@ -63,6 +63,9 @@ type SeedUser = {
     // Verified tradesmen can quote; unverified ones are gated. Mix both so the
     // browse-jobs gating + profile verification card are testable.
     isVerified?: boolean;
+    // Surfaced as a badge on the card/profile; seeds an (approved) verification
+    // record so it's visible in dev.
+    primaryTrade?: string;
   };
 };
 
@@ -120,6 +123,7 @@ const users: SeedUser[] = [
         'plumbing-boiler-service',
         'plumbing-fittings',
       ],
+      primaryTrade: 'Plumbing',
       // Verified — can quote on browse-jobs and shows the green seal.
       isVerified: true,
     },
@@ -142,6 +146,7 @@ const users: SeedUser[] = [
         'electrical-lighting',
         'electrical-safety',
       ],
+      primaryTrade: 'Electrical',
       // Unverified — quoting is gated; profile shows "Verification required".
       isVerified: false,
     },
@@ -164,6 +169,7 @@ const users: SeedUser[] = [
         'painting-wall-prep',
         'carpentry-doors-windows',
       ],
+      primaryTrade: 'Painting',
       isVerified: false,
     },
   },
@@ -282,6 +288,27 @@ async function applyTradesmanProfile(userId: string, seed: SeedUser) {
         skillId: s.id,
       })),
       skipDuplicates: true,
+    });
+  }
+
+  // Seed a verification record carrying the primary trade so the badge is
+  // visible in dev (seeded tradesmen otherwise have no verification record).
+  if (seed.tradesman.primaryTrade) {
+    const verificationData = {
+      fullName: seed.name,
+      nicNumber: `${(seed.phone ?? '').replace(/\D/g, '').slice(-9) || '000000000'}V`,
+      primaryTrade: seed.tradesman.primaryTrade,
+      city: seed.tradesman.city ?? null,
+      district: seed.tradesman.district ?? null,
+      yearsExperience: seed.tradesman.yearsExperience,
+      status: (seed.tradesman.isVerified ? 'APPROVED' : 'PENDING') as
+        | 'APPROVED'
+        | 'PENDING',
+    };
+    await prisma.tradesmanVerification.upsert({
+      where: { userId },
+      create: { userId, ...verificationData },
+      update: verificationData,
     });
   }
 }
