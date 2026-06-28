@@ -434,14 +434,31 @@ model Quote {
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
 
-  job            Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  tradesman      User       @relation("TradesmanQuotes", fields: [tradesmanId], references: [id], onDelete: Cascade)
-  acceptedForJob Job?       @relation("AcceptedQuote")
+  job            Job             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  tradesman      User            @relation("TradesmanQuotes", fields: [tradesmanId], references: [id], onDelete: Cascade)
+  acceptedForJob Job?            @relation("AcceptedQuote")
   escrow         JobEscrow?
+  materials      QuoteMaterial[]
 
   @@unique([jobId, tradesmanId])
   @@index([tradesmanId, status])
   @@index([jobId, status])
+}
+
+// An itemised material/tool line on a quote so the homeowner sees the scope and
+// estimated costs behind the price. Descriptive only — the deposit/escrow figure
+// is the quote's materialsAmount; unitPrice here is the tradesman's estimate.
+model QuoteMaterial {
+  id        String   @id @default(cuid())
+  quoteId   String
+  name      String
+  quantity  Decimal  @default(1) @db.Decimal(10, 2)
+  unitPrice Decimal? @db.Decimal(10, 2)
+  createdAt DateTime @default(now())
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([quoteId])
 }
 
 // One escrow per accepted quote that requested a materials deposit. Crafty Bass

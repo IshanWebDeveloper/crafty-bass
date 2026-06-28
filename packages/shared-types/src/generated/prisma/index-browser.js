@@ -318,6 +318,15 @@ exports.Prisma.QuoteScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.QuoteMaterialScalarFieldEnum = {
+  id: 'id',
+  quoteId: 'quoteId',
+  name: 'name',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  createdAt: 'createdAt',
+};
+
 exports.Prisma.JobEscrowScalarFieldEnum = {
   id: 'id',
   jobId: 'jobId',
@@ -616,6 +625,7 @@ exports.Prisma.ModelName = {
   Job: 'Job',
   JobSkill: 'JobSkill',
   Quote: 'Quote',
+  QuoteMaterial: 'QuoteMaterial',
   JobEscrow: 'JobEscrow',
   EscrowTransaction: 'EscrowTransaction',
   TradesmanVerification: 'TradesmanVerification',

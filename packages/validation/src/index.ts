@@ -117,6 +117,20 @@ export const CreateQuoteSchema = z
       .nonnegative()
       .max(100_000_000)
       .optional(),
+    materials: z
+      .array(
+        z.object({
+          name: z.string().trim().min(1).max(160),
+          quantity: z.coerce.number().positive().max(100_000).default(1),
+          unitPrice: z.coerce
+            .number()
+            .nonnegative()
+            .max(100_000_000)
+            .optional(),
+        }),
+      )
+      .max(40)
+      .optional(),
     depositRequested: z.coerce
       .number()
       .nonnegative()
