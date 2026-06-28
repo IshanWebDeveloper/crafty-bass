@@ -40,6 +40,7 @@ import { LegalModule } from './legal/legal.module.js';
 import { HealthModule } from './health/health.module.js';
 import { WebhooksModule } from './webhooks/webhooks.module.js';
 import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
+import { JobExpiryCronService } from './common/cron/job-expiry.cron.js';
 
 @Module({
   imports: [
@@ -153,6 +154,7 @@ import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
   providers: [
     AppService,
     DataRetentionCronService,
+    JobExpiryCronService,
 
     // Global sanitization pipe
     {

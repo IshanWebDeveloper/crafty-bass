@@ -388,6 +388,9 @@ model Job {
   status              JobStatus    @default(OPEN)
   assignedTradesmanId String?
   acceptedQuoteId     String?      @unique
+  // When an OPEN job stops accepting quotes, derived from urgency at creation. A
+  // cron flips lapsed OPEN jobs to EXPIRED; the UI flags those nearing this time.
+  expiresAt           DateTime?
   completedAt         DateTime?
   cancelledAt         DateTime?
   createdAt           DateTime     @default(now())
@@ -412,6 +415,7 @@ model Job {
   @@index([district, city])
   @@index([assignedTradesmanId])
   @@index([createdAt])
+  @@index([status, expiresAt])
 }
 
 model JobSkill {

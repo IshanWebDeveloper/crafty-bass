@@ -13,6 +13,20 @@ const JOB_LIST_INCLUDE = {
   _count: { select: { quotes: true } },
 } as const;
 
+// How long an OPEN job stays live before expiring, by urgency. More urgent jobs
+// lapse sooner so the board reflects work that's still actionable.
+const EXPIRY_DAYS_BY_URGENCY: Record<string, number> = {
+  EMERGENCY: 1,
+  HIGH: 3,
+  MEDIUM: 7,
+  LOW: 14,
+};
+
+function expiryFromUrgency(urgency: string, from = new Date()): Date {
+  const days = EXPIRY_DAYS_BY_URGENCY[urgency] ?? 7;
+  return new Date(from.getTime() + days * 24 * 60 * 60 * 1000);
+}
+
 @Injectable()
 export class JobsService {
   constructor(private readonly prisma: PrismaService) {}
@@ -40,6 +54,7 @@ export class JobsService {
         descriptionLanguage: dto.descriptionLanguage,
         categoryId: dto.categoryId ?? null,
         urgency: dto.urgency,
+        expiresAt: expiryFromUrgency(dto.urgency),
         locationText: dto.locationText ?? null,
         city: dto.city ?? null,
         district: dto.district ?? null,

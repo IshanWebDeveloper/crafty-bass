@@ -287,6 +287,7 @@ exports.Prisma.JobScalarFieldEnum = {
   status: 'status',
   assignedTradesmanId: 'assignedTradesmanId',
   acceptedQuoteId: 'acceptedQuoteId',
+  expiresAt: 'expiresAt',
   completedAt: 'completedAt',
   cancelledAt: 'cancelledAt',
   createdAt: 'createdAt',
