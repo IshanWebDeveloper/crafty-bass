@@ -15,7 +15,15 @@ import {
   ShieldCheck,
   UserRound,
 } from 'lucide-react';
-import { Badge, Button, DatePicker, Input, buttonVariants, cn } from '@repo/ui';
+import {
+  Badge,
+  Button,
+  Combobox,
+  DatePicker,
+  Input,
+  buttonVariants,
+  cn,
+} from '@repo/ui';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +34,7 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { parseDateInput, formatDateInput } from '@/lib/date';
+import { DISTRICT_OPTIONS } from '@/lib/districts';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { VerifiedBadge } from '@repo/ui';
@@ -37,16 +46,6 @@ import {
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
-const DISTRICTS = [
-  'Colombo',
-  'Gampaha',
-  'Kalutara',
-  'Kandy',
-  'Galle',
-  'Matara',
-  'Kurunegala',
-  'Jaffna',
-];
 const BANKS = [
   'Bank of Ceylon',
   "People's Bank",
@@ -102,7 +101,7 @@ const EMPTY: Form = {
   nicNumber: '',
   addressLine: '',
   city: '',
-  district: DISTRICTS[0],
+  district: '',
   primaryTrade: '',
   yearsExperience: '',
   nicFront: false,
@@ -404,33 +403,15 @@ function Profile({ t, tv, form, set }: StepProps) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="o-district">{t.profile.district}</Label>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  id="o-district"
-                  variant="outline"
-                  className="w-full justify-between"
-                  aria-label={t.profile.district}
-                >
-                  <span className="truncate">{form.district}</span>
-                  <ChevronDown className="size-4 opacity-60" />
-                </Button>
-              }
-            />
-            <DropdownMenuContent className="min-w-44">
-              <DropdownMenuRadioGroup
-                value={form.district}
-                onValueChange={(value) => set('district', value)}
-              >
-                {DISTRICTS.map((d) => (
-                  <DropdownMenuRadioItem key={d} value={d}>
-                    {d}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Combobox
+            id="o-district"
+            aria-label={t.profile.district}
+            items={DISTRICT_OPTIONS}
+            value={form.district || null}
+            onValueChange={(value) => set('district', value ?? '')}
+            placeholder={t.profile.district}
+            emptyText={t.profile.districtEmpty}
+          />
         </div>
       </div>
       <div className="space-y-1.5">
