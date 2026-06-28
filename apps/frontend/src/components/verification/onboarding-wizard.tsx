@@ -207,8 +207,34 @@ export function OnboardingWizard({
     );
   }
 
-  const canContinue =
-    step === 0 ? form.fullName.trim() && form.nicNumber.trim() : true;
+  // Each step must be completed before advancing (previously only step 0 was
+  // gated, so a tradesman could click through documents/details/payout empty).
+  const stepValid = (s: number): boolean => {
+    switch (s) {
+      case 0:
+        return Boolean(
+          form.fullName.trim() &&
+          form.nicNumber.trim() &&
+          form.primaryTrade.trim(),
+        );
+      case 1:
+        // Core identity documents.
+        return form.nicFront && form.nicBack && form.photo;
+      case 2:
+        // A team must say how many helpers; solo is always fine.
+        return form.crewType === 'solo' || Boolean(form.helperCount.trim());
+      case 3:
+        return Boolean(
+          form.payoutAccountHolder.trim() &&
+          form.payoutBranch.trim() &&
+          form.payoutAccountNumber.trim() &&
+          form.consent,
+        );
+      default:
+        return true;
+    }
+  };
+  const canContinue = stepValid(step);
   const isLast = step === STAGES.length - 1;
 
   return (
@@ -242,14 +268,16 @@ export function OnboardingWizard({
           <span />
         )}
         <span className="flex-1 text-xs text-muted-foreground">
-          {t.stepOf
-            .replace('{current}', String(step + 1))
-            .replace('{total}', String(STAGES.length))}
+          {!canContinue
+            ? t.completeFields
+            : t.stepOf
+                .replace('{current}', String(step + 1))
+                .replace('{total}', String(STAGES.length))}
         </span>
         {isLast ? (
           <Button
             onClick={() => mutation.mutate()}
-            disabled={!form.consent || mutation.isPending}
+            disabled={!canContinue || mutation.isPending}
           >
             {mutation.isPending ? t.submitting : t.submit}
           </Button>

@@ -165,6 +165,7 @@
     "submit": "Submit for verification",
     "submitting": "Submitting…",
     "stepOf": "{current} / {total}",
+    "completeFields": "Complete the required fields to continue.",
     "profile": {
       "title": "Tell us your trade",
       "sub": "Just the basics — you can do the rest later.",
