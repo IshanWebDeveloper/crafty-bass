@@ -409,6 +409,9 @@ export function PostJobForm({
           <Badge variant="soft" className="ml-auto shrink-0">
             {t.new.ai.confidence.replace('{n}', String(detection.confidence))}
           </Badge>
+          <p className="w-full text-xs text-accent-soft-foreground/80">
+            {t.new.ai.disclaimer}
+          </p>
         </div>
       ) : null}
 

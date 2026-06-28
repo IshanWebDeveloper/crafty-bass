@@ -27,7 +27,7 @@ import {
 } from '@repo/ui';
 import { signOut, useSession } from '@/lib/auth-client';
 import { useMounted } from '@/lib/hooks/use-mounted';
-import { useSessionStore } from '@/lib/stores/session-store';
+import { useSessionStore, type UserType } from '@/lib/stores/session-store';
 import { RoleBadge } from './role-badge';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
@@ -41,7 +41,13 @@ export function HeaderAuth({
 }) {
   const router = useRouter();
   const { data: session, isPending } = useSession();
-  const userType = useSessionStore((s) => s.userType);
+  // The session carries `userType` (inferred on the auth client), so the badge
+  // can render the instant the session resolves; the store is the optimistic
+  // fallback (e.g. just after sign-up, before the session refreshes).
+  const storeUserType = useSessionStore((s) => s.userType);
+  const userType =
+    (session?.user as { userType?: UserType } | undefined)?.userType ??
+    storeUserType;
   // Until mounted, the server (no session) and client (session may resolve
   // synchronously) would disagree; render the skeleton on both — see useMounted.
   const mounted = useMounted();

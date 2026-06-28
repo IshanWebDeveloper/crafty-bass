@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getMe } from '@/lib/api/users';
 import { useSession } from '@/lib/auth-client';
-import { useSessionStore } from '@/lib/stores/session-store';
+import { useSessionStore, type UserType } from '@/lib/stores/session-store';
 
 /**
  * The signed-in user (id, role, userType, …) or `undefined` when signed out.
@@ -13,7 +13,11 @@ import { useSessionStore } from '@/lib/stores/session-store';
  *
  * Side effect: mirrors the resolved `userType` into the session store so client
  * components can read the role synchronously (and so sign-up's optimistic set
- * has a home). Resets the store to null when the session goes away.
+ * has a home). The session itself carries `userType` (inferred on the auth
+ * client), so we seed the store the moment the session resolves — before the
+ * `me` query returns — which is what makes the header role badge appear
+ * immediately on sign-in instead of only after a reload. The query result then
+ * refines it. Resets the store to null when the session goes away.
  */
 export function useMe() {
   const { data: session } = useSession();
@@ -30,9 +34,11 @@ export function useMe() {
   useEffect(() => {
     if (!session) {
       setUserType(null);
-    } else if (query.data) {
-      setUserType(query.data.userType);
+      return;
     }
+    const sessionUserType =
+      (session.user as { userType?: UserType }).userType ?? null;
+    setUserType(query.data?.userType ?? sessionUserType);
   }, [session, query.data, setUserType]);
 
   return query;
