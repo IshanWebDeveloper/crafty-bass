@@ -60,6 +60,8 @@ export const TradesmanProfileSchema = z.object({
   serviceRadiusKm: z.coerce.number().int().min(0).max(500).default(15),
   preferredLanguage: LanguageCodeSchema.default('EN'),
   skillIds: z.array(id).max(50).optional(),
+  certifications: z.array(z.string().trim().min(1).max(160)).max(30).optional(),
+  vehicles: z.array(z.string().trim().min(1).max(120)).max(20).optional(),
 });
 
 // --- Jobs ---

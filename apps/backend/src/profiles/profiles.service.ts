@@ -64,6 +64,12 @@ export class ProfilesService {
       district: rest.district ?? null,
       serviceRadiusKm: rest.serviceRadiusKm,
       preferredLanguage: rest.preferredLanguage,
+      // Only touch these when the client sends them so partial updates don't
+      // wipe an existing list; the profile form always sends the full arrays.
+      ...(rest.certifications !== undefined
+        ? { certifications: rest.certifications }
+        : {}),
+      ...(rest.vehicles !== undefined ? { vehicles: rest.vehicles } : {}),
     };
 
     return this.prisma.$transaction(async (tx) => {
@@ -164,6 +170,8 @@ export class ProfilesService {
       locationText: profile.locationText,
       yearsExperience: profile.yearsExperience,
       preferredLanguage: profile.preferredLanguage,
+      certifications: profile.certifications,
+      vehicles: profile.vehicles,
       hourlyRate:
         profile.hourlyRate != null ? Number(profile.hourlyRate) : null,
       serviceRadiusKm: profile.serviceRadiusKm,

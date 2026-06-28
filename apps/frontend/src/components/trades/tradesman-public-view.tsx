@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, MapPin } from 'lucide-react';
+import { ArrowLeft, Award, MapPin, Truck } from 'lucide-react';
 import {
   Avatar,
   AvatarFallback,
@@ -165,6 +165,43 @@ export function TradesmanPublicView({
                 </p>
               )}
             </section>
+            {trade.certifications.length > 0 ? (
+              <section>
+                <h2 className="flex items-center gap-1.5 text-sm font-semibold">
+                  <Award className="size-4 text-muted-foreground" aria-hidden />
+                  {t.certifications}
+                </h2>
+                <ul className="mt-2 space-y-1.5">
+                  {trade.certifications.map((c) => (
+                    <li
+                      key={c}
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                    >
+                      <span
+                        className="mt-1.5 size-1.5 shrink-0 rounded-full bg-muted-foreground/50"
+                        aria-hidden
+                      />
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+            {trade.vehicles.length > 0 ? (
+              <section>
+                <h2 className="flex items-center gap-1.5 text-sm font-semibold">
+                  <Truck className="size-4 text-muted-foreground" aria-hidden />
+                  {t.vehicles}
+                </h2>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {trade.vehicles.map((v) => (
+                    <Tag key={v} variant="soft">
+                      {v}
+                    </Tag>
+                  ))}
+                </div>
+              </section>
+            ) : null}
           </CardContent>
         </Card>
 
