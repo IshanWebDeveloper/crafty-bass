@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ReceiptText } from 'lucide-react';
 import { Badge, Button, Skeleton } from '@repo/ui';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
@@ -51,6 +52,9 @@ export function MyQuotesList({
     return (
       <Card>
         <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
+          <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <ReceiptText className="size-6" aria-hidden />
+          </span>
           <p className="text-sm text-muted-foreground">{tm.empty}</p>
           <Button
             nativeButton={false}

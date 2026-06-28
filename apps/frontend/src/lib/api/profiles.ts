@@ -107,6 +107,7 @@ export type TradesmanListItem = {
   city: string | null;
   district: string | null;
   yearsExperience: number;
+  preferredLanguage: LanguageCode;
   avgRating: number;
   ratingCount: number;
   jobsCompleted: number;

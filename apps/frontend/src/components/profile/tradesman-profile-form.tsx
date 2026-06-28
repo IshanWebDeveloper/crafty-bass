@@ -5,10 +5,21 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Input, cn, tagVariants } from '@repo/ui';
+import {
+  Button,
+  Combobox,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+  Input,
+  cn,
+  tagVariants,
+} from '@repo/ui';
+import { ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
-import { NativeSelect } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import {
   upsertTradesmanProfile,
@@ -16,6 +27,7 @@ import {
   type TradesmanProfile,
   type LanguageCode,
 } from '@/lib/api/profiles';
+import { DISTRICT_OPTIONS } from '@/lib/districts';
 import type { Dictionary } from '@/i18n/dictionaries';
 
 const LANGUAGE_OPTIONS: LanguageCode[] = ['EN', 'SI', 'TA'];
@@ -65,6 +77,8 @@ export function TradesmanProfileForm({
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<TradesmanValues>({
     resolver: zodResolver(TradesmanSchema),
@@ -82,6 +96,7 @@ export function TradesmanProfileForm({
       preferredLanguage: initial?.preferredLanguage ?? 'EN',
     },
   });
+  const selectedLanguage = watch('preferredLanguage');
 
   const mutation = useMutation({
     mutationFn: (values: TradesmanValues) =>
@@ -188,22 +203,58 @@ export function TradesmanProfileForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="district">{t.fields.district}</Label>
-          <Input id="district" {...register('district')} />
+          <input type="hidden" {...register('district')} />
+          <Combobox
+            id="district"
+            aria-label={t.fields.district}
+            items={DISTRICT_OPTIONS}
+            value={watch('district') || null}
+            onValueChange={(value) =>
+              setValue('district', value ?? '', { shouldDirty: true })
+            }
+            placeholder={t.fields.districtPlaceholder}
+            emptyText={t.fields.districtEmpty}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="preferredLanguage">
             {t.fields.preferredLanguage}
           </Label>
-          <NativeSelect
-            id="preferredLanguage"
-            {...register('preferredLanguage')}
-          >
-            {LANGUAGE_OPTIONS.map((l) => (
-              <option key={l} value={l}>
-                {t.languages[l]}
-              </option>
-            ))}
-          </NativeSelect>
+          <input type="hidden" {...register('preferredLanguage')} />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  id="preferredLanguage"
+                  variant="outline"
+                  className="w-full justify-between"
+                  aria-label={t.fields.preferredLanguage}
+                >
+                  <span className="truncate">
+                    {t.languages[selectedLanguage]}
+                  </span>
+                  <ChevronDown className="size-4 opacity-60" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="min-w-44">
+              <DropdownMenuRadioGroup
+                value={selectedLanguage}
+                onValueChange={(value) =>
+                  setValue('preferredLanguage', value as LanguageCode, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
+              >
+                {LANGUAGE_OPTIONS.map((l) => (
+                  <DropdownMenuRadioItem key={l} value={l}>
+                    {t.languages[l]}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 

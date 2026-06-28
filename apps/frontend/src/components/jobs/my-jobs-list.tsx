@@ -2,10 +2,12 @@
 
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
+import { ClipboardList } from 'lucide-react';
 import { Badge, Button, Skeleton } from '@repo/ui';
 import { Card, CardContent } from '@/components/ui/card';
 import { listMyJobs } from '@/lib/api/jobs';
 import { statusVariant } from '@/lib/status';
+import { CategoryBadge } from '@/lib/categories';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -36,6 +38,9 @@ export function MyJobsList({
     return (
       <Card>
         <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
+          <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <ClipboardList className="size-6" aria-hidden />
+          </span>
           <p className="text-sm text-muted-foreground">{t.mine.empty}</p>
           <Button
             nativeButton={false}
@@ -55,6 +60,12 @@ export function MyJobsList({
           <Card>
             <CardContent className="flex items-start justify-between gap-4 p-5">
               <div className="min-w-0 flex-1">
+                <div className="mb-2">
+                  <CategoryBadge
+                    slug={job.category?.slug}
+                    label={job.category?.nameEn ?? '—'}
+                  />
+                </div>
                 <Link
                   href={`/${locale}/jobs/${job.id}`}
                   className="block text-base font-semibold hover:underline"
@@ -62,7 +73,6 @@ export function MyJobsList({
                   {job.title}
                 </Link>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  {job.category?.nameEn ?? '—'} ·{' '}
                   {new Date(job.createdAt).toLocaleDateString(locale)} ·{' '}
                   {[job.city, job.district].filter(Boolean).join(', ') || '—'}
                 </p>

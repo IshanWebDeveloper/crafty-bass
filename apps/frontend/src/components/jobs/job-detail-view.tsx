@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJob, cancelJob, type Job } from '@/lib/api/jobs';
 import { statusVariant } from '@/lib/status';
+import { CategoryBadge, UrgencyBadge } from '@/lib/categories';
 import { formatBudgetRange } from '@/lib/currency';
 import { EscrowSection } from '@/components/escrow/escrow-section';
 import {
@@ -115,10 +116,16 @@ export function JobDetailView({
 
           <dl className="grid gap-3 sm:grid-cols-3 text-sm">
             <Field label={t.fields.category}>
-              {job.category?.nameEn ?? '—'}
+              <CategoryBadge
+                slug={job.category?.slug}
+                label={job.category?.nameEn ?? '—'}
+              />
             </Field>
             <Field label={t.fields.urgency}>
-              {t.urgencyLabels[job.urgency]}
+              <UrgencyBadge
+                urgency={job.urgency}
+                label={t.urgencyLabels[job.urgency]}
+              />
             </Field>
             <Field label={t.detail.budget}>
               <span className="font-mono">

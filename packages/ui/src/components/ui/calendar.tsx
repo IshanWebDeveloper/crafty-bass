@@ -24,13 +24,13 @@ function Calendar({
       classNames={{
         months: 'relative flex flex-col gap-4 sm:flex-row',
         month: 'flex w-full flex-col gap-4',
-        month_caption: 'relative flex h-8 items-center justify-center',
+        month_caption: 'relative z-0 flex h-8 items-center justify-center',
         caption_label: 'text-sm font-medium',
         dropdowns: 'flex items-center gap-1.5 text-sm font-medium',
         dropdown_root:
           'relative rounded-md border border-input has-focus:border-ring',
         dropdown: 'absolute inset-0 opacity-0',
-        nav: 'absolute inset-x-0 top-0 flex items-center justify-between',
+        nav: 'absolute inset-x-0 top-0 z-10 flex items-center justify-between',
         button_previous: cn(
           buttonVariants({ variant: 'outline', size: 'icon' }),
           'size-7 bg-transparent p-0 opacity-70 hover:opacity-100',

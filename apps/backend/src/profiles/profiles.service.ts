@@ -134,6 +134,7 @@ export class ProfilesService {
       city: p.city,
       district: p.district,
       yearsExperience: p.yearsExperience,
+      preferredLanguage: p.preferredLanguage,
       avgRating: Number(p.avgRating),
       ratingCount: p.ratingCount,
       jobsCompleted: p.jobsCompleted,
@@ -162,6 +163,7 @@ export class ProfilesService {
       district: profile.district,
       locationText: profile.locationText,
       yearsExperience: profile.yearsExperience,
+      preferredLanguage: profile.preferredLanguage,
       hourlyRate:
         profile.hourlyRate != null ? Number(profile.hourlyRate) : null,
       serviceRadiusKm: profile.serviceRadiusKm,

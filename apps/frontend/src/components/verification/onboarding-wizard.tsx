@@ -16,11 +16,18 @@ import {
   UserRound,
 } from 'lucide-react';
 import { Badge, Button, DatePicker, Input, buttonVariants, cn } from '@repo/ui';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@repo/ui';
+import { ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { parseDateInput, formatDateInput } from '@/lib/date';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { NativeSelect } from '@/components/ui/select';
 import { VerifiedBadge } from '@repo/ui';
 import {
   getMyVerification,
@@ -369,15 +376,33 @@ function Profile({ t, tv, form, set }: StepProps) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="o-district">{t.profile.district}</Label>
-          <NativeSelect
-            id="o-district"
-            value={form.district}
-            onChange={(e) => set('district', e.target.value)}
-          >
-            {DISTRICTS.map((d) => (
-              <option key={d}>{d}</option>
-            ))}
-          </NativeSelect>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  id="o-district"
+                  variant="outline"
+                  className="w-full justify-between"
+                  aria-label={t.profile.district}
+                >
+                  <span className="truncate">{form.district}</span>
+                  <ChevronDown className="size-4 opacity-60" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="min-w-44">
+              <DropdownMenuRadioGroup
+                value={form.district}
+                onValueChange={(value) => set('district', value)}
+              >
+                {DISTRICTS.map((d) => (
+                  <DropdownMenuRadioItem key={d} value={d}>
+                    {d}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <div className="space-y-1.5">
@@ -673,15 +698,33 @@ function Payout({ tv, form, set }: StepProps) {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="o-bank">{tv.fields.bank}</Label>
-          <NativeSelect
-            id="o-bank"
-            value={form.payoutBank}
-            onChange={(e) => set('payoutBank', e.target.value)}
-          >
-            {BANKS.map((b) => (
-              <option key={b}>{b}</option>
-            ))}
-          </NativeSelect>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  id="o-bank"
+                  variant="outline"
+                  className="w-full justify-between"
+                  aria-label={tv.fields.bank}
+                >
+                  <span className="truncate">{form.payoutBank}</span>
+                  <ChevronDown className="size-4 opacity-60" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="min-w-56">
+              <DropdownMenuRadioGroup
+                value={form.payoutBank}
+                onValueChange={(value) => set('payoutBank', value)}
+              >
+                {BANKS.map((b) => (
+                  <DropdownMenuRadioItem key={b} value={b}>
+                    {b}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="o-branch">{tv.fields.branch}</Label>
