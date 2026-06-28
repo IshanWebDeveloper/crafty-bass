@@ -248,7 +248,7 @@ export function SignUpForm({
           </Link>{' '}
           {t.signUp.consentAnd}{' '}
           <Link
-            href={`/${locale}/account/privacy`}
+            href={`/${locale}/privacy-policy`}
             className="font-medium text-foreground underline underline-offset-2"
           >
             {t.signUp.privacy}
@@ -256,6 +256,9 @@ export function SignUpForm({
           .
         </span>
       </label>
+      <p className="text-[0.7rem] leading-relaxed text-muted-foreground">
+        {t.signUp.contactConsent}
+      </p>
       <Button type="submit" className="w-full" disabled={submitting || !agreed}>
         {submitting ? tp.sending : tp.send}
       </Button>
