@@ -26,6 +26,7 @@ import {
   type Quote,
 } from '@/lib/api/quotes';
 import { startConversation } from '@/lib/api/conversations';
+import { QuoteMaterials } from '@/components/quotes/quote-materials';
 import { useSession } from '@/lib/auth-client';
 import { SubmitQuotePanel } from './submit-quote-panel';
 import { LeaveReviewPanel } from '@/components/reviews/leave-review-panel';
@@ -352,6 +353,15 @@ function QuoteRow({
                 ? `${tq.estimatedCompletion}: ${new Date(quote.estimatedCompletion).toLocaleDateString(locale)}`
                 : ''}
             </p>
+          ) : null}
+          {quote.materials.length > 0 ? (
+            <div className="mt-3 max-w-prose">
+              <QuoteMaterials
+                materials={quote.materials}
+                currency={quote.currency}
+                dict={dict}
+              />
+            </div>
           ) : null}
         </div>
       </div>

@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Plus, Trash2 } from 'lucide-react';
 import { Button, DatePicker, Input } from '@repo/ui';
 import { maxDeposit } from '@repo/validation';
 import { toast } from 'sonner';
@@ -31,6 +32,17 @@ const SubmitQuoteSchema = z.object({
     .min(1)
     .refine((v) => Number(v) > 0, { message: 'Amount must be positive' }),
   materials: z.string().optional(),
+  // Itemised materials/tools (name + quantity + estimated unit price). Kept as
+  // form strings and converted to numbers on submit.
+  materialItems: z
+    .array(
+      z.object({
+        name: z.string().trim().max(160),
+        quantity: z.string(),
+        unitPrice: z.string(),
+      }),
+    )
+    .optional(),
   currency: z.string().trim().length(3),
   message: z.string().trim().max(2000).optional(),
   estimatedStart: z.string().optional(),
@@ -57,6 +69,7 @@ export function SubmitQuotePanel({
     handleSubmit,
     watch,
     setValue,
+    control,
     formState: { errors },
     reset,
   } = useForm<SubmitQuoteValues>({
@@ -64,6 +77,7 @@ export function SubmitQuotePanel({
     defaultValues: {
       amount: '',
       materials: '',
+      materialItems: [],
       currency: 'LKR',
       message: '',
       estimatedStart: '',
@@ -72,6 +86,8 @@ export function SubmitQuotePanel({
       deposit: '',
     },
   });
+
+  const materialItems = useFieldArray({ control, name: 'materialItems' });
 
   const wantDeposit = watch('wantDeposit');
   const amount = Number(watch('amount')) || 0;
@@ -96,19 +112,28 @@ export function SubmitQuotePanel({
   const cappedDeposit = Math.min(deposit, allowedDeposit);
 
   const mutation = useMutation({
-    mutationFn: (values: SubmitQuoteValues) =>
-      createQuote(jobId, {
+    mutationFn: (values: SubmitQuoteValues) => {
+      const materialList = (values.materialItems ?? [])
+        .map((m) => ({
+          name: m.name.trim(),
+          quantity: Number(m.quantity) || 1,
+          unitPrice: m.unitPrice ? Number(m.unitPrice) : undefined,
+        }))
+        .filter((m) => m.name.length > 0);
+      return createQuote(jobId, {
         amount: Number(values.amount),
         materialsAmount: values.materials
           ? Number(values.materials)
           : undefined,
+        materials: materialList.length > 0 ? materialList : undefined,
         depositRequested:
           values.wantDeposit && cappedDeposit > 0 ? cappedDeposit : undefined,
         currency: values.currency,
         message: values.message || undefined,
         estimatedStart: values.estimatedStart || undefined,
         estimatedCompletion: values.estimatedCompletion || undefined,
-      }),
+      });
+    },
     onSuccess: () => {
       toast.success(ts.success);
       reset();
@@ -174,6 +199,77 @@ export function SubmitQuotePanel({
               <Input id="quote-currency" {...register('currency')} />
             </div>
           </div>
+
+          <div className="space-y-2 rounded-lg border border-border p-4">
+            <div>
+              <p className="text-sm font-semibold">
+                {ts.materialsList.heading}
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                {ts.materialsList.hint}
+              </p>
+            </div>
+            {materialItems.fields.length > 0 ? (
+              <div className="space-y-2">
+                <div className="hidden grid-cols-[1fr_5rem_7rem_2rem] gap-2 px-1 text-xs text-muted-foreground sm:grid">
+                  <span>{ts.materialsList.name}</span>
+                  <span>{ts.materialsList.quantity}</span>
+                  <span>{ts.materialsList.unitPrice}</span>
+                  <span className="sr-only">{ts.materialsList.remove}</span>
+                </div>
+                {materialItems.fields.map((field, index) => (
+                  <div
+                    key={field.id}
+                    className="grid grid-cols-2 gap-2 sm:grid-cols-[1fr_5rem_7rem_2rem]"
+                  >
+                    <Input
+                      aria-label={ts.materialsList.name}
+                      placeholder={ts.materialsList.namePlaceholder}
+                      className="col-span-2 sm:col-span-1"
+                      {...register(`materialItems.${index}.name`)}
+                    />
+                    <Input
+                      aria-label={ts.materialsList.quantity}
+                      type="number"
+                      min={0}
+                      step="0.01"
+                      placeholder={ts.materialsList.quantity}
+                      {...register(`materialItems.${index}.quantity`)}
+                    />
+                    <Input
+                      aria-label={ts.materialsList.unitPrice}
+                      type="number"
+                      min={0}
+                      step="0.01"
+                      placeholder={ts.materialsList.unitPrice}
+                      {...register(`materialItems.${index}.unitPrice`)}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={ts.materialsList.remove}
+                      onClick={() => materialItems.remove(index)}
+                    >
+                      <Trash2 className="size-4" aria-hidden />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                materialItems.append({ name: '', quantity: '1', unitPrice: '' })
+              }
+            >
+              <Plus className="size-4" aria-hidden />
+              {ts.materialsList.add}
+            </Button>
+          </div>
+
           <div className="space-y-1.5">
             <Label htmlFor="quote-message">{t.message}</Label>
             <Textarea id="quote-message" rows={3} {...register('message')} />

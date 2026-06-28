@@ -7,12 +7,20 @@ export type QuoteStatus =
   | 'WITHDRAWN'
   | 'EXPIRED';
 
+export type QuoteMaterial = {
+  id: string;
+  name: string;
+  quantity: number;
+  unitPrice: number | null;
+};
+
 export type Quote = {
   id: string;
   jobId: string;
   tradesmanId: string;
   amount: number;
   materialsAmount: number | null;
+  materials: QuoteMaterial[];
   depositRequested: number | null;
   currency: string;
   message: string | null;
@@ -38,6 +46,7 @@ export type Quote = {
 export type CreateQuoteBody = {
   amount: number;
   materialsAmount?: number;
+  materials?: { name: string; quantity: number; unitPrice?: number }[];
   depositRequested?: number;
   currency: string;
   message?: string;

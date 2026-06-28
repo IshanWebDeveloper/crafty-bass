@@ -87,6 +87,12 @@ export type JobSkill = $Result.DefaultSelection<Prisma.$JobSkillPayload>;
  */
 export type Quote = $Result.DefaultSelection<Prisma.$QuotePayload>;
 /**
+ * Model QuoteMaterial
+ *
+ */
+export type QuoteMaterial =
+  $Result.DefaultSelection<Prisma.$QuoteMaterialPayload>;
+/**
  * Model JobEscrow
  *
  */
@@ -650,6 +656,16 @@ export class PrismaClient<
    * ```
    */
   get quote(): Prisma.QuoteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.quoteMaterial`: Exposes CRUD operations for the **QuoteMaterial** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more QuoteMaterials
+   * const quoteMaterials = await prisma.quoteMaterial.findMany()
+   * ```
+   */
+  get quoteMaterial(): Prisma.QuoteMaterialDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.jobEscrow`: Exposes CRUD operations for the **JobEscrow** model.
@@ -1228,6 +1244,7 @@ export namespace Prisma {
     Job: 'Job';
     JobSkill: 'JobSkill';
     Quote: 'Quote';
+    QuoteMaterial: 'QuoteMaterial';
     JobEscrow: 'JobEscrow';
     EscrowTransaction: 'EscrowTransaction';
     TradesmanVerification: 'TradesmanVerification';
@@ -1275,6 +1292,7 @@ export namespace Prisma {
         | 'job'
         | 'jobSkill'
         | 'quote'
+        | 'quoteMaterial'
         | 'jobEscrow'
         | 'escrowTransaction'
         | 'tradesmanVerification'
@@ -2336,6 +2354,82 @@ export namespace Prisma {
           };
         };
       };
+      QuoteMaterial: {
+        payload: Prisma.$QuoteMaterialPayload<ExtArgs>;
+        fields: Prisma.QuoteMaterialFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.QuoteMaterialFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.QuoteMaterialFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload>;
+          };
+          findFirst: {
+            args: Prisma.QuoteMaterialFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.QuoteMaterialFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload>;
+          };
+          findMany: {
+            args: Prisma.QuoteMaterialFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload>[];
+          };
+          create: {
+            args: Prisma.QuoteMaterialCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload>;
+          };
+          createMany: {
+            args: Prisma.QuoteMaterialCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.QuoteMaterialCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload>[];
+          };
+          delete: {
+            args: Prisma.QuoteMaterialDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload>;
+          };
+          update: {
+            args: Prisma.QuoteMaterialUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload>;
+          };
+          deleteMany: {
+            args: Prisma.QuoteMaterialDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.QuoteMaterialUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.QuoteMaterialUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload>[];
+          };
+          upsert: {
+            args: Prisma.QuoteMaterialUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$QuoteMaterialPayload>;
+          };
+          aggregate: {
+            args: Prisma.QuoteMaterialAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateQuoteMaterial>;
+          };
+          groupBy: {
+            args: Prisma.QuoteMaterialGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<QuoteMaterialGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.QuoteMaterialCountArgs<ExtArgs>;
+            result:
+              | $Utils.Optional<QuoteMaterialCountAggregateOutputType>
+              | number;
+          };
+        };
+      };
       JobEscrow: {
         payload: Prisma.$JobEscrowPayload<ExtArgs>;
         fields: Prisma.JobEscrowFieldRefs;
@@ -3214,6 +3308,7 @@ export namespace Prisma {
     job?: JobOmit;
     jobSkill?: JobSkillOmit;
     quote?: QuoteOmit;
+    quoteMaterial?: QuoteMaterialOmit;
     jobEscrow?: JobEscrowOmit;
     escrowTransaction?: EscrowTransactionOmit;
     tradesmanVerification?: TradesmanVerificationOmit;
@@ -3762,6 +3857,42 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: ReportWhereInput;
+  };
+
+  /**
+   * Count Type QuoteCountOutputType
+   */
+
+  export type QuoteCountOutputType = {
+    materials: number;
+  };
+
+  export type QuoteCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    materials?: boolean | QuoteCountOutputTypeCountMaterialsArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * QuoteCountOutputType without action
+   */
+  export type QuoteCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteCountOutputType
+     */
+    select?: QuoteCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * QuoteCountOutputType without action
+   */
+  export type QuoteCountOutputTypeCountMaterialsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: QuoteMaterialWhereInput;
   };
 
   /**
@@ -24077,6 +24208,8 @@ export namespace Prisma {
       tradesman?: boolean | UserDefaultArgs<ExtArgs>;
       acceptedForJob?: boolean | Quote$acceptedForJobArgs<ExtArgs>;
       escrow?: boolean | Quote$escrowArgs<ExtArgs>;
+      materials?: boolean | Quote$materialsArgs<ExtArgs>;
+      _count?: boolean | QuoteCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['quote']
   >;
@@ -24176,6 +24309,8 @@ export namespace Prisma {
     tradesman?: boolean | UserDefaultArgs<ExtArgs>;
     acceptedForJob?: boolean | Quote$acceptedForJobArgs<ExtArgs>;
     escrow?: boolean | Quote$escrowArgs<ExtArgs>;
+    materials?: boolean | Quote$materialsArgs<ExtArgs>;
+    _count?: boolean | QuoteCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type QuoteIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
@@ -24199,6 +24334,7 @@ export namespace Prisma {
       tradesman: Prisma.$UserPayload<ExtArgs>;
       acceptedForJob: Prisma.$JobPayload<ExtArgs> | null;
       escrow: Prisma.$JobEscrowPayload<ExtArgs> | null;
+      materials: Prisma.$QuoteMaterialPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -24817,6 +24953,17 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >;
+    materials<T extends Quote$materialsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Quote$materialsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$QuoteMaterialPayload<ExtArgs>,
+          T,
+          'findMany',
+          GlobalOmitOptions
+        >
+      | Null
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -25342,6 +25489,34 @@ export namespace Prisma {
   };
 
   /**
+   * Quote.materials
+   */
+  export type Quote$materialsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    where?: QuoteMaterialWhereInput;
+    orderBy?:
+      | QuoteMaterialOrderByWithRelationInput
+      | QuoteMaterialOrderByWithRelationInput[];
+    cursor?: QuoteMaterialWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: QuoteMaterialScalarFieldEnum | QuoteMaterialScalarFieldEnum[];
+  };
+
+  /**
    * Quote without action
    */
   export type QuoteDefaultArgs<
@@ -25359,6 +25534,1375 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: QuoteInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model QuoteMaterial
+   */
+
+  export type AggregateQuoteMaterial = {
+    _count: QuoteMaterialCountAggregateOutputType | null;
+    _avg: QuoteMaterialAvgAggregateOutputType | null;
+    _sum: QuoteMaterialSumAggregateOutputType | null;
+    _min: QuoteMaterialMinAggregateOutputType | null;
+    _max: QuoteMaterialMaxAggregateOutputType | null;
+  };
+
+  export type QuoteMaterialAvgAggregateOutputType = {
+    quantity: Decimal | null;
+    unitPrice: Decimal | null;
+  };
+
+  export type QuoteMaterialSumAggregateOutputType = {
+    quantity: Decimal | null;
+    unitPrice: Decimal | null;
+  };
+
+  export type QuoteMaterialMinAggregateOutputType = {
+    id: string | null;
+    quoteId: string | null;
+    name: string | null;
+    quantity: Decimal | null;
+    unitPrice: Decimal | null;
+    createdAt: Date | null;
+  };
+
+  export type QuoteMaterialMaxAggregateOutputType = {
+    id: string | null;
+    quoteId: string | null;
+    name: string | null;
+    quantity: Decimal | null;
+    unitPrice: Decimal | null;
+    createdAt: Date | null;
+  };
+
+  export type QuoteMaterialCountAggregateOutputType = {
+    id: number;
+    quoteId: number;
+    name: number;
+    quantity: number;
+    unitPrice: number;
+    createdAt: number;
+    _all: number;
+  };
+
+  export type QuoteMaterialAvgAggregateInputType = {
+    quantity?: true;
+    unitPrice?: true;
+  };
+
+  export type QuoteMaterialSumAggregateInputType = {
+    quantity?: true;
+    unitPrice?: true;
+  };
+
+  export type QuoteMaterialMinAggregateInputType = {
+    id?: true;
+    quoteId?: true;
+    name?: true;
+    quantity?: true;
+    unitPrice?: true;
+    createdAt?: true;
+  };
+
+  export type QuoteMaterialMaxAggregateInputType = {
+    id?: true;
+    quoteId?: true;
+    name?: true;
+    quantity?: true;
+    unitPrice?: true;
+    createdAt?: true;
+  };
+
+  export type QuoteMaterialCountAggregateInputType = {
+    id?: true;
+    quoteId?: true;
+    name?: true;
+    quantity?: true;
+    unitPrice?: true;
+    createdAt?: true;
+    _all?: true;
+  };
+
+  export type QuoteMaterialAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which QuoteMaterial to aggregate.
+     */
+    where?: QuoteMaterialWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of QuoteMaterials to fetch.
+     */
+    orderBy?:
+      | QuoteMaterialOrderByWithRelationInput
+      | QuoteMaterialOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: QuoteMaterialWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` QuoteMaterials from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` QuoteMaterials.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned QuoteMaterials
+     **/
+    _count?: true | QuoteMaterialCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: QuoteMaterialAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: QuoteMaterialSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: QuoteMaterialMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: QuoteMaterialMaxAggregateInputType;
+  };
+
+  export type GetQuoteMaterialAggregateType<
+    T extends QuoteMaterialAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateQuoteMaterial]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQuoteMaterial[P]>
+      : GetScalarType<T[P], AggregateQuoteMaterial[P]>;
+  };
+
+  export type QuoteMaterialGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: QuoteMaterialWhereInput;
+    orderBy?:
+      | QuoteMaterialOrderByWithAggregationInput
+      | QuoteMaterialOrderByWithAggregationInput[];
+    by: QuoteMaterialScalarFieldEnum[] | QuoteMaterialScalarFieldEnum;
+    having?: QuoteMaterialScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: QuoteMaterialCountAggregateInputType | true;
+    _avg?: QuoteMaterialAvgAggregateInputType;
+    _sum?: QuoteMaterialSumAggregateInputType;
+    _min?: QuoteMaterialMinAggregateInputType;
+    _max?: QuoteMaterialMaxAggregateInputType;
+  };
+
+  export type QuoteMaterialGroupByOutputType = {
+    id: string;
+    quoteId: string;
+    name: string;
+    quantity: Decimal;
+    unitPrice: Decimal | null;
+    createdAt: Date;
+    _count: QuoteMaterialCountAggregateOutputType | null;
+    _avg: QuoteMaterialAvgAggregateOutputType | null;
+    _sum: QuoteMaterialSumAggregateOutputType | null;
+    _min: QuoteMaterialMinAggregateOutputType | null;
+    _max: QuoteMaterialMaxAggregateOutputType | null;
+  };
+
+  type GetQuoteMaterialGroupByPayload<T extends QuoteMaterialGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<QuoteMaterialGroupByOutputType, T['by']> & {
+          [P in keyof T &
+            keyof QuoteMaterialGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QuoteMaterialGroupByOutputType[P]>
+            : GetScalarType<T[P], QuoteMaterialGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type QuoteMaterialSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      quoteId?: boolean;
+      name?: boolean;
+      quantity?: boolean;
+      unitPrice?: boolean;
+      createdAt?: boolean;
+      quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['quoteMaterial']
+  >;
+
+  export type QuoteMaterialSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      quoteId?: boolean;
+      name?: boolean;
+      quantity?: boolean;
+      unitPrice?: boolean;
+      createdAt?: boolean;
+      quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['quoteMaterial']
+  >;
+
+  export type QuoteMaterialSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      quoteId?: boolean;
+      name?: boolean;
+      quantity?: boolean;
+      unitPrice?: boolean;
+      createdAt?: boolean;
+      quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['quoteMaterial']
+  >;
+
+  export type QuoteMaterialSelectScalar = {
+    id?: boolean;
+    quoteId?: boolean;
+    name?: boolean;
+    quantity?: boolean;
+    unitPrice?: boolean;
+    createdAt?: boolean;
+  };
+
+  export type QuoteMaterialOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    'id' | 'quoteId' | 'name' | 'quantity' | 'unitPrice' | 'createdAt',
+    ExtArgs['result']['quoteMaterial']
+  >;
+  export type QuoteMaterialInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+  };
+  export type QuoteMaterialIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+  };
+  export type QuoteMaterialIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    quote?: boolean | QuoteDefaultArgs<ExtArgs>;
+  };
+
+  export type $QuoteMaterialPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'QuoteMaterial';
+    objects: {
+      quote: Prisma.$QuotePayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        quoteId: string;
+        name: string;
+        quantity: Prisma.Decimal;
+        unitPrice: Prisma.Decimal | null;
+        createdAt: Date;
+      },
+      ExtArgs['result']['quoteMaterial']
+    >;
+    composites: {};
+  };
+
+  type QuoteMaterialGetPayload<
+    S extends boolean | null | undefined | QuoteMaterialDefaultArgs,
+  > = $Result.GetResult<Prisma.$QuoteMaterialPayload, S>;
+
+  type QuoteMaterialCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    QuoteMaterialFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit'
+  > & {
+    select?: QuoteMaterialCountAggregateInputType | true;
+  };
+
+  export interface QuoteMaterialDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['QuoteMaterial'];
+      meta: { name: 'QuoteMaterial' };
+    };
+    /**
+     * Find zero or one QuoteMaterial that matches the filter.
+     * @param {QuoteMaterialFindUniqueArgs} args - Arguments to find a QuoteMaterial
+     * @example
+     * // Get one QuoteMaterial
+     * const quoteMaterial = await prisma.quoteMaterial.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QuoteMaterialFindUniqueArgs>(
+      args: SelectSubset<T, QuoteMaterialFindUniqueArgs<ExtArgs>>,
+    ): Prisma__QuoteMaterialClient<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one QuoteMaterial that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {QuoteMaterialFindUniqueOrThrowArgs} args - Arguments to find a QuoteMaterial
+     * @example
+     * // Get one QuoteMaterial
+     * const quoteMaterial = await prisma.quoteMaterial.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QuoteMaterialFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, QuoteMaterialFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__QuoteMaterialClient<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first QuoteMaterial that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuoteMaterialFindFirstArgs} args - Arguments to find a QuoteMaterial
+     * @example
+     * // Get one QuoteMaterial
+     * const quoteMaterial = await prisma.quoteMaterial.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QuoteMaterialFindFirstArgs>(
+      args?: SelectSubset<T, QuoteMaterialFindFirstArgs<ExtArgs>>,
+    ): Prisma__QuoteMaterialClient<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first QuoteMaterial that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuoteMaterialFindFirstOrThrowArgs} args - Arguments to find a QuoteMaterial
+     * @example
+     * // Get one QuoteMaterial
+     * const quoteMaterial = await prisma.quoteMaterial.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QuoteMaterialFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, QuoteMaterialFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__QuoteMaterialClient<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more QuoteMaterials that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuoteMaterialFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QuoteMaterials
+     * const quoteMaterials = await prisma.quoteMaterial.findMany()
+     *
+     * // Get first 10 QuoteMaterials
+     * const quoteMaterials = await prisma.quoteMaterial.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const quoteMaterialWithIdOnly = await prisma.quoteMaterial.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends QuoteMaterialFindManyArgs>(
+      args?: SelectSubset<T, QuoteMaterialFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create a QuoteMaterial.
+     * @param {QuoteMaterialCreateArgs} args - Arguments to create a QuoteMaterial.
+     * @example
+     * // Create one QuoteMaterial
+     * const QuoteMaterial = await prisma.quoteMaterial.create({
+     *   data: {
+     *     // ... data to create a QuoteMaterial
+     *   }
+     * })
+     *
+     */
+    create<T extends QuoteMaterialCreateArgs>(
+      args: SelectSubset<T, QuoteMaterialCreateArgs<ExtArgs>>,
+    ): Prisma__QuoteMaterialClient<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'create',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many QuoteMaterials.
+     * @param {QuoteMaterialCreateManyArgs} args - Arguments to create many QuoteMaterials.
+     * @example
+     * // Create many QuoteMaterials
+     * const quoteMaterial = await prisma.quoteMaterial.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends QuoteMaterialCreateManyArgs>(
+      args?: SelectSubset<T, QuoteMaterialCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many QuoteMaterials and returns the data saved in the database.
+     * @param {QuoteMaterialCreateManyAndReturnArgs} args - Arguments to create many QuoteMaterials.
+     * @example
+     * // Create many QuoteMaterials
+     * const quoteMaterial = await prisma.quoteMaterial.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many QuoteMaterials and only return the `id`
+     * const quoteMaterialWithIdOnly = await prisma.quoteMaterial.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends QuoteMaterialCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, QuoteMaterialCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a QuoteMaterial.
+     * @param {QuoteMaterialDeleteArgs} args - Arguments to delete one QuoteMaterial.
+     * @example
+     * // Delete one QuoteMaterial
+     * const QuoteMaterial = await prisma.quoteMaterial.delete({
+     *   where: {
+     *     // ... filter to delete one QuoteMaterial
+     *   }
+     * })
+     *
+     */
+    delete<T extends QuoteMaterialDeleteArgs>(
+      args: SelectSubset<T, QuoteMaterialDeleteArgs<ExtArgs>>,
+    ): Prisma__QuoteMaterialClient<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'delete',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one QuoteMaterial.
+     * @param {QuoteMaterialUpdateArgs} args - Arguments to update one QuoteMaterial.
+     * @example
+     * // Update one QuoteMaterial
+     * const quoteMaterial = await prisma.quoteMaterial.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends QuoteMaterialUpdateArgs>(
+      args: SelectSubset<T, QuoteMaterialUpdateArgs<ExtArgs>>,
+    ): Prisma__QuoteMaterialClient<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'update',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more QuoteMaterials.
+     * @param {QuoteMaterialDeleteManyArgs} args - Arguments to filter QuoteMaterials to delete.
+     * @example
+     * // Delete a few QuoteMaterials
+     * const { count } = await prisma.quoteMaterial.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends QuoteMaterialDeleteManyArgs>(
+      args?: SelectSubset<T, QuoteMaterialDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more QuoteMaterials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuoteMaterialUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QuoteMaterials
+     * const quoteMaterial = await prisma.quoteMaterial.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends QuoteMaterialUpdateManyArgs>(
+      args: SelectSubset<T, QuoteMaterialUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more QuoteMaterials and returns the data updated in the database.
+     * @param {QuoteMaterialUpdateManyAndReturnArgs} args - Arguments to update many QuoteMaterials.
+     * @example
+     * // Update many QuoteMaterials
+     * const quoteMaterial = await prisma.quoteMaterial.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more QuoteMaterials and only return the `id`
+     * const quoteMaterialWithIdOnly = await prisma.quoteMaterial.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends QuoteMaterialUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, QuoteMaterialUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one QuoteMaterial.
+     * @param {QuoteMaterialUpsertArgs} args - Arguments to update or create a QuoteMaterial.
+     * @example
+     * // Update or create a QuoteMaterial
+     * const quoteMaterial = await prisma.quoteMaterial.upsert({
+     *   create: {
+     *     // ... data to create a QuoteMaterial
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QuoteMaterial we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QuoteMaterialUpsertArgs>(
+      args: SelectSubset<T, QuoteMaterialUpsertArgs<ExtArgs>>,
+    ): Prisma__QuoteMaterialClient<
+      $Result.GetResult<
+        Prisma.$QuoteMaterialPayload<ExtArgs>,
+        T,
+        'upsert',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of QuoteMaterials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuoteMaterialCountArgs} args - Arguments to filter QuoteMaterials to count.
+     * @example
+     * // Count the number of QuoteMaterials
+     * const count = await prisma.quoteMaterial.count({
+     *   where: {
+     *     // ... the filter for the QuoteMaterials we want to count
+     *   }
+     * })
+     **/
+    count<T extends QuoteMaterialCountArgs>(
+      args?: Subset<T, QuoteMaterialCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QuoteMaterialCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a QuoteMaterial.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuoteMaterialAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends QuoteMaterialAggregateArgs>(
+      args: Subset<T, QuoteMaterialAggregateArgs>,
+    ): Prisma.PrismaPromise<GetQuoteMaterialAggregateType<T>>;
+
+    /**
+     * Group by QuoteMaterial.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuoteMaterialGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends QuoteMaterialGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QuoteMaterialGroupByArgs['orderBy'] }
+        : { orderBy?: QuoteMaterialGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T['orderBy']>>
+      >,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      'Field ',
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, QuoteMaterialGroupByArgs, OrderByArg> &
+        InputErrors,
+    ): {} extends InputErrors
+      ? GetQuoteMaterialGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the QuoteMaterial model
+     */
+    readonly fields: QuoteMaterialFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QuoteMaterial.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QuoteMaterialClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    quote<T extends QuoteDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, QuoteDefaultArgs<ExtArgs>>,
+    ): Prisma__QuoteClient<
+      | $Result.GetResult<
+          Prisma.$QuotePayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the QuoteMaterial model
+   */
+  interface QuoteMaterialFieldRefs {
+    readonly id: FieldRef<'QuoteMaterial', 'String'>;
+    readonly quoteId: FieldRef<'QuoteMaterial', 'String'>;
+    readonly name: FieldRef<'QuoteMaterial', 'String'>;
+    readonly quantity: FieldRef<'QuoteMaterial', 'Decimal'>;
+    readonly unitPrice: FieldRef<'QuoteMaterial', 'Decimal'>;
+    readonly createdAt: FieldRef<'QuoteMaterial', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * QuoteMaterial findUnique
+   */
+  export type QuoteMaterialFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    /**
+     * Filter, which QuoteMaterial to fetch.
+     */
+    where: QuoteMaterialWhereUniqueInput;
+  };
+
+  /**
+   * QuoteMaterial findUniqueOrThrow
+   */
+  export type QuoteMaterialFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    /**
+     * Filter, which QuoteMaterial to fetch.
+     */
+    where: QuoteMaterialWhereUniqueInput;
+  };
+
+  /**
+   * QuoteMaterial findFirst
+   */
+  export type QuoteMaterialFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    /**
+     * Filter, which QuoteMaterial to fetch.
+     */
+    where?: QuoteMaterialWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of QuoteMaterials to fetch.
+     */
+    orderBy?:
+      | QuoteMaterialOrderByWithRelationInput
+      | QuoteMaterialOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for QuoteMaterials.
+     */
+    cursor?: QuoteMaterialWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` QuoteMaterials from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` QuoteMaterials.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of QuoteMaterials.
+     */
+    distinct?: QuoteMaterialScalarFieldEnum | QuoteMaterialScalarFieldEnum[];
+  };
+
+  /**
+   * QuoteMaterial findFirstOrThrow
+   */
+  export type QuoteMaterialFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    /**
+     * Filter, which QuoteMaterial to fetch.
+     */
+    where?: QuoteMaterialWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of QuoteMaterials to fetch.
+     */
+    orderBy?:
+      | QuoteMaterialOrderByWithRelationInput
+      | QuoteMaterialOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for QuoteMaterials.
+     */
+    cursor?: QuoteMaterialWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` QuoteMaterials from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` QuoteMaterials.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of QuoteMaterials.
+     */
+    distinct?: QuoteMaterialScalarFieldEnum | QuoteMaterialScalarFieldEnum[];
+  };
+
+  /**
+   * QuoteMaterial findMany
+   */
+  export type QuoteMaterialFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    /**
+     * Filter, which QuoteMaterials to fetch.
+     */
+    where?: QuoteMaterialWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of QuoteMaterials to fetch.
+     */
+    orderBy?:
+      | QuoteMaterialOrderByWithRelationInput
+      | QuoteMaterialOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing QuoteMaterials.
+     */
+    cursor?: QuoteMaterialWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` QuoteMaterials from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` QuoteMaterials.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of QuoteMaterials.
+     */
+    distinct?: QuoteMaterialScalarFieldEnum | QuoteMaterialScalarFieldEnum[];
+  };
+
+  /**
+   * QuoteMaterial create
+   */
+  export type QuoteMaterialCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a QuoteMaterial.
+     */
+    data: XOR<QuoteMaterialCreateInput, QuoteMaterialUncheckedCreateInput>;
+  };
+
+  /**
+   * QuoteMaterial createMany
+   */
+  export type QuoteMaterialCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many QuoteMaterials.
+     */
+    data: QuoteMaterialCreateManyInput | QuoteMaterialCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * QuoteMaterial createManyAndReturn
+   */
+  export type QuoteMaterialCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * The data used to create many QuoteMaterials.
+     */
+    data: QuoteMaterialCreateManyInput | QuoteMaterialCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * QuoteMaterial update
+   */
+  export type QuoteMaterialUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a QuoteMaterial.
+     */
+    data: XOR<QuoteMaterialUpdateInput, QuoteMaterialUncheckedUpdateInput>;
+    /**
+     * Choose, which QuoteMaterial to update.
+     */
+    where: QuoteMaterialWhereUniqueInput;
+  };
+
+  /**
+   * QuoteMaterial updateMany
+   */
+  export type QuoteMaterialUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update QuoteMaterials.
+     */
+    data: XOR<
+      QuoteMaterialUpdateManyMutationInput,
+      QuoteMaterialUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which QuoteMaterials to update
+     */
+    where?: QuoteMaterialWhereInput;
+    /**
+     * Limit how many QuoteMaterials to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * QuoteMaterial updateManyAndReturn
+   */
+  export type QuoteMaterialUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * The data used to update QuoteMaterials.
+     */
+    data: XOR<
+      QuoteMaterialUpdateManyMutationInput,
+      QuoteMaterialUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which QuoteMaterials to update
+     */
+    where?: QuoteMaterialWhereInput;
+    /**
+     * Limit how many QuoteMaterials to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * QuoteMaterial upsert
+   */
+  export type QuoteMaterialUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the QuoteMaterial to update in case it exists.
+     */
+    where: QuoteMaterialWhereUniqueInput;
+    /**
+     * In case the QuoteMaterial found by the `where` argument doesn't exist, create a new QuoteMaterial with this data.
+     */
+    create: XOR<QuoteMaterialCreateInput, QuoteMaterialUncheckedCreateInput>;
+    /**
+     * In case the QuoteMaterial was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QuoteMaterialUpdateInput, QuoteMaterialUncheckedUpdateInput>;
+  };
+
+  /**
+   * QuoteMaterial delete
+   */
+  export type QuoteMaterialDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
+    /**
+     * Filter which QuoteMaterial to delete.
+     */
+    where: QuoteMaterialWhereUniqueInput;
+  };
+
+  /**
+   * QuoteMaterial deleteMany
+   */
+  export type QuoteMaterialDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which QuoteMaterials to delete
+     */
+    where?: QuoteMaterialWhereInput;
+    /**
+     * Limit how many QuoteMaterials to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * QuoteMaterial without action
+   */
+  export type QuoteMaterialDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the QuoteMaterial
+     */
+    select?: QuoteMaterialSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the QuoteMaterial
+     */
+    omit?: QuoteMaterialOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuoteMaterialInclude<ExtArgs> | null;
   };
 
   /**
@@ -40678,6 +42222,18 @@ export namespace Prisma {
   export type QuoteScalarFieldEnum =
     (typeof QuoteScalarFieldEnum)[keyof typeof QuoteScalarFieldEnum];
 
+  export const QuoteMaterialScalarFieldEnum: {
+    id: 'id';
+    quoteId: 'quoteId';
+    name: 'name';
+    quantity: 'quantity';
+    unitPrice: 'unitPrice';
+    createdAt: 'createdAt';
+  };
+
+  export type QuoteMaterialScalarFieldEnum =
+    (typeof QuoteMaterialScalarFieldEnum)[keyof typeof QuoteMaterialScalarFieldEnum];
+
   export const JobEscrowScalarFieldEnum: {
     id: 'id';
     jobId: 'jobId';
@@ -42966,6 +44522,7 @@ export namespace Prisma {
       JobEscrowNullableScalarRelationFilter,
       JobEscrowWhereInput
     > | null;
+    materials?: QuoteMaterialListRelationFilter;
   };
 
   export type QuoteOrderByWithRelationInput = {
@@ -42988,6 +44545,7 @@ export namespace Prisma {
     tradesman?: UserOrderByWithRelationInput;
     acceptedForJob?: JobOrderByWithRelationInput;
     escrow?: JobEscrowOrderByWithRelationInput;
+    materials?: QuoteMaterialOrderByRelationAggregateInput;
   };
 
   export type QuoteWhereUniqueInput = Prisma.AtLeast<
@@ -43042,6 +44600,7 @@ export namespace Prisma {
         JobEscrowNullableScalarRelationFilter,
         JobEscrowWhereInput
       > | null;
+      materials?: QuoteMaterialListRelationFilter;
     },
     'id' | 'jobId_tradesmanId'
   >;
@@ -43125,6 +44684,108 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeWithAggregatesFilter<'Quote'> | Date | string;
     updatedAt?: DateTimeWithAggregatesFilter<'Quote'> | Date | string;
+  };
+
+  export type QuoteMaterialWhereInput = {
+    AND?: QuoteMaterialWhereInput | QuoteMaterialWhereInput[];
+    OR?: QuoteMaterialWhereInput[];
+    NOT?: QuoteMaterialWhereInput | QuoteMaterialWhereInput[];
+    id?: StringFilter<'QuoteMaterial'> | string;
+    quoteId?: StringFilter<'QuoteMaterial'> | string;
+    name?: StringFilter<'QuoteMaterial'> | string;
+    quantity?:
+      | DecimalFilter<'QuoteMaterial'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | DecimalNullableFilter<'QuoteMaterial'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeFilter<'QuoteMaterial'> | Date | string;
+    quote?: XOR<QuoteScalarRelationFilter, QuoteWhereInput>;
+  };
+
+  export type QuoteMaterialOrderByWithRelationInput = {
+    id?: SortOrder;
+    quoteId?: SortOrder;
+    name?: SortOrder;
+    quantity?: SortOrder;
+    unitPrice?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    quote?: QuoteOrderByWithRelationInput;
+  };
+
+  export type QuoteMaterialWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: QuoteMaterialWhereInput | QuoteMaterialWhereInput[];
+      OR?: QuoteMaterialWhereInput[];
+      NOT?: QuoteMaterialWhereInput | QuoteMaterialWhereInput[];
+      quoteId?: StringFilter<'QuoteMaterial'> | string;
+      name?: StringFilter<'QuoteMaterial'> | string;
+      quantity?:
+        | DecimalFilter<'QuoteMaterial'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string;
+      unitPrice?:
+        | DecimalNullableFilter<'QuoteMaterial'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string
+        | null;
+      createdAt?: DateTimeFilter<'QuoteMaterial'> | Date | string;
+      quote?: XOR<QuoteScalarRelationFilter, QuoteWhereInput>;
+    },
+    'id'
+  >;
+
+  export type QuoteMaterialOrderByWithAggregationInput = {
+    id?: SortOrder;
+    quoteId?: SortOrder;
+    name?: SortOrder;
+    quantity?: SortOrder;
+    unitPrice?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    _count?: QuoteMaterialCountOrderByAggregateInput;
+    _avg?: QuoteMaterialAvgOrderByAggregateInput;
+    _max?: QuoteMaterialMaxOrderByAggregateInput;
+    _min?: QuoteMaterialMinOrderByAggregateInput;
+    _sum?: QuoteMaterialSumOrderByAggregateInput;
+  };
+
+  export type QuoteMaterialScalarWhereWithAggregatesInput = {
+    AND?:
+      | QuoteMaterialScalarWhereWithAggregatesInput
+      | QuoteMaterialScalarWhereWithAggregatesInput[];
+    OR?: QuoteMaterialScalarWhereWithAggregatesInput[];
+    NOT?:
+      | QuoteMaterialScalarWhereWithAggregatesInput
+      | QuoteMaterialScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'QuoteMaterial'> | string;
+    quoteId?: StringWithAggregatesFilter<'QuoteMaterial'> | string;
+    name?: StringWithAggregatesFilter<'QuoteMaterial'> | string;
+    quantity?:
+      | DecimalWithAggregatesFilter<'QuoteMaterial'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | DecimalNullableWithAggregatesFilter<'QuoteMaterial'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeWithAggregatesFilter<'QuoteMaterial'> | Date | string;
   };
 
   export type JobEscrowWhereInput = {
@@ -46487,6 +48148,7 @@ export namespace Prisma {
     tradesman: UserCreateNestedOneWithoutQuotesInput;
     acceptedForJob?: JobCreateNestedOneWithoutAcceptedQuoteInput;
     escrow?: JobEscrowCreateNestedOneWithoutQuoteInput;
+    materials?: QuoteMaterialCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteUncheckedCreateInput = {
@@ -46507,6 +48169,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     acceptedForJob?: JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutQuoteInput;
+    materials?: QuoteMaterialUncheckedCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteUpdateInput = {
@@ -46560,6 +48223,7 @@ export namespace Prisma {
     tradesman?: UserUpdateOneRequiredWithoutQuotesNestedInput;
     acceptedForJob?: JobUpdateOneWithoutAcceptedQuoteNestedInput;
     escrow?: JobEscrowUpdateOneWithoutQuoteNestedInput;
+    materials?: QuoteMaterialUpdateManyWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateInput = {
@@ -46613,6 +48277,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     acceptedForJob?: JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
+    materials?: QuoteMaterialUncheckedUpdateManyWithoutQuoteNestedInput;
   };
 
   export type QuoteCreateManyInput = {
@@ -46731,6 +48396,112 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type QuoteMaterialCreateInput = {
+    id?: string;
+    name: string;
+    quantity?: Decimal | DecimalJsLike | number | string;
+    unitPrice?: Decimal | DecimalJsLike | number | string | null;
+    createdAt?: Date | string;
+    quote: QuoteCreateNestedOneWithoutMaterialsInput;
+  };
+
+  export type QuoteMaterialUncheckedCreateInput = {
+    id?: string;
+    quoteId: string;
+    name: string;
+    quantity?: Decimal | DecimalJsLike | number | string;
+    unitPrice?: Decimal | DecimalJsLike | number | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type QuoteMaterialUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    quantity?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    quote?: QuoteUpdateOneRequiredWithoutMaterialsNestedInput;
+  };
+
+  export type QuoteMaterialUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    quantity?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type QuoteMaterialCreateManyInput = {
+    id?: string;
+    quoteId: string;
+    name: string;
+    quantity?: Decimal | DecimalJsLike | number | string;
+    unitPrice?: Decimal | DecimalJsLike | number | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type QuoteMaterialUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    quantity?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type QuoteMaterialUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    quoteId?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    quantity?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type JobEscrowCreateInput = {
@@ -49660,6 +51431,16 @@ export namespace Prisma {
     isNot?: JobWhereInput | null;
   };
 
+  export type QuoteMaterialListRelationFilter = {
+    every?: QuoteMaterialWhereInput;
+    some?: QuoteMaterialWhereInput;
+    none?: QuoteMaterialWhereInput;
+  };
+
+  export type QuoteMaterialOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
   export type QuoteJobIdTradesmanIdCompoundUniqueInput = {
     jobId: string;
     tradesmanId: string;
@@ -49745,6 +51526,48 @@ export namespace Prisma {
     _max?: NestedEnumQuoteStatusFilter<$PrismaModel>;
   };
 
+  export type QuoteScalarRelationFilter = {
+    is?: QuoteWhereInput;
+    isNot?: QuoteWhereInput;
+  };
+
+  export type QuoteMaterialCountOrderByAggregateInput = {
+    id?: SortOrder;
+    quoteId?: SortOrder;
+    name?: SortOrder;
+    quantity?: SortOrder;
+    unitPrice?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type QuoteMaterialAvgOrderByAggregateInput = {
+    quantity?: SortOrder;
+    unitPrice?: SortOrder;
+  };
+
+  export type QuoteMaterialMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    quoteId?: SortOrder;
+    name?: SortOrder;
+    quantity?: SortOrder;
+    unitPrice?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type QuoteMaterialMinOrderByAggregateInput = {
+    id?: SortOrder;
+    quoteId?: SortOrder;
+    name?: SortOrder;
+    quantity?: SortOrder;
+    unitPrice?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type QuoteMaterialSumOrderByAggregateInput = {
+    quantity?: SortOrder;
+    unitPrice?: SortOrder;
+  };
+
   export type EnumEscrowStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EscrowStatus | EnumEscrowStatusFieldRefInput<$PrismaModel>;
     in?:
@@ -49754,11 +51577,6 @@ export namespace Prisma {
       | $Enums.EscrowStatus[]
       | ListEnumEscrowStatusFieldRefInput<$PrismaModel>;
     not?: NestedEnumEscrowStatusFilter<$PrismaModel> | $Enums.EscrowStatus;
-  };
-
-  export type QuoteScalarRelationFilter = {
-    is?: QuoteWhereInput;
-    isNot?: QuoteWhereInput;
   };
 
   export type EscrowTransactionListRelationFilter = {
@@ -54106,6 +55924,21 @@ export namespace Prisma {
     connect?: JobEscrowWhereUniqueInput;
   };
 
+  export type QuoteMaterialCreateNestedManyWithoutQuoteInput = {
+    create?:
+      | XOR<
+          QuoteMaterialCreateWithoutQuoteInput,
+          QuoteMaterialUncheckedCreateWithoutQuoteInput
+        >
+      | QuoteMaterialCreateWithoutQuoteInput[]
+      | QuoteMaterialUncheckedCreateWithoutQuoteInput[];
+    connectOrCreate?:
+      | QuoteMaterialCreateOrConnectWithoutQuoteInput
+      | QuoteMaterialCreateOrConnectWithoutQuoteInput[];
+    createMany?: QuoteMaterialCreateManyQuoteInputEnvelope;
+    connect?: QuoteMaterialWhereUniqueInput | QuoteMaterialWhereUniqueInput[];
+  };
+
   export type JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput = {
     create?: XOR<
       JobCreateWithoutAcceptedQuoteInput,
@@ -54122,6 +55955,21 @@ export namespace Prisma {
     >;
     connectOrCreate?: JobEscrowCreateOrConnectWithoutQuoteInput;
     connect?: JobEscrowWhereUniqueInput;
+  };
+
+  export type QuoteMaterialUncheckedCreateNestedManyWithoutQuoteInput = {
+    create?:
+      | XOR<
+          QuoteMaterialCreateWithoutQuoteInput,
+          QuoteMaterialUncheckedCreateWithoutQuoteInput
+        >
+      | QuoteMaterialCreateWithoutQuoteInput[]
+      | QuoteMaterialUncheckedCreateWithoutQuoteInput[];
+    connectOrCreate?:
+      | QuoteMaterialCreateOrConnectWithoutQuoteInput
+      | QuoteMaterialCreateOrConnectWithoutQuoteInput[];
+    createMany?: QuoteMaterialCreateManyQuoteInputEnvelope;
+    connect?: QuoteMaterialWhereUniqueInput | QuoteMaterialWhereUniqueInput[];
   };
 
   export type EnumQuoteStatusFieldUpdateOperationsInput = {
@@ -54200,6 +56048,38 @@ export namespace Prisma {
     >;
   };
 
+  export type QuoteMaterialUpdateManyWithoutQuoteNestedInput = {
+    create?:
+      | XOR<
+          QuoteMaterialCreateWithoutQuoteInput,
+          QuoteMaterialUncheckedCreateWithoutQuoteInput
+        >
+      | QuoteMaterialCreateWithoutQuoteInput[]
+      | QuoteMaterialUncheckedCreateWithoutQuoteInput[];
+    connectOrCreate?:
+      | QuoteMaterialCreateOrConnectWithoutQuoteInput
+      | QuoteMaterialCreateOrConnectWithoutQuoteInput[];
+    upsert?:
+      | QuoteMaterialUpsertWithWhereUniqueWithoutQuoteInput
+      | QuoteMaterialUpsertWithWhereUniqueWithoutQuoteInput[];
+    createMany?: QuoteMaterialCreateManyQuoteInputEnvelope;
+    set?: QuoteMaterialWhereUniqueInput | QuoteMaterialWhereUniqueInput[];
+    disconnect?:
+      | QuoteMaterialWhereUniqueInput
+      | QuoteMaterialWhereUniqueInput[];
+    delete?: QuoteMaterialWhereUniqueInput | QuoteMaterialWhereUniqueInput[];
+    connect?: QuoteMaterialWhereUniqueInput | QuoteMaterialWhereUniqueInput[];
+    update?:
+      | QuoteMaterialUpdateWithWhereUniqueWithoutQuoteInput
+      | QuoteMaterialUpdateWithWhereUniqueWithoutQuoteInput[];
+    updateMany?:
+      | QuoteMaterialUpdateManyWithWhereWithoutQuoteInput
+      | QuoteMaterialUpdateManyWithWhereWithoutQuoteInput[];
+    deleteMany?:
+      | QuoteMaterialScalarWhereInput
+      | QuoteMaterialScalarWhereInput[];
+  };
+
   export type JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput = {
     create?: XOR<
       JobCreateWithoutAcceptedQuoteInput,
@@ -54235,6 +56115,64 @@ export namespace Prisma {
         JobEscrowUpdateWithoutQuoteInput
       >,
       JobEscrowUncheckedUpdateWithoutQuoteInput
+    >;
+  };
+
+  export type QuoteMaterialUncheckedUpdateManyWithoutQuoteNestedInput = {
+    create?:
+      | XOR<
+          QuoteMaterialCreateWithoutQuoteInput,
+          QuoteMaterialUncheckedCreateWithoutQuoteInput
+        >
+      | QuoteMaterialCreateWithoutQuoteInput[]
+      | QuoteMaterialUncheckedCreateWithoutQuoteInput[];
+    connectOrCreate?:
+      | QuoteMaterialCreateOrConnectWithoutQuoteInput
+      | QuoteMaterialCreateOrConnectWithoutQuoteInput[];
+    upsert?:
+      | QuoteMaterialUpsertWithWhereUniqueWithoutQuoteInput
+      | QuoteMaterialUpsertWithWhereUniqueWithoutQuoteInput[];
+    createMany?: QuoteMaterialCreateManyQuoteInputEnvelope;
+    set?: QuoteMaterialWhereUniqueInput | QuoteMaterialWhereUniqueInput[];
+    disconnect?:
+      | QuoteMaterialWhereUniqueInput
+      | QuoteMaterialWhereUniqueInput[];
+    delete?: QuoteMaterialWhereUniqueInput | QuoteMaterialWhereUniqueInput[];
+    connect?: QuoteMaterialWhereUniqueInput | QuoteMaterialWhereUniqueInput[];
+    update?:
+      | QuoteMaterialUpdateWithWhereUniqueWithoutQuoteInput
+      | QuoteMaterialUpdateWithWhereUniqueWithoutQuoteInput[];
+    updateMany?:
+      | QuoteMaterialUpdateManyWithWhereWithoutQuoteInput
+      | QuoteMaterialUpdateManyWithWhereWithoutQuoteInput[];
+    deleteMany?:
+      | QuoteMaterialScalarWhereInput
+      | QuoteMaterialScalarWhereInput[];
+  };
+
+  export type QuoteCreateNestedOneWithoutMaterialsInput = {
+    create?: XOR<
+      QuoteCreateWithoutMaterialsInput,
+      QuoteUncheckedCreateWithoutMaterialsInput
+    >;
+    connectOrCreate?: QuoteCreateOrConnectWithoutMaterialsInput;
+    connect?: QuoteWhereUniqueInput;
+  };
+
+  export type QuoteUpdateOneRequiredWithoutMaterialsNestedInput = {
+    create?: XOR<
+      QuoteCreateWithoutMaterialsInput,
+      QuoteUncheckedCreateWithoutMaterialsInput
+    >;
+    connectOrCreate?: QuoteCreateOrConnectWithoutMaterialsInput;
+    upsert?: QuoteUpsertWithoutMaterialsInput;
+    connect?: QuoteWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        QuoteUpdateToOneWithWhereWithoutMaterialsInput,
+        QuoteUpdateWithoutMaterialsInput
+      >,
+      QuoteUncheckedUpdateWithoutMaterialsInput
     >;
   };
 
@@ -56679,6 +58617,7 @@ export namespace Prisma {
     job: JobCreateNestedOneWithoutQuotesInput;
     acceptedForJob?: JobCreateNestedOneWithoutAcceptedQuoteInput;
     escrow?: JobEscrowCreateNestedOneWithoutQuoteInput;
+    materials?: QuoteMaterialCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteUncheckedCreateWithoutTradesmanInput = {
@@ -56698,6 +58637,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     acceptedForJob?: JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutQuoteInput;
+    materials?: QuoteMaterialUncheckedCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteCreateOrConnectWithoutTradesmanInput = {
@@ -60911,6 +62851,7 @@ export namespace Prisma {
     job: JobCreateNestedOneWithoutQuotesInput;
     tradesman: UserCreateNestedOneWithoutQuotesInput;
     escrow?: JobEscrowCreateNestedOneWithoutQuoteInput;
+    materials?: QuoteMaterialCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteUncheckedCreateWithoutAcceptedForJobInput = {
@@ -60930,6 +62871,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutQuoteInput;
+    materials?: QuoteMaterialUncheckedCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteCreateOrConnectWithoutAcceptedForJobInput = {
@@ -60957,6 +62899,7 @@ export namespace Prisma {
     tradesman: UserCreateNestedOneWithoutQuotesInput;
     acceptedForJob?: JobCreateNestedOneWithoutAcceptedQuoteInput;
     escrow?: JobEscrowCreateNestedOneWithoutQuoteInput;
+    materials?: QuoteMaterialCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteUncheckedCreateWithoutJobInput = {
@@ -60976,6 +62919,7 @@ export namespace Prisma {
     updatedAt?: Date | string;
     acceptedForJob?: JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutQuoteInput;
+    materials?: QuoteMaterialUncheckedCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteCreateOrConnectWithoutJobInput = {
@@ -61665,6 +63609,7 @@ export namespace Prisma {
     job?: JobUpdateOneRequiredWithoutQuotesNestedInput;
     tradesman?: UserUpdateOneRequiredWithoutQuotesNestedInput;
     escrow?: JobEscrowUpdateOneWithoutQuoteNestedInput;
+    materials?: QuoteMaterialUpdateManyWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateWithoutAcceptedForJobInput = {
@@ -61717,6 +63662,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
+    materials?: QuoteMaterialUncheckedUpdateManyWithoutQuoteNestedInput;
   };
 
   export type QuoteUpsertWithWhereUniqueWithoutJobInput = {
@@ -62671,6 +64617,37 @@ export namespace Prisma {
     >;
   };
 
+  export type QuoteMaterialCreateWithoutQuoteInput = {
+    id?: string;
+    name: string;
+    quantity?: Decimal | DecimalJsLike | number | string;
+    unitPrice?: Decimal | DecimalJsLike | number | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type QuoteMaterialUncheckedCreateWithoutQuoteInput = {
+    id?: string;
+    name: string;
+    quantity?: Decimal | DecimalJsLike | number | string;
+    unitPrice?: Decimal | DecimalJsLike | number | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type QuoteMaterialCreateOrConnectWithoutQuoteInput = {
+    where: QuoteMaterialWhereUniqueInput;
+    create: XOR<
+      QuoteMaterialCreateWithoutQuoteInput,
+      QuoteMaterialUncheckedCreateWithoutQuoteInput
+    >;
+  };
+
+  export type QuoteMaterialCreateManyQuoteInputEnvelope = {
+    data:
+      | QuoteMaterialCreateManyQuoteInput
+      | QuoteMaterialCreateManyQuoteInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type JobUpsertWithoutQuotesInput = {
     update: XOR<
       JobUpdateWithoutQuotesInput,
@@ -63309,6 +65286,231 @@ export namespace Prisma {
     transactions?: EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput;
   };
 
+  export type QuoteMaterialUpsertWithWhereUniqueWithoutQuoteInput = {
+    where: QuoteMaterialWhereUniqueInput;
+    update: XOR<
+      QuoteMaterialUpdateWithoutQuoteInput,
+      QuoteMaterialUncheckedUpdateWithoutQuoteInput
+    >;
+    create: XOR<
+      QuoteMaterialCreateWithoutQuoteInput,
+      QuoteMaterialUncheckedCreateWithoutQuoteInput
+    >;
+  };
+
+  export type QuoteMaterialUpdateWithWhereUniqueWithoutQuoteInput = {
+    where: QuoteMaterialWhereUniqueInput;
+    data: XOR<
+      QuoteMaterialUpdateWithoutQuoteInput,
+      QuoteMaterialUncheckedUpdateWithoutQuoteInput
+    >;
+  };
+
+  export type QuoteMaterialUpdateManyWithWhereWithoutQuoteInput = {
+    where: QuoteMaterialScalarWhereInput;
+    data: XOR<
+      QuoteMaterialUpdateManyMutationInput,
+      QuoteMaterialUncheckedUpdateManyWithoutQuoteInput
+    >;
+  };
+
+  export type QuoteMaterialScalarWhereInput = {
+    AND?: QuoteMaterialScalarWhereInput | QuoteMaterialScalarWhereInput[];
+    OR?: QuoteMaterialScalarWhereInput[];
+    NOT?: QuoteMaterialScalarWhereInput | QuoteMaterialScalarWhereInput[];
+    id?: StringFilter<'QuoteMaterial'> | string;
+    quoteId?: StringFilter<'QuoteMaterial'> | string;
+    name?: StringFilter<'QuoteMaterial'> | string;
+    quantity?:
+      | DecimalFilter<'QuoteMaterial'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | DecimalNullableFilter<'QuoteMaterial'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeFilter<'QuoteMaterial'> | Date | string;
+  };
+
+  export type QuoteCreateWithoutMaterialsInput = {
+    id?: string;
+    amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    message?: string | null;
+    estimatedStart?: Date | string | null;
+    estimatedCompletion?: Date | string | null;
+    status?: $Enums.QuoteStatus;
+    respondedAt?: Date | string | null;
+    withdrawnAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    job: JobCreateNestedOneWithoutQuotesInput;
+    tradesman: UserCreateNestedOneWithoutQuotesInput;
+    acceptedForJob?: JobCreateNestedOneWithoutAcceptedQuoteInput;
+    escrow?: JobEscrowCreateNestedOneWithoutQuoteInput;
+  };
+
+  export type QuoteUncheckedCreateWithoutMaterialsInput = {
+    id?: string;
+    jobId: string;
+    tradesmanId: string;
+    amount: Decimal | DecimalJsLike | number | string;
+    materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    depositRequested?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    message?: string | null;
+    estimatedStart?: Date | string | null;
+    estimatedCompletion?: Date | string | null;
+    status?: $Enums.QuoteStatus;
+    respondedAt?: Date | string | null;
+    withdrawnAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    acceptedForJob?: JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutQuoteInput;
+  };
+
+  export type QuoteCreateOrConnectWithoutMaterialsInput = {
+    where: QuoteWhereUniqueInput;
+    create: XOR<
+      QuoteCreateWithoutMaterialsInput,
+      QuoteUncheckedCreateWithoutMaterialsInput
+    >;
+  };
+
+  export type QuoteUpsertWithoutMaterialsInput = {
+    update: XOR<
+      QuoteUpdateWithoutMaterialsInput,
+      QuoteUncheckedUpdateWithoutMaterialsInput
+    >;
+    create: XOR<
+      QuoteCreateWithoutMaterialsInput,
+      QuoteUncheckedCreateWithoutMaterialsInput
+    >;
+    where?: QuoteWhereInput;
+  };
+
+  export type QuoteUpdateToOneWithWhereWithoutMaterialsInput = {
+    where?: QuoteWhereInput;
+    data: XOR<
+      QuoteUpdateWithoutMaterialsInput,
+      QuoteUncheckedUpdateWithoutMaterialsInput
+    >;
+  };
+
+  export type QuoteUpdateWithoutMaterialsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    message?: NullableStringFieldUpdateOperationsInput | string | null;
+    estimatedStart?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    withdrawnAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    job?: JobUpdateOneRequiredWithoutQuotesNestedInput;
+    tradesman?: UserUpdateOneRequiredWithoutQuotesNestedInput;
+    acceptedForJob?: JobUpdateOneWithoutAcceptedQuoteNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutQuoteNestedInput;
+  };
+
+  export type QuoteUncheckedUpdateWithoutMaterialsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    tradesmanId?: StringFieldUpdateOperationsInput | string;
+    amount?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    materialsAmount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    depositRequested?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    message?: NullableStringFieldUpdateOperationsInput | string | null;
+    estimatedStart?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    withdrawnAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    acceptedForJob?: JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
+  };
+
   export type JobCreateWithoutEscrowInput = {
     id?: string;
     title: string;
@@ -63402,6 +65604,7 @@ export namespace Prisma {
     job: JobCreateNestedOneWithoutQuotesInput;
     tradesman: UserCreateNestedOneWithoutQuotesInput;
     acceptedForJob?: JobCreateNestedOneWithoutAcceptedQuoteInput;
+    materials?: QuoteMaterialCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteUncheckedCreateWithoutEscrowInput = {
@@ -63421,6 +65624,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     acceptedForJob?: JobUncheckedCreateNestedOneWithoutAcceptedQuoteInput;
+    materials?: QuoteMaterialUncheckedCreateNestedManyWithoutQuoteInput;
   };
 
   export type QuoteCreateOrConnectWithoutEscrowInput = {
@@ -63887,6 +66091,7 @@ export namespace Prisma {
     job?: JobUpdateOneRequiredWithoutQuotesNestedInput;
     tradesman?: UserUpdateOneRequiredWithoutQuotesNestedInput;
     acceptedForJob?: JobUpdateOneWithoutAcceptedQuoteNestedInput;
+    materials?: QuoteMaterialUpdateManyWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateWithoutEscrowInput = {
@@ -63939,6 +66144,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     acceptedForJob?: JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput;
+    materials?: QuoteMaterialUncheckedUpdateManyWithoutQuoteNestedInput;
   };
 
   export type UserUpsertWithoutEscrowsAsHomeownerInput = {
@@ -69247,6 +71453,7 @@ export namespace Prisma {
     job?: JobUpdateOneRequiredWithoutQuotesNestedInput;
     acceptedForJob?: JobUpdateOneWithoutAcceptedQuoteNestedInput;
     escrow?: JobEscrowUpdateOneWithoutQuoteNestedInput;
+    materials?: QuoteMaterialUpdateManyWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateWithoutTradesmanInput = {
@@ -69299,6 +71506,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     acceptedForJob?: JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
+    materials?: QuoteMaterialUncheckedUpdateManyWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateManyWithoutTradesmanInput = {
@@ -71118,6 +73326,7 @@ export namespace Prisma {
     tradesman?: UserUpdateOneRequiredWithoutQuotesNestedInput;
     acceptedForJob?: JobUpdateOneWithoutAcceptedQuoteNestedInput;
     escrow?: JobEscrowUpdateOneWithoutQuoteNestedInput;
+    materials?: QuoteMaterialUpdateManyWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateWithoutJobInput = {
@@ -71170,6 +73379,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     acceptedForJob?: JobUncheckedUpdateOneWithoutAcceptedQuoteNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
+    materials?: QuoteMaterialUncheckedUpdateManyWithoutQuoteNestedInput;
   };
 
   export type QuoteUncheckedUpdateManyWithoutJobInput = {
@@ -71451,6 +73661,71 @@ export namespace Prisma {
     reviewId?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type QuoteMaterialCreateManyQuoteInput = {
+    id?: string;
+    name: string;
+    quantity?: Decimal | DecimalJsLike | number | string;
+    unitPrice?: Decimal | DecimalJsLike | number | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type QuoteMaterialUpdateWithoutQuoteInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    quantity?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type QuoteMaterialUncheckedUpdateWithoutQuoteInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    quantity?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type QuoteMaterialUncheckedUpdateManyWithoutQuoteInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    quantity?:
+      | DecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string;
+    unitPrice?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type EscrowTransactionCreateManyEscrowInput = {

@@ -614,6 +614,8 @@
     },
     "accepted": "Quote accepted",
     "rejected": "Quote rejected",
+    "materialsHeading": "Materials & tools",
+    "materialsEstimate": "Estimated · subject to change",
     "submitQuote": {
       "heading": "Submit a quote",
       "subtitle": "Let the homeowner know your price and timing.",
@@ -622,6 +624,16 @@
       "success": "Quote submitted",
       "currency": "Currency",
       "materials": "Of which materials",
+      "materialsList": {
+        "heading": "Materials & tools",
+        "hint": "List the materials and tools you'll use, with estimated quantities and prices, so the homeowner understands the scope.",
+        "name": "Item",
+        "namePlaceholder": "e.g. Cement (50kg bag)",
+        "quantity": "Qty",
+        "unitPrice": "Unit price",
+        "add": "Add item",
+        "remove": "Remove item"
+      },
       "requestDeposit": "Request a materials deposit",
       "requestDepositHint": "The homeowner funds this into escrow up front so you can buy parts. You receive it when you start — Crafty Bass releases it, the homeowner never hands you cash.",
       "depositToRequest": "Deposit to request",

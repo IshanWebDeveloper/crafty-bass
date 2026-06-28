@@ -7,6 +7,7 @@ import { Badge, Button, Skeleton } from '@repo/ui';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { listMyQuotes, withdrawQuote } from '@/lib/api/quotes';
+import { QuoteMaterials } from '@/components/quotes/quote-materials';
 import { statusVariant } from '@/lib/status';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
@@ -90,6 +91,15 @@ export function MyQuotesList({
                   <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
                     {q.message}
                   </p>
+                ) : null}
+                {q.materials.length > 0 ? (
+                  <div className="mt-3">
+                    <QuoteMaterials
+                      materials={q.materials}
+                      currency={q.currency}
+                      dict={dict}
+                    />
+                  </div>
                 ) : null}
               </div>
               <div className="flex flex-col items-end gap-2 text-right">

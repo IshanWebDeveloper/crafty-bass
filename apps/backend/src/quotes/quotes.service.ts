@@ -20,6 +20,7 @@ const QUOTE_INCLUDE = {
       },
     },
   },
+  materials: { orderBy: { createdAt: 'asc' } },
 } as const;
 
 @Injectable()
@@ -103,7 +104,19 @@ export class QuotesService {
         message: dto.message ?? null,
         estimatedStart: dto.estimatedStart ?? null,
         estimatedCompletion: dto.estimatedCompletion ?? null,
+        ...(dto.materials && dto.materials.length > 0
+          ? {
+              materials: {
+                create: dto.materials.map((m) => ({
+                  name: m.name,
+                  quantity: m.quantity,
+                  unitPrice: m.unitPrice ?? null,
+                })),
+              },
+            }
+          : {}),
       },
+      include: QUOTE_INCLUDE,
     });
   }
 
@@ -121,6 +134,7 @@ export class QuotesService {
             district: true,
           },
         },
+        materials: { orderBy: { createdAt: 'asc' } },
       },
     });
   }
