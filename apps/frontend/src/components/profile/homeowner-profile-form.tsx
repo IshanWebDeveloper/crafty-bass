@@ -5,15 +5,25 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Input } from '@repo/ui';
+import {
+  Button,
+  Combobox,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+  Input,
+} from '@repo/ui';
+import { ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
-import { NativeSelect } from '@/components/ui/select';
 import {
   upsertHomeownerProfile,
   type HomeownerProfile,
   type LanguageCode,
 } from '@/lib/api/profiles';
+import { DISTRICT_OPTIONS } from '@/lib/districts';
 import type { Dictionary } from '@/i18n/dictionaries';
 
 const LANGUAGE_OPTIONS: LanguageCode[] = ['EN', 'SI', 'TA'];
@@ -40,6 +50,8 @@ export function HomeownerProfileForm({
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<HomeownerValues>({
     resolver: zodResolver(HomeownerSchema),
@@ -51,6 +63,7 @@ export function HomeownerProfileForm({
       preferredLanguage: initial?.preferredLanguage ?? 'EN',
     },
   });
+  const selectedLanguage = watch('preferredLanguage');
 
   const mutation = useMutation({
     mutationFn: (values: HomeownerValues) =>
@@ -96,7 +109,18 @@ export function HomeownerProfileForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="district">{t.fields.district}</Label>
-          <Input id="district" {...register('district')} />
+          <input type="hidden" {...register('district')} />
+          <Combobox
+            id="district"
+            aria-label={t.fields.district}
+            items={DISTRICT_OPTIONS}
+            value={watch('district') || null}
+            onValueChange={(value) =>
+              setValue('district', value ?? '', { shouldDirty: true })
+            }
+            placeholder={t.fields.districtPlaceholder}
+            emptyText={t.fields.districtEmpty}
+          />
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -108,16 +132,41 @@ export function HomeownerProfileForm({
           <Label htmlFor="preferredLanguage">
             {t.fields.preferredLanguage}
           </Label>
-          <NativeSelect
-            id="preferredLanguage"
-            {...register('preferredLanguage')}
-          >
-            {LANGUAGE_OPTIONS.map((l) => (
-              <option key={l} value={l}>
-                {t.languages[l]}
-              </option>
-            ))}
-          </NativeSelect>
+          <input type="hidden" {...register('preferredLanguage')} />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  id="preferredLanguage"
+                  variant="outline"
+                  className="w-full justify-between"
+                  aria-label={t.fields.preferredLanguage}
+                >
+                  <span className="truncate">
+                    {t.languages[selectedLanguage]}
+                  </span>
+                  <ChevronDown className="size-4 opacity-60" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="min-w-44">
+              <DropdownMenuRadioGroup
+                value={selectedLanguage}
+                onValueChange={(value) =>
+                  setValue('preferredLanguage', value as LanguageCode, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
+              >
+                {LANGUAGE_OPTIONS.map((l) => (
+                  <DropdownMenuRadioItem key={l} value={l}>
+                    {t.languages[l]}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <Button type="submit" className="w-full" disabled={submitting}>

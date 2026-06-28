@@ -1,5 +1,6 @@
 import { buttonVariants, cn } from '@repo/ui';
 import Link from 'next/link';
+import { CategoryIconBubble } from '@/lib/categories';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -23,16 +24,17 @@ export function JobSearchPanel({
             <button
               type="button"
               className={cn(
-                'flex w-full items-center justify-between rounded-md border border-border px-4 py-3 text-left transition-colors hover:bg-accent-soft',
+                'flex w-full items-center gap-3 rounded-md border border-border px-4 py-3 text-left transition-colors hover:bg-accent-soft',
                 index === 0
                   ? 'bg-accent-soft text-accent-soft-foreground'
                   : 'bg-card',
               )}
             >
+              <CategoryIconBubble slug={service.slug} className="size-9" />
               <span className="text-base font-medium text-foreground">
                 {service.label}
               </span>
-              <span className="text-sm text-muted-foreground">
+              <span className="ml-auto text-sm text-muted-foreground">
                 {service.meta}
               </span>
             </button>

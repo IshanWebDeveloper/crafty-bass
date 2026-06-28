@@ -1,22 +1,37 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
-import { Camera, Loader2, Lock, MapPin, Sparkles, X } from 'lucide-react';
-import { Badge, Button, DatePicker, Input } from '@repo/ui';
+import {
+  Camera,
+  ChevronDown,
+  Loader2,
+  Lock,
+  MapPin,
+  Sparkles,
+  X,
+} from 'lucide-react';
+import { Badge, Button, Combobox, DatePicker, Input } from '@repo/ui';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@repo/ui';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { parseDateInput, formatDateInput } from '@/lib/date';
 import { Textarea } from '@/components/ui/textarea';
-import { NativeSelect } from '@/components/ui/select';
 import { createJob, type JobUrgency, type LanguageCode } from '@/lib/api/jobs';
 import { listCategories, type ServiceCategory } from '@/lib/api/categories';
+import { CategoryIcon } from '@/lib/categories';
+import { DISTRICT_OPTIONS } from '@/lib/districts';
 import { ApiError } from '@/lib/api';
-import { useSession } from '@/lib/auth-client';
 import { useMe } from '@/lib/hooks/use-me';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
@@ -162,24 +177,18 @@ export function PostJobForm({
   const t = dict.jobs;
   const [submitting, setSubmitting] = useState(false);
 
-  // Posting a job is for homeowners. Mirror the backend rule (jobs.service):
-  // guests must sign in; tradesmen are bounced (they can't post); a homeowner
-  // or a brand-new user with no userType yet (auto-promoted on first post) may
-  // proceed. We guard here because the route itself is otherwise public.
-  const { data: session, isPending: sessionPending } = useSession();
+  // Posting a job is for homeowners. Authentication is enforced server-side by
+  // requireAuth() on the route, so we only handle the userType rule here (mirror
+  // of jobs.service): tradesmen are bounced (they can't post); a homeowner or a
+  // brand-new user with no userType yet (auto-promoted on first post) may proceed.
   const { data: me, isLoading: meLoading } = useMe();
   const isTradesman = me?.userType === 'TRADESMAN';
-  const authzReady = !sessionPending && !!session && !meLoading && !isTradesman;
+  const authzReady = !meLoading && !isTradesman;
   useEffect(() => {
-    if (sessionPending) return;
-    if (!session) {
-      router.replace(`/${locale}/sign-in`);
-      return;
-    }
-    if (isTradesman) {
+    if (!meLoading && isTradesman) {
       router.replace(`/${locale}/jobs`);
     }
-  }, [session, sessionPending, isTradesman, router, locale]);
+  }, [meLoading, isTradesman, router, locale]);
 
   const { data: categories } = useQuery({
     queryKey: ['categories'],
@@ -211,6 +220,8 @@ export function PostJobForm({
   // homeowner types and suggests the category + skills. The Job model already
   // has ai* fields; wiring the real LLM classify endpoint is a follow-up.
   const description = watch('description');
+  const selectedCategoryId = watch('categoryId');
+  const selectedUrgency = watch('urgency');
   const [detection, setDetection] = useState<{
     categoryId: string;
     confidence: number;
@@ -312,6 +323,21 @@ export function PostJobForm({
     return category.nameEn;
   };
 
+  const selectedUrgencyLabel = t.urgencyLabels[selectedUrgency];
+
+  // Searchable category options — label is the localized name, with the slug
+  // carried through so the dropdown row can render the matching icon.
+  const categoryOptions = useMemo(
+    () =>
+      (categories ?? []).map((cat) => ({
+        value: cat.id,
+        label: categoryDisplayName(cat),
+        slug: cat.slug,
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [categories, locale],
+  );
+
   // While we resolve the session/role (or redirect a guest/tradesman away), show
   // a spinner instead of the form so it never flashes for someone who can't post.
   if (!authzReady) {
@@ -360,8 +386,14 @@ export function PostJobForm({
       {detection ? (
         <div className="flex flex-wrap items-center gap-2.5 rounded-lg bg-accent-soft px-3.5 py-3 text-sm text-accent-soft-foreground">
           <Sparkles className="size-4 shrink-0" aria-hidden />
-          <span>
+          <span className="flex flex-wrap items-center gap-1.5">
             {t.new.ai.detected}{' '}
+            <CategoryIcon
+              slug={
+                categories?.find((c) => c.id === detection.categoryId)?.slug
+              }
+              className="size-4"
+            />
             <strong>
               {categories?.find((c) => c.id === detection.categoryId)?.nameEn ??
                 ''}
@@ -473,24 +505,63 @@ export function PostJobForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="category">{t.fields.category}</Label>
-          <NativeSelect id="category" {...register('categoryId')}>
-            <option value="">{t.fields.categoryPlaceholder}</option>
-            {categories?.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {categoryDisplayName(cat)}
-              </option>
-            ))}
-          </NativeSelect>
+          <input type="hidden" {...register('categoryId')} />
+          <Combobox
+            id="category"
+            aria-label={t.fields.category}
+            items={categoryOptions}
+            value={selectedCategoryId || null}
+            onValueChange={(value) =>
+              setValue('categoryId', value ?? '', {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }
+            placeholder={t.fields.categoryPlaceholder}
+            emptyText={t.fields.categoryEmpty}
+            renderItem={(item) => (
+              <>
+                <CategoryIcon slug={item.slug} className="size-4 shrink-0" />
+                <span className="truncate">{item.label}</span>
+              </>
+            )}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="urgency">{t.fields.urgency}</Label>
-          <NativeSelect id="urgency" {...register('urgency')}>
-            {URGENCY_OPTIONS.map((u) => (
-              <option key={u} value={u}>
-                {t.urgencyLabels[u]}
-              </option>
-            ))}
-          </NativeSelect>
+          <input type="hidden" {...register('urgency')} />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  id="urgency"
+                  variant="outline"
+                  className="w-full justify-between"
+                  aria-label={t.fields.urgency}
+                >
+                  <span className="truncate">{selectedUrgencyLabel}</span>
+                  <ChevronDown className="size-4 opacity-60" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="min-w-44">
+              <DropdownMenuRadioGroup
+                value={selectedUrgency}
+                onValueChange={(value) =>
+                  setValue('urgency', value as JobUrgency, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
+              >
+                {URGENCY_OPTIONS.map((u) => (
+                  <DropdownMenuRadioItem key={u} value={u}>
+                    {t.urgencyLabels[u]}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -501,7 +572,18 @@ export function PostJobForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="district">{t.fields.district}</Label>
-          <Input id="district" {...register('district')} />
+          <input type="hidden" {...register('district')} />
+          <Combobox
+            id="district"
+            aria-label={t.fields.district}
+            items={DISTRICT_OPTIONS}
+            value={watch('district') || null}
+            onValueChange={(value) =>
+              setValue('district', value ?? '', { shouldDirty: true })
+            }
+            placeholder={t.fields.districtPlaceholder}
+            emptyText={t.fields.districtEmpty}
+          />
         </div>
       </div>
 

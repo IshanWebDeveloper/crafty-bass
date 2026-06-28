@@ -3,6 +3,7 @@ import { ProfileView } from '@/components/profile/profile-view';
 import { ReviewsReceivedPanel } from '@/components/reviews/reviews-received-panel';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { requireAuth } from '@/lib/server-session';
 
 export default async function ProfilePage({
   params,
@@ -10,8 +11,13 @@ export default async function ProfilePage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const session = await requireAuth(locale);
   const dict = await getDictionary(locale);
   const t = dict.profile;
+
+  // Homeowners post jobs and don't receive reviews, so the panel is only
+  // meaningful for tradesmen.
+  const isTradesman = session.user.userType === 'TRADESMAN';
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
@@ -23,9 +29,11 @@ export default async function ProfilePage({
             <p className="text-sm text-muted-foreground">{t.subtitle}</p>
           </div>
           <ProfileView locale={locale} dict={dict} />
-          <div className="mt-8">
-            <ReviewsReceivedPanel locale={locale} dict={dict} />
-          </div>
+          {isTradesman ? (
+            <div className="mt-8">
+              <ReviewsReceivedPanel locale={locale} dict={dict} />
+            </div>
+          ) : null}
         </div>
       </main>
     </div>

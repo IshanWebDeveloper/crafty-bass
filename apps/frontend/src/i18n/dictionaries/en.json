@@ -11,7 +11,9 @@
     "dashboard": "Dashboard",
     "profile": "Profile",
     "privacy": "Privacy",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "roleHomeowner": "Homeowner",
+    "roleTradesman": "Tradesman"
   },
   "auth": {
     "signIn": {
@@ -312,6 +314,19 @@
     "recent": {
       "heading": "Recent posted jobs",
       "viewAll": "View all"
+    },
+    "tradesman": {
+      "empty": "No quotes yet. Browse open jobs to send your first quote.",
+      "stats": {
+        "submittedQuotes": "Submitted quotes",
+        "pendingQuotes": "Pending quotes",
+        "assignedJobs": "Jobs assigned to you",
+        "reviewsReceived": "Reviews received"
+      },
+      "recent": {
+        "heading": "Recent quotes",
+        "viewAll": "View all"
+      }
     }
   },
   "jobs": {
@@ -350,9 +365,12 @@
       "descriptionLanguage": "Written in",
       "category": "Category",
       "categoryPlaceholder": "Select a category (optional)",
+      "categoryEmpty": "No matching category.",
       "urgency": "How urgent?",
       "city": "City",
       "district": "District",
+      "districtPlaceholder": "Select a district",
+      "districtEmpty": "No matching district.",
       "budgetMin": "Budget (min)",
       "budgetMax": "Budget (max)",
       "scheduledFor": "Preferred date (optional)"
@@ -396,8 +414,10 @@
       "filters": {
         "category": "Category",
         "allCategories": "All categories",
+        "allMyTrades": "All my trades",
         "district": "District",
         "districtPlaceholder": "Any district",
+        "districtEmpty": "No matching district.",
         "urgency": "Urgency",
         "allUrgencies": "Any urgency",
         "apply": "Apply filters"
@@ -410,6 +430,14 @@
         "body": "Browse freely — but quoting unlocks once an admin approves your verification.",
         "cta": "Continue verification",
         "quoteLocked": "Get verified to quote"
+      },
+      "relevance": {
+        "myTrades": "My trades",
+        "allJobs": "All jobs",
+        "area": "Your area",
+        "anywhere": "Anywhere",
+        "hint": "Showing jobs matched to your trades and service area.",
+        "empty": "No open jobs match your trades and area right now."
       }
     }
   },
@@ -531,6 +559,8 @@
       "locationText": "Address (optional)",
       "city": "City",
       "district": "District",
+      "districtPlaceholder": "Select a district",
+      "districtEmpty": "No matching district.",
       "postalCode": "Postal code",
       "preferredLanguage": "Preferred language"
     },
@@ -598,10 +628,18 @@
     "title": "What needs fixing?",
     "findMatches": "Find matches",
     "services": [
-      { "label": "Kitchen tap leak", "meta": "28 plumbers nearby" },
-      { "label": "Electrical socket", "meta": "19 matches" },
-      { "label": "Garden wall", "meta": "26 matches" },
-      { "label": "Bathroom tiling", "meta": "33 matches" }
+      {
+        "label": "Kitchen tap leak",
+        "meta": "28 plumbers nearby",
+        "slug": "plumbing"
+      },
+      {
+        "label": "Electrical socket",
+        "meta": "19 matches",
+        "slug": "electrical"
+      },
+      { "label": "Garden wall", "meta": "26 matches", "slug": "masonry" },
+      { "label": "Bathroom tiling", "meta": "33 matches", "slug": "masonry" }
     ]
   },
   "categories": {
@@ -654,7 +692,8 @@
       "category": "Category",
       "allCategories": "All categories",
       "district": "District",
-      "districtPlaceholder": "Any district"
+      "districtPlaceholder": "Any district",
+      "districtEmpty": "No matching district."
     },
     "empty": "No verified tradespeople match your filters yet.",
     "jobsCompleted": "{count} completed",

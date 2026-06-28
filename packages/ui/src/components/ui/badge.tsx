@@ -27,7 +27,8 @@ const badgeVariants = cva(
         // Semantic status chips, tuned to the brand green/amber/blue.
         success:
           'rounded-md bg-success-subtle text-[color-mix(in_oklch,var(--success)_75%,var(--foreground)_25%)]',
-        warning: 'rounded-md bg-warning-subtle text-warning-foreground',
+        warning:
+          'rounded-md bg-warning-subtle text-[color-mix(in_oklch,var(--warning)_75%,var(--foreground)_25%)]',
         info: 'rounded-md bg-info-subtle text-[color-mix(in_oklch,var(--info)_80%,var(--foreground)_20%)]',
       },
     },

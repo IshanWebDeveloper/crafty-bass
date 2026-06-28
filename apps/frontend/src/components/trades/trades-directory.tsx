@@ -3,13 +3,18 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { MapPin } from 'lucide-react';
+import { MapPin, ChevronDown, Users, Languages } from 'lucide-react';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   Button,
-  Input,
+  Combobox,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
   RatingStars,
   Skeleton,
   Tag,
@@ -17,13 +22,14 @@ import {
 } from '@repo/ui';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { NativeSelect } from '@/components/ui/select';
 import {
   browseTradesmen,
   type TradesmanListItem,
   type TradesmenQuery,
 } from '@/lib/api/profiles';
 import { listCategories } from '@/lib/api/categories';
+import { CategoryIcon } from '@/lib/categories';
+import { DISTRICT_OPTIONS } from '@/lib/districts';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -61,42 +67,77 @@ export function TradesDirectory({
     placeholderData: (prev) => prev,
   });
 
+  const selectedCategory = categories?.find((c) => c.id === filters.categoryId);
+
   return (
     <div className="space-y-6">
       <Card>
         <CardContent className="grid gap-4 p-5 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="trades-category">{t.filters.category}</Label>
-            <NativeSelect
-              id="trades-category"
-              value={filters.categoryId ?? ''}
-              onChange={(e) =>
-                setFilters((f) => ({
-                  ...f,
-                  categoryId: e.target.value || undefined,
-                }))
-              }
-            >
-              <option value="">{t.filters.allCategories}</option>
-              {categories?.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nameEn}
-                </option>
-              ))}
-            </NativeSelect>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    id="trades-category"
+                    variant="outline"
+                    className="h-9 w-full justify-between font-normal"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      {selectedCategory ? (
+                        <>
+                          <CategoryIcon
+                            slug={selectedCategory.slug}
+                            className="size-4"
+                          />
+                          {selectedCategory.nameEn}
+                        </>
+                      ) : (
+                        t.filters.allCategories
+                      )}
+                    </span>
+                    <ChevronDown className="size-4 opacity-60" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent className="min-w-(--anchor-width)">
+                <DropdownMenuRadioGroup
+                  value={filters.categoryId ?? ''}
+                  onValueChange={(value) =>
+                    setFilters((f) => ({
+                      ...f,
+                      categoryId: (value as string) || undefined,
+                    }))
+                  }
+                >
+                  <DropdownMenuRadioItem value="">
+                    {t.filters.allCategories}
+                  </DropdownMenuRadioItem>
+                  {categories?.map((c) => (
+                    <DropdownMenuRadioItem
+                      key={c.id}
+                      value={c.id}
+                      className="gap-2"
+                    >
+                      <CategoryIcon slug={c.slug} className="size-4" />
+                      {c.nameEn}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="trades-district">{t.filters.district}</Label>
-            <Input
+            <Combobox
               id="trades-district"
-              placeholder={t.filters.districtPlaceholder}
-              value={filters.district ?? ''}
-              onChange={(e) =>
-                setFilters((f) => ({
-                  ...f,
-                  district: e.target.value || undefined,
-                }))
+              items={DISTRICT_OPTIONS}
+              value={filters.district ?? null}
+              onValueChange={(value) =>
+                setFilters((f) => ({ ...f, district: value ?? undefined }))
               }
+              placeholder={t.filters.districtPlaceholder}
+              emptyText={t.filters.districtEmpty}
             />
           </div>
         </CardContent>
@@ -110,8 +151,11 @@ export function TradesDirectory({
         </div>
       ) : !data || data.data.length === 0 ? (
         <Card>
-          <CardContent className="p-10 text-center text-sm text-muted-foreground">
-            {t.empty}
+          <CardContent className="flex flex-col items-center gap-3 p-10 text-center">
+            <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+              <Users className="size-6" aria-hidden />
+            </span>
+            <p className="text-sm text-muted-foreground">{t.empty}</p>
           </CardContent>
         </Card>
       ) : (
@@ -177,6 +221,10 @@ function TradeCard({
           ) : null}
           <span>
             {t.jobsCompleted.replace('{count}', String(trade.jobsCompleted))}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Languages className="size-3.5" aria-hidden />
+            {dict.profile.languages[trade.preferredLanguage]}
           </span>
         </div>
 
