@@ -2,8 +2,14 @@
 // Centralizes the base URL, cookie credentials, JSON handling, and error
 // normalization (formalizes the ad-hoc pattern previously in privacy-actions).
 
+// Same-origin in the browser: next.config.ts rewrites /api/* to the NestJS API,
+// so data fetches carry the now-first-party session cookie. On the server there
+// is no origin to resolve a relative path against, so reach the API origin
+// directly (server-to-server, no proxy hop).
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3005/api/v1';
+  typeof window === 'undefined'
+    ? `${process.env.API_PROXY_TARGET ?? 'http://localhost:3005'}/api/v1`
+    : '/api/v1';
 
 export class ApiError extends Error {
   constructor(

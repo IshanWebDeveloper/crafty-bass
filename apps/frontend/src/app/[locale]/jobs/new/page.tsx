@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { requireUserType } from '@/lib/server-session';
 
 export default async function NewJobPage({
   params,
@@ -16,6 +17,7 @@ export default async function NewJobPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  await requireUserType(locale, 'HOMEOWNER');
   const dict = await getDictionary(locale);
   const t = dict.jobs;
 

@@ -1,11 +1,22 @@
 import { createAuthClient } from 'better-auth/react';
-import { phoneNumberClient } from 'better-auth/client/plugins';
+import {
+  phoneNumberClient,
+  inferAdditionalFields,
+} from 'better-auth/client/plugins';
 
-// Points at the backend better-auth mount (origin + /api/auth, applied by the
-// client). Defaults to the local backend; override with NEXT_PUBLIC_BETTER_AUTH_URL.
+// Same-origin: next.config.ts rewrites /api/* to the NestJS API, so the client
+// hits the frontend's own origin and the better-auth session cookie is set
+// first-party. This is what lets server components read the session
+// (lib/server-session.ts) and sidesteps CORS entirely. On the server (no
+// `window`) an empty baseURL resolves relative paths against the request.
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? 'http://localhost:3005',
-  plugins: [phoneNumberClient()],
+  baseURL: typeof window === 'undefined' ? '' : window.location.origin,
+  // Mirror the server's custom `userType` field (packages/auth) so the client
+  // types updateUser()/useSession() with it — without importing server code.
+  plugins: [
+    phoneNumberClient(),
+    inferAdditionalFields({ user: { userType: { type: 'string' } } }),
+  ],
 });
 
 export const { signIn, signUp, signOut, useSession, getSession } = authClient;

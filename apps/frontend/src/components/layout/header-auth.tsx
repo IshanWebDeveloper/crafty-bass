@@ -27,6 +27,8 @@ import {
 } from '@repo/ui';
 import { signOut, useSession } from '@/lib/auth-client';
 import { useMounted } from '@/lib/hooks/use-mounted';
+import { useSessionStore } from '@/lib/stores/session-store';
+import { RoleBadge } from './role-badge';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -39,6 +41,7 @@ export function HeaderAuth({
 }) {
   const router = useRouter();
   const { data: session, isPending } = useSession();
+  const userType = useSessionStore((s) => s.userType);
   // Until mounted, the server (no session) and client (session may resolve
   // synchronously) would disagree; render the skeleton on both — see useMounted.
   const mounted = useMounted();
@@ -91,16 +94,17 @@ export function HeaderAuth({
       <DropdownMenuTrigger
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'h-10 gap-2 rounded-full pl-1 pr-2.5',
+          'h-auto min-h-10 gap-2 rounded-full pl-1 pr-2.5 cursor-pointer',
         )}
       >
         <Avatar className="h-8 w-8">
           {user.image ? <AvatarImage src={user.image} alt={user.name} /> : null}
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
-        <span className="hidden text-sm font-medium md:inline">
-          {user.name}
-        </span>
+        <div className="hidden flex-col items-start md:flex">
+          <span className="text-sm font-medium leading-tight">{user.name}</span>
+          <RoleBadge userType={userType} dict={dict} className="mt-0.5" />
+        </div>
         <ChevronDown
           className="size-4 text-muted-foreground transition-transform group-aria-expanded/button:rotate-180"
           aria-hidden
@@ -115,6 +119,7 @@ export function HeaderAuth({
             <span className="truncate text-xs font-normal text-muted-foreground">
               {user.email}
             </span>
+            <RoleBadge userType={userType} dict={dict} className="mt-1.5" />
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

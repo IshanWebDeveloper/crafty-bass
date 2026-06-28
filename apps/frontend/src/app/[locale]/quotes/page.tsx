@@ -2,6 +2,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { MyQuotesList } from '@/components/quotes/my-quotes-list';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { requireUserType } from '@/lib/server-session';
 
 export default async function MyQuotesPage({
   params,
@@ -9,6 +10,7 @@ export default async function MyQuotesPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  await requireUserType(locale, 'TRADESMAN');
   const dict = await getDictionary(locale);
   const t = dict.myQuotes;
 

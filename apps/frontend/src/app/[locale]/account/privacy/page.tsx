@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { PrivacyActions } from '@/components/account/privacy-actions';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { requireAuth } from '@/lib/server-session';
 
 export const metadata: Metadata = {
   title: 'Privacy — Crafty Bass',
@@ -14,6 +15,7 @@ export default async function PrivacyPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  await requireAuth(locale);
   const t = (await getDictionary(locale)).privacy;
 
   return (

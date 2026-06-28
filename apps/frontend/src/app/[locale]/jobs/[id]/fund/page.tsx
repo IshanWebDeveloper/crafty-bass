@@ -2,6 +2,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { FundDepositView } from '@/components/escrow/fund-deposit-view';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { requireUserType } from '@/lib/server-session';
 
 export default async function FundDepositPage({
   params,
@@ -9,6 +10,7 @@ export default async function FundDepositPage({
   params: Promise<{ locale: Locale; id: string }>;
 }) {
   const { locale, id } = await params;
+  await requireUserType(locale, 'HOMEOWNER');
   const dict = await getDictionary(locale);
 
   return (

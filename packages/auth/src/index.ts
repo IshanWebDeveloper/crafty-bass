@@ -194,6 +194,18 @@ export const auth = betterAuth({
         defaultValue: 'CUSTOMER',
         input: false,
       },
+      userType: {
+        // Marketplace role (HOMEOWNER | TRADESMAN) — a domain column owned by
+        // @repo/db, surfaced through better-auth so it rides in the session.
+        // This is what lets server guards read it from get-session
+        // (lib/server-session.ts) and lets the sign-up form persist the chosen
+        // role via updateUser. `required: false` — it stays null until the user
+        // commits to a role (the backend also sets it lazily on the first
+        // job/quote, and definitively when a profile is created).
+        type: 'string',
+        required: false,
+        input: true,
+      },
       phone: {
         type: 'string',
         required: false,
@@ -423,6 +435,32 @@ export const auth = betterAuth({
               consentVersion: PRIVACY_POLICY_VERSION,
             },
           });
+        },
+      },
+      update: {
+        before: async (data, context) => {
+          // Set-once guard: userType may be assigned while it's still null (at
+          // sign-up, or lazily on the first job/quote), but never changed
+          // afterwards — otherwise a homeowner could flip to TRADESMAN (or vice
+          // versa) via updateUser and slip past the role checks. Only runs when
+          // an update actually touches userType, so ordinary profile edits
+          // (name, etc.) pay no extra query.
+          if (!('userType' in data)) return;
+          const userId = (
+            context as {
+              context?: { session?: { user?: { id?: string } } };
+            } | null
+          )?.context?.session?.user?.id;
+          if (!userId) return;
+          const existing = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { userType: true },
+          });
+          if (existing?.userType && existing.userType !== data.userType) {
+            throw new APIError('FORBIDDEN', {
+              message: 'Your account role cannot be changed once it is set.',
+            });
+          }
         },
       },
     },

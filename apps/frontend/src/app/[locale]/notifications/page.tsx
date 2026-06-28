@@ -2,6 +2,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { NotificationsView } from '@/components/notifications/notifications-view';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { requireAuth } from '@/lib/server-session';
 
 export default async function NotificationsPage({
   params,
@@ -9,6 +10,7 @@ export default async function NotificationsPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  await requireAuth(locale);
   const dict = await getDictionary(locale);
   const t = dict.notifications;
 

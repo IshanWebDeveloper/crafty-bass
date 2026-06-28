@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@repo/ui';
 import { useMe } from '@/lib/hooks/use-me';
 import { useMounted } from '@/lib/hooks/use-mounted';
+import { useSessionStore } from '@/lib/stores/session-store';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -22,7 +23,9 @@ export function MainNav({
   dict: Dictionary;
 }) {
   const pathname = usePathname();
-  const { data: me } = useMe();
+  // Triggers the current-user fetch, which seeds the session store below.
+  useMe();
+  const userType = useSessionStore((s) => s.userType);
   // The session resolves only on the client; render the guest nav until mounted
   // so SSR and the first client paint agree (avoids a hydration mismatch).
   const mounted = useMounted();
@@ -42,9 +45,9 @@ export function MainNav({
   ];
 
   const items =
-    mounted && me?.userType === 'TRADESMAN'
+    mounted && userType === 'TRADESMAN'
       ? tradesman
-      : mounted && me?.userType === 'HOMEOWNER'
+      : mounted && userType === 'HOMEOWNER'
         ? homeowner
         : guest;
 
