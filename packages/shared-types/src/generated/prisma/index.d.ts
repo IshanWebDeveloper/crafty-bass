@@ -20709,6 +20709,7 @@ export namespace Prisma {
     status: $Enums.JobStatus | null;
     assignedTradesmanId: string | null;
     acceptedQuoteId: string | null;
+    expiresAt: Date | null;
     completedAt: Date | null;
     cancelledAt: Date | null;
     createdAt: Date | null;
@@ -20736,6 +20737,7 @@ export namespace Prisma {
     status: $Enums.JobStatus | null;
     assignedTradesmanId: string | null;
     acceptedQuoteId: string | null;
+    expiresAt: Date | null;
     completedAt: Date | null;
     cancelledAt: Date | null;
     createdAt: Date | null;
@@ -20764,6 +20766,7 @@ export namespace Prisma {
     status: number;
     assignedTradesmanId: number;
     acceptedQuoteId: number;
+    expiresAt: number;
     completedAt: number;
     cancelledAt: number;
     createdAt: number;
@@ -20808,6 +20811,7 @@ export namespace Prisma {
     status?: true;
     assignedTradesmanId?: true;
     acceptedQuoteId?: true;
+    expiresAt?: true;
     completedAt?: true;
     cancelledAt?: true;
     createdAt?: true;
@@ -20835,6 +20839,7 @@ export namespace Prisma {
     status?: true;
     assignedTradesmanId?: true;
     acceptedQuoteId?: true;
+    expiresAt?: true;
     completedAt?: true;
     cancelledAt?: true;
     createdAt?: true;
@@ -20863,6 +20868,7 @@ export namespace Prisma {
     status?: true;
     assignedTradesmanId?: true;
     acceptedQuoteId?: true;
+    expiresAt?: true;
     completedAt?: true;
     cancelledAt?: true;
     createdAt?: true;
@@ -20979,6 +20985,7 @@ export namespace Prisma {
     status: $Enums.JobStatus;
     assignedTradesmanId: string | null;
     acceptedQuoteId: string | null;
+    expiresAt: Date | null;
     completedAt: Date | null;
     cancelledAt: Date | null;
     createdAt: Date;
@@ -21027,6 +21034,7 @@ export namespace Prisma {
       status?: boolean;
       assignedTradesmanId?: boolean;
       acceptedQuoteId?: boolean;
+      expiresAt?: boolean;
       completedAt?: boolean;
       cancelledAt?: boolean;
       createdAt?: boolean;
@@ -21074,6 +21082,7 @@ export namespace Prisma {
       status?: boolean;
       assignedTradesmanId?: boolean;
       acceptedQuoteId?: boolean;
+      expiresAt?: boolean;
       completedAt?: boolean;
       cancelledAt?: boolean;
       createdAt?: boolean;
@@ -21112,6 +21121,7 @@ export namespace Prisma {
       status?: boolean;
       assignedTradesmanId?: boolean;
       acceptedQuoteId?: boolean;
+      expiresAt?: boolean;
       completedAt?: boolean;
       cancelledAt?: boolean;
       createdAt?: boolean;
@@ -21147,6 +21157,7 @@ export namespace Prisma {
     status?: boolean;
     assignedTradesmanId?: boolean;
     acceptedQuoteId?: boolean;
+    expiresAt?: boolean;
     completedAt?: boolean;
     cancelledAt?: boolean;
     createdAt?: boolean;
@@ -21177,6 +21188,7 @@ export namespace Prisma {
     | 'status'
     | 'assignedTradesmanId'
     | 'acceptedQuoteId'
+    | 'expiresAt'
     | 'completedAt'
     | 'cancelledAt'
     | 'createdAt'
@@ -21262,6 +21274,7 @@ export namespace Prisma {
         status: $Enums.JobStatus;
         assignedTradesmanId: string | null;
         acceptedQuoteId: string | null;
+        expiresAt: Date | null;
         completedAt: Date | null;
         cancelledAt: Date | null;
         createdAt: Date;
@@ -22028,6 +22041,7 @@ export namespace Prisma {
     readonly status: FieldRef<'Job', 'JobStatus'>;
     readonly assignedTradesmanId: FieldRef<'Job', 'String'>;
     readonly acceptedQuoteId: FieldRef<'Job', 'String'>;
+    readonly expiresAt: FieldRef<'Job', 'DateTime'>;
     readonly completedAt: FieldRef<'Job', 'DateTime'>;
     readonly cancelledAt: FieldRef<'Job', 'DateTime'>;
     readonly createdAt: FieldRef<'Job', 'DateTime'>;
@@ -43861,6 +43875,7 @@ export namespace Prisma {
     status: 'status';
     assignedTradesmanId: 'assignedTradesmanId';
     acceptedQuoteId: 'acceptedQuoteId';
+    expiresAt: 'expiresAt';
     completedAt: 'completedAt';
     cancelledAt: 'cancelledAt';
     createdAt: 'createdAt';
@@ -45830,6 +45845,7 @@ export namespace Prisma {
     status?: EnumJobStatusFilter<'Job'> | $Enums.JobStatus;
     assignedTradesmanId?: StringNullableFilter<'Job'> | string | null;
     acceptedQuoteId?: StringNullableFilter<'Job'> | string | null;
+    expiresAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     completedAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     cancelledAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     createdAt?: DateTimeFilter<'Job'> | Date | string;
@@ -45886,6 +45902,7 @@ export namespace Prisma {
     status?: SortOrder;
     assignedTradesmanId?: SortOrderInput | SortOrder;
     acceptedQuoteId?: SortOrderInput | SortOrder;
+    expiresAt?: SortOrderInput | SortOrder;
     completedAt?: SortOrderInput | SortOrder;
     cancelledAt?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
@@ -45961,6 +45978,7 @@ export namespace Prisma {
       urgency?: EnumJobUrgencyFilter<'Job'> | $Enums.JobUrgency;
       status?: EnumJobStatusFilter<'Job'> | $Enums.JobStatus;
       assignedTradesmanId?: StringNullableFilter<'Job'> | string | null;
+      expiresAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
       completedAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
       cancelledAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
       createdAt?: DateTimeFilter<'Job'> | Date | string;
@@ -46019,6 +46037,7 @@ export namespace Prisma {
     status?: SortOrder;
     assignedTradesmanId?: SortOrderInput | SortOrder;
     acceptedQuoteId?: SortOrderInput | SortOrder;
+    expiresAt?: SortOrderInput | SortOrder;
     completedAt?: SortOrderInput | SortOrder;
     cancelledAt?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
@@ -46098,6 +46117,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: StringNullableWithAggregatesFilter<'Job'> | string | null;
+    expiresAt?:
+      | DateTimeNullableWithAggregatesFilter<'Job'>
+      | Date
+      | string
+      | null;
     completedAt?:
       | DateTimeNullableWithAggregatesFilter<'Job'>
       | Date
@@ -49520,6 +49544,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -49561,6 +49586,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -49628,6 +49654,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -49716,6 +49747,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -49760,6 +49796,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -49819,6 +49856,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -49894,6 +49936,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -53231,6 +53278,7 @@ export namespace Prisma {
     status?: SortOrder;
     assignedTradesmanId?: SortOrder;
     acceptedQuoteId?: SortOrder;
+    expiresAt?: SortOrder;
     completedAt?: SortOrder;
     cancelledAt?: SortOrder;
     createdAt?: SortOrder;
@@ -53266,6 +53314,7 @@ export namespace Prisma {
     status?: SortOrder;
     assignedTradesmanId?: SortOrder;
     acceptedQuoteId?: SortOrder;
+    expiresAt?: SortOrder;
     completedAt?: SortOrder;
     cancelledAt?: SortOrder;
     createdAt?: SortOrder;
@@ -53293,6 +53342,7 @@ export namespace Prisma {
     status?: SortOrder;
     assignedTradesmanId?: SortOrder;
     acceptedQuoteId?: SortOrder;
+    expiresAt?: SortOrder;
     completedAt?: SortOrder;
     cancelledAt?: SortOrder;
     createdAt?: SortOrder;
@@ -60836,6 +60886,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -60875,6 +60926,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -60919,6 +60971,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -60958,6 +61011,7 @@ export namespace Prisma {
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -62078,6 +62132,7 @@ export namespace Prisma {
     status?: EnumJobStatusFilter<'Job'> | $Enums.JobStatus;
     assignedTradesmanId?: StringNullableFilter<'Job'> | string | null;
     acceptedQuoteId?: StringNullableFilter<'Job'> | string | null;
+    expiresAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     completedAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     cancelledAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     createdAt?: DateTimeFilter<'Job'> | Date | string;
@@ -64224,6 +64279,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -64263,6 +64319,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -64307,6 +64364,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -64346,6 +64404,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -66590,6 +66649,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -66630,6 +66690,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -66756,6 +66817,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -66843,6 +66909,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -66925,6 +66996,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -66965,6 +67037,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -67093,6 +67166,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -67132,6 +67206,7 @@ export namespace Prisma {
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -67312,6 +67387,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -67399,6 +67479,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -67629,6 +67714,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -67713,6 +67803,11 @@ export namespace Prisma {
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
       | string
       | null;
     completedAt?:
@@ -68125,6 +68220,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -68165,6 +68261,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -68349,6 +68446,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -68436,6 +68538,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -68610,6 +68717,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -68650,6 +68758,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -69003,6 +69112,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -69090,6 +69204,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -70229,6 +70348,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -70269,6 +70389,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -70433,6 +70554,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -70520,6 +70646,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -71528,6 +71659,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -71568,6 +71700,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -71887,6 +72020,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -71974,6 +72112,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -72312,6 +72455,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -72352,6 +72496,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -72536,6 +72681,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -72623,6 +72773,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -72977,6 +73132,7 @@ export namespace Prisma {
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -73017,6 +73173,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -73453,6 +73610,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -73540,6 +73702,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -73717,6 +73884,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -73744,6 +73912,7 @@ export namespace Prisma {
     urgency?: $Enums.JobUrgency;
     status?: $Enums.JobStatus;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -74158,6 +74327,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -74244,6 +74418,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -74326,6 +74505,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -74393,6 +74577,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -74476,6 +74665,11 @@ export namespace Prisma {
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -74555,6 +74749,11 @@ export namespace Prisma {
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -75788,6 +75987,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -75815,6 +76015,7 @@ export namespace Prisma {
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
+    expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
     createdAt?: Date | string;
@@ -75928,6 +76129,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -76014,6 +76220,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -76096,6 +76307,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -76163,6 +76379,11 @@ export namespace Prisma {
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -76249,6 +76470,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -76331,6 +76557,11 @@ export namespace Prisma {
       | string
       | null;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    expiresAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     completedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date

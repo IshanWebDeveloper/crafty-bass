@@ -19,6 +19,7 @@ import { browseJobs, type JobListQuery, type JobUrgency } from '@/lib/api/jobs';
 import { listCategories } from '@/lib/api/categories';
 import { getMyProfile } from '@/lib/api/profiles';
 import { DISTRICT_OPTIONS } from '@/lib/districts';
+import { JobExpiryBadge } from '@/components/jobs/job-expiry-badge';
 import { CategoryBadge, CategoryIcon, UrgencyBadge } from '@/lib/categories';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
@@ -301,6 +302,7 @@ export function BrowseJobsView({
                         urgency={job.urgency}
                         label={t.urgencyLabels[job.urgency]}
                       />
+                      <JobExpiryBadge job={job} dict={dict} />
                     </div>
                     <Link
                       href={`/${locale}/jobs/${job.id}`}

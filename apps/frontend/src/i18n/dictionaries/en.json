@@ -436,6 +436,8 @@
       "empty": "No open jobs match your filters right now.",
       "loadMore": "Load more",
       "quote": "Quote",
+      "expiringIn": "Expiring in {h}h",
+      "expired": "Expired",
       "gate": {
         "title": "You can't send quotes until you're verified",
         "body": "Browse freely — but quoting unlocks once an admin approves your verification.",

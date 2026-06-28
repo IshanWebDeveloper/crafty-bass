@@ -21,6 +21,7 @@ export type JobListItem = {
   budgetMin: number | null;
   budgetMax: number | null;
   scheduledFor: string | null;
+  expiresAt: string | null;
   createdAt: string;
   assignedTradesmanId: string | null;
   category: { id: string; slug: string; nameEn: string } | null;

@@ -30,6 +30,7 @@ import { QuoteMaterials } from '@/components/quotes/quote-materials';
 import { useSession } from '@/lib/auth-client';
 import { SubmitQuotePanel } from './submit-quote-panel';
 import { MaterialRequestsPanel } from './material-requests-panel';
+import { JobExpiryBadge } from './job-expiry-badge';
 import { LeaveReviewPanel } from '@/components/reviews/leave-review-panel';
 import { PublicReviewsList } from '@/components/reviews/public-reviews-list';
 import { ReportButton } from '@/components/reports/report-button';
@@ -104,9 +105,12 @@ export function JobDetailView({
         <CardHeader className="space-y-2">
           <div className="flex items-start justify-between gap-3">
             <CardTitle className="text-2xl">{job.title}</CardTitle>
-            <Badge variant={statusVariant(job.status)} className="shrink-0">
-              {t.statusLabels[job.status]}
-            </Badge>
+            <div className="flex shrink-0 items-center gap-2">
+              <JobExpiryBadge job={job} dict={dict} />
+              <Badge variant={statusVariant(job.status)}>
+                {t.statusLabels[job.status]}
+              </Badge>
+            </div>
           </div>
           <p className="text-xs text-muted-foreground">
             {t.detail.postedBy} {job.homeowner.name} · {t.detail.postedOn}{' '}
