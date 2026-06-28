@@ -6,6 +6,7 @@ import { buttonVariants, cn } from '@repo/ui';
 import { NotificationBell } from '@/components/notifications/notification-bell';
 import { useMe } from '@/lib/hooks/use-me';
 import { useMounted } from '@/lib/hooks/use-mounted';
+import { useSessionStore } from '@/lib/stores/session-store';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -22,6 +23,7 @@ export function HeaderActions({
   dict: Dictionary;
 }) {
   const { data: me } = useMe();
+  const userType = useSessionStore((s) => s.userType);
   // Gate session-dependent actions until mounted so SSR (no session) and the
   // first client paint render the same thing — see {@link useMounted}.
   const mounted = useMounted();
@@ -29,7 +31,7 @@ export function HeaderActions({
   return (
     <>
       {mounted && me ? <NotificationBell locale={locale} dict={dict} /> : null}
-      {mounted && me?.userType === 'HOMEOWNER' ? (
+      {mounted && userType === 'HOMEOWNER' ? (
         <Link
           href={`/${locale}/jobs/new`}
           className={cn(

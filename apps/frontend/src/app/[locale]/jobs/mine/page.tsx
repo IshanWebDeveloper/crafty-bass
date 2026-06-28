@@ -4,6 +4,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { MyJobsList } from '@/components/jobs/my-jobs-list';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { requireUserType } from '@/lib/server-session';
 
 export default async function MyJobsPage({
   params,
@@ -11,6 +12,7 @@ export default async function MyJobsPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  await requireUserType(locale, 'HOMEOWNER');
   const dict = await getDictionary(locale);
   const t = dict.jobs;
 

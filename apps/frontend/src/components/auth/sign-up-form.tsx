@@ -8,6 +8,7 @@ import { Button, Input, cn } from '@repo/ui';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { authClient } from '@/lib/auth-client';
+import { useSessionStore } from '@/lib/stores/session-store';
 import { toE164LK } from '@/lib/phone';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
@@ -78,13 +79,23 @@ export function SignUpForm({
       }
       // The OTP verify created the account with a temporary email/name. Patch
       // the real name now; set the recovery email best-effort (it'll be sent a
-      // verification link). userType is set later when the profile is created.
-      await authClient.updateUser({ name: name.trim() }).catch(() => {});
+      // verification link).
+      const userType = role === 'tradesman' ? 'TRADESMAN' : 'HOMEOWNER';
+      // Persist the role the user picked. `userType` is a better-auth custom
+      // field (packages/auth), so this writes it into the session — which is
+      // what the server-side role guards (lib/server-session.ts) read. Without
+      // this the choice was discarded and userType stayed null.
+      await authClient
+        .updateUser({ name: name.trim(), userType })
+        .catch(() => {});
       if (email.trim()) {
         await authClient
           .changeEmail({ newEmail: email.trim() })
           .catch(() => {});
       }
+      // Optimistically prime the client store so the role-aware header/nav is
+      // correct the instant we redirect, before the `me` query refetches.
+      useSessionStore.getState().setUserType(userType);
       toast.success(t.signUp.success);
       router.push(
         role === 'tradesman'
