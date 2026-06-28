@@ -86,7 +86,7 @@ function Combobox<T extends ComboboxOption>({
               contentClassName,
             )}
           >
-            <ComboboxPrimitive.Empty className="px-2 py-4 text-center text-sm text-muted-foreground">
+            <ComboboxPrimitive.Empty className="px-2 py-1 text-center text-sm text-muted-foreground">
               {emptyText}
             </ComboboxPrimitive.Empty>
             <ComboboxPrimitive.List>
