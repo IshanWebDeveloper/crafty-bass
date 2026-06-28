@@ -340,7 +340,8 @@
         "hint": "Our AI reads this as you type to detect the right category.",
         "detected": "Detected",
         "suggested": "suggested skills",
-        "confidence": "{n}% confidence"
+        "confidence": "{n}% confidence",
+        "disclaimer": "AI-generated suggestion — AI can make mistakes, so please check it's right before posting."
       },
       "photos": {
         "label": "Photos",
