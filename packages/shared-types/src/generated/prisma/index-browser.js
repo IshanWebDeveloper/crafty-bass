@@ -327,6 +327,19 @@ exports.Prisma.QuoteMaterialScalarFieldEnum = {
   createdAt: 'createdAt',
 };
 
+exports.Prisma.MaterialRequestScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  requestedById: 'requestedById',
+  note: 'note',
+  estimatedCost: 'estimatedCost',
+  currency: 'currency',
+  status: 'status',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
 exports.Prisma.JobEscrowScalarFieldEnum = {
   id: 'id',
   jobId: 'jobId',
@@ -550,6 +563,12 @@ exports.QuoteStatus = exports.$Enums.QuoteStatus = {
   EXPIRED: 'EXPIRED',
 };
 
+exports.MaterialRequestStatus = exports.$Enums.MaterialRequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  DECLINED: 'DECLINED',
+};
+
 exports.EscrowStatus = exports.$Enums.EscrowStatus = {
   REQUESTED: 'REQUESTED',
   FUNDED: 'FUNDED',
@@ -626,6 +645,7 @@ exports.Prisma.ModelName = {
   JobSkill: 'JobSkill',
   Quote: 'Quote',
   QuoteMaterial: 'QuoteMaterial',
+  MaterialRequest: 'MaterialRequest',
   JobEscrow: 'JobEscrow',
   EscrowTransaction: 'EscrowTransaction',
   TradesmanVerification: 'TradesmanVerification',

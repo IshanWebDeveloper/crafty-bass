@@ -854,5 +854,24 @@
       }
     ],
     "backHome": "Back to home"
+  },
+  "materialRequests": {
+    "heading": "Material & tool requests",
+    "note": "What do you need?",
+    "notePlaceholder": "e.g. 3 extra bags of cement and a tile cutter to finish the bathroom.",
+    "estimatedCost": "Estimated cost (optional)",
+    "submit": "Send request",
+    "submitting": "Sending…",
+    "success": "Request sent to the homeowner",
+    "empty": "No material requests yet.",
+    "approve": "Approve",
+    "decline": "Decline",
+    "approved": "Request approved",
+    "declined": "Request declined",
+    "statusLabels": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "DECLINED": "Declined"
+    }
   }
 }

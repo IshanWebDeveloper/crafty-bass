@@ -27,6 +27,7 @@ import { CategoriesModule } from './categories/categories.module.js';
 import { ProfilesModule } from './profiles/profiles.module.js';
 import { JobsModule } from './jobs/jobs.module.js';
 import { QuotesModule } from './quotes/quotes.module.js';
+import { MaterialRequestsModule } from './material-requests/material-requests.module.js';
 import { EscrowModule } from './escrow/escrow.module.js';
 import { VerificationModule } from './verification/verification.module.js';
 import { ConversationsModule } from './conversations/conversations.module.js';
@@ -135,6 +136,7 @@ import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
     ProfilesModule,
     JobsModule,
     QuotesModule,
+    MaterialRequestsModule,
     EscrowModule,
     VerificationModule,
     ConversationsModule,

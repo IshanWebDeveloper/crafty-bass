@@ -93,6 +93,12 @@ export type Quote = $Result.DefaultSelection<Prisma.$QuotePayload>;
 export type QuoteMaterial =
   $Result.DefaultSelection<Prisma.$QuoteMaterialPayload>;
 /**
+ * Model MaterialRequest
+ *
+ */
+export type MaterialRequest =
+  $Result.DefaultSelection<Prisma.$MaterialRequestPayload>;
+/**
  * Model JobEscrow
  *
  */
@@ -206,6 +212,15 @@ export namespace $Enums {
 
   export type QuoteStatus = (typeof QuoteStatus)[keyof typeof QuoteStatus];
 
+  export const MaterialRequestStatus: {
+    PENDING: 'PENDING';
+    APPROVED: 'APPROVED';
+    DECLINED: 'DECLINED';
+  };
+
+  export type MaterialRequestStatus =
+    (typeof MaterialRequestStatus)[keyof typeof MaterialRequestStatus];
+
   export const EscrowStatus: {
     REQUESTED: 'REQUESTED';
     FUNDED: 'FUNDED';
@@ -311,6 +326,10 @@ export const JobUrgency: typeof $Enums.JobUrgency;
 export type QuoteStatus = $Enums.QuoteStatus;
 
 export const QuoteStatus: typeof $Enums.QuoteStatus;
+
+export type MaterialRequestStatus = $Enums.MaterialRequestStatus;
+
+export const MaterialRequestStatus: typeof $Enums.MaterialRequestStatus;
 
 export type EscrowStatus = $Enums.EscrowStatus;
 
@@ -666,6 +685,16 @@ export class PrismaClient<
    * ```
    */
   get quoteMaterial(): Prisma.QuoteMaterialDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.materialRequest`: Exposes CRUD operations for the **MaterialRequest** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more MaterialRequests
+   * const materialRequests = await prisma.materialRequest.findMany()
+   * ```
+   */
+  get materialRequest(): Prisma.MaterialRequestDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.jobEscrow`: Exposes CRUD operations for the **JobEscrow** model.
@@ -1245,6 +1274,7 @@ export namespace Prisma {
     JobSkill: 'JobSkill';
     Quote: 'Quote';
     QuoteMaterial: 'QuoteMaterial';
+    MaterialRequest: 'MaterialRequest';
     JobEscrow: 'JobEscrow';
     EscrowTransaction: 'EscrowTransaction';
     TradesmanVerification: 'TradesmanVerification';
@@ -1293,6 +1323,7 @@ export namespace Prisma {
         | 'jobSkill'
         | 'quote'
         | 'quoteMaterial'
+        | 'materialRequest'
         | 'jobEscrow'
         | 'escrowTransaction'
         | 'tradesmanVerification'
@@ -2430,6 +2461,82 @@ export namespace Prisma {
           };
         };
       };
+      MaterialRequest: {
+        payload: Prisma.$MaterialRequestPayload<ExtArgs>;
+        fields: Prisma.MaterialRequestFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.MaterialRequestFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.MaterialRequestFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload>;
+          };
+          findFirst: {
+            args: Prisma.MaterialRequestFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.MaterialRequestFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload>;
+          };
+          findMany: {
+            args: Prisma.MaterialRequestFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload>[];
+          };
+          create: {
+            args: Prisma.MaterialRequestCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload>;
+          };
+          createMany: {
+            args: Prisma.MaterialRequestCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.MaterialRequestCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload>[];
+          };
+          delete: {
+            args: Prisma.MaterialRequestDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload>;
+          };
+          update: {
+            args: Prisma.MaterialRequestUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload>;
+          };
+          deleteMany: {
+            args: Prisma.MaterialRequestDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.MaterialRequestUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.MaterialRequestUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload>[];
+          };
+          upsert: {
+            args: Prisma.MaterialRequestUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$MaterialRequestPayload>;
+          };
+          aggregate: {
+            args: Prisma.MaterialRequestAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateMaterialRequest>;
+          };
+          groupBy: {
+            args: Prisma.MaterialRequestGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<MaterialRequestGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.MaterialRequestCountArgs<ExtArgs>;
+            result:
+              | $Utils.Optional<MaterialRequestCountAggregateOutputType>
+              | number;
+          };
+        };
+      };
       JobEscrow: {
         payload: Prisma.$JobEscrowPayload<ExtArgs>;
         fields: Prisma.JobEscrowFieldRefs;
@@ -3309,6 +3416,7 @@ export namespace Prisma {
     jobSkill?: JobSkillOmit;
     quote?: QuoteOmit;
     quoteMaterial?: QuoteMaterialOmit;
+    materialRequest?: MaterialRequestOmit;
     jobEscrow?: JobEscrowOmit;
     escrowTransaction?: EscrowTransactionOmit;
     tradesmanVerification?: TradesmanVerificationOmit;
@@ -3407,6 +3515,7 @@ export namespace Prisma {
     postedJobs: number;
     assignedJobs: number;
     quotes: number;
+    materialRequests: number;
     sentMessages: number;
     receivedMessages: number;
     reviewsGiven: number;
@@ -3429,6 +3538,7 @@ export namespace Prisma {
     postedJobs?: boolean | UserCountOutputTypeCountPostedJobsArgs;
     assignedJobs?: boolean | UserCountOutputTypeCountAssignedJobsArgs;
     quotes?: boolean | UserCountOutputTypeCountQuotesArgs;
+    materialRequests?: boolean | UserCountOutputTypeCountMaterialRequestsArgs;
     sentMessages?: boolean | UserCountOutputTypeCountSentMessagesArgs;
     receivedMessages?: boolean | UserCountOutputTypeCountReceivedMessagesArgs;
     reviewsGiven?: boolean | UserCountOutputTypeCountReviewsGivenArgs;
@@ -3513,6 +3623,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: QuoteWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMaterialRequestsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaterialRequestWhereInput;
   };
 
   /**
@@ -3779,6 +3898,7 @@ export namespace Prisma {
     reviews: number;
     recommendations: number;
     reports: number;
+    materialRequests: number;
   };
 
   export type JobCountOutputTypeSelect<
@@ -3790,6 +3910,7 @@ export namespace Prisma {
     reviews?: boolean | JobCountOutputTypeCountReviewsArgs;
     recommendations?: boolean | JobCountOutputTypeCountRecommendationsArgs;
     reports?: boolean | JobCountOutputTypeCountReportsArgs;
+    materialRequests?: boolean | JobCountOutputTypeCountMaterialRequestsArgs;
   };
 
   // Custom InputTypes
@@ -3857,6 +3978,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: ReportWhereInput;
+  };
+
+  /**
+   * JobCountOutputType without action
+   */
+  export type JobCountOutputTypeCountMaterialRequestsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaterialRequestWhereInput;
   };
 
   /**
@@ -4333,6 +4463,7 @@ export namespace Prisma {
       postedJobs?: boolean | User$postedJobsArgs<ExtArgs>;
       assignedJobs?: boolean | User$assignedJobsArgs<ExtArgs>;
       quotes?: boolean | User$quotesArgs<ExtArgs>;
+      materialRequests?: boolean | User$materialRequestsArgs<ExtArgs>;
       sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>;
       receivedMessages?: boolean | User$receivedMessagesArgs<ExtArgs>;
       reviewsGiven?: boolean | User$reviewsGivenArgs<ExtArgs>;
@@ -4457,6 +4588,7 @@ export namespace Prisma {
     postedJobs?: boolean | User$postedJobsArgs<ExtArgs>;
     assignedJobs?: boolean | User$assignedJobsArgs<ExtArgs>;
     quotes?: boolean | User$quotesArgs<ExtArgs>;
+    materialRequests?: boolean | User$materialRequestsArgs<ExtArgs>;
     sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>;
     receivedMessages?: boolean | User$receivedMessagesArgs<ExtArgs>;
     reviewsGiven?: boolean | User$reviewsGivenArgs<ExtArgs>;
@@ -4491,6 +4623,7 @@ export namespace Prisma {
       postedJobs: Prisma.$JobPayload<ExtArgs>[];
       assignedJobs: Prisma.$JobPayload<ExtArgs>[];
       quotes: Prisma.$QuotePayload<ExtArgs>[];
+      materialRequests: Prisma.$MaterialRequestPayload<ExtArgs>[];
       sentMessages: Prisma.$MessagePayload<ExtArgs>[];
       receivedMessages: Prisma.$MessagePayload<ExtArgs>[];
       reviewsGiven: Prisma.$ReviewPayload<ExtArgs>[];
@@ -5155,6 +5288,17 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       | $Result.GetResult<
           Prisma.$QuotePayload<ExtArgs>,
+          T,
+          'findMany',
+          GlobalOmitOptions
+        >
+      | Null
+    >;
+    materialRequests<T extends User$materialRequestsArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$materialRequestsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$MaterialRequestPayload<ExtArgs>,
           T,
           'findMany',
           GlobalOmitOptions
@@ -5976,6 +6120,36 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: QuoteScalarFieldEnum | QuoteScalarFieldEnum[];
+  };
+
+  /**
+   * User.materialRequests
+   */
+  export type User$materialRequestsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    where?: MaterialRequestWhereInput;
+    orderBy?:
+      | MaterialRequestOrderByWithRelationInput
+      | MaterialRequestOrderByWithRelationInput[];
+    cursor?: MaterialRequestWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?:
+      | MaterialRequestScalarFieldEnum
+      | MaterialRequestScalarFieldEnum[];
   };
 
   /**
@@ -20869,6 +21043,7 @@ export namespace Prisma {
       recommendations?: boolean | Job$recommendationsArgs<ExtArgs>;
       reports?: boolean | Job$reportsArgs<ExtArgs>;
       escrow?: boolean | Job$escrowArgs<ExtArgs>;
+      materialRequests?: boolean | Job$materialRequestsArgs<ExtArgs>;
       _count?: boolean | JobCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['job']
@@ -21023,6 +21198,7 @@ export namespace Prisma {
     recommendations?: boolean | Job$recommendationsArgs<ExtArgs>;
     reports?: boolean | Job$reportsArgs<ExtArgs>;
     escrow?: boolean | Job$escrowArgs<ExtArgs>;
+    materialRequests?: boolean | Job$materialRequestsArgs<ExtArgs>;
     _count?: boolean | JobCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type JobIncludeCreateManyAndReturn<
@@ -21061,6 +21237,7 @@ export namespace Prisma {
       recommendations: Prisma.$JobRecommendationPayload<ExtArgs>[];
       reports: Prisma.$ReportPayload<ExtArgs>[];
       escrow: Prisma.$JobEscrowPayload<ExtArgs> | null;
+      materialRequests: Prisma.$MaterialRequestPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -21778,6 +21955,17 @@ export namespace Prisma {
       null,
       ExtArgs,
       GlobalOmitOptions
+    >;
+    materialRequests<T extends Job$materialRequestsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Job$materialRequestsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$MaterialRequestPayload<ExtArgs>,
+          T,
+          'findMany',
+          GlobalOmitOptions
+        >
+      | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -22538,6 +22726,36 @@ export namespace Prisma {
      */
     include?: JobEscrowInclude<ExtArgs> | null;
     where?: JobEscrowWhereInput;
+  };
+
+  /**
+   * Job.materialRequests
+   */
+  export type Job$materialRequestsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    where?: MaterialRequestWhereInput;
+    orderBy?:
+      | MaterialRequestOrderByWithRelationInput
+      | MaterialRequestOrderByWithRelationInput[];
+    cursor?: MaterialRequestWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?:
+      | MaterialRequestScalarFieldEnum
+      | MaterialRequestScalarFieldEnum[];
   };
 
   /**
@@ -26903,6 +27121,1467 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: QuoteMaterialInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model MaterialRequest
+   */
+
+  export type AggregateMaterialRequest = {
+    _count: MaterialRequestCountAggregateOutputType | null;
+    _avg: MaterialRequestAvgAggregateOutputType | null;
+    _sum: MaterialRequestSumAggregateOutputType | null;
+    _min: MaterialRequestMinAggregateOutputType | null;
+    _max: MaterialRequestMaxAggregateOutputType | null;
+  };
+
+  export type MaterialRequestAvgAggregateOutputType = {
+    estimatedCost: Decimal | null;
+  };
+
+  export type MaterialRequestSumAggregateOutputType = {
+    estimatedCost: Decimal | null;
+  };
+
+  export type MaterialRequestMinAggregateOutputType = {
+    id: string | null;
+    jobId: string | null;
+    requestedById: string | null;
+    note: string | null;
+    estimatedCost: Decimal | null;
+    currency: string | null;
+    status: $Enums.MaterialRequestStatus | null;
+    respondedAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type MaterialRequestMaxAggregateOutputType = {
+    id: string | null;
+    jobId: string | null;
+    requestedById: string | null;
+    note: string | null;
+    estimatedCost: Decimal | null;
+    currency: string | null;
+    status: $Enums.MaterialRequestStatus | null;
+    respondedAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type MaterialRequestCountAggregateOutputType = {
+    id: number;
+    jobId: number;
+    requestedById: number;
+    note: number;
+    estimatedCost: number;
+    currency: number;
+    status: number;
+    respondedAt: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type MaterialRequestAvgAggregateInputType = {
+    estimatedCost?: true;
+  };
+
+  export type MaterialRequestSumAggregateInputType = {
+    estimatedCost?: true;
+  };
+
+  export type MaterialRequestMinAggregateInputType = {
+    id?: true;
+    jobId?: true;
+    requestedById?: true;
+    note?: true;
+    estimatedCost?: true;
+    currency?: true;
+    status?: true;
+    respondedAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type MaterialRequestMaxAggregateInputType = {
+    id?: true;
+    jobId?: true;
+    requestedById?: true;
+    note?: true;
+    estimatedCost?: true;
+    currency?: true;
+    status?: true;
+    respondedAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type MaterialRequestCountAggregateInputType = {
+    id?: true;
+    jobId?: true;
+    requestedById?: true;
+    note?: true;
+    estimatedCost?: true;
+    currency?: true;
+    status?: true;
+    respondedAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type MaterialRequestAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaterialRequest to aggregate.
+     */
+    where?: MaterialRequestWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaterialRequests to fetch.
+     */
+    orderBy?:
+      | MaterialRequestOrderByWithRelationInput
+      | MaterialRequestOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: MaterialRequestWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaterialRequests from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaterialRequests.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned MaterialRequests
+     **/
+    _count?: true | MaterialRequestCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: MaterialRequestAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: MaterialRequestSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: MaterialRequestMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: MaterialRequestMaxAggregateInputType;
+  };
+
+  export type GetMaterialRequestAggregateType<
+    T extends MaterialRequestAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateMaterialRequest]: P extends
+      | '_count'
+      | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaterialRequest[P]>
+      : GetScalarType<T[P], AggregateMaterialRequest[P]>;
+  };
+
+  export type MaterialRequestGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaterialRequestWhereInput;
+    orderBy?:
+      | MaterialRequestOrderByWithAggregationInput
+      | MaterialRequestOrderByWithAggregationInput[];
+    by: MaterialRequestScalarFieldEnum[] | MaterialRequestScalarFieldEnum;
+    having?: MaterialRequestScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: MaterialRequestCountAggregateInputType | true;
+    _avg?: MaterialRequestAvgAggregateInputType;
+    _sum?: MaterialRequestSumAggregateInputType;
+    _min?: MaterialRequestMinAggregateInputType;
+    _max?: MaterialRequestMaxAggregateInputType;
+  };
+
+  export type MaterialRequestGroupByOutputType = {
+    id: string;
+    jobId: string;
+    requestedById: string;
+    note: string;
+    estimatedCost: Decimal | null;
+    currency: string;
+    status: $Enums.MaterialRequestStatus;
+    respondedAt: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: MaterialRequestCountAggregateOutputType | null;
+    _avg: MaterialRequestAvgAggregateOutputType | null;
+    _sum: MaterialRequestSumAggregateOutputType | null;
+    _min: MaterialRequestMinAggregateOutputType | null;
+    _max: MaterialRequestMaxAggregateOutputType | null;
+  };
+
+  type GetMaterialRequestGroupByPayload<T extends MaterialRequestGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<MaterialRequestGroupByOutputType, T['by']> & {
+          [P in keyof T &
+            keyof MaterialRequestGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MaterialRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], MaterialRequestGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type MaterialRequestSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      jobId?: boolean;
+      requestedById?: boolean;
+      note?: boolean;
+      estimatedCost?: boolean;
+      currency?: boolean;
+      status?: boolean;
+      respondedAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      job?: boolean | JobDefaultArgs<ExtArgs>;
+      requestedBy?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['materialRequest']
+  >;
+
+  export type MaterialRequestSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      jobId?: boolean;
+      requestedById?: boolean;
+      note?: boolean;
+      estimatedCost?: boolean;
+      currency?: boolean;
+      status?: boolean;
+      respondedAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      job?: boolean | JobDefaultArgs<ExtArgs>;
+      requestedBy?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['materialRequest']
+  >;
+
+  export type MaterialRequestSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      jobId?: boolean;
+      requestedById?: boolean;
+      note?: boolean;
+      estimatedCost?: boolean;
+      currency?: boolean;
+      status?: boolean;
+      respondedAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      job?: boolean | JobDefaultArgs<ExtArgs>;
+      requestedBy?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['materialRequest']
+  >;
+
+  export type MaterialRequestSelectScalar = {
+    id?: boolean;
+    jobId?: boolean;
+    requestedById?: boolean;
+    note?: boolean;
+    estimatedCost?: boolean;
+    currency?: boolean;
+    status?: boolean;
+    respondedAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type MaterialRequestOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | 'id'
+    | 'jobId'
+    | 'requestedById'
+    | 'note'
+    | 'estimatedCost'
+    | 'currency'
+    | 'status'
+    | 'respondedAt'
+    | 'createdAt'
+    | 'updatedAt',
+    ExtArgs['result']['materialRequest']
+  >;
+  export type MaterialRequestInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    job?: boolean | JobDefaultArgs<ExtArgs>;
+    requestedBy?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type MaterialRequestIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    job?: boolean | JobDefaultArgs<ExtArgs>;
+    requestedBy?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type MaterialRequestIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    job?: boolean | JobDefaultArgs<ExtArgs>;
+    requestedBy?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $MaterialRequestPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'MaterialRequest';
+    objects: {
+      job: Prisma.$JobPayload<ExtArgs>;
+      requestedBy: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        jobId: string;
+        requestedById: string;
+        note: string;
+        estimatedCost: Prisma.Decimal | null;
+        currency: string;
+        status: $Enums.MaterialRequestStatus;
+        respondedAt: Date | null;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['materialRequest']
+    >;
+    composites: {};
+  };
+
+  type MaterialRequestGetPayload<
+    S extends boolean | null | undefined | MaterialRequestDefaultArgs,
+  > = $Result.GetResult<Prisma.$MaterialRequestPayload, S>;
+
+  type MaterialRequestCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    MaterialRequestFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit'
+  > & {
+    select?: MaterialRequestCountAggregateInputType | true;
+  };
+
+  export interface MaterialRequestDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['MaterialRequest'];
+      meta: { name: 'MaterialRequest' };
+    };
+    /**
+     * Find zero or one MaterialRequest that matches the filter.
+     * @param {MaterialRequestFindUniqueArgs} args - Arguments to find a MaterialRequest
+     * @example
+     * // Get one MaterialRequest
+     * const materialRequest = await prisma.materialRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaterialRequestFindUniqueArgs>(
+      args: SelectSubset<T, MaterialRequestFindUniqueArgs<ExtArgs>>,
+    ): Prisma__MaterialRequestClient<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one MaterialRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaterialRequestFindUniqueOrThrowArgs} args - Arguments to find a MaterialRequest
+     * @example
+     * // Get one MaterialRequest
+     * const materialRequest = await prisma.materialRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaterialRequestFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, MaterialRequestFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__MaterialRequestClient<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first MaterialRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialRequestFindFirstArgs} args - Arguments to find a MaterialRequest
+     * @example
+     * // Get one MaterialRequest
+     * const materialRequest = await prisma.materialRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaterialRequestFindFirstArgs>(
+      args?: SelectSubset<T, MaterialRequestFindFirstArgs<ExtArgs>>,
+    ): Prisma__MaterialRequestClient<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first MaterialRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialRequestFindFirstOrThrowArgs} args - Arguments to find a MaterialRequest
+     * @example
+     * // Get one MaterialRequest
+     * const materialRequest = await prisma.materialRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaterialRequestFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, MaterialRequestFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__MaterialRequestClient<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more MaterialRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaterialRequests
+     * const materialRequests = await prisma.materialRequest.findMany()
+     *
+     * // Get first 10 MaterialRequests
+     * const materialRequests = await prisma.materialRequest.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const materialRequestWithIdOnly = await prisma.materialRequest.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends MaterialRequestFindManyArgs>(
+      args?: SelectSubset<T, MaterialRequestFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create a MaterialRequest.
+     * @param {MaterialRequestCreateArgs} args - Arguments to create a MaterialRequest.
+     * @example
+     * // Create one MaterialRequest
+     * const MaterialRequest = await prisma.materialRequest.create({
+     *   data: {
+     *     // ... data to create a MaterialRequest
+     *   }
+     * })
+     *
+     */
+    create<T extends MaterialRequestCreateArgs>(
+      args: SelectSubset<T, MaterialRequestCreateArgs<ExtArgs>>,
+    ): Prisma__MaterialRequestClient<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'create',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many MaterialRequests.
+     * @param {MaterialRequestCreateManyArgs} args - Arguments to create many MaterialRequests.
+     * @example
+     * // Create many MaterialRequests
+     * const materialRequest = await prisma.materialRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends MaterialRequestCreateManyArgs>(
+      args?: SelectSubset<T, MaterialRequestCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many MaterialRequests and returns the data saved in the database.
+     * @param {MaterialRequestCreateManyAndReturnArgs} args - Arguments to create many MaterialRequests.
+     * @example
+     * // Create many MaterialRequests
+     * const materialRequest = await prisma.materialRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many MaterialRequests and only return the `id`
+     * const materialRequestWithIdOnly = await prisma.materialRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends MaterialRequestCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, MaterialRequestCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a MaterialRequest.
+     * @param {MaterialRequestDeleteArgs} args - Arguments to delete one MaterialRequest.
+     * @example
+     * // Delete one MaterialRequest
+     * const MaterialRequest = await prisma.materialRequest.delete({
+     *   where: {
+     *     // ... filter to delete one MaterialRequest
+     *   }
+     * })
+     *
+     */
+    delete<T extends MaterialRequestDeleteArgs>(
+      args: SelectSubset<T, MaterialRequestDeleteArgs<ExtArgs>>,
+    ): Prisma__MaterialRequestClient<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'delete',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one MaterialRequest.
+     * @param {MaterialRequestUpdateArgs} args - Arguments to update one MaterialRequest.
+     * @example
+     * // Update one MaterialRequest
+     * const materialRequest = await prisma.materialRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends MaterialRequestUpdateArgs>(
+      args: SelectSubset<T, MaterialRequestUpdateArgs<ExtArgs>>,
+    ): Prisma__MaterialRequestClient<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'update',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more MaterialRequests.
+     * @param {MaterialRequestDeleteManyArgs} args - Arguments to filter MaterialRequests to delete.
+     * @example
+     * // Delete a few MaterialRequests
+     * const { count } = await prisma.materialRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends MaterialRequestDeleteManyArgs>(
+      args?: SelectSubset<T, MaterialRequestDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more MaterialRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaterialRequests
+     * const materialRequest = await prisma.materialRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends MaterialRequestUpdateManyArgs>(
+      args: SelectSubset<T, MaterialRequestUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more MaterialRequests and returns the data updated in the database.
+     * @param {MaterialRequestUpdateManyAndReturnArgs} args - Arguments to update many MaterialRequests.
+     * @example
+     * // Update many MaterialRequests
+     * const materialRequest = await prisma.materialRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more MaterialRequests and only return the `id`
+     * const materialRequestWithIdOnly = await prisma.materialRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends MaterialRequestUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, MaterialRequestUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create or update one MaterialRequest.
+     * @param {MaterialRequestUpsertArgs} args - Arguments to update or create a MaterialRequest.
+     * @example
+     * // Update or create a MaterialRequest
+     * const materialRequest = await prisma.materialRequest.upsert({
+     *   create: {
+     *     // ... data to create a MaterialRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaterialRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaterialRequestUpsertArgs>(
+      args: SelectSubset<T, MaterialRequestUpsertArgs<ExtArgs>>,
+    ): Prisma__MaterialRequestClient<
+      $Result.GetResult<
+        Prisma.$MaterialRequestPayload<ExtArgs>,
+        T,
+        'upsert',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of MaterialRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialRequestCountArgs} args - Arguments to filter MaterialRequests to count.
+     * @example
+     * // Count the number of MaterialRequests
+     * const count = await prisma.materialRequest.count({
+     *   where: {
+     *     // ... the filter for the MaterialRequests we want to count
+     *   }
+     * })
+     **/
+    count<T extends MaterialRequestCountArgs>(
+      args?: Subset<T, MaterialRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MaterialRequestCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a MaterialRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends MaterialRequestAggregateArgs>(
+      args: Subset<T, MaterialRequestAggregateArgs>,
+    ): Prisma.PrismaPromise<GetMaterialRequestAggregateType<T>>;
+
+    /**
+     * Group by MaterialRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends MaterialRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaterialRequestGroupByArgs['orderBy'] }
+        : { orderBy?: MaterialRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T['orderBy']>>
+      >,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      'Field ',
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, MaterialRequestGroupByArgs, OrderByArg> &
+        InputErrors,
+    ): {} extends InputErrors
+      ? GetMaterialRequestGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the MaterialRequest model
+     */
+    readonly fields: MaterialRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaterialRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaterialRequestClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    job<T extends JobDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, JobDefaultArgs<ExtArgs>>,
+    ): Prisma__JobClient<
+      | $Result.GetResult<
+          Prisma.$JobPayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    requestedBy<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the MaterialRequest model
+   */
+  interface MaterialRequestFieldRefs {
+    readonly id: FieldRef<'MaterialRequest', 'String'>;
+    readonly jobId: FieldRef<'MaterialRequest', 'String'>;
+    readonly requestedById: FieldRef<'MaterialRequest', 'String'>;
+    readonly note: FieldRef<'MaterialRequest', 'String'>;
+    readonly estimatedCost: FieldRef<'MaterialRequest', 'Decimal'>;
+    readonly currency: FieldRef<'MaterialRequest', 'String'>;
+    readonly status: FieldRef<'MaterialRequest', 'MaterialRequestStatus'>;
+    readonly respondedAt: FieldRef<'MaterialRequest', 'DateTime'>;
+    readonly createdAt: FieldRef<'MaterialRequest', 'DateTime'>;
+    readonly updatedAt: FieldRef<'MaterialRequest', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * MaterialRequest findUnique
+   */
+  export type MaterialRequestFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    /**
+     * Filter, which MaterialRequest to fetch.
+     */
+    where: MaterialRequestWhereUniqueInput;
+  };
+
+  /**
+   * MaterialRequest findUniqueOrThrow
+   */
+  export type MaterialRequestFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    /**
+     * Filter, which MaterialRequest to fetch.
+     */
+    where: MaterialRequestWhereUniqueInput;
+  };
+
+  /**
+   * MaterialRequest findFirst
+   */
+  export type MaterialRequestFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    /**
+     * Filter, which MaterialRequest to fetch.
+     */
+    where?: MaterialRequestWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaterialRequests to fetch.
+     */
+    orderBy?:
+      | MaterialRequestOrderByWithRelationInput
+      | MaterialRequestOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaterialRequests.
+     */
+    cursor?: MaterialRequestWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaterialRequests from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaterialRequests.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaterialRequests.
+     */
+    distinct?:
+      | MaterialRequestScalarFieldEnum
+      | MaterialRequestScalarFieldEnum[];
+  };
+
+  /**
+   * MaterialRequest findFirstOrThrow
+   */
+  export type MaterialRequestFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    /**
+     * Filter, which MaterialRequest to fetch.
+     */
+    where?: MaterialRequestWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaterialRequests to fetch.
+     */
+    orderBy?:
+      | MaterialRequestOrderByWithRelationInput
+      | MaterialRequestOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaterialRequests.
+     */
+    cursor?: MaterialRequestWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaterialRequests from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaterialRequests.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaterialRequests.
+     */
+    distinct?:
+      | MaterialRequestScalarFieldEnum
+      | MaterialRequestScalarFieldEnum[];
+  };
+
+  /**
+   * MaterialRequest findMany
+   */
+  export type MaterialRequestFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    /**
+     * Filter, which MaterialRequests to fetch.
+     */
+    where?: MaterialRequestWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaterialRequests to fetch.
+     */
+    orderBy?:
+      | MaterialRequestOrderByWithRelationInput
+      | MaterialRequestOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing MaterialRequests.
+     */
+    cursor?: MaterialRequestWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaterialRequests from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaterialRequests.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaterialRequests.
+     */
+    distinct?:
+      | MaterialRequestScalarFieldEnum
+      | MaterialRequestScalarFieldEnum[];
+  };
+
+  /**
+   * MaterialRequest create
+   */
+  export type MaterialRequestCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a MaterialRequest.
+     */
+    data: XOR<MaterialRequestCreateInput, MaterialRequestUncheckedCreateInput>;
+  };
+
+  /**
+   * MaterialRequest createMany
+   */
+  export type MaterialRequestCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many MaterialRequests.
+     */
+    data: MaterialRequestCreateManyInput | MaterialRequestCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * MaterialRequest createManyAndReturn
+   */
+  export type MaterialRequestCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * The data used to create many MaterialRequests.
+     */
+    data: MaterialRequestCreateManyInput | MaterialRequestCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * MaterialRequest update
+   */
+  export type MaterialRequestUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a MaterialRequest.
+     */
+    data: XOR<MaterialRequestUpdateInput, MaterialRequestUncheckedUpdateInput>;
+    /**
+     * Choose, which MaterialRequest to update.
+     */
+    where: MaterialRequestWhereUniqueInput;
+  };
+
+  /**
+   * MaterialRequest updateMany
+   */
+  export type MaterialRequestUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update MaterialRequests.
+     */
+    data: XOR<
+      MaterialRequestUpdateManyMutationInput,
+      MaterialRequestUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which MaterialRequests to update
+     */
+    where?: MaterialRequestWhereInput;
+    /**
+     * Limit how many MaterialRequests to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * MaterialRequest updateManyAndReturn
+   */
+  export type MaterialRequestUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * The data used to update MaterialRequests.
+     */
+    data: XOR<
+      MaterialRequestUpdateManyMutationInput,
+      MaterialRequestUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which MaterialRequests to update
+     */
+    where?: MaterialRequestWhereInput;
+    /**
+     * Limit how many MaterialRequests to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * MaterialRequest upsert
+   */
+  export type MaterialRequestUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the MaterialRequest to update in case it exists.
+     */
+    where: MaterialRequestWhereUniqueInput;
+    /**
+     * In case the MaterialRequest found by the `where` argument doesn't exist, create a new MaterialRequest with this data.
+     */
+    create: XOR<
+      MaterialRequestCreateInput,
+      MaterialRequestUncheckedCreateInput
+    >;
+    /**
+     * In case the MaterialRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<
+      MaterialRequestUpdateInput,
+      MaterialRequestUncheckedUpdateInput
+    >;
+  };
+
+  /**
+   * MaterialRequest delete
+   */
+  export type MaterialRequestDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
+    /**
+     * Filter which MaterialRequest to delete.
+     */
+    where: MaterialRequestWhereUniqueInput;
+  };
+
+  /**
+   * MaterialRequest deleteMany
+   */
+  export type MaterialRequestDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaterialRequests to delete
+     */
+    where?: MaterialRequestWhereInput;
+    /**
+     * Limit how many MaterialRequests to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * MaterialRequest without action
+   */
+  export type MaterialRequestDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaterialRequest
+     */
+    select?: MaterialRequestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MaterialRequest
+     */
+    omit?: MaterialRequestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialRequestInclude<ExtArgs> | null;
   };
 
   /**
@@ -42234,6 +43913,22 @@ export namespace Prisma {
   export type QuoteMaterialScalarFieldEnum =
     (typeof QuoteMaterialScalarFieldEnum)[keyof typeof QuoteMaterialScalarFieldEnum];
 
+  export const MaterialRequestScalarFieldEnum: {
+    id: 'id';
+    jobId: 'jobId';
+    requestedById: 'requestedById';
+    note: 'note';
+    estimatedCost: 'estimatedCost';
+    currency: 'currency';
+    status: 'status';
+    respondedAt: 'respondedAt';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type MaterialRequestScalarFieldEnum =
+    (typeof MaterialRequestScalarFieldEnum)[keyof typeof MaterialRequestScalarFieldEnum];
+
   export const JobEscrowScalarFieldEnum: {
     id: 'id';
     jobId: 'jobId';
@@ -42647,6 +44342,18 @@ export namespace Prisma {
     FieldRefInputType<$PrismaModel, 'QuoteStatus[]'>;
 
   /**
+   * Reference to a field of type 'MaterialRequestStatus'
+   */
+  export type EnumMaterialRequestStatusFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'MaterialRequestStatus'>;
+
+  /**
+   * Reference to a field of type 'MaterialRequestStatus[]'
+   */
+  export type ListEnumMaterialRequestStatusFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'MaterialRequestStatus[]'>;
+
+  /**
    * Reference to a field of type 'EscrowStatus'
    */
   export type EnumEscrowStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
@@ -42804,6 +44511,7 @@ export namespace Prisma {
     postedJobs?: JobListRelationFilter;
     assignedJobs?: JobListRelationFilter;
     quotes?: QuoteListRelationFilter;
+    materialRequests?: MaterialRequestListRelationFilter;
     sentMessages?: MessageListRelationFilter;
     receivedMessages?: MessageListRelationFilter;
     reviewsGiven?: ReviewListRelationFilter;
@@ -42848,6 +44556,7 @@ export namespace Prisma {
     postedJobs?: JobOrderByRelationAggregateInput;
     assignedJobs?: JobOrderByRelationAggregateInput;
     quotes?: QuoteOrderByRelationAggregateInput;
+    materialRequests?: MaterialRequestOrderByRelationAggregateInput;
     sentMessages?: MessageOrderByRelationAggregateInput;
     receivedMessages?: MessageOrderByRelationAggregateInput;
     reviewsGiven?: ReviewOrderByRelationAggregateInput;
@@ -42903,6 +44612,7 @@ export namespace Prisma {
       postedJobs?: JobListRelationFilter;
       assignedJobs?: JobListRelationFilter;
       quotes?: QuoteListRelationFilter;
+      materialRequests?: MaterialRequestListRelationFilter;
       sentMessages?: MessageListRelationFilter;
       receivedMessages?: MessageListRelationFilter;
       reviewsGiven?: ReviewListRelationFilter;
@@ -44151,6 +45861,7 @@ export namespace Prisma {
       JobEscrowNullableScalarRelationFilter,
       JobEscrowWhereInput
     > | null;
+    materialRequests?: MaterialRequestListRelationFilter;
   };
 
   export type JobOrderByWithRelationInput = {
@@ -44191,6 +45902,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationOrderByRelationAggregateInput;
     reports?: ReportOrderByRelationAggregateInput;
     escrow?: JobEscrowOrderByWithRelationInput;
+    materialRequests?: MaterialRequestOrderByRelationAggregateInput;
   };
 
   export type JobWhereUniqueInput = Prisma.AtLeast<
@@ -44280,6 +45992,7 @@ export namespace Prisma {
         JobEscrowNullableScalarRelationFilter,
         JobEscrowWhereInput
       > | null;
+      materialRequests?: MaterialRequestListRelationFilter;
     },
     'id' | 'acceptedQuoteId'
   >;
@@ -44786,6 +46499,134 @@ export namespace Prisma {
       | string
       | null;
     createdAt?: DateTimeWithAggregatesFilter<'QuoteMaterial'> | Date | string;
+  };
+
+  export type MaterialRequestWhereInput = {
+    AND?: MaterialRequestWhereInput | MaterialRequestWhereInput[];
+    OR?: MaterialRequestWhereInput[];
+    NOT?: MaterialRequestWhereInput | MaterialRequestWhereInput[];
+    id?: StringFilter<'MaterialRequest'> | string;
+    jobId?: StringFilter<'MaterialRequest'> | string;
+    requestedById?: StringFilter<'MaterialRequest'> | string;
+    note?: StringFilter<'MaterialRequest'> | string;
+    estimatedCost?:
+      | DecimalNullableFilter<'MaterialRequest'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFilter<'MaterialRequest'> | string;
+    status?:
+      | EnumMaterialRequestStatusFilter<'MaterialRequest'>
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | DateTimeNullableFilter<'MaterialRequest'>
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFilter<'MaterialRequest'> | Date | string;
+    updatedAt?: DateTimeFilter<'MaterialRequest'> | Date | string;
+    job?: XOR<JobScalarRelationFilter, JobWhereInput>;
+    requestedBy?: XOR<UserScalarRelationFilter, UserWhereInput>;
+  };
+
+  export type MaterialRequestOrderByWithRelationInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    requestedById?: SortOrder;
+    note?: SortOrder;
+    estimatedCost?: SortOrderInput | SortOrder;
+    currency?: SortOrder;
+    status?: SortOrder;
+    respondedAt?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    job?: JobOrderByWithRelationInput;
+    requestedBy?: UserOrderByWithRelationInput;
+  };
+
+  export type MaterialRequestWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: MaterialRequestWhereInput | MaterialRequestWhereInput[];
+      OR?: MaterialRequestWhereInput[];
+      NOT?: MaterialRequestWhereInput | MaterialRequestWhereInput[];
+      jobId?: StringFilter<'MaterialRequest'> | string;
+      requestedById?: StringFilter<'MaterialRequest'> | string;
+      note?: StringFilter<'MaterialRequest'> | string;
+      estimatedCost?:
+        | DecimalNullableFilter<'MaterialRequest'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string
+        | null;
+      currency?: StringFilter<'MaterialRequest'> | string;
+      status?:
+        | EnumMaterialRequestStatusFilter<'MaterialRequest'>
+        | $Enums.MaterialRequestStatus;
+      respondedAt?:
+        | DateTimeNullableFilter<'MaterialRequest'>
+        | Date
+        | string
+        | null;
+      createdAt?: DateTimeFilter<'MaterialRequest'> | Date | string;
+      updatedAt?: DateTimeFilter<'MaterialRequest'> | Date | string;
+      job?: XOR<JobScalarRelationFilter, JobWhereInput>;
+      requestedBy?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    },
+    'id'
+  >;
+
+  export type MaterialRequestOrderByWithAggregationInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    requestedById?: SortOrder;
+    note?: SortOrder;
+    estimatedCost?: SortOrderInput | SortOrder;
+    currency?: SortOrder;
+    status?: SortOrder;
+    respondedAt?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: MaterialRequestCountOrderByAggregateInput;
+    _avg?: MaterialRequestAvgOrderByAggregateInput;
+    _max?: MaterialRequestMaxOrderByAggregateInput;
+    _min?: MaterialRequestMinOrderByAggregateInput;
+    _sum?: MaterialRequestSumOrderByAggregateInput;
+  };
+
+  export type MaterialRequestScalarWhereWithAggregatesInput = {
+    AND?:
+      | MaterialRequestScalarWhereWithAggregatesInput
+      | MaterialRequestScalarWhereWithAggregatesInput[];
+    OR?: MaterialRequestScalarWhereWithAggregatesInput[];
+    NOT?:
+      | MaterialRequestScalarWhereWithAggregatesInput
+      | MaterialRequestScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<'MaterialRequest'> | string;
+    jobId?: StringWithAggregatesFilter<'MaterialRequest'> | string;
+    requestedById?: StringWithAggregatesFilter<'MaterialRequest'> | string;
+    note?: StringWithAggregatesFilter<'MaterialRequest'> | string;
+    estimatedCost?:
+      | DecimalNullableWithAggregatesFilter<'MaterialRequest'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringWithAggregatesFilter<'MaterialRequest'> | string;
+    status?:
+      | EnumMaterialRequestStatusWithAggregatesFilter<'MaterialRequest'>
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | DateTimeNullableWithAggregatesFilter<'MaterialRequest'>
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeWithAggregatesFilter<'MaterialRequest'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'MaterialRequest'> | Date | string;
   };
 
   export type JobEscrowWhereInput = {
@@ -46303,6 +48144,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -46344,6 +48186,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -46402,6 +48245,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -46460,6 +48304,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -47691,6 +49536,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateInput = {
@@ -47726,6 +49572,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobUpdateInput = {
@@ -47805,6 +49652,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateInput = {
@@ -47887,6 +49735,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type JobCreateManyInput = {
@@ -48502,6 +50351,143 @@ export namespace Prisma {
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MaterialRequestCreateInput = {
+    id?: string;
+    note: string;
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    status?: $Enums.MaterialRequestStatus;
+    respondedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    job: JobCreateNestedOneWithoutMaterialRequestsInput;
+    requestedBy: UserCreateNestedOneWithoutMaterialRequestsInput;
+  };
+
+  export type MaterialRequestUncheckedCreateInput = {
+    id?: string;
+    jobId: string;
+    requestedById: string;
+    note: string;
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    status?: $Enums.MaterialRequestStatus;
+    respondedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MaterialRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    job?: JobUpdateOneRequiredWithoutMaterialRequestsNestedInput;
+    requestedBy?: UserUpdateOneRequiredWithoutMaterialRequestsNestedInput;
+  };
+
+  export type MaterialRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    requestedById?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MaterialRequestCreateManyInput = {
+    id?: string;
+    jobId: string;
+    requestedById: string;
+    note: string;
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    status?: $Enums.MaterialRequestStatus;
+    respondedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MaterialRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MaterialRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    requestedById?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type JobEscrowCreateInput = {
@@ -50086,6 +52072,12 @@ export namespace Prisma {
     none?: QuoteWhereInput;
   };
 
+  export type MaterialRequestListRelationFilter = {
+    every?: MaterialRequestWhereInput;
+    some?: MaterialRequestWhereInput;
+    none?: MaterialRequestWhereInput;
+  };
+
   export type MessageListRelationFilter = {
     every?: MessageWhereInput;
     some?: MessageWhereInput;
@@ -50155,6 +52147,10 @@ export namespace Prisma {
   };
 
   export type QuoteOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type MaterialRequestOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -51568,6 +53564,88 @@ export namespace Prisma {
     unitPrice?: SortOrder;
   };
 
+  export type EnumMaterialRequestStatusFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.MaterialRequestStatus
+      | EnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.MaterialRequestStatus[]
+      | ListEnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.MaterialRequestStatus[]
+      | ListEnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumMaterialRequestStatusFilter<$PrismaModel>
+      | $Enums.MaterialRequestStatus;
+  };
+
+  export type MaterialRequestCountOrderByAggregateInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    requestedById?: SortOrder;
+    note?: SortOrder;
+    estimatedCost?: SortOrder;
+    currency?: SortOrder;
+    status?: SortOrder;
+    respondedAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type MaterialRequestAvgOrderByAggregateInput = {
+    estimatedCost?: SortOrder;
+  };
+
+  export type MaterialRequestMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    requestedById?: SortOrder;
+    note?: SortOrder;
+    estimatedCost?: SortOrder;
+    currency?: SortOrder;
+    status?: SortOrder;
+    respondedAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type MaterialRequestMinOrderByAggregateInput = {
+    id?: SortOrder;
+    jobId?: SortOrder;
+    requestedById?: SortOrder;
+    note?: SortOrder;
+    estimatedCost?: SortOrder;
+    currency?: SortOrder;
+    status?: SortOrder;
+    respondedAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type MaterialRequestSumOrderByAggregateInput = {
+    estimatedCost?: SortOrder;
+  };
+
+  export type EnumMaterialRequestStatusWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?:
+      | $Enums.MaterialRequestStatus
+      | EnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.MaterialRequestStatus[]
+      | ListEnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.MaterialRequestStatus[]
+      | ListEnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumMaterialRequestStatusWithAggregatesFilter<$PrismaModel>
+      | $Enums.MaterialRequestStatus;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumMaterialRequestStatusFilter<$PrismaModel>;
+    _max?: NestedEnumMaterialRequestStatusFilter<$PrismaModel>;
+  };
+
   export type EnumEscrowStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EscrowStatus | EnumEscrowStatusFieldRefInput<$PrismaModel>;
     in?:
@@ -52568,6 +54646,23 @@ export namespace Prisma {
     connect?: QuoteWhereUniqueInput | QuoteWhereUniqueInput[];
   };
 
+  export type MaterialRequestCreateNestedManyWithoutRequestedByInput = {
+    create?:
+      | XOR<
+          MaterialRequestCreateWithoutRequestedByInput,
+          MaterialRequestUncheckedCreateWithoutRequestedByInput
+        >
+      | MaterialRequestCreateWithoutRequestedByInput[]
+      | MaterialRequestUncheckedCreateWithoutRequestedByInput[];
+    connectOrCreate?:
+      | MaterialRequestCreateOrConnectWithoutRequestedByInput
+      | MaterialRequestCreateOrConnectWithoutRequestedByInput[];
+    createMany?: MaterialRequestCreateManyRequestedByInputEnvelope;
+    connect?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+  };
+
   export type MessageCreateNestedManyWithoutSenderInput = {
     create?:
       | XOR<
@@ -52855,6 +54950,24 @@ export namespace Prisma {
     createMany?: QuoteCreateManyTradesmanInputEnvelope;
     connect?: QuoteWhereUniqueInput | QuoteWhereUniqueInput[];
   };
+
+  export type MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput =
+    {
+      create?:
+        | XOR<
+            MaterialRequestCreateWithoutRequestedByInput,
+            MaterialRequestUncheckedCreateWithoutRequestedByInput
+          >
+        | MaterialRequestCreateWithoutRequestedByInput[]
+        | MaterialRequestUncheckedCreateWithoutRequestedByInput[];
+      connectOrCreate?:
+        | MaterialRequestCreateOrConnectWithoutRequestedByInput
+        | MaterialRequestCreateOrConnectWithoutRequestedByInput[];
+      createMany?: MaterialRequestCreateManyRequestedByInputEnvelope;
+      connect?:
+        | MaterialRequestWhereUniqueInput
+        | MaterialRequestWhereUniqueInput[];
+    };
 
   export type MessageUncheckedCreateNestedManyWithoutSenderInput = {
     create?:
@@ -53275,6 +55388,42 @@ export namespace Prisma {
       | QuoteUpdateManyWithWhereWithoutTradesmanInput
       | QuoteUpdateManyWithWhereWithoutTradesmanInput[];
     deleteMany?: QuoteScalarWhereInput | QuoteScalarWhereInput[];
+  };
+
+  export type MaterialRequestUpdateManyWithoutRequestedByNestedInput = {
+    create?:
+      | XOR<
+          MaterialRequestCreateWithoutRequestedByInput,
+          MaterialRequestUncheckedCreateWithoutRequestedByInput
+        >
+      | MaterialRequestCreateWithoutRequestedByInput[]
+      | MaterialRequestUncheckedCreateWithoutRequestedByInput[];
+    connectOrCreate?:
+      | MaterialRequestCreateOrConnectWithoutRequestedByInput
+      | MaterialRequestCreateOrConnectWithoutRequestedByInput[];
+    upsert?:
+      | MaterialRequestUpsertWithWhereUniqueWithoutRequestedByInput
+      | MaterialRequestUpsertWithWhereUniqueWithoutRequestedByInput[];
+    createMany?: MaterialRequestCreateManyRequestedByInputEnvelope;
+    set?: MaterialRequestWhereUniqueInput | MaterialRequestWhereUniqueInput[];
+    disconnect?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+    delete?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+    connect?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+    update?:
+      | MaterialRequestUpdateWithWhereUniqueWithoutRequestedByInput
+      | MaterialRequestUpdateWithWhereUniqueWithoutRequestedByInput[];
+    updateMany?:
+      | MaterialRequestUpdateManyWithWhereWithoutRequestedByInput
+      | MaterialRequestUpdateManyWithWhereWithoutRequestedByInput[];
+    deleteMany?:
+      | MaterialRequestScalarWhereInput
+      | MaterialRequestScalarWhereInput[];
   };
 
   export type MessageUpdateManyWithoutSenderNestedInput = {
@@ -53839,6 +55988,43 @@ export namespace Prisma {
       | QuoteUpdateManyWithWhereWithoutTradesmanInput[];
     deleteMany?: QuoteScalarWhereInput | QuoteScalarWhereInput[];
   };
+
+  export type MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput =
+    {
+      create?:
+        | XOR<
+            MaterialRequestCreateWithoutRequestedByInput,
+            MaterialRequestUncheckedCreateWithoutRequestedByInput
+          >
+        | MaterialRequestCreateWithoutRequestedByInput[]
+        | MaterialRequestUncheckedCreateWithoutRequestedByInput[];
+      connectOrCreate?:
+        | MaterialRequestCreateOrConnectWithoutRequestedByInput
+        | MaterialRequestCreateOrConnectWithoutRequestedByInput[];
+      upsert?:
+        | MaterialRequestUpsertWithWhereUniqueWithoutRequestedByInput
+        | MaterialRequestUpsertWithWhereUniqueWithoutRequestedByInput[];
+      createMany?: MaterialRequestCreateManyRequestedByInputEnvelope;
+      set?: MaterialRequestWhereUniqueInput | MaterialRequestWhereUniqueInput[];
+      disconnect?:
+        | MaterialRequestWhereUniqueInput
+        | MaterialRequestWhereUniqueInput[];
+      delete?:
+        | MaterialRequestWhereUniqueInput
+        | MaterialRequestWhereUniqueInput[];
+      connect?:
+        | MaterialRequestWhereUniqueInput
+        | MaterialRequestWhereUniqueInput[];
+      update?:
+        | MaterialRequestUpdateWithWhereUniqueWithoutRequestedByInput
+        | MaterialRequestUpdateWithWhereUniqueWithoutRequestedByInput[];
+      updateMany?:
+        | MaterialRequestUpdateManyWithWhereWithoutRequestedByInput
+        | MaterialRequestUpdateManyWithWhereWithoutRequestedByInput[];
+      deleteMany?:
+        | MaterialRequestScalarWhereInput
+        | MaterialRequestScalarWhereInput[];
+    };
 
   export type MessageUncheckedUpdateManyWithoutSenderNestedInput = {
     create?:
@@ -55267,6 +57453,23 @@ export namespace Prisma {
     connect?: JobEscrowWhereUniqueInput;
   };
 
+  export type MaterialRequestCreateNestedManyWithoutJobInput = {
+    create?:
+      | XOR<
+          MaterialRequestCreateWithoutJobInput,
+          MaterialRequestUncheckedCreateWithoutJobInput
+        >
+      | MaterialRequestCreateWithoutJobInput[]
+      | MaterialRequestUncheckedCreateWithoutJobInput[];
+    connectOrCreate?:
+      | MaterialRequestCreateOrConnectWithoutJobInput
+      | MaterialRequestCreateOrConnectWithoutJobInput[];
+    createMany?: MaterialRequestCreateManyJobInputEnvelope;
+    connect?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+  };
+
   export type QuoteUncheckedCreateNestedManyWithoutJobInput = {
     create?:
       | XOR<QuoteCreateWithoutJobInput, QuoteUncheckedCreateWithoutJobInput>
@@ -55357,6 +57560,23 @@ export namespace Prisma {
     >;
     connectOrCreate?: JobEscrowCreateOrConnectWithoutJobInput;
     connect?: JobEscrowWhereUniqueInput;
+  };
+
+  export type MaterialRequestUncheckedCreateNestedManyWithoutJobInput = {
+    create?:
+      | XOR<
+          MaterialRequestCreateWithoutJobInput,
+          MaterialRequestUncheckedCreateWithoutJobInput
+        >
+      | MaterialRequestCreateWithoutJobInput[]
+      | MaterialRequestUncheckedCreateWithoutJobInput[];
+    connectOrCreate?:
+      | MaterialRequestCreateOrConnectWithoutJobInput
+      | MaterialRequestCreateOrConnectWithoutJobInput[];
+    createMany?: MaterialRequestCreateManyJobInputEnvelope;
+    connect?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
   };
 
   export type EnumJobUrgencyFieldUpdateOperationsInput = {
@@ -55648,6 +57868,42 @@ export namespace Prisma {
     >;
   };
 
+  export type MaterialRequestUpdateManyWithoutJobNestedInput = {
+    create?:
+      | XOR<
+          MaterialRequestCreateWithoutJobInput,
+          MaterialRequestUncheckedCreateWithoutJobInput
+        >
+      | MaterialRequestCreateWithoutJobInput[]
+      | MaterialRequestUncheckedCreateWithoutJobInput[];
+    connectOrCreate?:
+      | MaterialRequestCreateOrConnectWithoutJobInput
+      | MaterialRequestCreateOrConnectWithoutJobInput[];
+    upsert?:
+      | MaterialRequestUpsertWithWhereUniqueWithoutJobInput
+      | MaterialRequestUpsertWithWhereUniqueWithoutJobInput[];
+    createMany?: MaterialRequestCreateManyJobInputEnvelope;
+    set?: MaterialRequestWhereUniqueInput | MaterialRequestWhereUniqueInput[];
+    disconnect?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+    delete?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+    connect?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+    update?:
+      | MaterialRequestUpdateWithWhereUniqueWithoutJobInput
+      | MaterialRequestUpdateWithWhereUniqueWithoutJobInput[];
+    updateMany?:
+      | MaterialRequestUpdateManyWithWhereWithoutJobInput
+      | MaterialRequestUpdateManyWithWhereWithoutJobInput[];
+    deleteMany?:
+      | MaterialRequestScalarWhereInput
+      | MaterialRequestScalarWhereInput[];
+  };
+
   export type QuoteUncheckedUpdateManyWithoutJobNestedInput = {
     create?:
       | XOR<QuoteCreateWithoutJobInput, QuoteUncheckedCreateWithoutJobInput>
@@ -55834,6 +58090,42 @@ export namespace Prisma {
       >,
       JobEscrowUncheckedUpdateWithoutJobInput
     >;
+  };
+
+  export type MaterialRequestUncheckedUpdateManyWithoutJobNestedInput = {
+    create?:
+      | XOR<
+          MaterialRequestCreateWithoutJobInput,
+          MaterialRequestUncheckedCreateWithoutJobInput
+        >
+      | MaterialRequestCreateWithoutJobInput[]
+      | MaterialRequestUncheckedCreateWithoutJobInput[];
+    connectOrCreate?:
+      | MaterialRequestCreateOrConnectWithoutJobInput
+      | MaterialRequestCreateOrConnectWithoutJobInput[];
+    upsert?:
+      | MaterialRequestUpsertWithWhereUniqueWithoutJobInput
+      | MaterialRequestUpsertWithWhereUniqueWithoutJobInput[];
+    createMany?: MaterialRequestCreateManyJobInputEnvelope;
+    set?: MaterialRequestWhereUniqueInput | MaterialRequestWhereUniqueInput[];
+    disconnect?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+    delete?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+    connect?:
+      | MaterialRequestWhereUniqueInput
+      | MaterialRequestWhereUniqueInput[];
+    update?:
+      | MaterialRequestUpdateWithWhereUniqueWithoutJobInput
+      | MaterialRequestUpdateWithWhereUniqueWithoutJobInput[];
+    updateMany?:
+      | MaterialRequestUpdateManyWithWhereWithoutJobInput
+      | MaterialRequestUpdateManyWithWhereWithoutJobInput[];
+    deleteMany?:
+      | MaterialRequestScalarWhereInput
+      | MaterialRequestScalarWhereInput[];
   };
 
   export type JobCreateNestedOneWithoutSkillsInput = {
@@ -56173,6 +58465,62 @@ export namespace Prisma {
         QuoteUpdateWithoutMaterialsInput
       >,
       QuoteUncheckedUpdateWithoutMaterialsInput
+    >;
+  };
+
+  export type JobCreateNestedOneWithoutMaterialRequestsInput = {
+    create?: XOR<
+      JobCreateWithoutMaterialRequestsInput,
+      JobUncheckedCreateWithoutMaterialRequestsInput
+    >;
+    connectOrCreate?: JobCreateOrConnectWithoutMaterialRequestsInput;
+    connect?: JobWhereUniqueInput;
+  };
+
+  export type UserCreateNestedOneWithoutMaterialRequestsInput = {
+    create?: XOR<
+      UserCreateWithoutMaterialRequestsInput,
+      UserUncheckedCreateWithoutMaterialRequestsInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutMaterialRequestsInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type EnumMaterialRequestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MaterialRequestStatus;
+  };
+
+  export type JobUpdateOneRequiredWithoutMaterialRequestsNestedInput = {
+    create?: XOR<
+      JobCreateWithoutMaterialRequestsInput,
+      JobUncheckedCreateWithoutMaterialRequestsInput
+    >;
+    connectOrCreate?: JobCreateOrConnectWithoutMaterialRequestsInput;
+    upsert?: JobUpsertWithoutMaterialRequestsInput;
+    connect?: JobWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        JobUpdateToOneWithWhereWithoutMaterialRequestsInput,
+        JobUpdateWithoutMaterialRequestsInput
+      >,
+      JobUncheckedUpdateWithoutMaterialRequestsInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutMaterialRequestsNestedInput = {
+    create?: XOR<
+      UserCreateWithoutMaterialRequestsInput,
+      UserUncheckedCreateWithoutMaterialRequestsInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutMaterialRequestsInput;
+    upsert?: UserUpsertWithoutMaterialRequestsInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutMaterialRequestsInput,
+        UserUpdateWithoutMaterialRequestsInput
+      >,
+      UserUncheckedUpdateWithoutMaterialRequestsInput
     >;
   };
 
@@ -57911,6 +60259,41 @@ export namespace Prisma {
       _max?: NestedEnumQuoteStatusFilter<$PrismaModel>;
     };
 
+  export type NestedEnumMaterialRequestStatusFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.MaterialRequestStatus
+      | EnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.MaterialRequestStatus[]
+      | ListEnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.MaterialRequestStatus[]
+      | ListEnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumMaterialRequestStatusFilter<$PrismaModel>
+      | $Enums.MaterialRequestStatus;
+  };
+
+  export type NestedEnumMaterialRequestStatusWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?:
+      | $Enums.MaterialRequestStatus
+      | EnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.MaterialRequestStatus[]
+      | ListEnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.MaterialRequestStatus[]
+      | ListEnumMaterialRequestStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumMaterialRequestStatusWithAggregatesFilter<$PrismaModel>
+      | $Enums.MaterialRequestStatus;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumMaterialRequestStatusFilter<$PrismaModel>;
+    _max?: NestedEnumMaterialRequestStatusFilter<$PrismaModel>;
+  };
+
   export type NestedEnumEscrowStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EscrowStatus | EnumEscrowStatusFieldRefInput<$PrismaModel>;
     in?:
@@ -58468,6 +60851,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutHomeownerInput = {
@@ -58502,6 +60886,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutHomeownerInput = {
@@ -58549,6 +60934,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutAssignedTradesmanInput = {
@@ -58583,6 +60969,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutAssignedTradesmanInput = {
@@ -58650,6 +61037,45 @@ export namespace Prisma {
 
   export type QuoteCreateManyTradesmanInputEnvelope = {
     data: QuoteCreateManyTradesmanInput | QuoteCreateManyTradesmanInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type MaterialRequestCreateWithoutRequestedByInput = {
+    id?: string;
+    note: string;
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    status?: $Enums.MaterialRequestStatus;
+    respondedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    job: JobCreateNestedOneWithoutMaterialRequestsInput;
+  };
+
+  export type MaterialRequestUncheckedCreateWithoutRequestedByInput = {
+    id?: string;
+    jobId: string;
+    note: string;
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    status?: $Enums.MaterialRequestStatus;
+    respondedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MaterialRequestCreateOrConnectWithoutRequestedByInput = {
+    where: MaterialRequestWhereUniqueInput;
+    create: XOR<
+      MaterialRequestCreateWithoutRequestedByInput,
+      MaterialRequestUncheckedCreateWithoutRequestedByInput
+    >;
+  };
+
+  export type MaterialRequestCreateManyRequestedByInputEnvelope = {
+    data:
+      | MaterialRequestCreateManyRequestedByInput
+      | MaterialRequestCreateManyRequestedByInput[];
     skipDuplicates?: boolean;
   };
 
@@ -59751,6 +62177,62 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<'Quote'> | Date | string;
   };
 
+  export type MaterialRequestUpsertWithWhereUniqueWithoutRequestedByInput = {
+    where: MaterialRequestWhereUniqueInput;
+    update: XOR<
+      MaterialRequestUpdateWithoutRequestedByInput,
+      MaterialRequestUncheckedUpdateWithoutRequestedByInput
+    >;
+    create: XOR<
+      MaterialRequestCreateWithoutRequestedByInput,
+      MaterialRequestUncheckedCreateWithoutRequestedByInput
+    >;
+  };
+
+  export type MaterialRequestUpdateWithWhereUniqueWithoutRequestedByInput = {
+    where: MaterialRequestWhereUniqueInput;
+    data: XOR<
+      MaterialRequestUpdateWithoutRequestedByInput,
+      MaterialRequestUncheckedUpdateWithoutRequestedByInput
+    >;
+  };
+
+  export type MaterialRequestUpdateManyWithWhereWithoutRequestedByInput = {
+    where: MaterialRequestScalarWhereInput;
+    data: XOR<
+      MaterialRequestUpdateManyMutationInput,
+      MaterialRequestUncheckedUpdateManyWithoutRequestedByInput
+    >;
+  };
+
+  export type MaterialRequestScalarWhereInput = {
+    AND?: MaterialRequestScalarWhereInput | MaterialRequestScalarWhereInput[];
+    OR?: MaterialRequestScalarWhereInput[];
+    NOT?: MaterialRequestScalarWhereInput | MaterialRequestScalarWhereInput[];
+    id?: StringFilter<'MaterialRequest'> | string;
+    jobId?: StringFilter<'MaterialRequest'> | string;
+    requestedById?: StringFilter<'MaterialRequest'> | string;
+    note?: StringFilter<'MaterialRequest'> | string;
+    estimatedCost?:
+      | DecimalNullableFilter<'MaterialRequest'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFilter<'MaterialRequest'> | string;
+    status?:
+      | EnumMaterialRequestStatusFilter<'MaterialRequest'>
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | DateTimeNullableFilter<'MaterialRequest'>
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFilter<'MaterialRequest'> | Date | string;
+    updatedAt?: DateTimeFilter<'MaterialRequest'> | Date | string;
+  };
+
   export type MessageUpsertWithWhereUniqueWithoutSenderInput = {
     where: MessageWhereUniqueInput;
     update: XOR<
@@ -60464,6 +62946,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -60504,6 +62987,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -60589,6 +63073,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -60646,6 +63131,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -60686,6 +63172,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -60726,6 +63213,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -60811,6 +63299,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -60868,6 +63357,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -60908,6 +63398,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -60948,6 +63439,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -61033,6 +63525,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -61090,6 +63583,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -61130,6 +63624,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -61170,6 +63665,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -61255,6 +63751,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -61312,6 +63809,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -61352,6 +63850,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -61392,6 +63891,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -61506,6 +64006,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -61563,6 +64064,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -61737,6 +64239,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutCategoryInput = {
@@ -61771,6 +64274,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutCategoryInput = {
@@ -61818,6 +64322,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutAiCategoryInput = {
@@ -61852,6 +64357,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutAiCategoryInput = {
@@ -62604,6 +65110,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileCreateNestedOneWithoutUserInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -62644,6 +65151,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileUncheckedCreateNestedOneWithoutUserInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -62772,6 +65280,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileCreateNestedOneWithoutUserInput;
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -62812,6 +65321,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileUncheckedCreateNestedOneWithoutUserInput;
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -63166,6 +65676,45 @@ export namespace Prisma {
     >;
   };
 
+  export type MaterialRequestCreateWithoutJobInput = {
+    id?: string;
+    note: string;
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    status?: $Enums.MaterialRequestStatus;
+    respondedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    requestedBy: UserCreateNestedOneWithoutMaterialRequestsInput;
+  };
+
+  export type MaterialRequestUncheckedCreateWithoutJobInput = {
+    id?: string;
+    requestedById: string;
+    note: string;
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    status?: $Enums.MaterialRequestStatus;
+    respondedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MaterialRequestCreateOrConnectWithoutJobInput = {
+    where: MaterialRequestWhereUniqueInput;
+    create: XOR<
+      MaterialRequestCreateWithoutJobInput,
+      MaterialRequestUncheckedCreateWithoutJobInput
+    >;
+  };
+
+  export type MaterialRequestCreateManyJobInputEnvelope = {
+    data:
+      | MaterialRequestCreateManyJobInput
+      | MaterialRequestCreateManyJobInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type UserUpsertWithoutPostedJobsInput = {
     update: XOR<
       UserUpdateWithoutPostedJobsInput,
@@ -63229,6 +65778,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileUpdateOneWithoutUserNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -63286,6 +65836,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileUncheckedUpdateOneWithoutUserNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -63468,6 +66019,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileUpdateOneWithoutUserNestedInput;
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -63525,6 +66077,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileUncheckedUpdateOneWithoutUserNestedInput;
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -63992,6 +66545,34 @@ export namespace Prisma {
     transactions?: EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput;
   };
 
+  export type MaterialRequestUpsertWithWhereUniqueWithoutJobInput = {
+    where: MaterialRequestWhereUniqueInput;
+    update: XOR<
+      MaterialRequestUpdateWithoutJobInput,
+      MaterialRequestUncheckedUpdateWithoutJobInput
+    >;
+    create: XOR<
+      MaterialRequestCreateWithoutJobInput,
+      MaterialRequestUncheckedCreateWithoutJobInput
+    >;
+  };
+
+  export type MaterialRequestUpdateWithWhereUniqueWithoutJobInput = {
+    where: MaterialRequestWhereUniqueInput;
+    data: XOR<
+      MaterialRequestUpdateWithoutJobInput,
+      MaterialRequestUncheckedUpdateWithoutJobInput
+    >;
+  };
+
+  export type MaterialRequestUpdateManyWithWhereWithoutJobInput = {
+    where: MaterialRequestScalarWhereInput;
+    data: XOR<
+      MaterialRequestUpdateManyMutationInput,
+      MaterialRequestUncheckedUpdateManyWithoutJobInput
+    >;
+  };
+
   export type JobCreateWithoutSkillsInput = {
     id?: string;
     title: string;
@@ -64024,6 +66605,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutSkillsInput = {
@@ -64058,6 +66640,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutSkillsInput = {
@@ -64196,6 +66779,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutSkillsInput = {
@@ -64277,6 +66861,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type SkillUpsertWithoutJobsInput = {
@@ -64355,6 +66940,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutQuotesInput = {
@@ -64389,6 +66975,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutQuotesInput = {
@@ -64425,6 +67012,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileCreateNestedOneWithoutUserInput;
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -64465,6 +67053,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileUncheckedCreateNestedOneWithoutUserInput;
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -64519,6 +67108,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutAcceptedQuoteInput = {
@@ -64553,6 +67143,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutAcceptedQuoteInput = {
@@ -64744,6 +67335,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutQuotesInput = {
@@ -64825,6 +67417,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type UserUpsertWithoutQuotesInput = {
@@ -64890,6 +67483,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileUpdateOneWithoutUserNestedInput;
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -64947,6 +67541,7 @@ export namespace Prisma {
     tradesmanProfile?: TradesmanProfileUncheckedUpdateOneWithoutUserNestedInput;
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -65057,6 +67652,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutAcceptedQuoteInput = {
@@ -65138,6 +67734,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type JobEscrowUpsertWithoutQuoteInput = {
@@ -65511,6 +68108,491 @@ export namespace Prisma {
     escrow?: JobEscrowUncheckedUpdateOneWithoutQuoteNestedInput;
   };
 
+  export type JobCreateWithoutMaterialRequestsInput = {
+    id?: string;
+    title: string;
+    description: string;
+    descriptionLanguage?: $Enums.LanguageCode;
+    aiConfidence?: Decimal | DecimalJsLike | number | string | null;
+    aiSuggestedTags?: NullableJsonNullValueInput | InputJsonValue;
+    locationText?: string | null;
+    city?: string | null;
+    district?: string | null;
+    latitude?: Decimal | DecimalJsLike | number | string | null;
+    longitude?: Decimal | DecimalJsLike | number | string | null;
+    budgetMin?: Decimal | DecimalJsLike | number | string | null;
+    budgetMax?: Decimal | DecimalJsLike | number | string | null;
+    scheduledFor?: Date | string | null;
+    urgency?: $Enums.JobUrgency;
+    status?: $Enums.JobStatus;
+    completedAt?: Date | string | null;
+    cancelledAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    homeowner: UserCreateNestedOneWithoutPostedJobsInput;
+    category?: ServiceCategoryCreateNestedOneWithoutJobsInput;
+    aiCategory?: ServiceCategoryCreateNestedOneWithoutAiClassifiedJobsInput;
+    assignedTradesman?: UserCreateNestedOneWithoutAssignedJobsInput;
+    acceptedQuote?: QuoteCreateNestedOneWithoutAcceptedForJobInput;
+    quotes?: QuoteCreateNestedManyWithoutJobInput;
+    skills?: JobSkillCreateNestedManyWithoutJobInput;
+    conversations?: ConversationCreateNestedManyWithoutJobInput;
+    reviews?: ReviewCreateNestedManyWithoutJobInput;
+    recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
+    reports?: ReportCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+  };
+
+  export type JobUncheckedCreateWithoutMaterialRequestsInput = {
+    id?: string;
+    homeownerId: string;
+    title: string;
+    description: string;
+    descriptionLanguage?: $Enums.LanguageCode;
+    categoryId?: string | null;
+    aiCategoryId?: string | null;
+    aiConfidence?: Decimal | DecimalJsLike | number | string | null;
+    aiSuggestedTags?: NullableJsonNullValueInput | InputJsonValue;
+    locationText?: string | null;
+    city?: string | null;
+    district?: string | null;
+    latitude?: Decimal | DecimalJsLike | number | string | null;
+    longitude?: Decimal | DecimalJsLike | number | string | null;
+    budgetMin?: Decimal | DecimalJsLike | number | string | null;
+    budgetMax?: Decimal | DecimalJsLike | number | string | null;
+    scheduledFor?: Date | string | null;
+    urgency?: $Enums.JobUrgency;
+    status?: $Enums.JobStatus;
+    assignedTradesmanId?: string | null;
+    acceptedQuoteId?: string | null;
+    completedAt?: Date | string | null;
+    cancelledAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
+    skills?: JobSkillUncheckedCreateNestedManyWithoutJobInput;
+    conversations?: ConversationUncheckedCreateNestedManyWithoutJobInput;
+    reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
+    recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
+    reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+  };
+
+  export type JobCreateOrConnectWithoutMaterialRequestsInput = {
+    where: JobWhereUniqueInput;
+    create: XOR<
+      JobCreateWithoutMaterialRequestsInput,
+      JobUncheckedCreateWithoutMaterialRequestsInput
+    >;
+  };
+
+  export type UserCreateWithoutMaterialRequestsInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountCreateNestedManyWithoutUserInput;
+    sessions?: SessionCreateNestedManyWithoutUserInput;
+    consents?: UserConsentCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileCreateNestedOneWithoutUserInput;
+    postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationCreateNestedManyWithoutReviewedByInput;
+  };
+
+  export type UserUncheckedCreateWithoutMaterialRequestsInput = {
+    id?: string;
+    name: string;
+    email: string;
+    emailVerified?: boolean;
+    image?: string | null;
+    role?: $Enums.Role;
+    userType?: $Enums.UserType | null;
+    phone?: string | null;
+    stripeCustomerId?: string | null;
+    deletionScheduledAt?: Date | string | null;
+    privacyPolicyAcceptedAt: Date | string;
+    banned?: boolean;
+    banReason?: string | null;
+    banExpires?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    phoneNumber?: string | null;
+    phoneNumberVerified?: boolean | null;
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput;
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput;
+    consents?: UserConsentUncheckedCreateNestedManyWithoutUserInput;
+    homeownerProfile?: HomeownerProfileUncheckedCreateNestedOneWithoutUserInput;
+    tradesmanProfile?: TradesmanProfileUncheckedCreateNestedOneWithoutUserInput;
+    postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
+    assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
+    quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
+    reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
+    reviewsReceived?: ReviewUncheckedCreateNestedManyWithoutRevieweeInput;
+    createdReports?: ReportUncheckedCreateNestedManyWithoutReporterInput;
+    assignedReports?: ReportUncheckedCreateNestedManyWithoutAssigneeInput;
+    recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutTradesmanInput;
+    conversationLinks?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedCreateNestedManyWithoutHomeownerInput;
+    escrowsAsTradesman?: JobEscrowUncheckedCreateNestedManyWithoutTradesmanInput;
+    verification?: TradesmanVerificationUncheckedCreateNestedOneWithoutUserInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedCreateNestedManyWithoutReviewedByInput;
+  };
+
+  export type UserCreateOrConnectWithoutMaterialRequestsInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutMaterialRequestsInput,
+      UserUncheckedCreateWithoutMaterialRequestsInput
+    >;
+  };
+
+  export type JobUpsertWithoutMaterialRequestsInput = {
+    update: XOR<
+      JobUpdateWithoutMaterialRequestsInput,
+      JobUncheckedUpdateWithoutMaterialRequestsInput
+    >;
+    create: XOR<
+      JobCreateWithoutMaterialRequestsInput,
+      JobUncheckedCreateWithoutMaterialRequestsInput
+    >;
+    where?: JobWhereInput;
+  };
+
+  export type JobUpdateToOneWithWhereWithoutMaterialRequestsInput = {
+    where?: JobWhereInput;
+    data: XOR<
+      JobUpdateWithoutMaterialRequestsInput,
+      JobUncheckedUpdateWithoutMaterialRequestsInput
+    >;
+  };
+
+  export type JobUpdateWithoutMaterialRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    descriptionLanguage?:
+      | EnumLanguageCodeFieldUpdateOperationsInput
+      | $Enums.LanguageCode;
+    aiConfidence?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    aiSuggestedTags?: NullableJsonNullValueInput | InputJsonValue;
+    locationText?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    latitude?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    longitude?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    budgetMin?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    budgetMax?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    scheduledFor?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    cancelledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
+    category?: ServiceCategoryUpdateOneWithoutJobsNestedInput;
+    aiCategory?: ServiceCategoryUpdateOneWithoutAiClassifiedJobsNestedInput;
+    assignedTradesman?: UserUpdateOneWithoutAssignedJobsNestedInput;
+    acceptedQuote?: QuoteUpdateOneWithoutAcceptedForJobNestedInput;
+    quotes?: QuoteUpdateManyWithoutJobNestedInput;
+    skills?: JobSkillUpdateManyWithoutJobNestedInput;
+    conversations?: ConversationUpdateManyWithoutJobNestedInput;
+    reviews?: ReviewUpdateManyWithoutJobNestedInput;
+    recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
+    reports?: ReportUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+  };
+
+  export type JobUncheckedUpdateWithoutMaterialRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    homeownerId?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    descriptionLanguage?:
+      | EnumLanguageCodeFieldUpdateOperationsInput
+      | $Enums.LanguageCode;
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null;
+    aiCategoryId?: NullableStringFieldUpdateOperationsInput | string | null;
+    aiConfidence?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    aiSuggestedTags?: NullableJsonNullValueInput | InputJsonValue;
+    locationText?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    district?: NullableStringFieldUpdateOperationsInput | string | null;
+    latitude?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    longitude?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    budgetMin?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    budgetMax?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    scheduledFor?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
+    assignedTradesmanId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
+    acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    cancelledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
+    skills?: JobSkillUncheckedUpdateManyWithoutJobNestedInput;
+    conversations?: ConversationUncheckedUpdateManyWithoutJobNestedInput;
+    reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
+    recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
+    reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+  };
+
+  export type UserUpsertWithoutMaterialRequestsInput = {
+    update: XOR<
+      UserUpdateWithoutMaterialRequestsInput,
+      UserUncheckedUpdateWithoutMaterialRequestsInput
+    >;
+    create: XOR<
+      UserCreateWithoutMaterialRequestsInput,
+      UserUncheckedCreateWithoutMaterialRequestsInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutMaterialRequestsInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutMaterialRequestsInput,
+      UserUncheckedUpdateWithoutMaterialRequestsInput
+    >;
+  };
+
+  export type UserUpdateWithoutMaterialRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUpdateManyWithoutReviewedByNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutMaterialRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean;
+    image?: NullableStringFieldUpdateOperationsInput | string | null;
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role;
+    userType?:
+      | NullableEnumUserTypeFieldUpdateOperationsInput
+      | $Enums.UserType
+      | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    deletionScheduledAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    privacyPolicyAcceptedAt?:
+      | DateTimeFieldUpdateOperationsInput
+      | Date
+      | string;
+    banned?: BoolFieldUpdateOperationsInput | boolean;
+    banReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    banExpires?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    phoneNumberVerified?:
+      | NullableBoolFieldUpdateOperationsInput
+      | boolean
+      | null;
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput;
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput;
+    consents?: UserConsentUncheckedUpdateManyWithoutUserNestedInput;
+    homeownerProfile?: HomeownerProfileUncheckedUpdateOneWithoutUserNestedInput;
+    tradesmanProfile?: TradesmanProfileUncheckedUpdateOneWithoutUserNestedInput;
+    postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
+    assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
+    quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
+    receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
+    reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
+    reviewsReceived?: ReviewUncheckedUpdateManyWithoutRevieweeNestedInput;
+    createdReports?: ReportUncheckedUpdateManyWithoutReporterNestedInput;
+    assignedReports?: ReportUncheckedUpdateManyWithoutAssigneeNestedInput;
+    recommendations?: JobRecommendationUncheckedUpdateManyWithoutTradesmanNestedInput;
+    conversationLinks?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput;
+    escrowsAsHomeowner?: JobEscrowUncheckedUpdateManyWithoutHomeownerNestedInput;
+    escrowsAsTradesman?: JobEscrowUncheckedUpdateManyWithoutTradesmanNestedInput;
+    verification?: TradesmanVerificationUncheckedUpdateOneWithoutUserNestedInput;
+    reviewedVerifications?: TradesmanVerificationUncheckedUpdateManyWithoutReviewedByNestedInput;
+  };
+
   export type JobCreateWithoutEscrowInput = {
     id?: string;
     title: string;
@@ -65543,6 +68625,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutEscrowInput = {
@@ -65577,6 +68660,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutEscrowInput = {
@@ -65662,6 +68746,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -65702,6 +68787,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -65750,6 +68836,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -65790,6 +68877,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -65938,6 +69026,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutEscrowInput = {
@@ -66019,6 +69108,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type QuoteUpsertWithoutEscrowInput = {
@@ -66211,6 +69301,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -66268,6 +69359,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -66345,6 +69437,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -66402,6 +69495,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -66693,6 +69787,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -66733,6 +69828,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -66781,6 +69877,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -66821,6 +69918,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -66906,6 +70004,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -66963,6 +70062,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -67040,6 +70140,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -67097,6 +70198,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -67142,6 +70244,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutConversationsInput = {
@@ -67176,6 +70279,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutConversationsInput = {
@@ -67352,6 +70456,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutConversationsInput = {
@@ -67433,6 +70538,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutConversationInput =
@@ -67549,6 +70655,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -67589,6 +70696,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -67726,6 +70834,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -67783,6 +70892,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -67851,6 +70961,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
     reviewsReceived?: ReviewCreateNestedManyWithoutRevieweeInput;
@@ -67891,6 +71002,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
     reviewsReceived?: ReviewUncheckedCreateNestedManyWithoutRevieweeInput;
@@ -67939,6 +71051,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
     reviewsReceived?: ReviewCreateNestedManyWithoutRevieweeInput;
@@ -67979,6 +71092,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
     reviewsReceived?: ReviewUncheckedCreateNestedManyWithoutRevieweeInput;
@@ -68161,6 +71275,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
     reviewsReceived?: ReviewUpdateManyWithoutRevieweeNestedInput;
@@ -68218,6 +71333,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
     reviewsReceived?: ReviewUncheckedUpdateManyWithoutRevieweeNestedInput;
@@ -68295,6 +71411,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
     reviewsReceived?: ReviewUpdateManyWithoutRevieweeNestedInput;
@@ -68352,6 +71469,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
     reviewsReceived?: ReviewUncheckedUpdateManyWithoutRevieweeNestedInput;
@@ -68425,6 +71543,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutReviewsInput = {
@@ -68459,6 +71578,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutReviewsInput = {
@@ -68496,6 +71616,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsReceived?: ReviewCreateNestedManyWithoutRevieweeInput;
@@ -68536,6 +71657,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsReceived?: ReviewUncheckedCreateNestedManyWithoutRevieweeInput;
@@ -68584,6 +71706,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -68624,6 +71747,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -68786,6 +71910,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutReviewsInput = {
@@ -68867,6 +71992,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type UserUpsertWithoutReviewsGivenInput = {
@@ -68933,6 +72059,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsReceived?: ReviewUpdateManyWithoutRevieweeNestedInput;
@@ -68990,6 +72117,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsReceived?: ReviewUncheckedUpdateManyWithoutRevieweeNestedInput;
@@ -69067,6 +72195,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -69124,6 +72253,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -69197,6 +72327,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     reports?: ReportCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutRecommendationsInput = {
@@ -69231,6 +72362,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     reports?: ReportUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutRecommendationsInput = {
@@ -69268,6 +72400,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -69308,6 +72441,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -69425,6 +72559,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutRecommendationsInput = {
@@ -69506,6 +72641,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type UserUpsertWithoutRecommendationsInput = {
@@ -69572,6 +72708,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -69629,6 +72766,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -69669,6 +72807,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -69709,6 +72848,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -69757,6 +72897,7 @@ export namespace Prisma {
     postedJobs?: JobCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewCreateNestedManyWithoutReviewerInput;
@@ -69797,6 +72938,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedCreateNestedManyWithoutHomeownerInput;
     assignedJobs?: JobUncheckedCreateNestedManyWithoutAssignedTradesmanInput;
     quotes?: QuoteUncheckedCreateNestedManyWithoutTradesmanInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutRequestedByInput;
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutRecipientInput;
     reviewsGiven?: ReviewUncheckedCreateNestedManyWithoutReviewerInput;
@@ -69850,6 +72992,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestCreateNestedManyWithoutJobInput;
   };
 
   export type JobUncheckedCreateWithoutReportsInput = {
@@ -69884,6 +73027,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutJobInput;
     recommendations?: JobRecommendationUncheckedCreateNestedManyWithoutJobInput;
     escrow?: JobEscrowUncheckedCreateNestedOneWithoutJobInput;
+    materialRequests?: MaterialRequestUncheckedCreateNestedManyWithoutJobInput;
   };
 
   export type JobCreateOrConnectWithoutReportsInput = {
@@ -70028,6 +73172,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -70085,6 +73230,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -70162,6 +73308,7 @@ export namespace Prisma {
     postedJobs?: JobUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUpdateManyWithoutReviewerNestedInput;
@@ -70219,6 +73366,7 @@ export namespace Prisma {
     postedJobs?: JobUncheckedUpdateManyWithoutHomeownerNestedInput;
     assignedJobs?: JobUncheckedUpdateManyWithoutAssignedTradesmanNestedInput;
     quotes?: QuoteUncheckedUpdateManyWithoutTradesmanNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutRequestedByNestedInput;
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: MessageUncheckedUpdateManyWithoutRecipientNestedInput;
     reviewsGiven?: ReviewUncheckedUpdateManyWithoutReviewerNestedInput;
@@ -70328,6 +73476,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutReportsInput = {
@@ -70409,6 +73558,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutJobNestedInput;
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type MessageUpsertWithoutReportsInput = {
@@ -70613,6 +73763,18 @@ export namespace Prisma {
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MaterialRequestCreateManyRequestedByInput = {
+    id?: string;
+    jobId: string;
+    note: string;
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    status?: $Enums.MaterialRequestStatus;
+    respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -71019,6 +74181,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutHomeownerInput = {
@@ -71100,6 +74263,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateManyWithoutHomeownerInput = {
@@ -71252,6 +74416,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutAssignedTradesmanInput = {
@@ -71330,6 +74495,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateManyWithoutAssignedTradesmanInput = {
@@ -71551,6 +74717,78 @@ export namespace Prisma {
       | string
       | null;
     withdrawnAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MaterialRequestUpdateWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    job?: JobUpdateOneRequiredWithoutMaterialRequestsNestedInput;
+  };
+
+  export type MaterialRequestUncheckedUpdateWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MaterialRequestUncheckedUpdateManyWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    jobId?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -72713,6 +75951,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutCategoryInput = {
@@ -72794,6 +76033,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateManyWithoutCategoryInput = {
@@ -72946,6 +76186,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUpdateManyWithoutJobNestedInput;
     reports?: ReportUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateWithoutAiCategoryInput = {
@@ -73027,6 +76268,7 @@ export namespace Prisma {
     recommendations?: JobRecommendationUncheckedUpdateManyWithoutJobNestedInput;
     reports?: ReportUncheckedUpdateManyWithoutJobNestedInput;
     escrow?: JobEscrowUncheckedUpdateOneWithoutJobNestedInput;
+    materialRequests?: MaterialRequestUncheckedUpdateManyWithoutJobNestedInput;
   };
 
   export type JobUncheckedUpdateManyWithoutAiCategoryInput = {
@@ -73272,6 +76514,18 @@ export namespace Prisma {
     resolvedAt?: Date | string | null;
     messageId?: string | null;
     reviewId?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MaterialRequestCreateManyJobInput = {
+    id?: string;
+    requestedById: string;
+    note: string;
+    estimatedCost?: Decimal | DecimalJsLike | number | string | null;
+    currency?: string;
+    status?: $Enums.MaterialRequestStatus;
+    respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -73659,6 +76913,78 @@ export namespace Prisma {
       | null;
     messageId?: NullableStringFieldUpdateOperationsInput | string | null;
     reviewId?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MaterialRequestUpdateWithoutJobInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    requestedBy?: UserUpdateOneRequiredWithoutMaterialRequestsNestedInput;
+  };
+
+  export type MaterialRequestUncheckedUpdateWithoutJobInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    requestedById?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MaterialRequestUncheckedUpdateManyWithoutJobInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    requestedById?: StringFieldUpdateOperationsInput | string;
+    note?: StringFieldUpdateOperationsInput | string;
+    estimatedCost?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    currency?: StringFieldUpdateOperationsInput | string;
+    status?:
+      | EnumMaterialRequestStatusFieldUpdateOperationsInput
+      | $Enums.MaterialRequestStatus;
+    respondedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };

@@ -59,6 +59,14 @@ enum QuoteStatus {
   EXPIRED
 }
 
+// A tradesman's mid-job request for extra materials/tools, awaiting the
+// homeowner's decision.
+enum MaterialRequestStatus {
+  PENDING
+  APPROVED
+  DECLINED
+}
+
 // Materials-deposit escrow lifecycle. Mirrors the homeowner-facing milestone
 // strip: FUNDED (held) -> MATERIALS_RELEASED (paid out to buy parts when work
 // starts) -> WORK_COMPLETED (job done) -> RELEASED (balance paid out). REQUESTED
@@ -144,6 +152,7 @@ model User {
   postedJobs            Job[]                     @relation("HomeownerJobs")
   assignedJobs          Job[]                     @relation("AssignedTradesman")
   quotes                Quote[]                   @relation("TradesmanQuotes")
+  materialRequests      MaterialRequest[]         @relation("TradesmanMaterialRequests")
   sentMessages          Message[]                 @relation("SentMessages")
   receivedMessages      Message[]                 @relation("ReceivedMessages")
   reviewsGiven          Review[]                  @relation("ReviewsGiven")
@@ -396,6 +405,7 @@ model Job {
   recommendations   JobRecommendation[]
   reports           Report[]
   escrow            JobEscrow?
+  materialRequests  MaterialRequest[]
 
   @@index([homeownerId, status])
   @@index([status, categoryId])
@@ -459,6 +469,28 @@ model QuoteMaterial {
   quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
 
   @@index([quoteId])
+}
+
+// A request from the assigned tradesman for additional materials/tools partway
+// through a job. The homeowner approves or declines it. `estimatedCost` is the
+// tradesman's optional estimate; settling payment is out of scope here.
+model MaterialRequest {
+  id            String                @id @default(cuid())
+  jobId         String
+  requestedById String
+  note          String                @db.Text
+  estimatedCost Decimal?              @db.Decimal(10, 2)
+  currency      String                @default("LKR")
+  status        MaterialRequestStatus @default(PENDING)
+  respondedAt   DateTime?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  job         Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  requestedBy User @relation("TradesmanMaterialRequests", fields: [requestedById], references: [id], onDelete: Cascade)
+
+  @@index([jobId, status])
+  @@index([requestedById])
 }
 
 // One escrow per accepted quote that requested a materials deposit. Crafty Bass

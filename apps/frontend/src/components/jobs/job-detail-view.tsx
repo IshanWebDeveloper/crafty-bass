@@ -29,6 +29,7 @@ import { startConversation } from '@/lib/api/conversations';
 import { QuoteMaterials } from '@/components/quotes/quote-materials';
 import { useSession } from '@/lib/auth-client';
 import { SubmitQuotePanel } from './submit-quote-panel';
+import { MaterialRequestsPanel } from './material-requests-panel';
 import { LeaveReviewPanel } from '@/components/reviews/leave-review-panel';
 import { PublicReviewsList } from '@/components/reviews/public-reviews-list';
 import { ReportButton } from '@/components/reports/report-button';
@@ -240,6 +241,22 @@ export function JobDetailView({
             )}
           </CardContent>
         </Card>
+      ) : null}
+
+      {session &&
+      (isOwner || session.user.id === job.assignedTradesmanId) &&
+      job.status !== 'OPEN' &&
+      job.status !== 'CANCELLED' ? (
+        <MaterialRequestsPanel
+          jobId={job.id}
+          canRequest={
+            session.user.id === job.assignedTradesmanId &&
+            (job.status === 'ASSIGNED' || job.status === 'IN_PROGRESS')
+          }
+          canRespond={isOwner}
+          locale={locale}
+          dict={dict}
+        />
       ) : null}
 
       {job.status === 'COMPLETED' && session ? (
