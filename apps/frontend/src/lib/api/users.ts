@@ -26,6 +26,7 @@ export type Me = {
   role: 'CUSTOMER' | 'SUPPORT' | 'ADMIN';
   userType: 'HOMEOWNER' | 'TRADESMAN' | null;
   phone: string | null;
+  primaryTrade: string | null;
 };
 
 export function getMe() {

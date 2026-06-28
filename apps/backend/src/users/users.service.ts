@@ -24,13 +24,17 @@ export class UsersService {
   async getProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
+      include: { verification: { select: { primaryTrade: true } } },
     });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    return user;
+    // Flatten the tradesman's stated primary trade so the header/own-profile can
+    // badge it without a second request.
+    const { verification, ...rest } = user;
+    return { ...rest, primaryTrade: verification?.primaryTrade ?? null };
   }
 
   async updateProfile(userId: string, dto: UpdateProfileDto) {
