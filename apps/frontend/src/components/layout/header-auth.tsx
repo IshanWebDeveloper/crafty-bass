@@ -26,6 +26,7 @@ import {
   Skeleton,
 } from '@repo/ui';
 import { signOut, useSession } from '@/lib/auth-client';
+import { useMe } from '@/lib/hooks/use-me';
 import { useMounted } from '@/lib/hooks/use-mounted';
 import { useSessionStore, type UserType } from '@/lib/stores/session-store';
 import { RoleBadge } from './role-badge';
@@ -48,6 +49,10 @@ export function HeaderAuth({
   const userType =
     (session?.user as { userType?: UserType } | undefined)?.userType ??
     storeUserType;
+  // The tradesman's stated primary trade, badged beside the avatar.
+  const { data: me } = useMe();
+  const primaryTrade =
+    userType === 'TRADESMAN' ? (me?.primaryTrade ?? null) : null;
   // Until mounted, the server (no session) and client (session may resolve
   // synchronously) would disagree; render the skeleton on both — see useMounted.
   const mounted = useMounted();
@@ -109,7 +114,14 @@ export function HeaderAuth({
         </Avatar>
         <div className="hidden flex-col items-start md:flex">
           <span className="text-sm font-medium leading-tight">{user.name}</span>
-          <RoleBadge userType={userType} dict={dict} className="mt-0.5" />
+          <span className="mt-0.5 flex items-center gap-1.5">
+            <RoleBadge userType={userType} dict={dict} />
+            {primaryTrade ? (
+              <span className="text-xs leading-tight text-muted-foreground">
+                {primaryTrade}
+              </span>
+            ) : null}
+          </span>
         </div>
         <ChevronDown
           className="size-4 text-muted-foreground transition-transform group-aria-expanded/button:rotate-180"
@@ -125,7 +137,14 @@ export function HeaderAuth({
             <span className="truncate text-xs font-normal text-muted-foreground">
               {user.email}
             </span>
-            <RoleBadge userType={userType} dict={dict} className="mt-1.5" />
+            <span className="mt-1.5 flex items-center gap-1.5">
+              <RoleBadge userType={userType} dict={dict} />
+              {primaryTrade ? (
+                <span className="text-xs font-normal text-muted-foreground">
+                  {primaryTrade}
+                </span>
+              ) : null}
+            </span>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

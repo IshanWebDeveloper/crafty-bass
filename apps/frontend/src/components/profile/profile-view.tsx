@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { ShieldAlert, ShieldCheck } from 'lucide-react';
-import { Badge, Button, Skeleton, VerifiedBadge, cn } from '@repo/ui';
+import { Badge, Button, Skeleton, Tag, VerifiedBadge, cn } from '@repo/ui';
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getMyProfile } from '@/lib/api/profiles';
+import { useMe } from '@/lib/hooks/use-me';
 import { HomeownerProfileForm } from './homeowner-profile-form';
 import { TradesmanProfileForm } from './tradesman-profile-form';
 import type { Locale } from '@/i18n/config';
@@ -30,6 +31,7 @@ export function ProfileView({
     queryKey: ['profile', 'me'],
     queryFn: getMyProfile,
   });
+  const { data: me } = useMe();
   const [chosenRole, setChosenRole] = useState<
     'HOMEOWNER' | 'TRADESMAN' | null
   >(null);
@@ -90,7 +92,12 @@ export function ProfileView({
       />
       <Card>
         <CardHeader>
-          <CardTitle>{t.tradesman.heading}</CardTitle>
+          <div className="flex flex-wrap items-center gap-2">
+            <CardTitle>{t.tradesman.heading}</CardTitle>
+            {me?.primaryTrade ? (
+              <Tag variant="active">{me.primaryTrade}</Tag>
+            ) : null}
+          </div>
         </CardHeader>
         <CardContent>
           <TradesmanProfileForm
