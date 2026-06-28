@@ -633,6 +633,9 @@ export function PostJobForm({
         />
       </div>
 
+      <p className="text-[0.7rem] leading-relaxed text-muted-foreground">
+        {t.new.contactConsent}
+      </p>
       <Button type="submit" className="w-full" disabled={submitting}>
         {submitting ? t.new.submitting : t.new.submit}
       </Button>

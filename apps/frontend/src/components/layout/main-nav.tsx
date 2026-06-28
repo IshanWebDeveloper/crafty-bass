@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@repo/ui';
+import { cn, Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui';
 import { useMe } from '@/lib/hooks/use-me';
 import { useMounted } from '@/lib/hooks/use-mounted';
 import { useSessionStore } from '@/lib/stores/session-store';
@@ -32,16 +32,18 @@ export function MainNav({
   const h = dict.header;
   const base = `/${locale}`;
 
-  const guest = [{ label: h.findTrades, href: `${base}/trades` }];
+  const guest = [
+    { label: h.findTrades, href: `${base}/trades`, hint: h.hints.findTrades },
+  ];
   const homeowner = [
-    { label: h.findTrades, href: `${base}/trades` },
-    { label: h.myJobs, href: `${base}/jobs/mine` },
-    { label: h.messages, href: `${base}/messages` },
+    { label: h.findTrades, href: `${base}/trades`, hint: h.hints.findTrades },
+    { label: h.myJobs, href: `${base}/jobs/mine`, hint: h.hints.myJobs },
+    { label: h.messages, href: `${base}/messages`, hint: h.hints.messages },
   ];
   const tradesman = [
-    { label: h.browseJobs, href: `${base}/jobs` },
-    { label: h.quotes, href: `${base}/quotes` },
-    { label: h.messages, href: `${base}/messages` },
+    { label: h.browseJobs, href: `${base}/jobs`, hint: h.hints.browseJobs },
+    { label: h.quotes, href: `${base}/quotes`, hint: h.hints.quotes },
+    { label: h.messages, href: `${base}/messages`, hint: h.hints.messages },
   ];
 
   const items =
@@ -57,18 +59,24 @@ export function MainNav({
         const active =
           pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              'text-sm font-medium transition-colors',
-              active
-                ? 'text-foreground'
-                : 'text-muted-foreground hover:text-foreground',
-            )}
-          >
-            {item.label}
-          </Link>
+          <Tooltip key={item.href}>
+            <TooltipTrigger
+              render={
+                <Link
+                  href={item.href}
+                  className={cn(
+                    'text-sm font-medium transition-colors',
+                    active
+                      ? 'text-foreground'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {item.label}
+                </Link>
+              }
+            />
+            <TooltipContent side="bottom">{item.hint}</TooltipContent>
+          </Tooltip>
         );
       })}
     </nav>

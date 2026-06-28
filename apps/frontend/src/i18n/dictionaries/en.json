@@ -13,7 +13,15 @@
     "privacy": "Privacy",
     "signOut": "Sign out",
     "roleHomeowner": "Homeowner",
-    "roleTradesman": "Tradesman"
+    "roleTradesman": "Tradesman",
+    "hints": {
+      "findTrades": "Browse verified tradespeople near you",
+      "browseJobs": "Find open jobs to quote on",
+      "postJob": "Describe a job and get quotes",
+      "quotes": "Track quotes you've submitted",
+      "myJobs": "Manage the jobs you've posted",
+      "messages": "Your conversations with tradespeople and homeowners"
+    }
   },
   "auth": {
     "signIn": {
@@ -44,7 +52,8 @@
       "consentPre": "I agree to the",
       "consentAnd": "and",
       "terms": "Terms & Conditions",
-      "privacy": "Privacy Policy"
+      "privacy": "Privacy Policy",
+      "contactConsent": "By creating an account, I agree that Crafty Bass and the tradespeople I contact (or parties acting on their behalf) may contact me about my jobs and account at the number I provide — including by automated technology, prerecorded messages, SMS and calls. Consent is not a condition of using the service, and message and data rates may apply."
     },
     "fields": {
       "name": "Name",
@@ -335,6 +344,7 @@
       "subtitle": "Describe the work and we'll match you with verified tradespeople.",
       "submit": "Post job",
       "submitting": "Posting…",
+      "contactConsent": "By posting this job, I agree that Crafty Bass and the tradespeople who respond (or parties acting on their behalf) may contact me about it — including by automated technology, prerecorded messages, SMS and calls — at the number on my account. Consent is not a condition of using the service.",
       "success": "Your job has been posted",
       "ai": {
         "hint": "Our AI reads this as you type to detect the right category.",
@@ -755,6 +765,72 @@
       {
         "heading": "7. Changes to these terms",
         "body": "We may update these terms from time to time. We'll show the date of the latest version above and, for significant changes, let you know in the app."
+      }
+    ],
+    "backHome": "Back to home"
+  },
+  "footer": {
+    "tagline": "Sri Lanka's marketplace connecting homeowners with trusted, verified tradespeople.",
+    "explore": "Explore",
+    "company": "Company",
+    "legal": "Legal",
+    "findTrades": "Find tradespeople",
+    "browseJobs": "Browse jobs",
+    "postJob": "Post a job",
+    "about": "About us",
+    "contact": "Contact us",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "rights": "© {year} Crafty Bass. All rights reserved."
+  },
+  "about": {
+    "title": "About Crafty Bass",
+    "intro": "Crafty Bass is a Sri Lankan marketplace that connects homeowners with verified, skilled tradespeople — from plumbers and electricians to painters and masons.",
+    "sections": [
+      {
+        "heading": "Our mission",
+        "body": "Finding a reliable tradesperson shouldn't rely on luck or word of mouth. We verify every tradesperson's identity and credentials so homeowners can hire with confidence, and we give skilled professionals a fair place to grow their business."
+      },
+      {
+        "heading": "How it works",
+        "body": "Homeowners post a job describing what they need. Verified tradespeople nearby send quotes. You compare profiles, ratings and prices, then hire the right person — with payments protected by escrow for added peace of mind."
+      },
+      {
+        "heading": "Built for Sri Lanka",
+        "body": "Crafty Bass works in Sinhala, Tamil and English, covers all 25 districts, and is designed around how trades work locally — so both sides can communicate clearly and get the job done."
+      }
+    ],
+    "backHome": "Back to home"
+  },
+  "contact": {
+    "title": "Contact us",
+    "intro": "Have a question, some feedback, or need a hand with your account? We'd love to hear from you.",
+    "emailHeading": "Email",
+    "email": "hello@craftybass.lk",
+    "supportHeading": "Support hours",
+    "support": "Monday to Friday, 9am–6pm (Sri Lanka Standard Time). We aim to reply within one business day.",
+    "backHome": "Back to home"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated June 2026",
+    "intro": "This policy explains what personal information Crafty Bass collects, how we use it, and the choices you have. We only collect what we need to run the marketplace safely.",
+    "sections": [
+      {
+        "heading": "1. Information we collect",
+        "body": "Account details (name, phone number, email), profile information you add, and — for tradespeople seeking verification — identity and credential documents. We also record activity such as jobs, quotes and messages so the service works."
+      },
+      {
+        "heading": "2. How we use it",
+        "body": "To operate the marketplace: matching jobs to tradespeople, verifying tradespeople, processing escrow payments, sending service notifications, and keeping the platform safe. We do not sell your personal information."
+      },
+      {
+        "heading": "3. Sharing",
+        "body": "We share only what's needed to complete a job — for example, your area and job details with quoting tradespeople. Verification documents and bank details are never shown to other users. We use trusted providers (e.g. payments, SMS) bound by contract."
+      },
+      {
+        "heading": "4. Your choices and rights",
+        "body": "You can view and update your profile, manage contact preferences, and request a copy or deletion of your data from your account settings. Contact us if you need help exercising these rights."
       }
     ],
     "backHome": "Back to home"

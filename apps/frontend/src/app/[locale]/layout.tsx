@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import '../globals.css';
 import { cn } from '@repo/ui';
 import { Providers } from '@/components/providers';
+import { SiteFooter } from '@/components/layout/site-footer';
 import { I18nProvider } from '@/i18n/provider';
 import { getDictionary } from '@/i18n/dictionaries';
 import { locales, isLocale } from '@/i18n/config';
@@ -44,6 +45,7 @@ export default async function RootLayout({
         <Providers>
           <I18nProvider locale={locale} dict={dict}>
             {children}
+            <SiteFooter locale={locale} dict={dict} />
           </I18nProvider>
         </Providers>
       </body>

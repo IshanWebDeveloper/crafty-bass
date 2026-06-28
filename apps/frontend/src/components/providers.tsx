@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ThemeProvider } from '@repo/ui';
+import { ThemeProvider, TooltipProvider } from '@repo/ui';
 import { Toaster } from 'sonner';
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -23,8 +23,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
-        {children}
-        <Toaster richColors closeButton position="top-center" />
+        <TooltipProvider delay={200}>
+          {children}
+          <Toaster richColors closeButton position="top-center" />
+        </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
