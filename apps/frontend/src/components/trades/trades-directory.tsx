@@ -235,10 +235,15 @@ function TradeCard({
               <span className="truncate">{trade.name}</span>
               {trade.isVerified ? <VerifiedBadge size={15} /> : null}
             </p>
+            {trade.primaryTrade ? (
+              <Tag variant="active" className="mt-1">
+                {trade.primaryTrade}
+              </Tag>
+            ) : null}
             <RatingStars
               value={trade.avgRating}
               count={trade.ratingCount}
-              className="mt-0.5"
+              className="mt-1"
             />
           </div>
         </div>

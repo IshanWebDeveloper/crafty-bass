@@ -107,6 +107,7 @@ export type TradesmanListItem = {
   userId: string;
   name: string;
   image: string | null;
+  primaryTrade: string | null;
   bio: string | null;
   city: string | null;
   district: string | null;

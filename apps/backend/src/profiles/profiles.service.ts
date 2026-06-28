@@ -125,7 +125,14 @@ export class ProfilesService {
         take: limit,
         orderBy: [{ avgRating: 'desc' }, { jobsCompleted: 'desc' }],
         include: {
-          user: { select: { id: true, name: true, image: true } },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              verification: { select: { primaryTrade: true } },
+            },
+          },
           skills: { include: { skill: true } },
         },
       }),
@@ -136,6 +143,7 @@ export class ProfilesService {
       userId: p.userId,
       name: p.user.name,
       image: p.user.image,
+      primaryTrade: p.user.verification?.primaryTrade ?? null,
       bio: p.bio,
       city: p.city,
       district: p.district,
@@ -155,7 +163,14 @@ export class ProfilesService {
     const profile = await this.prisma.tradesmanProfile.findUnique({
       where: { userId },
       include: {
-        user: { select: { id: true, name: true, image: true } },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            verification: { select: { primaryTrade: true } },
+          },
+        },
         skills: { include: { skill: true } },
       },
     });
@@ -164,6 +179,7 @@ export class ProfilesService {
       userId: profile.userId,
       name: profile.user.name,
       image: profile.user.image,
+      primaryTrade: profile.user.verification?.primaryTrade ?? null,
       bio: profile.bio,
       city: profile.city,
       district: profile.district,
