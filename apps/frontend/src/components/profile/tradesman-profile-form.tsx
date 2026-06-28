@@ -51,8 +51,19 @@ const TradesmanSchema = z.object({
   city: z.string().trim().max(80).optional(),
   district: z.string().trim().max(80).optional(),
   preferredLanguage: z.enum(LANGUAGE_OPTIONS),
+  // Edited as newline-separated text; split into arrays on submit.
+  certifications: z.string().max(5000).optional(),
+  vehicles: z.string().max(2500).optional(),
 });
 type TradesmanValues = z.infer<typeof TradesmanSchema>;
+
+/** Split a newline-separated textarea value into a trimmed, non-empty list. */
+function toLines(value: string | undefined): string[] {
+  return (value ?? '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
 
 export function TradesmanProfileForm({
   initial,
@@ -94,6 +105,8 @@ export function TradesmanProfileForm({
       city: initial?.city ?? '',
       district: initial?.district ?? '',
       preferredLanguage: initial?.preferredLanguage ?? 'EN',
+      certifications: (initial?.certifications ?? []).join('\n'),
+      vehicles: (initial?.vehicles ?? []).join('\n'),
     },
   });
   const selectedLanguage = watch('preferredLanguage');
@@ -113,6 +126,8 @@ export function TradesmanProfileForm({
         city: values.city || undefined,
         district: values.district || undefined,
         skillIds: Array.from(selectedSkillIds),
+        certifications: toLines(values.certifications),
+        vehicles: toLines(values.vehicles),
       }),
     onSuccess: () => {
       toast.success(t.saved);
@@ -284,6 +299,32 @@ export function TradesmanProfileForm({
             );
           })}
         </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="certifications">{t.tradesman.certifications}</Label>
+        <Textarea
+          id="certifications"
+          rows={3}
+          placeholder={t.tradesman.certificationsPlaceholder}
+          {...register('certifications')}
+        />
+        <p className="text-xs text-muted-foreground">
+          {t.tradesman.certificationsHint}
+        </p>
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="vehicles">{t.tradesman.vehicles}</Label>
+        <Textarea
+          id="vehicles"
+          rows={2}
+          placeholder={t.tradesman.vehiclesPlaceholder}
+          {...register('vehicles')}
+        />
+        <p className="text-xs text-muted-foreground">
+          {t.tradesman.vehiclesHint}
+        </p>
       </div>
 
       <Button type="submit" className="w-full" disabled={submitting}>

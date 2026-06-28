@@ -14327,6 +14327,8 @@ export namespace Prisma {
     backgroundChecked: number;
     isAvailable: number;
     preferredLanguage: number;
+    certifications: number;
+    vehicles: number;
     createdAt: number;
     updatedAt: number;
     _all: number;
@@ -14429,6 +14431,8 @@ export namespace Prisma {
     backgroundChecked?: true;
     isAvailable?: true;
     preferredLanguage?: true;
+    certifications?: true;
+    vehicles?: true;
     createdAt?: true;
     updatedAt?: true;
     _all?: true;
@@ -14550,6 +14554,8 @@ export namespace Prisma {
     backgroundChecked: boolean;
     isAvailable: boolean;
     preferredLanguage: $Enums.LanguageCode;
+    certifications: string[];
+    vehicles: string[];
     createdAt: Date;
     updatedAt: Date;
     _count: TradesmanProfileCountAggregateOutputType | null;
@@ -14598,6 +14604,8 @@ export namespace Prisma {
       backgroundChecked?: boolean;
       isAvailable?: boolean;
       preferredLanguage?: boolean;
+      certifications?: boolean;
+      vehicles?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
@@ -14631,6 +14639,8 @@ export namespace Prisma {
       backgroundChecked?: boolean;
       isAvailable?: boolean;
       preferredLanguage?: boolean;
+      certifications?: boolean;
+      vehicles?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
@@ -14662,6 +14672,8 @@ export namespace Prisma {
       backgroundChecked?: boolean;
       isAvailable?: boolean;
       preferredLanguage?: boolean;
+      certifications?: boolean;
+      vehicles?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
@@ -14690,6 +14702,8 @@ export namespace Prisma {
     backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: boolean;
+    certifications?: boolean;
+    vehicles?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
   };
@@ -14717,6 +14731,8 @@ export namespace Prisma {
     | 'backgroundChecked'
     | 'isAvailable'
     | 'preferredLanguage'
+    | 'certifications'
+    | 'vehicles'
     | 'createdAt'
     | 'updatedAt',
     ExtArgs['result']['tradesmanProfile']
@@ -14769,6 +14785,8 @@ export namespace Prisma {
         backgroundChecked: boolean;
         isAvailable: boolean;
         preferredLanguage: $Enums.LanguageCode;
+        certifications: string[];
+        vehicles: string[];
         createdAt: Date;
         updatedAt: Date;
       },
@@ -15406,6 +15424,8 @@ export namespace Prisma {
     readonly backgroundChecked: FieldRef<'TradesmanProfile', 'Boolean'>;
     readonly isAvailable: FieldRef<'TradesmanProfile', 'Boolean'>;
     readonly preferredLanguage: FieldRef<'TradesmanProfile', 'LanguageCode'>;
+    readonly certifications: FieldRef<'TradesmanProfile', 'String[]'>;
+    readonly vehicles: FieldRef<'TradesmanProfile', 'String[]'>;
     readonly createdAt: FieldRef<'TradesmanProfile', 'DateTime'>;
     readonly updatedAt: FieldRef<'TradesmanProfile', 'DateTime'>;
   }
@@ -40546,6 +40566,8 @@ export namespace Prisma {
     backgroundChecked: 'backgroundChecked';
     isAvailable: 'isAvailable';
     preferredLanguage: 'preferredLanguage';
+    certifications: 'certifications';
+    vehicles: 'vehicles';
     createdAt: 'createdAt';
     updatedAt: 'updatedAt';
   };
@@ -42001,6 +42023,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeFilter<'TradesmanProfile'>
       | $Enums.LanguageCode;
+    certifications?: StringNullableListFilter<'TradesmanProfile'>;
+    vehicles?: StringNullableListFilter<'TradesmanProfile'>;
     createdAt?: DateTimeFilter<'TradesmanProfile'> | Date | string;
     updatedAt?: DateTimeFilter<'TradesmanProfile'> | Date | string;
     user?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -42028,6 +42052,8 @@ export namespace Prisma {
     backgroundChecked?: SortOrder;
     isAvailable?: SortOrder;
     preferredLanguage?: SortOrder;
+    certifications?: SortOrder;
+    vehicles?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     user?: UserOrderByWithRelationInput;
@@ -42084,6 +42110,8 @@ export namespace Prisma {
       preferredLanguage?:
         | EnumLanguageCodeFilter<'TradesmanProfile'>
         | $Enums.LanguageCode;
+      certifications?: StringNullableListFilter<'TradesmanProfile'>;
+      vehicles?: StringNullableListFilter<'TradesmanProfile'>;
       createdAt?: DateTimeFilter<'TradesmanProfile'> | Date | string;
       updatedAt?: DateTimeFilter<'TradesmanProfile'> | Date | string;
       user?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -42113,6 +42141,8 @@ export namespace Prisma {
     backgroundChecked?: SortOrder;
     isAvailable?: SortOrder;
     preferredLanguage?: SortOrder;
+    certifications?: SortOrder;
+    vehicles?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     _count?: TradesmanProfileCountOrderByAggregateInput;
@@ -42187,6 +42217,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeWithAggregatesFilter<'TradesmanProfile'>
       | $Enums.LanguageCode;
+    certifications?: StringNullableListFilter<'TradesmanProfile'>;
+    vehicles?: StringNullableListFilter<'TradesmanProfile'>;
     createdAt?:
       | DateTimeWithAggregatesFilter<'TradesmanProfile'>
       | Date
@@ -45449,6 +45481,8 @@ export namespace Prisma {
     backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
+    certifications?: TradesmanProfileCreatecertificationsInput | string[];
+    vehicles?: TradesmanProfileCreatevehiclesInput | string[];
     createdAt?: Date | string;
     updatedAt?: Date | string;
     user: UserCreateNestedOneWithoutTradesmanProfileInput;
@@ -45476,6 +45510,8 @@ export namespace Prisma {
     backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
+    certifications?: TradesmanProfileCreatecertificationsInput | string[];
+    vehicles?: TradesmanProfileCreatevehiclesInput | string[];
     createdAt?: Date | string;
     updatedAt?: Date | string;
     skills?: TradesmanSkillUncheckedCreateNestedManyWithoutTradesmanProfileInput;
@@ -45526,6 +45562,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
       | $Enums.LanguageCode;
+    certifications?: TradesmanProfileUpdatecertificationsInput | string[];
+    vehicles?: TradesmanProfileUpdatevehiclesInput | string[];
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     user?: UserUpdateOneRequiredWithoutTradesmanProfileNestedInput;
@@ -45578,6 +45616,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
       | $Enums.LanguageCode;
+    certifications?: TradesmanProfileUpdatecertificationsInput | string[];
+    vehicles?: TradesmanProfileUpdatevehiclesInput | string[];
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     skills?: TradesmanSkillUncheckedUpdateManyWithoutTradesmanProfileNestedInput;
@@ -45604,6 +45644,8 @@ export namespace Prisma {
     backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
+    certifications?: TradesmanProfileCreatecertificationsInput | string[];
+    vehicles?: TradesmanProfileCreatevehiclesInput | string[];
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -45653,6 +45695,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
       | $Enums.LanguageCode;
+    certifications?: TradesmanProfileUpdatecertificationsInput | string[];
+    vehicles?: TradesmanProfileUpdatevehiclesInput | string[];
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -45703,6 +45747,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
       | $Enums.LanguageCode;
+    certifications?: TradesmanProfileUpdatecertificationsInput | string[];
+    vehicles?: TradesmanProfileUpdatevehiclesInput | string[];
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -48916,6 +48962,14 @@ export namespace Prisma {
       | string;
   };
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null;
+    has?: string | StringFieldRefInput<$PrismaModel> | null;
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>;
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>;
+    isEmpty?: boolean;
+  };
+
   export type TradesmanSkillListRelationFilter = {
     every?: TradesmanSkillWhereInput;
     some?: TradesmanSkillWhereInput;
@@ -48947,6 +49001,8 @@ export namespace Prisma {
     backgroundChecked?: SortOrder;
     isAvailable?: SortOrder;
     preferredLanguage?: SortOrder;
+    certifications?: SortOrder;
+    vehicles?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -52434,6 +52490,14 @@ export namespace Prisma {
     >;
   };
 
+  export type TradesmanProfileCreatecertificationsInput = {
+    set: string[];
+  };
+
+  export type TradesmanProfileCreatevehiclesInput = {
+    set: string[];
+  };
+
   export type UserCreateNestedOneWithoutTradesmanProfileInput = {
     create?: XOR<
       UserCreateWithoutTradesmanProfileInput,
@@ -52498,6 +52562,16 @@ export namespace Prisma {
     decrement?: Decimal | DecimalJsLike | number | string;
     multiply?: Decimal | DecimalJsLike | number | string;
     divide?: Decimal | DecimalJsLike | number | string;
+  };
+
+  export type TradesmanProfileUpdatecertificationsInput = {
+    set?: string[];
+    push?: string | string[];
+  };
+
+  export type TradesmanProfileUpdatevehiclesInput = {
+    set?: string[];
+    push?: string | string[];
   };
 
   export type UserUpdateOneRequiredWithoutTradesmanProfileNestedInput = {
@@ -56382,6 +56456,8 @@ export namespace Prisma {
     backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
+    certifications?: TradesmanProfileCreatecertificationsInput | string[];
+    vehicles?: TradesmanProfileCreatevehiclesInput | string[];
     createdAt?: Date | string;
     updatedAt?: Date | string;
     skills?: TradesmanSkillCreateNestedManyWithoutTradesmanProfileInput;
@@ -56407,6 +56483,8 @@ export namespace Prisma {
     backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
+    certifications?: TradesmanProfileCreatecertificationsInput | string[];
+    vehicles?: TradesmanProfileCreatevehiclesInput | string[];
     createdAt?: Date | string;
     updatedAt?: Date | string;
     skills?: TradesmanSkillUncheckedCreateNestedManyWithoutTradesmanProfileInput;
@@ -57492,6 +57570,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
       | $Enums.LanguageCode;
+    certifications?: TradesmanProfileUpdatecertificationsInput | string[];
+    vehicles?: TradesmanProfileUpdatevehiclesInput | string[];
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     skills?: TradesmanSkillUpdateManyWithoutTradesmanProfileNestedInput;
@@ -57542,6 +57622,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
       | $Enums.LanguageCode;
+    certifications?: TradesmanProfileUpdatecertificationsInput | string[];
+    vehicles?: TradesmanProfileUpdatevehiclesInput | string[];
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     skills?: TradesmanSkillUncheckedUpdateManyWithoutTradesmanProfileNestedInput;
@@ -60314,6 +60396,8 @@ export namespace Prisma {
     backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
+    certifications?: TradesmanProfileCreatecertificationsInput | string[];
+    vehicles?: TradesmanProfileCreatevehiclesInput | string[];
     createdAt?: Date | string;
     updatedAt?: Date | string;
     user: UserCreateNestedOneWithoutTradesmanProfileInput;
@@ -60340,6 +60424,8 @@ export namespace Prisma {
     backgroundChecked?: boolean;
     isAvailable?: boolean;
     preferredLanguage?: $Enums.LanguageCode;
+    certifications?: TradesmanProfileCreatecertificationsInput | string[];
+    vehicles?: TradesmanProfileCreatevehiclesInput | string[];
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -60449,6 +60535,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
       | $Enums.LanguageCode;
+    certifications?: TradesmanProfileUpdatecertificationsInput | string[];
+    vehicles?: TradesmanProfileUpdatevehiclesInput | string[];
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     user?: UserUpdateOneRequiredWithoutTradesmanProfileNestedInput;
@@ -60500,6 +60588,8 @@ export namespace Prisma {
     preferredLanguage?:
       | EnumLanguageCodeFieldUpdateOperationsInput
       | $Enums.LanguageCode;
+    certifications?: TradesmanProfileUpdatecertificationsInput | string[];
+    vehicles?: TradesmanProfileUpdatevehiclesInput | string[];
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };

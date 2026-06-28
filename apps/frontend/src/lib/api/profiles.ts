@@ -23,6 +23,8 @@ export type TradesmanProfile = {
   district: string | null;
   serviceRadiusKm: number;
   preferredLanguage: LanguageCode;
+  certifications: string[];
+  vehicles: string[];
   isVerified: boolean;
   backgroundChecked: boolean;
   avgRating: number;
@@ -63,6 +65,8 @@ export type UpsertTradesmanBody = {
   serviceRadiusKm: number;
   preferredLanguage: LanguageCode;
   skillIds?: string[];
+  certifications?: string[];
+  vehicles?: string[];
 };
 
 export function getMyProfile() {
@@ -121,6 +125,8 @@ export type TradesmanPublicProfile = TradesmanListItem & {
   serviceRadiusKm: number;
   responseTimeMinutes: number;
   isAvailable: boolean;
+  certifications: string[];
+  vehicles: string[];
 };
 
 export type TradesmenQuery = {

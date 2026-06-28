@@ -227,6 +227,8 @@ exports.Prisma.TradesmanProfileScalarFieldEnum = {
   backgroundChecked: 'backgroundChecked',
   isAvailable: 'isAvailable',
   preferredLanguage: 'preferredLanguage',
+  certifications: 'certifications',
+  vehicles: 'vehicles',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 };

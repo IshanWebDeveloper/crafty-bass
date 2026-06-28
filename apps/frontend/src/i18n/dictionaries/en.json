@@ -564,7 +564,13 @@
       "hourlyRate": "Hourly rate (optional)",
       "serviceRadiusKm": "Service radius (km)",
       "skills": "Skills",
-      "skillsHelp": "Choose all that apply. You can update this list any time."
+      "skillsHelp": "Choose all that apply. You can update this list any time.",
+      "certifications": "Certifications & licences",
+      "certificationsHint": "List any qualifications or licences — one per line. These help homeowners trust your work.",
+      "certificationsPlaceholder": "e.g. CIDA registered electrician\nNVQ Level 4 Plumbing",
+      "vehicles": "Vehicles",
+      "vehiclesHint": "List the vehicles you use for jobs — one per line — so homeowners know what you can transport.",
+      "vehiclesPlaceholder": "e.g. Van\nPickup truck"
     },
     "fields": {
       "locationText": "Address (optional)",
@@ -718,6 +724,8 @@
       "noBio": "This tradesman hasn't added a bio yet.",
       "skills": "Skills",
       "noSkills": "No skills listed yet.",
+      "certifications": "Certifications & licences",
+      "vehicles": "Vehicles",
       "stats": {
         "rating": "Rating",
         "completed": "Jobs completed",

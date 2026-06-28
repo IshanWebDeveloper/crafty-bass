@@ -1,5 +1,5 @@
 {
   "schemaPath": "packages/db/prisma/schema.prisma",
-  "schemaSha256": "487bc96a8a6cac07025250f1aac69d581c1f7fdebc7b21d41c059cd0af8cf5cc",
-  "generatedAt": "2026-06-24T14:23:30.602Z"
+  "schemaSha256": "a2a240b920338e39c7fe3dbc9e33cd00c36cc72bbec21558cb82ce471f13431c",
+  "generatedAt": "2026-06-28T18:38:47.333Z"
 }
