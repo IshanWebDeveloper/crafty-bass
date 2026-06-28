@@ -170,7 +170,8 @@
       "title": "Tell us your trade",
       "sub": "Just the basics — you can do the rest later.",
       "trade": "Primary trade",
-      "district": "Base location"
+      "district": "Base location",
+      "districtEmpty": "No matching district."
     },
     "documents": {
       "title": "Upload your documents",
