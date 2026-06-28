@@ -113,10 +113,15 @@ export function TradesmanPublicView({
                 {trade.name}
                 {trade.isVerified ? <VerifiedBadge size={18} /> : null}
               </h1>
+              {trade.primaryTrade ? (
+                <Tag variant="active" className="mt-1.5">
+                  {trade.primaryTrade}
+                </Tag>
+              ) : null}
               <RatingStars
                 value={trade.avgRating}
                 count={trade.ratingCount}
-                className="mt-1"
+                className="mt-1.5"
               />
               <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                 {location ? (
