@@ -23,6 +23,7 @@ import {
 } from '@/lib/api/escrow';
 import { formatLKR } from '@/lib/currency';
 import { EscrowStrip } from './escrow-strip';
+import { GuaranteeBadge } from '@/components/brand/guarantee-badge';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -208,6 +209,10 @@ export function EscrowSection({
                 : t.actions.approve}
             </Button>
           ) : null}
+        </div>
+
+        <div className="flex items-center gap-2 border-t border-border pt-4">
+          <GuaranteeBadge locale={locale} dict={dict} />
         </div>
       </CardContent>
     </Card>

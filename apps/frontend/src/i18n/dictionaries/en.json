@@ -271,10 +271,22 @@
     "heading": "Materials deposit",
     "subtitle": "Crafty Bass holds the deposit and releases it on agreed milestones.",
     "steps": {
-      "funded": { "label": "Funded", "note": "Held by Crafty Bass" },
-      "materials": { "label": "Materials", "note": "Released to buy parts" },
-      "workDone": { "label": "Work done", "note": "Job marked complete" },
-      "released": { "label": "Released", "note": "Balance paid out" }
+      "funded": {
+        "label": "Funded",
+        "note": "Held by Crafty Bass"
+      },
+      "materials": {
+        "label": "Materials",
+        "note": "Released to buy parts"
+      },
+      "workDone": {
+        "label": "Work done",
+        "note": "Job marked complete"
+      },
+      "released": {
+        "label": "Released",
+        "note": "Balance paid out"
+      }
     },
     "amounts": {
       "deposit": "Materials deposit",
@@ -307,9 +319,18 @@
       "refundConfirm": "Refund the held deposit to the homeowner?"
     },
     "methods": {
-      "card": { "label": "Card", "note": "Visa & Mastercard" },
-      "paypal": { "label": "PayPal", "note": "Pay with balance" },
-      "local": { "label": "Local", "note": "PayHere & LankaQR" }
+      "card": {
+        "label": "Card",
+        "note": "Visa & Mastercard"
+      },
+      "paypal": {
+        "label": "PayPal",
+        "note": "Pay with balance"
+      },
+      "local": {
+        "label": "Local",
+        "note": "PayHere & LankaQR"
+      }
     },
     "eligibility": {
       "title": "Materials deposit",
@@ -763,8 +784,16 @@
         "meta": "19 matches",
         "slug": "electrical"
       },
-      { "label": "Garden wall", "meta": "26 matches", "slug": "masonry" },
-      { "label": "Bathroom tiling", "meta": "33 matches", "slug": "masonry" }
+      {
+        "label": "Garden wall",
+        "meta": "26 matches",
+        "slug": "masonry"
+      },
+      {
+        "label": "Bathroom tiling",
+        "meta": "33 matches",
+        "slug": "masonry"
+      }
     ]
   },
   "categories": {
@@ -897,7 +926,8 @@
     "contact": "Contact us",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
-    "rights": "© {year} Crafty Bass. All rights reserved."
+    "rights": "© {year} Crafty Bass. All rights reserved.",
+    "guarantee": "Our guarantee"
   },
   "about": {
     "title": "About Crafty Bass",
@@ -969,5 +999,68 @@
       "APPROVED": "Approved",
       "DECLINED": "Declined"
     }
+  },
+  "guarantee": {
+    "badge": "Crafty Bass Guarantee",
+    "badgeTooltip": "Work hired and paid through Crafty Bass is covered by our guarantee.",
+    "title": "The Crafty Bass Guarantee",
+    "intro": "When you hire and pay through Crafty Bass, your project is protected from the first quote to the final sign-off. Here is exactly what that covers.",
+    "pillarsTitle": "What you are protected by",
+    "pillars": [
+      {
+        "heading": "Verified professionals only",
+        "body": "Every tradesperson who can quote on your job has had their identity and trade credentials checked. You only deal with people we have vetted."
+      },
+      {
+        "heading": "Your money is held safely",
+        "body": "Payments are held in secure escrow and released to the tradesperson only when you confirm the work is done to your satisfaction."
+      },
+      {
+        "heading": "Workmanship guarantee",
+        "body": "If covered work develops a fault within 12 months of completion, we help put it right — through the original tradesperson or a replacement."
+      },
+      {
+        "heading": "Dispute support",
+        "body": "If something goes wrong, our support team steps in to mediate. Where the work is not completed, your escrow balance is refunded."
+      }
+    ],
+    "howTitle": "How the guarantee works",
+    "how": [
+      {
+        "step": "Hire a verified pro",
+        "body": "Accept a quote from a verified tradesperson on Crafty Bass."
+      },
+      {
+        "step": "Pay into escrow",
+        "body": "Fund the job through Crafty Bass. We hold the money — the tradesperson is not paid until you approve."
+      },
+      {
+        "step": "Approve the work",
+        "body": "Once you are happy, release the funds. The 12-month workmanship guarantee starts from this date."
+      },
+      {
+        "step": "Claim if needed",
+        "body": "If a covered fault appears, raise a claim from the job and our team helps resolve it."
+      }
+    ],
+    "coveredTitle": "What is covered",
+    "covered": [
+      "Work agreed and paid for through Crafty Bass escrow",
+      "Defective workmanship reported within 12 months of approval",
+      "Jobs where the tradesperson never started or abandoned the work (full escrow refund)"
+    ],
+    "notCoveredTitle": "What is not covered",
+    "notCovered": [
+      "Cash or off-platform payments made directly to a tradesperson",
+      "Normal wear and tear, or damage caused by misuse after completion",
+      "Changes you request outside the originally agreed scope",
+      "Claims raised more than 12 months after you approved the work"
+    ],
+    "limitsTitle": "Guarantee limits",
+    "limits": "The guarantee covers eligible claims up to the value paid through Crafty Bass for the job, capped at LKR 500,000 per job. It applies only to jobs funded through Crafty Bass escrow and is not an insurance policy — it is our commitment to put covered problems right.",
+    "claimTitle": "Make a claim",
+    "claim": "Open the job in your Crafty Bass account and use Report a problem, or contact our support team. Have your job reference and a description ready, with photos where possible.",
+    "cta": "Post a job",
+    "backHome": "Back to home"
   }
 }
