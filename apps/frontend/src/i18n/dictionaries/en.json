@@ -13,7 +13,7 @@
     "privacy": "Privacy",
     "signOut": "Sign out",
     "roleHomeowner": "Homeowner",
-    "roleTradesman": "Tradesman",
+    "roleTradesman": "Tradesperson",
     "trades": {
       "plumber": "Plumber",
       "electrician": "Electrician",
@@ -53,9 +53,9 @@
       "signInLink": "Sign in",
       "success": "Account created",
       "iWantTo": "I want to",
-      "roleHomeowner": "Hire a tradesman",
+      "roleHomeowner": "Hire a tradesperson",
       "roleHomeownerSub": "Post jobs and compare quotes",
-      "roleTradesman": "Work as a tradesman",
+      "roleTradesman": "Work as a tradesperson",
       "roleTradesmanSub": "Quote on jobs nearby",
       "nameRequired": "Please enter your name.",
       "consentRequired": "Please accept the terms to continue.",
@@ -538,7 +538,7 @@
       "markedAt": "Read"
     },
     "startCta": "Message homeowner",
-    "startCtaTradesman": "Message tradesman",
+    "startCtaTradesman": "Message tradesperson",
     "started": "Message sent"
   },
   "profile": {
@@ -559,7 +559,7 @@
       "subtitle": "Pick the role that fits your activity. You can update later from this page.",
       "homeowner": "I'm a homeowner",
       "homeownerCopy": "Post jobs and hire tradespeople.",
-      "tradesman": "I'm a tradesman",
+      "tradesman": "I'm a tradesperson",
       "tradesmanCopy": "Quote on jobs and grow your business.",
       "continue": "Continue"
     },
@@ -569,7 +569,7 @@
       "submitting": "Saving…"
     },
     "tradesman": {
-      "heading": "Tradesman profile",
+      "heading": "Tradesperson profile",
       "submit": "Save profile",
       "submitting": "Saving…",
       "bio": "Short bio",
@@ -606,7 +606,7 @@
     "message": "Message",
     "estimatedStart": "Estimated start",
     "estimatedCompletion": "Estimated completion",
-    "verifiedTradesman": "Verified tradesman",
+    "verifiedTradesman": "Verified tradesperson",
     "stats": {
       "rating": "{rating} ★ ({count})",
       "jobsCompleted": "{count} completed"
@@ -729,7 +729,7 @@
     }
   },
   "trades": {
-    "title": "Find a trusted tradesman",
+    "title": "Find a trusted tradesperson",
     "subtitle": "Browse verified tradespeople near you — see their ratings, completed work and skills.",
     "filters": {
       "category": "Category",
@@ -743,11 +743,11 @@
     "viewProfile": "View profile",
     "profile": {
       "back": "All trades",
-      "verified": "Verified tradesman",
+      "verified": "Verified tradesperson",
       "available": "Available now",
       "unavailable": "Not taking jobs right now",
       "about": "About",
-      "noBio": "This tradesman hasn't added a bio yet.",
+      "noBio": "This tradesperson hasn't added a bio yet.",
       "skills": "Skills",
       "noSkills": "No skills listed yet.",
       "certifications": "Certifications & licences",
@@ -764,7 +764,7 @@
       "serviceRadius": "Service radius",
       "km": "{count} km",
       "message": "Message",
-      "notFound": "We couldn't find this tradesman."
+      "notFound": "We couldn't find this tradesperson."
     }
   },
   "terms": {
