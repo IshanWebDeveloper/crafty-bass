@@ -202,6 +202,23 @@ export namespace $Enums {
 
   export type JobUrgency = (typeof JobUrgency)[keyof typeof JobUrgency];
 
+  export const TaskSize: {
+    SMALL: 'SMALL';
+    MEDIUM: 'MEDIUM';
+    LARGE: 'LARGE';
+  };
+
+  export type TaskSize = (typeof TaskSize)[keyof typeof TaskSize];
+
+  export const VehicleRequirement: {
+    NONE: 'NONE';
+    CAR: 'CAR';
+    TRUCK: 'TRUCK';
+  };
+
+  export type VehicleRequirement =
+    (typeof VehicleRequirement)[keyof typeof VehicleRequirement];
+
   export const QuoteStatus: {
     PENDING: 'PENDING';
     ACCEPTED: 'ACCEPTED';
@@ -330,6 +347,14 @@ export const JobStatus: typeof $Enums.JobStatus;
 export type JobUrgency = $Enums.JobUrgency;
 
 export const JobUrgency: typeof $Enums.JobUrgency;
+
+export type TaskSize = $Enums.TaskSize;
+
+export const TaskSize: typeof $Enums.TaskSize;
+
+export type VehicleRequirement = $Enums.VehicleRequirement;
+
+export const VehicleRequirement: typeof $Enums.VehicleRequirement;
 
 export type QuoteStatus = $Enums.QuoteStatus;
 
@@ -20718,6 +20743,8 @@ export namespace Prisma {
     budgetMax: Decimal | null;
     scheduledFor: Date | null;
     urgency: $Enums.JobUrgency | null;
+    taskSize: $Enums.TaskSize | null;
+    vehicleRequirement: $Enums.VehicleRequirement | null;
     status: $Enums.JobStatus | null;
     assignedTradesmanId: string | null;
     acceptedQuoteId: string | null;
@@ -20746,6 +20773,8 @@ export namespace Prisma {
     budgetMax: Decimal | null;
     scheduledFor: Date | null;
     urgency: $Enums.JobUrgency | null;
+    taskSize: $Enums.TaskSize | null;
+    vehicleRequirement: $Enums.VehicleRequirement | null;
     status: $Enums.JobStatus | null;
     assignedTradesmanId: string | null;
     acceptedQuoteId: string | null;
@@ -20775,6 +20804,8 @@ export namespace Prisma {
     budgetMax: number;
     scheduledFor: number;
     urgency: number;
+    taskSize: number;
+    vehicleRequirement: number;
     status: number;
     assignedTradesmanId: number;
     acceptedQuoteId: number;
@@ -20820,6 +20851,8 @@ export namespace Prisma {
     budgetMax?: true;
     scheduledFor?: true;
     urgency?: true;
+    taskSize?: true;
+    vehicleRequirement?: true;
     status?: true;
     assignedTradesmanId?: true;
     acceptedQuoteId?: true;
@@ -20848,6 +20881,8 @@ export namespace Prisma {
     budgetMax?: true;
     scheduledFor?: true;
     urgency?: true;
+    taskSize?: true;
+    vehicleRequirement?: true;
     status?: true;
     assignedTradesmanId?: true;
     acceptedQuoteId?: true;
@@ -20877,6 +20912,8 @@ export namespace Prisma {
     budgetMax?: true;
     scheduledFor?: true;
     urgency?: true;
+    taskSize?: true;
+    vehicleRequirement?: true;
     status?: true;
     assignedTradesmanId?: true;
     acceptedQuoteId?: true;
@@ -20994,6 +21031,8 @@ export namespace Prisma {
     budgetMax: Decimal | null;
     scheduledFor: Date | null;
     urgency: $Enums.JobUrgency;
+    taskSize: $Enums.TaskSize | null;
+    vehicleRequirement: $Enums.VehicleRequirement | null;
     status: $Enums.JobStatus;
     assignedTradesmanId: string | null;
     acceptedQuoteId: string | null;
@@ -21043,6 +21082,8 @@ export namespace Prisma {
       budgetMax?: boolean;
       scheduledFor?: boolean;
       urgency?: boolean;
+      taskSize?: boolean;
+      vehicleRequirement?: boolean;
       status?: boolean;
       assignedTradesmanId?: boolean;
       acceptedQuoteId?: boolean;
@@ -21091,6 +21132,8 @@ export namespace Prisma {
       budgetMax?: boolean;
       scheduledFor?: boolean;
       urgency?: boolean;
+      taskSize?: boolean;
+      vehicleRequirement?: boolean;
       status?: boolean;
       assignedTradesmanId?: boolean;
       acceptedQuoteId?: boolean;
@@ -21130,6 +21173,8 @@ export namespace Prisma {
       budgetMax?: boolean;
       scheduledFor?: boolean;
       urgency?: boolean;
+      taskSize?: boolean;
+      vehicleRequirement?: boolean;
       status?: boolean;
       assignedTradesmanId?: boolean;
       acceptedQuoteId?: boolean;
@@ -21166,6 +21211,8 @@ export namespace Prisma {
     budgetMax?: boolean;
     scheduledFor?: boolean;
     urgency?: boolean;
+    taskSize?: boolean;
+    vehicleRequirement?: boolean;
     status?: boolean;
     assignedTradesmanId?: boolean;
     acceptedQuoteId?: boolean;
@@ -21197,6 +21244,8 @@ export namespace Prisma {
     | 'budgetMax'
     | 'scheduledFor'
     | 'urgency'
+    | 'taskSize'
+    | 'vehicleRequirement'
     | 'status'
     | 'assignedTradesmanId'
     | 'acceptedQuoteId'
@@ -21283,6 +21332,8 @@ export namespace Prisma {
         budgetMax: Prisma.Decimal | null;
         scheduledFor: Date | null;
         urgency: $Enums.JobUrgency;
+        taskSize: $Enums.TaskSize | null;
+        vehicleRequirement: $Enums.VehicleRequirement | null;
         status: $Enums.JobStatus;
         assignedTradesmanId: string | null;
         acceptedQuoteId: string | null;
@@ -22050,6 +22101,8 @@ export namespace Prisma {
     readonly budgetMax: FieldRef<'Job', 'Decimal'>;
     readonly scheduledFor: FieldRef<'Job', 'DateTime'>;
     readonly urgency: FieldRef<'Job', 'JobUrgency'>;
+    readonly taskSize: FieldRef<'Job', 'TaskSize'>;
+    readonly vehicleRequirement: FieldRef<'Job', 'VehicleRequirement'>;
     readonly status: FieldRef<'Job', 'JobStatus'>;
     readonly assignedTradesmanId: FieldRef<'Job', 'String'>;
     readonly acceptedQuoteId: FieldRef<'Job', 'String'>;
@@ -43985,6 +44038,8 @@ export namespace Prisma {
     budgetMax: 'budgetMax';
     scheduledFor: 'scheduledFor';
     urgency: 'urgency';
+    taskSize: 'taskSize';
+    vehicleRequirement: 'vehicleRequirement';
     status: 'status';
     assignedTradesmanId: 'assignedTradesmanId';
     acceptedQuoteId: 'acceptedQuoteId';
@@ -44444,6 +44499,34 @@ export namespace Prisma {
     $PrismaModel,
     'JobUrgency[]'
   >;
+
+  /**
+   * Reference to a field of type 'TaskSize'
+   */
+  export type EnumTaskSizeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'TaskSize'
+  >;
+
+  /**
+   * Reference to a field of type 'TaskSize[]'
+   */
+  export type ListEnumTaskSizeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'TaskSize[]'
+  >;
+
+  /**
+   * Reference to a field of type 'VehicleRequirement'
+   */
+  export type EnumVehicleRequirementFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'VehicleRequirement'>;
+
+  /**
+   * Reference to a field of type 'VehicleRequirement[]'
+   */
+  export type ListEnumVehicleRequirementFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'VehicleRequirement[]'>;
 
   /**
    * Reference to a field of type 'JobStatus'
@@ -45973,6 +46056,11 @@ export namespace Prisma {
       | null;
     scheduledFor?: DateTimeNullableFilter<'Job'> | Date | string | null;
     urgency?: EnumJobUrgencyFilter<'Job'> | $Enums.JobUrgency;
+    taskSize?: EnumTaskSizeNullableFilter<'Job'> | $Enums.TaskSize | null;
+    vehicleRequirement?:
+      | EnumVehicleRequirementNullableFilter<'Job'>
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFilter<'Job'> | $Enums.JobStatus;
     assignedTradesmanId?: StringNullableFilter<'Job'> | string | null;
     acceptedQuoteId?: StringNullableFilter<'Job'> | string | null;
@@ -46030,6 +46118,8 @@ export namespace Prisma {
     budgetMax?: SortOrderInput | SortOrder;
     scheduledFor?: SortOrderInput | SortOrder;
     urgency?: SortOrder;
+    taskSize?: SortOrderInput | SortOrder;
+    vehicleRequirement?: SortOrderInput | SortOrder;
     status?: SortOrder;
     assignedTradesmanId?: SortOrderInput | SortOrder;
     acceptedQuoteId?: SortOrderInput | SortOrder;
@@ -46107,6 +46197,11 @@ export namespace Prisma {
         | null;
       scheduledFor?: DateTimeNullableFilter<'Job'> | Date | string | null;
       urgency?: EnumJobUrgencyFilter<'Job'> | $Enums.JobUrgency;
+      taskSize?: EnumTaskSizeNullableFilter<'Job'> | $Enums.TaskSize | null;
+      vehicleRequirement?:
+        | EnumVehicleRequirementNullableFilter<'Job'>
+        | $Enums.VehicleRequirement
+        | null;
       status?: EnumJobStatusFilter<'Job'> | $Enums.JobStatus;
       assignedTradesmanId?: StringNullableFilter<'Job'> | string | null;
       expiresAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
@@ -46165,6 +46260,8 @@ export namespace Prisma {
     budgetMax?: SortOrderInput | SortOrder;
     scheduledFor?: SortOrderInput | SortOrder;
     urgency?: SortOrder;
+    taskSize?: SortOrderInput | SortOrder;
+    vehicleRequirement?: SortOrderInput | SortOrder;
     status?: SortOrder;
     assignedTradesmanId?: SortOrderInput | SortOrder;
     acceptedQuoteId?: SortOrderInput | SortOrder;
@@ -46242,6 +46339,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyWithAggregatesFilter<'Job'> | $Enums.JobUrgency;
+    taskSize?:
+      | EnumTaskSizeNullableWithAggregatesFilter<'Job'>
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | EnumVehicleRequirementNullableWithAggregatesFilter<'Job'>
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusWithAggregatesFilter<'Job'> | $Enums.JobStatus;
     assignedTradesmanId?:
       | StringNullableWithAggregatesFilter<'Job'>
@@ -49768,6 +49873,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -49808,6 +49915,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -49878,6 +49987,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -49966,6 +50083,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -50018,6 +50143,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -50080,6 +50207,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -50155,6 +50290,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -53587,6 +53730,38 @@ export namespace Prisma {
     not?: NestedEnumJobUrgencyFilter<$PrismaModel> | $Enums.JobUrgency;
   };
 
+  export type EnumTaskSizeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskSize | EnumTaskSizeFieldRefInput<$PrismaModel> | null;
+    in?: $Enums.TaskSize[] | ListEnumTaskSizeFieldRefInput<$PrismaModel> | null;
+    notIn?:
+      | $Enums.TaskSize[]
+      | ListEnumTaskSizeFieldRefInput<$PrismaModel>
+      | null;
+    not?:
+      | NestedEnumTaskSizeNullableFilter<$PrismaModel>
+      | $Enums.TaskSize
+      | null;
+  };
+
+  export type EnumVehicleRequirementNullableFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.VehicleRequirement
+      | EnumVehicleRequirementFieldRefInput<$PrismaModel>
+      | null;
+    in?:
+      | $Enums.VehicleRequirement[]
+      | ListEnumVehicleRequirementFieldRefInput<$PrismaModel>
+      | null;
+    notIn?:
+      | $Enums.VehicleRequirement[]
+      | ListEnumVehicleRequirementFieldRefInput<$PrismaModel>
+      | null;
+    not?:
+      | NestedEnumVehicleRequirementNullableFilter<$PrismaModel>
+      | $Enums.VehicleRequirement
+      | null;
+  };
+
   export type EnumJobStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.JobStatus | EnumJobStatusFieldRefInput<$PrismaModel>;
     in?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>;
@@ -53638,6 +53813,8 @@ export namespace Prisma {
     budgetMax?: SortOrder;
     scheduledFor?: SortOrder;
     urgency?: SortOrder;
+    taskSize?: SortOrder;
+    vehicleRequirement?: SortOrder;
     status?: SortOrder;
     assignedTradesmanId?: SortOrder;
     acceptedQuoteId?: SortOrder;
@@ -53674,6 +53851,8 @@ export namespace Prisma {
     budgetMax?: SortOrder;
     scheduledFor?: SortOrder;
     urgency?: SortOrder;
+    taskSize?: SortOrder;
+    vehicleRequirement?: SortOrder;
     status?: SortOrder;
     assignedTradesmanId?: SortOrder;
     acceptedQuoteId?: SortOrder;
@@ -53702,6 +53881,8 @@ export namespace Prisma {
     budgetMax?: SortOrder;
     scheduledFor?: SortOrder;
     urgency?: SortOrder;
+    taskSize?: SortOrder;
+    vehicleRequirement?: SortOrder;
     status?: SortOrder;
     assignedTradesmanId?: SortOrder;
     acceptedQuoteId?: SortOrder;
@@ -53773,6 +53954,46 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumJobUrgencyFilter<$PrismaModel>;
     _max?: NestedEnumJobUrgencyFilter<$PrismaModel>;
+  };
+
+  export type EnumTaskSizeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskSize | EnumTaskSizeFieldRefInput<$PrismaModel> | null;
+    in?: $Enums.TaskSize[] | ListEnumTaskSizeFieldRefInput<$PrismaModel> | null;
+    notIn?:
+      | $Enums.TaskSize[]
+      | ListEnumTaskSizeFieldRefInput<$PrismaModel>
+      | null;
+    not?:
+      | NestedEnumTaskSizeNullableWithAggregatesFilter<$PrismaModel>
+      | $Enums.TaskSize
+      | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedEnumTaskSizeNullableFilter<$PrismaModel>;
+    _max?: NestedEnumTaskSizeNullableFilter<$PrismaModel>;
+  };
+
+  export type EnumVehicleRequirementNullableWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?:
+      | $Enums.VehicleRequirement
+      | EnumVehicleRequirementFieldRefInput<$PrismaModel>
+      | null;
+    in?:
+      | $Enums.VehicleRequirement[]
+      | ListEnumVehicleRequirementFieldRefInput<$PrismaModel>
+      | null;
+    notIn?:
+      | $Enums.VehicleRequirement[]
+      | ListEnumVehicleRequirementFieldRefInput<$PrismaModel>
+      | null;
+    not?:
+      | NestedEnumVehicleRequirementNullableWithAggregatesFilter<$PrismaModel>
+      | $Enums.VehicleRequirement
+      | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedEnumVehicleRequirementNullableFilter<$PrismaModel>;
+    _max?: NestedEnumVehicleRequirementNullableFilter<$PrismaModel>;
   };
 
   export type EnumJobStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -58054,6 +58275,14 @@ export namespace Prisma {
     set?: $Enums.JobUrgency;
   };
 
+  export type NullableEnumTaskSizeFieldUpdateOperationsInput = {
+    set?: $Enums.TaskSize | null;
+  };
+
+  export type NullableEnumVehicleRequirementFieldUpdateOperationsInput = {
+    set?: $Enums.VehicleRequirement | null;
+  };
+
   export type EnumJobStatusFieldUpdateOperationsInput = {
     set?: $Enums.JobStatus;
   };
@@ -60640,6 +60869,39 @@ export namespace Prisma {
     not?: NestedEnumJobUrgencyFilter<$PrismaModel> | $Enums.JobUrgency;
   };
 
+  export type NestedEnumTaskSizeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskSize | EnumTaskSizeFieldRefInput<$PrismaModel> | null;
+    in?: $Enums.TaskSize[] | ListEnumTaskSizeFieldRefInput<$PrismaModel> | null;
+    notIn?:
+      | $Enums.TaskSize[]
+      | ListEnumTaskSizeFieldRefInput<$PrismaModel>
+      | null;
+    not?:
+      | NestedEnumTaskSizeNullableFilter<$PrismaModel>
+      | $Enums.TaskSize
+      | null;
+  };
+
+  export type NestedEnumVehicleRequirementNullableFilter<$PrismaModel = never> =
+    {
+      equals?:
+        | $Enums.VehicleRequirement
+        | EnumVehicleRequirementFieldRefInput<$PrismaModel>
+        | null;
+      in?:
+        | $Enums.VehicleRequirement[]
+        | ListEnumVehicleRequirementFieldRefInput<$PrismaModel>
+        | null;
+      notIn?:
+        | $Enums.VehicleRequirement[]
+        | ListEnumVehicleRequirementFieldRefInput<$PrismaModel>
+        | null;
+      not?:
+        | NestedEnumVehicleRequirementNullableFilter<$PrismaModel>
+        | $Enums.VehicleRequirement
+        | null;
+    };
+
   export type NestedEnumJobStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.JobStatus | EnumJobStatusFieldRefInput<$PrismaModel>;
     in?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>;
@@ -60694,6 +60956,48 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumJobUrgencyFilter<$PrismaModel>;
     _max?: NestedEnumJobUrgencyFilter<$PrismaModel>;
+  };
+
+  export type NestedEnumTaskSizeNullableWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?: $Enums.TaskSize | EnumTaskSizeFieldRefInput<$PrismaModel> | null;
+    in?: $Enums.TaskSize[] | ListEnumTaskSizeFieldRefInput<$PrismaModel> | null;
+    notIn?:
+      | $Enums.TaskSize[]
+      | ListEnumTaskSizeFieldRefInput<$PrismaModel>
+      | null;
+    not?:
+      | NestedEnumTaskSizeNullableWithAggregatesFilter<$PrismaModel>
+      | $Enums.TaskSize
+      | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedEnumTaskSizeNullableFilter<$PrismaModel>;
+    _max?: NestedEnumTaskSizeNullableFilter<$PrismaModel>;
+  };
+
+  export type NestedEnumVehicleRequirementNullableWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?:
+      | $Enums.VehicleRequirement
+      | EnumVehicleRequirementFieldRefInput<$PrismaModel>
+      | null;
+    in?:
+      | $Enums.VehicleRequirement[]
+      | ListEnumVehicleRequirementFieldRefInput<$PrismaModel>
+      | null;
+    notIn?:
+      | $Enums.VehicleRequirement[]
+      | ListEnumVehicleRequirementFieldRefInput<$PrismaModel>
+      | null;
+    not?:
+      | NestedEnumVehicleRequirementNullableWithAggregatesFilter<$PrismaModel>
+      | $Enums.VehicleRequirement
+      | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedEnumVehicleRequirementNullableFilter<$PrismaModel>;
+    _max?: NestedEnumVehicleRequirementNullableFilter<$PrismaModel>;
   };
 
   export type NestedEnumJobStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -61345,6 +61649,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -61383,6 +61689,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -61430,6 +61738,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -61469,6 +61779,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     acceptedQuoteId?: string | null;
     expiresAt?: Date | string | null;
@@ -62597,6 +62909,11 @@ export namespace Prisma {
       | null;
     scheduledFor?: DateTimeNullableFilter<'Job'> | Date | string | null;
     urgency?: EnumJobUrgencyFilter<'Job'> | $Enums.JobUrgency;
+    taskSize?: EnumTaskSizeNullableFilter<'Job'> | $Enums.TaskSize | null;
+    vehicleRequirement?:
+      | EnumVehicleRequirementNullableFilter<'Job'>
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFilter<'Job'> | $Enums.JobStatus;
     assignedTradesmanId?: StringNullableFilter<'Job'> | string | null;
     acceptedQuoteId?: StringNullableFilter<'Job'> | string | null;
@@ -64768,6 +65085,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -64806,6 +65125,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -64853,6 +65174,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -64891,6 +65214,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -67206,6 +67531,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -67245,6 +67572,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -67374,6 +67703,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -67461,6 +67798,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -67553,6 +67898,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -67592,6 +67939,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -67723,6 +68072,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -67762,6 +68113,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     expiresAt?: Date | string | null;
@@ -67948,6 +68301,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -68035,6 +68396,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -68275,6 +68644,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -68362,6 +68739,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -68845,6 +69230,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -68884,6 +69271,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -69071,6 +69460,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -69158,6 +69555,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -69342,6 +69747,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -69381,6 +69788,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -69745,6 +70154,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -69832,6 +70249,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -71033,6 +71458,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -71072,6 +71499,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -71239,6 +71668,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -71326,6 +71763,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -72344,6 +72789,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -72383,6 +72830,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -72705,6 +73154,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -72792,6 +73249,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -73140,6 +73605,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -73179,6 +73646,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -73366,6 +73835,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -73453,6 +73930,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -73817,6 +74302,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     expiresAt?: Date | string | null;
     completedAt?: Date | string | null;
@@ -73856,6 +74343,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -74295,6 +74784,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -74382,6 +74879,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -74567,6 +75072,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -74596,6 +75103,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     acceptedQuoteId?: string | null;
     expiresAt?: Date | string | null;
@@ -75016,6 +75525,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -75102,6 +75619,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -75189,6 +75714,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -75266,6 +75799,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -75353,6 +75894,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
     expiresAt?:
@@ -75437,6 +75986,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     acceptedQuoteId?: NullableStringFieldUpdateOperationsInput | string | null;
     expiresAt?:
@@ -76752,6 +77309,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -76780,6 +77339,8 @@ export namespace Prisma {
     budgetMax?: Decimal | DecimalJsLike | number | string | null;
     scheduledFor?: Date | string | null;
     urgency?: $Enums.JobUrgency;
+    taskSize?: $Enums.TaskSize | null;
+    vehicleRequirement?: $Enums.VehicleRequirement | null;
     status?: $Enums.JobStatus;
     assignedTradesmanId?: string | null;
     acceptedQuoteId?: string | null;
@@ -76896,6 +77457,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -76982,6 +77551,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -77069,6 +77646,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -77146,6 +77731,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     expiresAt?:
       | NullableDateTimeFieldUpdateOperationsInput
@@ -77232,6 +77825,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput
@@ -77319,6 +77920,14 @@ export namespace Prisma {
       | string
       | null;
     urgency?: EnumJobUrgencyFieldUpdateOperationsInput | $Enums.JobUrgency;
+    taskSize?:
+      | NullableEnumTaskSizeFieldUpdateOperationsInput
+      | $Enums.TaskSize
+      | null;
+    vehicleRequirement?:
+      | NullableEnumVehicleRequirementFieldUpdateOperationsInput
+      | $Enums.VehicleRequirement
+      | null;
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus;
     assignedTradesmanId?:
       | NullableStringFieldUpdateOperationsInput

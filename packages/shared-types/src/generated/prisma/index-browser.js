@@ -284,6 +284,8 @@ exports.Prisma.JobScalarFieldEnum = {
   budgetMax: 'budgetMax',
   scheduledFor: 'scheduledFor',
   urgency: 'urgency',
+  taskSize: 'taskSize',
+  vehicleRequirement: 'vehicleRequirement',
   status: 'status',
   assignedTradesmanId: 'assignedTradesmanId',
   acceptedQuoteId: 'acceptedQuoteId',
@@ -551,6 +553,18 @@ exports.JobUrgency = exports.$Enums.JobUrgency = {
   MEDIUM: 'MEDIUM',
   HIGH: 'HIGH',
   EMERGENCY: 'EMERGENCY',
+};
+
+exports.TaskSize = exports.$Enums.TaskSize = {
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE',
+};
+
+exports.VehicleRequirement = exports.$Enums.VehicleRequirement = {
+  NONE: 'NONE',
+  CAR: 'CAR',
+  TRUCK: 'TRUCK',
 };
 
 exports.JobStatus = exports.$Enums.JobStatus = {

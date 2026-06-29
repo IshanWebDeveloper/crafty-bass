@@ -146,6 +146,14 @@ export function JobDetailView({
                 ? new Date(job.scheduledFor).toLocaleDateString(locale)
                 : '—'}
             </Field>
+            <Field label={t.fields.taskSize}>
+              {job.taskSize ? t.taskSizeLabels[job.taskSize] : '—'}
+            </Field>
+            <Field label={t.fields.vehicle}>
+              {job.vehicleRequirement
+                ? t.vehicleLabels[job.vehicleRequirement]
+                : '—'}
+            </Field>
           </dl>
 
           <div className="flex flex-wrap items-center gap-2 pt-2">

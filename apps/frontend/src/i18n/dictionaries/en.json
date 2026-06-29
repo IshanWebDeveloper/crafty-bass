@@ -447,7 +447,10 @@
       "districtEmpty": "No matching district.",
       "budgetMin": "Budget (min)",
       "budgetMax": "Budget (max)",
-      "scheduledFor": "Preferred date (optional)"
+      "scheduledFor": "Preferred date (optional)",
+      "taskSize": "Task size",
+      "vehicle": "Vehicle needed",
+      "optional": "Optional"
     },
     "urgencyLabels": {
       "LOW": "No rush",
@@ -515,6 +518,26 @@
         "hint": "Showing jobs matched to your trades and service area.",
         "empty": "No open jobs match your trades and area right now."
       }
+    },
+    "taskSizeLabels": {
+      "SMALL": "Small",
+      "MEDIUM": "Medium",
+      "LARGE": "Large"
+    },
+    "taskSizeHints": {
+      "SMALL": "Est. 1 hr",
+      "MEDIUM": "Est. 2–3 hrs",
+      "LARGE": "Est. 4+ hrs"
+    },
+    "vehicleLabels": {
+      "NONE": "Not needed",
+      "CAR": "Car",
+      "TRUCK": "Truck / van"
+    },
+    "vehicleHints": {
+      "NONE": "No transport required",
+      "CAR": "Fits in a car",
+      "TRUCK": "Needs a truck or van"
     }
   },
   "myQuotes": {

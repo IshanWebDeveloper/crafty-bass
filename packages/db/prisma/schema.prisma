@@ -51,6 +51,21 @@ enum JobUrgency {
   EMERGENCY
 }
 
+// Rough size of a job, used to set duration expectations when posting.
+enum TaskSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+// Whether the job needs the tradesperson to bring a vehicle (e.g. moving,
+// hauling away waste). Helps homeowners surface trades equipped for the work.
+enum VehicleRequirement {
+  NONE
+  CAR
+  TRUCK
+}
+
 enum QuoteStatus {
   PENDING
   ACCEPTED
@@ -392,6 +407,8 @@ model Job {
   budgetMax           Decimal?     @db.Decimal(10, 2)
   scheduledFor        DateTime?
   urgency             JobUrgency   @default(MEDIUM)
+  taskSize            TaskSize?
+  vehicleRequirement  VehicleRequirement?
   status              JobStatus    @default(OPEN)
   assignedTradesmanId String?
   acceptedQuoteId     String?      @unique
