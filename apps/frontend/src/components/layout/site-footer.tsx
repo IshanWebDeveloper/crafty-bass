@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
+import { Logo } from '@/components/brand/logo';
 
 /**
  * Site-wide footer. Mounted once in the locale layout so every page gets it.
@@ -52,9 +53,10 @@ export function SiteFooter({
           <div className="max-w-xs">
             <Link
               href={base}
-              className="text-xl font-medium tracking-tight text-foreground"
+              className="inline-flex rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="Crafty Bass — home"
             >
-              Crafty Bass
+              <Logo />
             </Link>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               {f.tagline}
