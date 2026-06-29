@@ -62,7 +62,7 @@ const data = {
       url: '#',
       icon: <StoreIcon />,
       items: [
-        { title: 'Categories', url: '#' },
+        { title: 'Categories', url: '/categories' },
         { title: 'Skills', url: '#' },
       ],
     },
