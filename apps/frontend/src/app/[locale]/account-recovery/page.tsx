@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { redirectIfAuthenticated } from '@/lib/server-session';
 
 export default async function AccountRecoveryPage({
   params,
@@ -16,6 +17,7 @@ export default async function AccountRecoveryPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  await redirectIfAuthenticated(locale);
   const dict = await getDictionary(locale);
   const tr = dict.auth.recovery;
 
