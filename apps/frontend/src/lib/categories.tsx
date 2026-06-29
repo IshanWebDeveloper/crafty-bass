@@ -22,6 +22,7 @@ import {
   Flame,
   type LucideIcon,
 } from 'lucide-react';
+import Image from 'next/image';
 import { Badge, cn } from '@repo/ui';
 import type { ComponentProps } from 'react';
 import type { JobUrgency } from '@/lib/api/jobs';
@@ -34,6 +35,12 @@ type CategoryMeta = {
   tint: string;
   /** Soft background tint used behind the icon / chip. */
   surface: string;
+  /**
+   * Optional photographic header. Drop a file at
+   * `public/images/categories/<slug>.jpg` and set its path here to replace the
+   * illustrated banner with a real photo (see {@link CategoryImage}).
+   */
+  image?: string;
 };
 
 // Each service category gets a recognisable icon plus a soft tinted highlight so
@@ -164,6 +171,49 @@ export function CategoryIconBubble({
     >
       <Icon className={cn('size-5', tint, iconClassName)} aria-hidden />
     </span>
+  );
+}
+
+/**
+ * A category "cover" for cards: a real photo when one is configured in the
+ * meta, otherwise a tinted illustrated banner (gradient + oversized category
+ * icon) so every category reads visually even before photos are sourced.
+ */
+export function CategoryImage({
+  slug,
+  className,
+}: {
+  slug?: string | null;
+  className?: string;
+}) {
+  const { icon: Icon, tint, surface, image } = categoryMeta(slug);
+
+  if (image) {
+    return (
+      <div className={cn('relative overflow-hidden', className)}>
+        <Image
+          src={image}
+          alt=""
+          fill
+          sizes="(max-width: 640px) 100vw, 25vw"
+          className="object-cover"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        'relative flex items-center justify-center overflow-hidden',
+        surface,
+        className,
+      )}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-background/0 via-background/0 to-background/40" />
+      <Icon className={cn('size-16 opacity-80', tint)} />
+    </div>
   );
 }
 
