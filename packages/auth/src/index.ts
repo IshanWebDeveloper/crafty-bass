@@ -7,7 +7,14 @@
 import { prisma } from '@repo/db';
 import { APIError, betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { admin, openAPI, bearer, jwt, phoneNumber } from 'better-auth/plugins';
+import {
+  admin,
+  openAPI,
+  bearer,
+  jwt,
+  phoneNumber,
+  emailOTP,
+} from 'better-auth/plugins';
 import {
   ac,
   admin as adminRole,
@@ -47,6 +54,11 @@ const frontendURL = process.env.FRONTEND_URL ?? 'http://localhost:3000';
 // DEV_PHONE_OTP.
 const isProduction = process.env.NODE_ENV === 'production';
 const devPhoneOtp = process.env.DEV_PHONE_OTP ?? '123456';
+// Mirror of the phone dev OTP for the email-recovery flow, so seeded/test
+// accounts can recover access without reading an inbox. Override with
+// DEV_EMAIL_OTP; never used in production (the generateOTP override below is
+// only wired in non-prod).
+const devEmailOtp = process.env.DEV_EMAIL_OTP ?? devPhoneOtp;
 
 const parseSeconds = (value: string | undefined, fallback: number) => {
   const parsed = Number(value);
@@ -122,6 +134,51 @@ const plugins = [
       getTempEmail: (phone) =>
         `${phone.replace(/[^\d]/g, '')}@phone.craftybass.lk`,
       getTempName: (phone) => phone,
+    },
+  }),
+  // Account recovery: phone is the primary credential, so a tradesman who
+  // loses their number signs back in with a one-time code emailed to the
+  // recovery address they set at sign-up. `disableSignUp` makes this strictly
+  // a recovery path — an unknown email is rejected rather than silently
+  // creating a new account.
+  emailOTP({
+    otpLength: 6,
+    expiresIn: 300, // 5 minutes
+    disableSignUp: true,
+    // Dev only: accept a fixed code so seeded accounts recover without reading
+    // the inbox (mirrors the phone OTP). Omitted in production, where a random
+    // code is generated and the plugin's attempt-limited verification applies.
+    ...(isProduction ? {} : { generateOTP: () => devEmailOtp }),
+    sendVerificationOTP: async ({ email, otp, type }) => {
+      if (!isProduction) {
+        console.log(
+          `[DEV] Crafty Bass email OTP (${type}) for ${email}: ${otp} (or use static ${devEmailOtp})`,
+        );
+      }
+      if (!resend) {
+        console.warn(
+          '⚠️ RESEND_API_KEY not configured — recovery code email not sent.',
+        );
+        return;
+      }
+      const safeOtp = escapeHtml(otp);
+      await resend.emails.send({
+        to: email,
+        from: emailFrom,
+        subject: 'Your Crafty Bass sign-in code',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2>Sign back in to Crafty Bass</h2>
+            <p>Use this code to recover access to your account:</p>
+            <p style="text-align: center; margin: 32px 0;">
+              <span style="display: inline-block; background-color: #f1f5f9; color: #0f172a; padding: 12px 24px; border-radius: 6px; font-size: 28px; font-weight: 700; letter-spacing: 6px;">
+                ${safeOtp}
+              </span>
+            </p>
+            <p style="color: #64748b; font-size: 14px;">This code expires in 5 minutes. If you didn't request it, you can safely ignore this email.</p>
+          </div>
+        `,
+      });
     },
   }),
   ...(stripeClient && stripeWebhookSecret

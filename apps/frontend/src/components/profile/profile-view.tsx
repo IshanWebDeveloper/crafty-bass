@@ -17,6 +17,7 @@ import { useMe } from '@/lib/hooks/use-me';
 import { tradeRoleLabel } from '@/lib/trade-role';
 import { HomeownerProfileForm } from './homeowner-profile-form';
 import { TradesmanProfileForm } from './tradesman-profile-form';
+import { PhoneNumberCard } from './phone-number-card';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -70,17 +71,20 @@ export function ProfileView({
 
   if (role === 'HOMEOWNER') {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>{t.homeowner.heading}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <HomeownerProfileForm
-            initial={profile.homeownerProfile}
-            dict={dict}
-          />
-        </CardContent>
-      </Card>
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>{t.homeowner.heading}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <HomeownerProfileForm
+              initial={profile.homeownerProfile}
+              dict={dict}
+            />
+          </CardContent>
+        </Card>
+        <PhoneNumberCard dict={dict} />
+      </div>
     );
   }
 
@@ -109,6 +113,7 @@ export function ProfileView({
           />
         </CardContent>
       </Card>
+      <PhoneNumberCard dict={dict} />
     </div>
   );
 }

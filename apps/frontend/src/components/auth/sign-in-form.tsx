@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Button, Input } from '@repo/ui';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
@@ -143,6 +144,14 @@ export function SignInForm({
       <Button type="submit" className="w-full" disabled={submitting}>
         {submitting ? tp.sending : tp.send}
       </Button>
+      <p className="text-center text-sm">
+        <Link
+          href={`/${locale}/account-recovery`}
+          className="text-muted-foreground underline-offset-4 hover:underline"
+        >
+          {t.signIn.lostPhone}
+        </Link>
+      </p>
     </form>
   );
 }
