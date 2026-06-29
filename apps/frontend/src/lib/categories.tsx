@@ -50,21 +50,25 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
     icon: Wrench,
     tint: 'text-sky-600 dark:text-sky-400',
     surface: 'bg-sky-500/10',
+    image: '/images/categories/plumbing.jpg',
   },
   electrical: {
     icon: Zap,
     tint: 'text-amber-600 dark:text-amber-400',
     surface: 'bg-amber-500/10',
+    image: '/images/categories/electrical.jpg',
   },
   carpentry: {
     icon: Hammer,
     tint: 'text-orange-600 dark:text-orange-400',
     surface: 'bg-orange-500/10',
+    image: '/images/categories/carpentry.jpg',
   },
   painting: {
     icon: PaintRoller,
     tint: 'text-violet-600 dark:text-violet-400',
     surface: 'bg-violet-500/10',
+    image: '/images/categories/painting.jpg',
   },
   masonry: {
     icon: BrickWall,
