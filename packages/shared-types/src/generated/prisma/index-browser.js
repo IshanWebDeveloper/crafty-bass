@@ -307,11 +307,15 @@ exports.Prisma.QuoteScalarFieldEnum = {
   tradesmanId: 'tradesmanId',
   amount: 'amount',
   materialsAmount: 'materialsAmount',
+  calloutFee: 'calloutFee',
+  discount: 'discount',
+  vatRate: 'vatRate',
   depositRequested: 'depositRequested',
   currency: 'currency',
   message: 'message',
   estimatedStart: 'estimatedStart',
   estimatedCompletion: 'estimatedCompletion',
+  validUntil: 'validUntil',
   status: 'status',
   respondedAt: 'respondedAt',
   withdrawnAt: 'withdrawnAt',
@@ -322,6 +326,7 @@ exports.Prisma.QuoteScalarFieldEnum = {
 exports.Prisma.QuoteMaterialScalarFieldEnum = {
   id: 'id',
   quoteId: 'quoteId',
+  category: 'category',
   name: 'name',
   quantity: 'quantity',
   unit: 'unit',
@@ -563,6 +568,11 @@ exports.QuoteStatus = exports.$Enums.QuoteStatus = {
   REJECTED: 'REJECTED',
   WITHDRAWN: 'WITHDRAWN',
   EXPIRED: 'EXPIRED',
+};
+
+exports.QuoteLineCategory = exports.$Enums.QuoteLineCategory = {
+  LABOUR: 'LABOUR',
+  MATERIAL: 'MATERIAL',
 };
 
 exports.MaterialRequestStatus = exports.$Enums.MaterialRequestStatus = {

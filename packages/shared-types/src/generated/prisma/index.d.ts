@@ -221,6 +221,14 @@ export namespace $Enums {
   export type MaterialRequestStatus =
     (typeof MaterialRequestStatus)[keyof typeof MaterialRequestStatus];
 
+  export const QuoteLineCategory: {
+    LABOUR: 'LABOUR';
+    MATERIAL: 'MATERIAL';
+  };
+
+  export type QuoteLineCategory =
+    (typeof QuoteLineCategory)[keyof typeof QuoteLineCategory];
+
   export const EscrowStatus: {
     REQUESTED: 'REQUESTED';
     FUNDED: 'FUNDED';
@@ -330,6 +338,10 @@ export const QuoteStatus: typeof $Enums.QuoteStatus;
 export type MaterialRequestStatus = $Enums.MaterialRequestStatus;
 
 export const MaterialRequestStatus: typeof $Enums.MaterialRequestStatus;
+
+export type QuoteLineCategory = $Enums.QuoteLineCategory;
+
+export const QuoteLineCategory: typeof $Enums.QuoteLineCategory;
 
 export type EscrowStatus = $Enums.EscrowStatus;
 
@@ -24161,12 +24173,18 @@ export namespace Prisma {
   export type QuoteAvgAggregateOutputType = {
     amount: Decimal | null;
     materialsAmount: Decimal | null;
+    calloutFee: Decimal | null;
+    discount: Decimal | null;
+    vatRate: Decimal | null;
     depositRequested: Decimal | null;
   };
 
   export type QuoteSumAggregateOutputType = {
     amount: Decimal | null;
     materialsAmount: Decimal | null;
+    calloutFee: Decimal | null;
+    discount: Decimal | null;
+    vatRate: Decimal | null;
     depositRequested: Decimal | null;
   };
 
@@ -24176,11 +24194,15 @@ export namespace Prisma {
     tradesmanId: string | null;
     amount: Decimal | null;
     materialsAmount: Decimal | null;
+    calloutFee: Decimal | null;
+    discount: Decimal | null;
+    vatRate: Decimal | null;
     depositRequested: Decimal | null;
     currency: string | null;
     message: string | null;
     estimatedStart: Date | null;
     estimatedCompletion: Date | null;
+    validUntil: Date | null;
     status: $Enums.QuoteStatus | null;
     respondedAt: Date | null;
     withdrawnAt: Date | null;
@@ -24194,11 +24216,15 @@ export namespace Prisma {
     tradesmanId: string | null;
     amount: Decimal | null;
     materialsAmount: Decimal | null;
+    calloutFee: Decimal | null;
+    discount: Decimal | null;
+    vatRate: Decimal | null;
     depositRequested: Decimal | null;
     currency: string | null;
     message: string | null;
     estimatedStart: Date | null;
     estimatedCompletion: Date | null;
+    validUntil: Date | null;
     status: $Enums.QuoteStatus | null;
     respondedAt: Date | null;
     withdrawnAt: Date | null;
@@ -24212,11 +24238,15 @@ export namespace Prisma {
     tradesmanId: number;
     amount: number;
     materialsAmount: number;
+    calloutFee: number;
+    discount: number;
+    vatRate: number;
     depositRequested: number;
     currency: number;
     message: number;
     estimatedStart: number;
     estimatedCompletion: number;
+    validUntil: number;
     status: number;
     respondedAt: number;
     withdrawnAt: number;
@@ -24228,12 +24258,18 @@ export namespace Prisma {
   export type QuoteAvgAggregateInputType = {
     amount?: true;
     materialsAmount?: true;
+    calloutFee?: true;
+    discount?: true;
+    vatRate?: true;
     depositRequested?: true;
   };
 
   export type QuoteSumAggregateInputType = {
     amount?: true;
     materialsAmount?: true;
+    calloutFee?: true;
+    discount?: true;
+    vatRate?: true;
     depositRequested?: true;
   };
 
@@ -24243,11 +24279,15 @@ export namespace Prisma {
     tradesmanId?: true;
     amount?: true;
     materialsAmount?: true;
+    calloutFee?: true;
+    discount?: true;
+    vatRate?: true;
     depositRequested?: true;
     currency?: true;
     message?: true;
     estimatedStart?: true;
     estimatedCompletion?: true;
+    validUntil?: true;
     status?: true;
     respondedAt?: true;
     withdrawnAt?: true;
@@ -24261,11 +24301,15 @@ export namespace Prisma {
     tradesmanId?: true;
     amount?: true;
     materialsAmount?: true;
+    calloutFee?: true;
+    discount?: true;
+    vatRate?: true;
     depositRequested?: true;
     currency?: true;
     message?: true;
     estimatedStart?: true;
     estimatedCompletion?: true;
+    validUntil?: true;
     status?: true;
     respondedAt?: true;
     withdrawnAt?: true;
@@ -24279,11 +24323,15 @@ export namespace Prisma {
     tradesmanId?: true;
     amount?: true;
     materialsAmount?: true;
+    calloutFee?: true;
+    discount?: true;
+    vatRate?: true;
     depositRequested?: true;
     currency?: true;
     message?: true;
     estimatedStart?: true;
     estimatedCompletion?: true;
+    validUntil?: true;
     status?: true;
     respondedAt?: true;
     withdrawnAt?: true;
@@ -24387,11 +24435,15 @@ export namespace Prisma {
     tradesmanId: string;
     amount: Decimal;
     materialsAmount: Decimal | null;
+    calloutFee: Decimal | null;
+    discount: Decimal | null;
+    vatRate: Decimal | null;
     depositRequested: Decimal | null;
     currency: string;
     message: string | null;
     estimatedStart: Date | null;
     estimatedCompletion: Date | null;
+    validUntil: Date | null;
     status: $Enums.QuoteStatus;
     respondedAt: Date | null;
     withdrawnAt: Date | null;
@@ -24426,11 +24478,15 @@ export namespace Prisma {
       tradesmanId?: boolean;
       amount?: boolean;
       materialsAmount?: boolean;
+      calloutFee?: boolean;
+      discount?: boolean;
+      vatRate?: boolean;
       depositRequested?: boolean;
       currency?: boolean;
       message?: boolean;
       estimatedStart?: boolean;
       estimatedCompletion?: boolean;
+      validUntil?: boolean;
       status?: boolean;
       respondedAt?: boolean;
       withdrawnAt?: boolean;
@@ -24455,11 +24511,15 @@ export namespace Prisma {
       tradesmanId?: boolean;
       amount?: boolean;
       materialsAmount?: boolean;
+      calloutFee?: boolean;
+      discount?: boolean;
+      vatRate?: boolean;
       depositRequested?: boolean;
       currency?: boolean;
       message?: boolean;
       estimatedStart?: boolean;
       estimatedCompletion?: boolean;
+      validUntil?: boolean;
       status?: boolean;
       respondedAt?: boolean;
       withdrawnAt?: boolean;
@@ -24480,11 +24540,15 @@ export namespace Prisma {
       tradesmanId?: boolean;
       amount?: boolean;
       materialsAmount?: boolean;
+      calloutFee?: boolean;
+      discount?: boolean;
+      vatRate?: boolean;
       depositRequested?: boolean;
       currency?: boolean;
       message?: boolean;
       estimatedStart?: boolean;
       estimatedCompletion?: boolean;
+      validUntil?: boolean;
       status?: boolean;
       respondedAt?: boolean;
       withdrawnAt?: boolean;
@@ -24502,11 +24566,15 @@ export namespace Prisma {
     tradesmanId?: boolean;
     amount?: boolean;
     materialsAmount?: boolean;
+    calloutFee?: boolean;
+    discount?: boolean;
+    vatRate?: boolean;
     depositRequested?: boolean;
     currency?: boolean;
     message?: boolean;
     estimatedStart?: boolean;
     estimatedCompletion?: boolean;
+    validUntil?: boolean;
     status?: boolean;
     respondedAt?: boolean;
     withdrawnAt?: boolean;
@@ -24522,11 +24590,15 @@ export namespace Prisma {
     | 'tradesmanId'
     | 'amount'
     | 'materialsAmount'
+    | 'calloutFee'
+    | 'discount'
+    | 'vatRate'
     | 'depositRequested'
     | 'currency'
     | 'message'
     | 'estimatedStart'
     | 'estimatedCompletion'
+    | 'validUntil'
     | 'status'
     | 'respondedAt'
     | 'withdrawnAt'
@@ -24575,11 +24647,15 @@ export namespace Prisma {
         tradesmanId: string;
         amount: Prisma.Decimal;
         materialsAmount: Prisma.Decimal | null;
+        calloutFee: Prisma.Decimal | null;
+        discount: Prisma.Decimal | null;
+        vatRate: Prisma.Decimal | null;
         depositRequested: Prisma.Decimal | null;
         currency: string;
         message: string | null;
         estimatedStart: Date | null;
         estimatedCompletion: Date | null;
+        validUntil: Date | null;
         status: $Enums.QuoteStatus;
         respondedAt: Date | null;
         withdrawnAt: Date | null;
@@ -25241,11 +25317,15 @@ export namespace Prisma {
     readonly tradesmanId: FieldRef<'Quote', 'String'>;
     readonly amount: FieldRef<'Quote', 'Decimal'>;
     readonly materialsAmount: FieldRef<'Quote', 'Decimal'>;
+    readonly calloutFee: FieldRef<'Quote', 'Decimal'>;
+    readonly discount: FieldRef<'Quote', 'Decimal'>;
+    readonly vatRate: FieldRef<'Quote', 'Decimal'>;
     readonly depositRequested: FieldRef<'Quote', 'Decimal'>;
     readonly currency: FieldRef<'Quote', 'String'>;
     readonly message: FieldRef<'Quote', 'String'>;
     readonly estimatedStart: FieldRef<'Quote', 'DateTime'>;
     readonly estimatedCompletion: FieldRef<'Quote', 'DateTime'>;
+    readonly validUntil: FieldRef<'Quote', 'DateTime'>;
     readonly status: FieldRef<'Quote', 'QuoteStatus'>;
     readonly respondedAt: FieldRef<'Quote', 'DateTime'>;
     readonly withdrawnAt: FieldRef<'Quote', 'DateTime'>;
@@ -25793,6 +25873,7 @@ export namespace Prisma {
   export type QuoteMaterialMinAggregateOutputType = {
     id: string | null;
     quoteId: string | null;
+    category: $Enums.QuoteLineCategory | null;
     name: string | null;
     quantity: Decimal | null;
     unit: string | null;
@@ -25803,6 +25884,7 @@ export namespace Prisma {
   export type QuoteMaterialMaxAggregateOutputType = {
     id: string | null;
     quoteId: string | null;
+    category: $Enums.QuoteLineCategory | null;
     name: string | null;
     quantity: Decimal | null;
     unit: string | null;
@@ -25813,6 +25895,7 @@ export namespace Prisma {
   export type QuoteMaterialCountAggregateOutputType = {
     id: number;
     quoteId: number;
+    category: number;
     name: number;
     quantity: number;
     unit: number;
@@ -25834,6 +25917,7 @@ export namespace Prisma {
   export type QuoteMaterialMinAggregateInputType = {
     id?: true;
     quoteId?: true;
+    category?: true;
     name?: true;
     quantity?: true;
     unit?: true;
@@ -25844,6 +25928,7 @@ export namespace Prisma {
   export type QuoteMaterialMaxAggregateInputType = {
     id?: true;
     quoteId?: true;
+    category?: true;
     name?: true;
     quantity?: true;
     unit?: true;
@@ -25854,6 +25939,7 @@ export namespace Prisma {
   export type QuoteMaterialCountAggregateInputType = {
     id?: true;
     quoteId?: true;
+    category?: true;
     name?: true;
     quantity?: true;
     unit?: true;
@@ -25958,6 +26044,7 @@ export namespace Prisma {
   export type QuoteMaterialGroupByOutputType = {
     id: string;
     quoteId: string;
+    category: $Enums.QuoteLineCategory;
     name: string;
     quantity: Decimal;
     unit: string | null;
@@ -25990,6 +26077,7 @@ export namespace Prisma {
     {
       id?: boolean;
       quoteId?: boolean;
+      category?: boolean;
       name?: boolean;
       quantity?: boolean;
       unit?: boolean;
@@ -26006,6 +26094,7 @@ export namespace Prisma {
     {
       id?: boolean;
       quoteId?: boolean;
+      category?: boolean;
       name?: boolean;
       quantity?: boolean;
       unit?: boolean;
@@ -26022,6 +26111,7 @@ export namespace Prisma {
     {
       id?: boolean;
       quoteId?: boolean;
+      category?: boolean;
       name?: boolean;
       quantity?: boolean;
       unit?: boolean;
@@ -26035,6 +26125,7 @@ export namespace Prisma {
   export type QuoteMaterialSelectScalar = {
     id?: boolean;
     quoteId?: boolean;
+    category?: boolean;
     name?: boolean;
     quantity?: boolean;
     unit?: boolean;
@@ -26045,7 +26136,14 @@ export namespace Prisma {
   export type QuoteMaterialOmit<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = $Extensions.GetOmit<
-    'id' | 'quoteId' | 'name' | 'quantity' | 'unit' | 'unitPrice' | 'createdAt',
+    | 'id'
+    | 'quoteId'
+    | 'category'
+    | 'name'
+    | 'quantity'
+    | 'unit'
+    | 'unitPrice'
+    | 'createdAt',
     ExtArgs['result']['quoteMaterial']
   >;
   export type QuoteMaterialInclude<
@@ -26075,6 +26173,7 @@ export namespace Prisma {
       {
         id: string;
         quoteId: string;
+        category: $Enums.QuoteLineCategory;
         name: string;
         quantity: Prisma.Decimal;
         unit: string | null;
@@ -26686,6 +26785,7 @@ export namespace Prisma {
   interface QuoteMaterialFieldRefs {
     readonly id: FieldRef<'QuoteMaterial', 'String'>;
     readonly quoteId: FieldRef<'QuoteMaterial', 'String'>;
+    readonly category: FieldRef<'QuoteMaterial', 'QuoteLineCategory'>;
     readonly name: FieldRef<'QuoteMaterial', 'String'>;
     readonly quantity: FieldRef<'QuoteMaterial', 'Decimal'>;
     readonly unit: FieldRef<'QuoteMaterial', 'String'>;
@@ -43914,11 +44014,15 @@ export namespace Prisma {
     tradesmanId: 'tradesmanId';
     amount: 'amount';
     materialsAmount: 'materialsAmount';
+    calloutFee: 'calloutFee';
+    discount: 'discount';
+    vatRate: 'vatRate';
     depositRequested: 'depositRequested';
     currency: 'currency';
     message: 'message';
     estimatedStart: 'estimatedStart';
     estimatedCompletion: 'estimatedCompletion';
+    validUntil: 'validUntil';
     status: 'status';
     respondedAt: 'respondedAt';
     withdrawnAt: 'withdrawnAt';
@@ -43932,6 +44036,7 @@ export namespace Prisma {
   export const QuoteMaterialScalarFieldEnum: {
     id: 'id';
     quoteId: 'quoteId';
+    category: 'category';
     name: 'name';
     quantity: 'quantity';
     unit: 'unit';
@@ -44369,6 +44474,18 @@ export namespace Prisma {
    */
   export type ListEnumQuoteStatusFieldRefInput<$PrismaModel> =
     FieldRefInputType<$PrismaModel, 'QuoteStatus[]'>;
+
+  /**
+   * Reference to a field of type 'QuoteLineCategory'
+   */
+  export type EnumQuoteLineCategoryFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'QuoteLineCategory'>;
+
+  /**
+   * Reference to a field of type 'QuoteLineCategory[]'
+   */
+  export type ListEnumQuoteLineCategoryFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, 'QuoteLineCategory[]'>;
 
   /**
    * Reference to a field of type 'MaterialRequestStatus'
@@ -46246,6 +46363,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | DecimalNullableFilter<'Quote'>
       | Decimal
@@ -46261,6 +46399,7 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    validUntil?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     status?: EnumQuoteStatusFilter<'Quote'> | $Enums.QuoteStatus;
     respondedAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     withdrawnAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
@@ -46282,11 +46421,15 @@ export namespace Prisma {
     tradesmanId?: SortOrder;
     amount?: SortOrder;
     materialsAmount?: SortOrderInput | SortOrder;
+    calloutFee?: SortOrderInput | SortOrder;
+    discount?: SortOrderInput | SortOrder;
+    vatRate?: SortOrderInput | SortOrder;
     depositRequested?: SortOrderInput | SortOrder;
     currency?: SortOrder;
     message?: SortOrderInput | SortOrder;
     estimatedStart?: SortOrderInput | SortOrder;
     estimatedCompletion?: SortOrderInput | SortOrder;
+    validUntil?: SortOrderInput | SortOrder;
     status?: SortOrder;
     respondedAt?: SortOrderInput | SortOrder;
     withdrawnAt?: SortOrderInput | SortOrder;
@@ -46321,6 +46464,27 @@ export namespace Prisma {
         | number
         | string
         | null;
+      calloutFee?:
+        | DecimalNullableFilter<'Quote'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string
+        | null;
+      discount?:
+        | DecimalNullableFilter<'Quote'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string
+        | null;
+      vatRate?:
+        | DecimalNullableFilter<'Quote'>
+        | Decimal
+        | DecimalJsLike
+        | number
+        | string
+        | null;
       depositRequested?:
         | DecimalNullableFilter<'Quote'>
         | Decimal
@@ -46336,6 +46500,7 @@ export namespace Prisma {
         | Date
         | string
         | null;
+      validUntil?: DateTimeNullableFilter<'Quote'> | Date | string | null;
       status?: EnumQuoteStatusFilter<'Quote'> | $Enums.QuoteStatus;
       respondedAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
       withdrawnAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
@@ -46362,11 +46527,15 @@ export namespace Prisma {
     tradesmanId?: SortOrder;
     amount?: SortOrder;
     materialsAmount?: SortOrderInput | SortOrder;
+    calloutFee?: SortOrderInput | SortOrder;
+    discount?: SortOrderInput | SortOrder;
+    vatRate?: SortOrderInput | SortOrder;
     depositRequested?: SortOrderInput | SortOrder;
     currency?: SortOrder;
     message?: SortOrderInput | SortOrder;
     estimatedStart?: SortOrderInput | SortOrder;
     estimatedCompletion?: SortOrderInput | SortOrder;
+    validUntil?: SortOrderInput | SortOrder;
     status?: SortOrder;
     respondedAt?: SortOrderInput | SortOrder;
     withdrawnAt?: SortOrderInput | SortOrder;
@@ -46403,6 +46572,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | DecimalNullableWithAggregatesFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | DecimalNullableWithAggregatesFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | DecimalNullableWithAggregatesFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | DecimalNullableWithAggregatesFilter<'Quote'>
       | Decimal
@@ -46418,6 +46608,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | DateTimeNullableWithAggregatesFilter<'Quote'>
+      | Date
+      | string
+      | null;
+    validUntil?:
       | DateTimeNullableWithAggregatesFilter<'Quote'>
       | Date
       | string
@@ -46443,6 +46638,9 @@ export namespace Prisma {
     NOT?: QuoteMaterialWhereInput | QuoteMaterialWhereInput[];
     id?: StringFilter<'QuoteMaterial'> | string;
     quoteId?: StringFilter<'QuoteMaterial'> | string;
+    category?:
+      | EnumQuoteLineCategoryFilter<'QuoteMaterial'>
+      | $Enums.QuoteLineCategory;
     name?: StringFilter<'QuoteMaterial'> | string;
     quantity?:
       | DecimalFilter<'QuoteMaterial'>
@@ -46465,6 +46663,7 @@ export namespace Prisma {
   export type QuoteMaterialOrderByWithRelationInput = {
     id?: SortOrder;
     quoteId?: SortOrder;
+    category?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
     unit?: SortOrderInput | SortOrder;
@@ -46480,6 +46679,9 @@ export namespace Prisma {
       OR?: QuoteMaterialWhereInput[];
       NOT?: QuoteMaterialWhereInput | QuoteMaterialWhereInput[];
       quoteId?: StringFilter<'QuoteMaterial'> | string;
+      category?:
+        | EnumQuoteLineCategoryFilter<'QuoteMaterial'>
+        | $Enums.QuoteLineCategory;
       name?: StringFilter<'QuoteMaterial'> | string;
       quantity?:
         | DecimalFilter<'QuoteMaterial'>
@@ -46504,6 +46706,7 @@ export namespace Prisma {
   export type QuoteMaterialOrderByWithAggregationInput = {
     id?: SortOrder;
     quoteId?: SortOrder;
+    category?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
     unit?: SortOrderInput | SortOrder;
@@ -46526,6 +46729,9 @@ export namespace Prisma {
       | QuoteMaterialScalarWhereWithAggregatesInput[];
     id?: StringWithAggregatesFilter<'QuoteMaterial'> | string;
     quoteId?: StringWithAggregatesFilter<'QuoteMaterial'> | string;
+    category?:
+      | EnumQuoteLineCategoryWithAggregatesFilter<'QuoteMaterial'>
+      | $Enums.QuoteLineCategory;
     name?: StringWithAggregatesFilter<'QuoteMaterial'> | string;
     quantity?:
       | DecimalWithAggregatesFilter<'QuoteMaterial'>
@@ -50049,11 +50255,15 @@ export namespace Prisma {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -50072,11 +50282,15 @@ export namespace Prisma {
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -50102,6 +50316,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -50117,6 +50352,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -50158,6 +50398,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -50173,6 +50434,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -50201,11 +50467,15 @@ export namespace Prisma {
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -50228,6 +50498,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -50243,6 +50534,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -50279,6 +50575,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -50294,6 +50611,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -50315,6 +50637,7 @@ export namespace Prisma {
 
   export type QuoteMaterialCreateInput = {
     id?: string;
+    category?: $Enums.QuoteLineCategory;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
     unit?: string | null;
@@ -50326,6 +50649,7 @@ export namespace Prisma {
   export type QuoteMaterialUncheckedCreateInput = {
     id?: string;
     quoteId: string;
+    category?: $Enums.QuoteLineCategory;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
     unit?: string | null;
@@ -50335,6 +50659,9 @@ export namespace Prisma {
 
   export type QuoteMaterialUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    category?:
+      | EnumQuoteLineCategoryFieldUpdateOperationsInput
+      | $Enums.QuoteLineCategory;
     name?: StringFieldUpdateOperationsInput | string;
     quantity?:
       | DecimalFieldUpdateOperationsInput
@@ -50357,6 +50684,9 @@ export namespace Prisma {
   export type QuoteMaterialUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     quoteId?: StringFieldUpdateOperationsInput | string;
+    category?:
+      | EnumQuoteLineCategoryFieldUpdateOperationsInput
+      | $Enums.QuoteLineCategory;
     name?: StringFieldUpdateOperationsInput | string;
     quantity?:
       | DecimalFieldUpdateOperationsInput
@@ -50378,6 +50708,7 @@ export namespace Prisma {
   export type QuoteMaterialCreateManyInput = {
     id?: string;
     quoteId: string;
+    category?: $Enums.QuoteLineCategory;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
     unit?: string | null;
@@ -50387,6 +50718,9 @@ export namespace Prisma {
 
   export type QuoteMaterialUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    category?:
+      | EnumQuoteLineCategoryFieldUpdateOperationsInput
+      | $Enums.QuoteLineCategory;
     name?: StringFieldUpdateOperationsInput | string;
     quantity?:
       | DecimalFieldUpdateOperationsInput
@@ -50408,6 +50742,9 @@ export namespace Prisma {
   export type QuoteMaterialUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     quoteId?: StringFieldUpdateOperationsInput | string;
+    category?:
+      | EnumQuoteLineCategoryFieldUpdateOperationsInput
+      | $Enums.QuoteLineCategory;
     name?: StringFieldUpdateOperationsInput | string;
     quantity?:
       | DecimalFieldUpdateOperationsInput
@@ -53524,11 +53861,15 @@ export namespace Prisma {
     tradesmanId?: SortOrder;
     amount?: SortOrder;
     materialsAmount?: SortOrder;
+    calloutFee?: SortOrder;
+    discount?: SortOrder;
+    vatRate?: SortOrder;
     depositRequested?: SortOrder;
     currency?: SortOrder;
     message?: SortOrder;
     estimatedStart?: SortOrder;
     estimatedCompletion?: SortOrder;
+    validUntil?: SortOrder;
     status?: SortOrder;
     respondedAt?: SortOrder;
     withdrawnAt?: SortOrder;
@@ -53539,6 +53880,9 @@ export namespace Prisma {
   export type QuoteAvgOrderByAggregateInput = {
     amount?: SortOrder;
     materialsAmount?: SortOrder;
+    calloutFee?: SortOrder;
+    discount?: SortOrder;
+    vatRate?: SortOrder;
     depositRequested?: SortOrder;
   };
 
@@ -53548,11 +53892,15 @@ export namespace Prisma {
     tradesmanId?: SortOrder;
     amount?: SortOrder;
     materialsAmount?: SortOrder;
+    calloutFee?: SortOrder;
+    discount?: SortOrder;
+    vatRate?: SortOrder;
     depositRequested?: SortOrder;
     currency?: SortOrder;
     message?: SortOrder;
     estimatedStart?: SortOrder;
     estimatedCompletion?: SortOrder;
+    validUntil?: SortOrder;
     status?: SortOrder;
     respondedAt?: SortOrder;
     withdrawnAt?: SortOrder;
@@ -53566,11 +53914,15 @@ export namespace Prisma {
     tradesmanId?: SortOrder;
     amount?: SortOrder;
     materialsAmount?: SortOrder;
+    calloutFee?: SortOrder;
+    discount?: SortOrder;
+    vatRate?: SortOrder;
     depositRequested?: SortOrder;
     currency?: SortOrder;
     message?: SortOrder;
     estimatedStart?: SortOrder;
     estimatedCompletion?: SortOrder;
+    validUntil?: SortOrder;
     status?: SortOrder;
     respondedAt?: SortOrder;
     withdrawnAt?: SortOrder;
@@ -53581,6 +53933,9 @@ export namespace Prisma {
   export type QuoteSumOrderByAggregateInput = {
     amount?: SortOrder;
     materialsAmount?: SortOrder;
+    calloutFee?: SortOrder;
+    discount?: SortOrder;
+    vatRate?: SortOrder;
     depositRequested?: SortOrder;
   };
 
@@ -53598,6 +53953,21 @@ export namespace Prisma {
     _max?: NestedEnumQuoteStatusFilter<$PrismaModel>;
   };
 
+  export type EnumQuoteLineCategoryFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.QuoteLineCategory
+      | EnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.QuoteLineCategory[]
+      | ListEnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.QuoteLineCategory[]
+      | ListEnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumQuoteLineCategoryFilter<$PrismaModel>
+      | $Enums.QuoteLineCategory;
+  };
+
   export type QuoteScalarRelationFilter = {
     is?: QuoteWhereInput;
     isNot?: QuoteWhereInput;
@@ -53606,6 +53976,7 @@ export namespace Prisma {
   export type QuoteMaterialCountOrderByAggregateInput = {
     id?: SortOrder;
     quoteId?: SortOrder;
+    category?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
     unit?: SortOrder;
@@ -53621,6 +53992,7 @@ export namespace Prisma {
   export type QuoteMaterialMaxOrderByAggregateInput = {
     id?: SortOrder;
     quoteId?: SortOrder;
+    category?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
     unit?: SortOrder;
@@ -53631,6 +54003,7 @@ export namespace Prisma {
   export type QuoteMaterialMinOrderByAggregateInput = {
     id?: SortOrder;
     quoteId?: SortOrder;
+    category?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
     unit?: SortOrder;
@@ -53642,6 +54015,25 @@ export namespace Prisma {
     quantity?: SortOrder;
     unitPrice?: SortOrder;
   };
+
+  export type EnumQuoteLineCategoryWithAggregatesFilter<$PrismaModel = never> =
+    {
+      equals?:
+        | $Enums.QuoteLineCategory
+        | EnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+      in?:
+        | $Enums.QuoteLineCategory[]
+        | ListEnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+      notIn?:
+        | $Enums.QuoteLineCategory[]
+        | ListEnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+      not?:
+        | NestedEnumQuoteLineCategoryWithAggregatesFilter<$PrismaModel>
+        | $Enums.QuoteLineCategory;
+      _count?: NestedIntFilter<$PrismaModel>;
+      _min?: NestedEnumQuoteLineCategoryFilter<$PrismaModel>;
+      _max?: NestedEnumQuoteLineCategoryFilter<$PrismaModel>;
+    };
 
   export type EnumMaterialRequestStatusFilter<$PrismaModel = never> = {
     equals?:
@@ -58530,6 +58922,10 @@ export namespace Prisma {
     connect?: QuoteWhereUniqueInput;
   };
 
+  export type EnumQuoteLineCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.QuoteLineCategory;
+  };
+
   export type QuoteUpdateOneRequiredWithoutMaterialsNestedInput = {
     create?: XOR<
       QuoteCreateWithoutMaterialsInput,
@@ -60338,6 +60734,41 @@ export namespace Prisma {
       _max?: NestedEnumQuoteStatusFilter<$PrismaModel>;
     };
 
+  export type NestedEnumQuoteLineCategoryFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.QuoteLineCategory
+      | EnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.QuoteLineCategory[]
+      | ListEnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.QuoteLineCategory[]
+      | ListEnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumQuoteLineCategoryFilter<$PrismaModel>
+      | $Enums.QuoteLineCategory;
+  };
+
+  export type NestedEnumQuoteLineCategoryWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?:
+      | $Enums.QuoteLineCategory
+      | EnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.QuoteLineCategory[]
+      | ListEnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.QuoteLineCategory[]
+      | ListEnumQuoteLineCategoryFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumQuoteLineCategoryWithAggregatesFilter<$PrismaModel>
+      | $Enums.QuoteLineCategory;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumQuoteLineCategoryFilter<$PrismaModel>;
+    _max?: NestedEnumQuoteLineCategoryFilter<$PrismaModel>;
+  };
+
   export type NestedEnumMaterialRequestStatusFilter<$PrismaModel = never> = {
     equals?:
       | $Enums.MaterialRequestStatus
@@ -61074,11 +61505,15 @@ export namespace Prisma {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -61095,11 +61530,15 @@ export namespace Prisma {
     jobId: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -62239,6 +62678,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | DecimalNullableFilter<'Quote'>
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | DecimalNullableFilter<'Quote'>
       | Decimal
@@ -62254,6 +62714,7 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    validUntil?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     status?: EnumQuoteStatusFilter<'Quote'> | $Enums.QuoteStatus;
     respondedAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     withdrawnAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
@@ -65436,11 +65897,15 @@ export namespace Prisma {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -65458,11 +65923,15 @@ export namespace Prisma {
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -65484,11 +65953,15 @@ export namespace Prisma {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -65505,11 +65978,15 @@ export namespace Prisma {
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -66215,6 +66692,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -66230,6 +66728,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -66270,6 +66773,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -66285,6 +66809,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -67314,6 +67843,7 @@ export namespace Prisma {
 
   export type QuoteMaterialCreateWithoutQuoteInput = {
     id?: string;
+    category?: $Enums.QuoteLineCategory;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
     unit?: string | null;
@@ -67323,6 +67853,7 @@ export namespace Prisma {
 
   export type QuoteMaterialUncheckedCreateWithoutQuoteInput = {
     id?: string;
+    category?: $Enums.QuoteLineCategory;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
     unit?: string | null;
@@ -68043,6 +68574,9 @@ export namespace Prisma {
     NOT?: QuoteMaterialScalarWhereInput | QuoteMaterialScalarWhereInput[];
     id?: StringFilter<'QuoteMaterial'> | string;
     quoteId?: StringFilter<'QuoteMaterial'> | string;
+    category?:
+      | EnumQuoteLineCategoryFilter<'QuoteMaterial'>
+      | $Enums.QuoteLineCategory;
     name?: StringFilter<'QuoteMaterial'> | string;
     quantity?:
       | DecimalFilter<'QuoteMaterial'>
@@ -68065,11 +68599,15 @@ export namespace Prisma {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -68087,11 +68625,15 @@ export namespace Prisma {
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -68144,6 +68686,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -68159,6 +68722,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -68199,6 +68767,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -68214,6 +68803,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -68816,11 +69410,15 @@ export namespace Prisma {
     id?: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -68838,11 +69436,15 @@ export namespace Prisma {
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -69297,6 +69899,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -69312,6 +69935,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -69352,6 +69980,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -69367,6 +70016,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -73956,11 +74610,15 @@ export namespace Prisma {
     jobId: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -74815,6 +75473,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -74830,6 +75509,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -74869,6 +75553,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -74884,6 +75589,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -74922,6 +75632,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -74937,6 +75668,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -76717,11 +77453,15 @@ export namespace Prisma {
     tradesmanId: string;
     amount: Decimal | DecimalJsLike | number | string;
     materialsAmount?: Decimal | DecimalJsLike | number | string | null;
+    calloutFee?: Decimal | DecimalJsLike | number | string | null;
+    discount?: Decimal | DecimalJsLike | number | string | null;
+    vatRate?: Decimal | DecimalJsLike | number | string | null;
     depositRequested?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     message?: string | null;
     estimatedStart?: Date | string | null;
     estimatedCompletion?: Date | string | null;
+    validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
@@ -76808,6 +77548,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -76823,6 +77584,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -76862,6 +77628,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -76877,6 +77664,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -76915,6 +77707,27 @@ export namespace Prisma {
       | number
       | string
       | null;
+    calloutFee?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    discount?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
+    vatRate?:
+      | NullableDecimalFieldUpdateOperationsInput
+      | Decimal
+      | DecimalJsLike
+      | number
+      | string
+      | null;
     depositRequested?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -76930,6 +77743,11 @@ export namespace Prisma {
       | string
       | null;
     estimatedCompletion?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    validUntil?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
       | string
@@ -77254,6 +78072,7 @@ export namespace Prisma {
 
   export type QuoteMaterialCreateManyQuoteInput = {
     id?: string;
+    category?: $Enums.QuoteLineCategory;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
     unit?: string | null;
@@ -77263,6 +78082,9 @@ export namespace Prisma {
 
   export type QuoteMaterialUpdateWithoutQuoteInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    category?:
+      | EnumQuoteLineCategoryFieldUpdateOperationsInput
+      | $Enums.QuoteLineCategory;
     name?: StringFieldUpdateOperationsInput | string;
     quantity?:
       | DecimalFieldUpdateOperationsInput
@@ -77283,6 +78105,9 @@ export namespace Prisma {
 
   export type QuoteMaterialUncheckedUpdateWithoutQuoteInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    category?:
+      | EnumQuoteLineCategoryFieldUpdateOperationsInput
+      | $Enums.QuoteLineCategory;
     name?: StringFieldUpdateOperationsInput | string;
     quantity?:
       | DecimalFieldUpdateOperationsInput
@@ -77303,6 +78128,9 @@ export namespace Prisma {
 
   export type QuoteMaterialUncheckedUpdateManyWithoutQuoteInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    category?:
+      | EnumQuoteLineCategoryFieldUpdateOperationsInput
+      | $Enums.QuoteLineCategory;
     name?: StringFieldUpdateOperationsInput | string;
     quantity?:
       | DecimalFieldUpdateOperationsInput

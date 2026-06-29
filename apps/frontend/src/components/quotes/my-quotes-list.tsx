@@ -92,15 +92,18 @@ export function MyQuotesList({
                     {q.message}
                   </p>
                 ) : null}
-                {q.materials.length > 0 ? (
-                  <div className="mt-3">
-                    <QuoteMaterials
-                      materials={q.materials}
-                      currency={q.currency}
-                      dict={dict}
-                    />
-                  </div>
-                ) : null}
+                <div className="mt-3">
+                  <QuoteMaterials
+                    materials={q.materials}
+                    currency={q.currency}
+                    calloutFee={q.calloutFee}
+                    discount={q.discount}
+                    vatRate={q.vatRate}
+                    validUntil={q.validUntil}
+                    locale={locale}
+                    dict={dict}
+                  />
+                </div>
               </div>
               <div className="flex flex-col items-end gap-2 text-right">
                 <p className="font-mono text-lg font-semibold">
