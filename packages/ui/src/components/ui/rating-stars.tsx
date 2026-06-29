@@ -41,7 +41,11 @@ function RatingStars({
   showValue?: boolean;
   max?: number;
 }) {
-  const rounded = Math.round(value);
+  // Aggregates (e.g. a Prisma Decimal average) can arrive as a string over
+  // JSON; coerce so `.toFixed`/rounding never throw on a non-number.
+  const numeric = Number(value);
+  const safeValue = Number.isFinite(numeric) ? numeric : 0;
+  const rounded = Math.round(safeValue);
   return (
     <span
       data-slot="rating-stars"
@@ -55,7 +59,7 @@ function RatingStars({
       </span>
       {showValue && (
         <span className="text-[0.8125rem] font-semibold text-foreground">
-          {value.toFixed(1)}
+          {safeValue.toFixed(1)}
         </span>
       )}
       {count != null && (
