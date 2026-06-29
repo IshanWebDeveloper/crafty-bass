@@ -35,6 +35,7 @@ export function SiteFooter({
       links: [
         { label: f.about, href: `${base}/about` },
         { label: f.contact, href: `${base}/contact` },
+        { label: f.guarantee, href: `${base}/guarantee` },
       ],
     },
     {
