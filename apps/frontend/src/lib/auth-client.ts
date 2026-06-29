@@ -1,6 +1,7 @@
 import { createAuthClient } from 'better-auth/react';
 import {
   phoneNumberClient,
+  emailOTPClient,
   inferAdditionalFields,
 } from 'better-auth/client/plugins';
 
@@ -15,6 +16,7 @@ export const authClient = createAuthClient({
   // types updateUser()/useSession() with it — without importing server code.
   plugins: [
     phoneNumberClient(),
+    emailOTPClient(),
     inferAdditionalFields({ user: { userType: { type: 'string' } } }),
   ],
 });
