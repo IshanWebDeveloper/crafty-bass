@@ -324,6 +324,7 @@ exports.Prisma.QuoteMaterialScalarFieldEnum = {
   quoteId: 'quoteId',
   name: 'name',
   quantity: 'quantity',
+  unit: 'unit',
   unitPrice: 'unitPrice',
   createdAt: 'createdAt',
 };

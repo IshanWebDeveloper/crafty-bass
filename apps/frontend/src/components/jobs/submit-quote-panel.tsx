@@ -39,6 +39,7 @@ const SubmitQuoteSchema = z.object({
       z.object({
         name: z.string().trim().max(160),
         quantity: z.string(),
+        unit: z.string(),
         unitPrice: z.string(),
       }),
     )
@@ -51,6 +52,27 @@ const SubmitQuoteSchema = z.object({
   deposit: z.string().optional(),
 });
 type SubmitQuoteValues = z.infer<typeof SubmitQuoteSchema>;
+
+// Units of measurement a tradesman can attach to a material quantity.
+const MATERIAL_UNITS = [
+  'kg',
+  'g',
+  'm',
+  'cm',
+  'm²',
+  'm³',
+  'l',
+  'ml',
+  'pcs',
+  'inch',
+  'set',
+  'pair',
+  'bag',
+  'box',
+  'roll',
+  'sheet',
+  'hr',
+] as const;
 
 export function SubmitQuotePanel({
   jobId,
@@ -117,6 +139,7 @@ export function SubmitQuotePanel({
         .map((m) => ({
           name: m.name.trim(),
           quantity: Number(m.quantity) || 1,
+          unit: m.unit || undefined,
           unitPrice: m.unitPrice ? Number(m.unitPrice) : undefined,
         }))
         .filter((m) => m.name.length > 0);
@@ -211,16 +234,17 @@ export function SubmitQuotePanel({
             </div>
             {materialItems.fields.length > 0 ? (
               <div className="space-y-2">
-                <div className="hidden grid-cols-[1fr_5rem_7rem_2rem] gap-2 px-1 text-xs text-muted-foreground sm:grid">
+                <div className="hidden grid-cols-[1fr_4rem_5rem_6rem_2rem] gap-2 px-1 text-xs text-muted-foreground sm:grid">
                   <span>{ts.materialsList.name}</span>
                   <span>{ts.materialsList.quantity}</span>
+                  <span>{ts.materialsList.unit}</span>
                   <span>{ts.materialsList.unitPrice}</span>
                   <span className="sr-only">{ts.materialsList.remove}</span>
                 </div>
                 {materialItems.fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="grid grid-cols-2 gap-2 sm:grid-cols-[1fr_5rem_7rem_2rem]"
+                    className="grid grid-cols-2 gap-2 sm:grid-cols-[1fr_4rem_5rem_6rem_2rem]"
                   >
                     <Input
                       aria-label={ts.materialsList.name}
@@ -236,6 +260,18 @@ export function SubmitQuotePanel({
                       placeholder={ts.materialsList.quantity}
                       {...register(`materialItems.${index}.quantity`)}
                     />
+                    <select
+                      aria-label={ts.materialsList.unit}
+                      className="h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-1.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+                      {...register(`materialItems.${index}.unit`)}
+                    >
+                      <option value="">—</option>
+                      {MATERIAL_UNITS.map((u) => (
+                        <option key={u} value={u}>
+                          {u}
+                        </option>
+                      ))}
+                    </select>
                     <Input
                       aria-label={ts.materialsList.unitPrice}
                       type="number"
@@ -262,7 +298,12 @@ export function SubmitQuotePanel({
               variant="outline"
               size="sm"
               onClick={() =>
-                materialItems.append({ name: '', quantity: '1', unitPrice: '' })
+                materialItems.append({
+                  name: '',
+                  quantity: '1',
+                  unit: '',
+                  unitPrice: '',
+                })
               }
             >
               <Plus className="size-4" aria-hidden />

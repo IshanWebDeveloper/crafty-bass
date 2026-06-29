@@ -467,6 +467,8 @@ model QuoteMaterial {
   quoteId   String
   name      String
   quantity  Decimal  @default(1) @db.Decimal(10, 2)
+  // Unit of measurement for the quantity (e.g. kg, m, m², pcs, bag).
+  unit      String?
   unitPrice Decimal? @db.Decimal(10, 2)
   createdAt DateTime @default(now())
 
