@@ -6,7 +6,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Plus, Trash2 } from 'lucide-react';
-import { Button, DatePicker, Input } from '@repo/ui';
+import {
+  Button,
+  DatePicker,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@repo/ui';
 import { maxDeposit } from '@repo/validation';
 import { toast } from 'sonner';
 import {
@@ -234,7 +243,7 @@ export function SubmitQuotePanel({
             </div>
             {materialItems.fields.length > 0 ? (
               <div className="space-y-2">
-                <div className="hidden grid-cols-[1fr_4rem_5rem_6rem_2rem] gap-2 px-1 text-xs text-muted-foreground sm:grid">
+                <div className="hidden grid-cols-[1.4fr_0.7fr_0.8fr_1fr_2rem] gap-2 px-1 text-xs text-muted-foreground sm:grid">
                   <span>{ts.materialsList.name}</span>
                   <span>{ts.materialsList.quantity}</span>
                   <span>{ts.materialsList.unit}</span>
@@ -244,7 +253,7 @@ export function SubmitQuotePanel({
                 {materialItems.fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="grid grid-cols-2 gap-2 sm:grid-cols-[1fr_4rem_5rem_6rem_2rem]"
+                    className="grid grid-cols-2 gap-2 sm:grid-cols-[1.4fr_0.7fr_0.8fr_1fr_2rem]"
                   >
                     <Input
                       aria-label={ts.materialsList.name}
@@ -260,18 +269,29 @@ export function SubmitQuotePanel({
                       placeholder={ts.materialsList.quantity}
                       {...register(`materialItems.${index}.quantity`)}
                     />
-                    <select
-                      aria-label={ts.materialsList.unit}
-                      className="h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-1.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
-                      {...register(`materialItems.${index}.unit`)}
+                    <Select
+                      value={watch(`materialItems.${index}.unit`) || undefined}
+                      onValueChange={(value) =>
+                        setValue(
+                          `materialItems.${index}.unit`,
+                          (value as string) ?? '',
+                        )
+                      }
                     >
-                      <option value="">—</option>
-                      {MATERIAL_UNITS.map((u) => (
-                        <option key={u} value={u}>
-                          {u}
-                        </option>
-                      ))}
-                    </select>
+                      <SelectTrigger
+                        className="h-8"
+                        aria-label={ts.materialsList.unit}
+                      >
+                        <SelectValue placeholder="—" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {MATERIAL_UNITS.map((u) => (
+                          <SelectItem key={u} value={u}>
+                            {u}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <Input
                       aria-label={ts.materialsList.unitPrice}
                       type="number"

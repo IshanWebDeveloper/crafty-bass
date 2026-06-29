@@ -2,7 +2,15 @@
 
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Input } from '@repo/ui';
+import {
+  Button,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@repo/ui';
 import { ApiError } from '@/lib/api';
 import {
   listCategories,
@@ -46,6 +54,10 @@ export function CategoriesManager() {
   });
 
   const roots = categories ?? [];
+  const parentItems = [
+    { value: 'none', label: '— None (top level) —' },
+    ...roots.map((c) => ({ value: c.id, label: c.nameEn })),
+  ];
 
   return (
     <div className="space-y-6">
@@ -70,21 +82,27 @@ export function CategoriesManager() {
               placeholder="e.g. Appliance repair"
             />
           </label>
-          <label className="space-y-1.5">
-            <span className="text-sm font-medium">Parent (optional)</span>
-            <select
-              value={parentId}
-              onChange={(e) => setParentId(e.target.value)}
-              className="h-8 w-full min-w-48 rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+          <div className="space-y-1.5">
+            <span className="block text-sm font-medium">Parent (optional)</span>
+            <Select
+              items={parentItems}
+              value={parentId || 'none'}
+              onValueChange={(value) =>
+                setParentId(value === 'none' ? '' : (value as string))
+              }
             >
-              <option value="">— None (top level) —</option>
-              {roots.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nameEn}
-                </option>
-              ))}
-            </select>
-          </label>
+              <SelectTrigger className="min-w-48" aria-label="Parent category">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {parentItems.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <Button
             type="submit"
             disabled={name.trim().length === 0 || create.isPending}
