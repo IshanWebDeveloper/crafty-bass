@@ -31,6 +31,7 @@ import {
 } from '@/lib/api/profiles';
 import { listCategories } from '@/lib/api/categories';
 import { CategoryIcon } from '@/lib/categories';
+import { TranslateButton } from '@/components/common/translate-button';
 import { DISTRICT_OPTIONS } from '@/lib/districts';
 import { tradeRoleLabel } from '@/lib/trade-role';
 import type { Locale } from '@/i18n/config';
@@ -250,9 +251,17 @@ function TradeCard({
         </div>
 
         {trade.bio ? (
-          <p className="line-clamp-2 text-sm text-muted-foreground">
-            {trade.bio}
-          </p>
+          <div>
+            <p className="line-clamp-2 text-sm text-muted-foreground">
+              {trade.bio}
+            </p>
+            <TranslateButton
+              text={trade.bio}
+              locale={locale}
+              dict={dict}
+              className="mt-1.5"
+            />
+          </div>
         ) : null}
 
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">

@@ -5,7 +5,7 @@ from functools import lru_cache
 from typing import Any, cast
 
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_core.messages import BaseMessage
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 
 from app.core.config import Settings, get_settings
 from app.domain.classification.normalizer import normalize_classification
@@ -24,6 +24,7 @@ from app.graphs.classification.nodes import (
 from app.graphs.classification.state import ClassificationState
 from app.infrastructure.llm.factory import get_llm
 from app.infrastructure.prompts.classification import classification_template
+from app.infrastructure.prompts.translation import build_translation_system_prompt
 from app.schemas.chat import ChatRequest, ChatResponse, ServiceInfo
 from app.schemas.classification import (
     JobClassificationBatchRequest,
@@ -32,6 +33,7 @@ from app.schemas.classification import (
     JobClassificationRequest,
     JobClassificationResponse,
 )
+from app.schemas.translation import TranslateRequest, TranslateResponse
 
 
 class LlmGraphService:
@@ -157,6 +159,26 @@ class LlmGraphService:
             self.batch_classification_graph.invoke(state),
         )
         return JobClassificationBatchResponse(results=result["results"])
+
+    def translate(self, request: TranslateRequest) -> TranslateResponse:
+        """Translate free-form user content into the requested language.
+
+        A single LLM call (no graph): translation is stateless and has no
+        retry/branch topology to justify the graph machinery the classifier
+        uses. Low temperature keeps the output faithful to the source.
+        """
+        llm = self._build_llm(0.1)
+        messages: list[BaseMessage] = [
+            SystemMessage(
+                content=build_translation_system_prompt(request.target_language)
+            ),
+            HumanMessage(content=request.text),
+        ]
+        response = llm.invoke(messages)
+        return TranslateResponse(
+            model=self._active_model(),
+            translated_text=self._message_to_text(response),
+        )
 
     def _chat_with_model(self, state: ChatState) -> dict[str, str]:
         return call_model_node(

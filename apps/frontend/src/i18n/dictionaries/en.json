@@ -119,6 +119,13 @@
       "sessionRequired": "Please sign in to continue"
     }
   },
+  "translate": {
+    "action": "Translate",
+    "translating": "Translating…",
+    "hide": "Hide translation",
+    "disclaimer": "AI translation — may not be exact.",
+    "failed": "Couldn't translate. Try again."
+  },
   "verification": {
     "title": "Get verified",
     "subtitle": "Verify your identity and trade so homeowners can trust you. Required before you can receive jobs or send quotes.",
