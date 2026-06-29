@@ -110,6 +110,7 @@ export class QuotesService {
                 create: dto.materials.map((m) => ({
                   name: m.name,
                   quantity: m.quantity,
+                  unit: m.unit ?? null,
                   unitPrice: m.unitPrice ?? null,
                 })),
               },

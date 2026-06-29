@@ -11,6 +11,7 @@ export type QuoteMaterial = {
   id: string;
   name: string;
   quantity: number;
+  unit: string | null;
   unitPrice: number | null;
 };
 
@@ -46,7 +47,12 @@ export type Quote = {
 export type CreateQuoteBody = {
   amount: number;
   materialsAmount?: number;
-  materials?: { name: string; quantity: number; unitPrice?: number }[];
+  materials?: {
+    name: string;
+    quantity: number;
+    unit?: string;
+    unitPrice?: number;
+  }[];
   depositRequested?: number;
   currency: string;
   message?: string;

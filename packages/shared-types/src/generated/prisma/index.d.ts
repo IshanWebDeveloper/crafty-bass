@@ -25795,6 +25795,7 @@ export namespace Prisma {
     quoteId: string | null;
     name: string | null;
     quantity: Decimal | null;
+    unit: string | null;
     unitPrice: Decimal | null;
     createdAt: Date | null;
   };
@@ -25804,6 +25805,7 @@ export namespace Prisma {
     quoteId: string | null;
     name: string | null;
     quantity: Decimal | null;
+    unit: string | null;
     unitPrice: Decimal | null;
     createdAt: Date | null;
   };
@@ -25813,6 +25815,7 @@ export namespace Prisma {
     quoteId: number;
     name: number;
     quantity: number;
+    unit: number;
     unitPrice: number;
     createdAt: number;
     _all: number;
@@ -25833,6 +25836,7 @@ export namespace Prisma {
     quoteId?: true;
     name?: true;
     quantity?: true;
+    unit?: true;
     unitPrice?: true;
     createdAt?: true;
   };
@@ -25842,6 +25846,7 @@ export namespace Prisma {
     quoteId?: true;
     name?: true;
     quantity?: true;
+    unit?: true;
     unitPrice?: true;
     createdAt?: true;
   };
@@ -25851,6 +25856,7 @@ export namespace Prisma {
     quoteId?: true;
     name?: true;
     quantity?: true;
+    unit?: true;
     unitPrice?: true;
     createdAt?: true;
     _all?: true;
@@ -25954,6 +25960,7 @@ export namespace Prisma {
     quoteId: string;
     name: string;
     quantity: Decimal;
+    unit: string | null;
     unitPrice: Decimal | null;
     createdAt: Date;
     _count: QuoteMaterialCountAggregateOutputType | null;
@@ -25985,6 +25992,7 @@ export namespace Prisma {
       quoteId?: boolean;
       name?: boolean;
       quantity?: boolean;
+      unit?: boolean;
       unitPrice?: boolean;
       createdAt?: boolean;
       quote?: boolean | QuoteDefaultArgs<ExtArgs>;
@@ -26000,6 +26008,7 @@ export namespace Prisma {
       quoteId?: boolean;
       name?: boolean;
       quantity?: boolean;
+      unit?: boolean;
       unitPrice?: boolean;
       createdAt?: boolean;
       quote?: boolean | QuoteDefaultArgs<ExtArgs>;
@@ -26015,6 +26024,7 @@ export namespace Prisma {
       quoteId?: boolean;
       name?: boolean;
       quantity?: boolean;
+      unit?: boolean;
       unitPrice?: boolean;
       createdAt?: boolean;
       quote?: boolean | QuoteDefaultArgs<ExtArgs>;
@@ -26027,6 +26037,7 @@ export namespace Prisma {
     quoteId?: boolean;
     name?: boolean;
     quantity?: boolean;
+    unit?: boolean;
     unitPrice?: boolean;
     createdAt?: boolean;
   };
@@ -26034,7 +26045,7 @@ export namespace Prisma {
   export type QuoteMaterialOmit<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = $Extensions.GetOmit<
-    'id' | 'quoteId' | 'name' | 'quantity' | 'unitPrice' | 'createdAt',
+    'id' | 'quoteId' | 'name' | 'quantity' | 'unit' | 'unitPrice' | 'createdAt',
     ExtArgs['result']['quoteMaterial']
   >;
   export type QuoteMaterialInclude<
@@ -26066,6 +26077,7 @@ export namespace Prisma {
         quoteId: string;
         name: string;
         quantity: Prisma.Decimal;
+        unit: string | null;
         unitPrice: Prisma.Decimal | null;
         createdAt: Date;
       },
@@ -26676,6 +26688,7 @@ export namespace Prisma {
     readonly quoteId: FieldRef<'QuoteMaterial', 'String'>;
     readonly name: FieldRef<'QuoteMaterial', 'String'>;
     readonly quantity: FieldRef<'QuoteMaterial', 'Decimal'>;
+    readonly unit: FieldRef<'QuoteMaterial', 'String'>;
     readonly unitPrice: FieldRef<'QuoteMaterial', 'Decimal'>;
     readonly createdAt: FieldRef<'QuoteMaterial', 'DateTime'>;
   }
@@ -43921,6 +43934,7 @@ export namespace Prisma {
     quoteId: 'quoteId';
     name: 'name';
     quantity: 'quantity';
+    unit: 'unit';
     unitPrice: 'unitPrice';
     createdAt: 'createdAt';
   };
@@ -46436,6 +46450,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: StringNullableFilter<'QuoteMaterial'> | string | null;
     unitPrice?:
       | DecimalNullableFilter<'QuoteMaterial'>
       | Decimal
@@ -46452,6 +46467,7 @@ export namespace Prisma {
     quoteId?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
+    unit?: SortOrderInput | SortOrder;
     unitPrice?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     quote?: QuoteOrderByWithRelationInput;
@@ -46471,6 +46487,7 @@ export namespace Prisma {
         | DecimalJsLike
         | number
         | string;
+      unit?: StringNullableFilter<'QuoteMaterial'> | string | null;
       unitPrice?:
         | DecimalNullableFilter<'QuoteMaterial'>
         | Decimal
@@ -46489,6 +46506,7 @@ export namespace Prisma {
     quoteId?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
+    unit?: SortOrderInput | SortOrder;
     unitPrice?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     _count?: QuoteMaterialCountOrderByAggregateInput;
@@ -46515,6 +46533,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: StringNullableWithAggregatesFilter<'QuoteMaterial'> | string | null;
     unitPrice?:
       | DecimalNullableWithAggregatesFilter<'QuoteMaterial'>
       | Decimal
@@ -50298,6 +50317,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
+    unit?: string | null;
     unitPrice?: Decimal | DecimalJsLike | number | string | null;
     createdAt?: Date | string;
     quote: QuoteCreateNestedOneWithoutMaterialsInput;
@@ -50308,6 +50328,7 @@ export namespace Prisma {
     quoteId: string;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
+    unit?: string | null;
     unitPrice?: Decimal | DecimalJsLike | number | string | null;
     createdAt?: Date | string;
   };
@@ -50321,6 +50342,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: NullableStringFieldUpdateOperationsInput | string | null;
     unitPrice?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -50342,6 +50364,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: NullableStringFieldUpdateOperationsInput | string | null;
     unitPrice?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -50357,6 +50380,7 @@ export namespace Prisma {
     quoteId: string;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
+    unit?: string | null;
     unitPrice?: Decimal | DecimalJsLike | number | string | null;
     createdAt?: Date | string;
   };
@@ -50370,6 +50394,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: NullableStringFieldUpdateOperationsInput | string | null;
     unitPrice?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -50390,6 +50415,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: NullableStringFieldUpdateOperationsInput | string | null;
     unitPrice?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -53582,6 +53608,7 @@ export namespace Prisma {
     quoteId?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
+    unit?: SortOrder;
     unitPrice?: SortOrder;
     createdAt?: SortOrder;
   };
@@ -53596,6 +53623,7 @@ export namespace Prisma {
     quoteId?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
+    unit?: SortOrder;
     unitPrice?: SortOrder;
     createdAt?: SortOrder;
   };
@@ -53605,6 +53633,7 @@ export namespace Prisma {
     quoteId?: SortOrder;
     name?: SortOrder;
     quantity?: SortOrder;
+    unit?: SortOrder;
     unitPrice?: SortOrder;
     createdAt?: SortOrder;
   };
@@ -67287,6 +67316,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
+    unit?: string | null;
     unitPrice?: Decimal | DecimalJsLike | number | string | null;
     createdAt?: Date | string;
   };
@@ -67295,6 +67325,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
+    unit?: string | null;
     unitPrice?: Decimal | DecimalJsLike | number | string | null;
     createdAt?: Date | string;
   };
@@ -68019,6 +68050,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: StringNullableFilter<'QuoteMaterial'> | string | null;
     unitPrice?:
       | DecimalNullableFilter<'QuoteMaterial'>
       | Decimal
@@ -77224,6 +77256,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     quantity?: Decimal | DecimalJsLike | number | string;
+    unit?: string | null;
     unitPrice?: Decimal | DecimalJsLike | number | string | null;
     createdAt?: Date | string;
   };
@@ -77237,6 +77270,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: NullableStringFieldUpdateOperationsInput | string | null;
     unitPrice?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -77256,6 +77290,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: NullableStringFieldUpdateOperationsInput | string | null;
     unitPrice?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal
@@ -77275,6 +77310,7 @@ export namespace Prisma {
       | DecimalJsLike
       | number
       | string;
+    unit?: NullableStringFieldUpdateOperationsInput | string | null;
     unitPrice?:
       | NullableDecimalFieldUpdateOperationsInput
       | Decimal

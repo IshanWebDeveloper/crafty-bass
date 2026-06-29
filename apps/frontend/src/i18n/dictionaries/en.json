@@ -644,6 +644,7 @@
         "name": "Item",
         "namePlaceholder": "e.g. Cement (50kg bag)",
         "quantity": "Qty",
+        "unit": "Unit",
         "unitPrice": "Unit price",
         "add": "Add item",
         "remove": "Remove item"

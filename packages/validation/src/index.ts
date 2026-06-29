@@ -122,6 +122,7 @@ export const CreateQuoteSchema = z
         z.object({
           name: z.string().trim().min(1).max(160),
           quantity: z.coerce.number().positive().max(100_000).default(1),
+          unit: z.string().trim().max(16).optional(),
           unitPrice: z.coerce
             .number()
             .nonnegative()

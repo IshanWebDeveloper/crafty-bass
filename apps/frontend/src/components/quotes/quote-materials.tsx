@@ -38,7 +38,10 @@ export function QuoteMaterials({
               className="flex items-baseline justify-between gap-3 text-sm"
             >
               <span className="min-w-0 text-muted-foreground">
-                <span className="font-medium text-foreground">{qty}×</span>{' '}
+                <span className="font-medium text-foreground">
+                  {qty}
+                  {m.unit ? ` ${m.unit}` : ''} ×
+                </span>{' '}
                 {m.name}
               </span>
               {unit != null ? (
