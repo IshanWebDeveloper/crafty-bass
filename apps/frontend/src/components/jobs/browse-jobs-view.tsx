@@ -20,6 +20,7 @@ import { listCategories } from '@/lib/api/categories';
 import { getMyProfile } from '@/lib/api/profiles';
 import { DISTRICT_OPTIONS } from '@/lib/districts';
 import { JobExpiryBadge } from '@/components/jobs/job-expiry-badge';
+import { TranslateButton } from '@/components/common/translate-button';
 import { CategoryBadge, CategoryIcon, UrgencyBadge } from '@/lib/categories';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
@@ -318,6 +319,14 @@ export function BrowseJobsView({
                     <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
                       {job.description}
                     </p>
+                    {job.description ? (
+                      <TranslateButton
+                        text={`${job.title}\n\n${job.description}`}
+                        locale={locale}
+                        dict={dict}
+                        className="mt-2"
+                      />
+                    ) : null}
                   </div>
                   {gated ? (
                     <Button

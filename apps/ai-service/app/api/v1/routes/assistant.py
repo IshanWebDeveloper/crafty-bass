@@ -15,6 +15,7 @@ from app.api.v1.schemas.classification import (
     JobClassificationRequest,
     JobClassificationResponse,
 )
+from app.api.v1.schemas.translation import TranslateRequest, TranslateResponse
 from app.services.assistant_service import AssistantService
 
 router = APIRouter(prefix="/assistant", tags=["assistant"])
@@ -54,6 +55,15 @@ def chat_stream(
             yield f"data: {payload}\n\n"
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+@router.post("/translate", response_model=TranslateResponse)
+async def translate(
+    request: TranslateRequest,
+    service: AssistantServiceDep,
+    _: AuthDep,
+) -> TranslateResponse:
+    return await run_in_threadpool(service.translate, request)
 
 
 @router.post("/classify-job", response_model=JobClassificationResponse)

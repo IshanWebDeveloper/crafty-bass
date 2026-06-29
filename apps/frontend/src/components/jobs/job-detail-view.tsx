@@ -269,7 +269,7 @@ export function JobDetailView({
           session.user.id === job.assignedTradesmanId ? (
             <LeaveReviewPanel jobId={job.id} dict={dict} />
           ) : null}
-          <PublicReviewsList jobId={job.id} dict={dict} />
+          <PublicReviewsList jobId={job.id} locale={locale} dict={dict} />
         </>
       ) : null}
     </div>
