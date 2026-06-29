@@ -10,6 +10,16 @@ import {
   Clock,
   CalendarClock,
   Siren,
+  Drill,
+  Armchair,
+  Tv,
+  WashingMachine,
+  AirVent,
+  Trees,
+  Truck,
+  House,
+  Bug,
+  Flame,
   type LucideIcon,
 } from 'lucide-react';
 import { Badge, cn } from '@repo/ui';
@@ -58,6 +68,56 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
     icon: SprayCan,
     tint: 'text-emerald-600 dark:text-emerald-400',
     surface: 'bg-emerald-500/10',
+  },
+  handyman: {
+    icon: Drill,
+    tint: 'text-slate-600 dark:text-slate-300',
+    surface: 'bg-slate-500/10',
+  },
+  'furniture-assembly': {
+    icon: Armchair,
+    tint: 'text-teal-600 dark:text-teal-400',
+    surface: 'bg-teal-500/10',
+  },
+  mounting: {
+    icon: Tv,
+    tint: 'text-indigo-600 dark:text-indigo-400',
+    surface: 'bg-indigo-500/10',
+  },
+  appliances: {
+    icon: WashingMachine,
+    tint: 'text-cyan-600 dark:text-cyan-400',
+    surface: 'bg-cyan-500/10',
+  },
+  'air-conditioning': {
+    icon: AirVent,
+    tint: 'text-blue-600 dark:text-blue-400',
+    surface: 'bg-blue-500/10',
+  },
+  gardening: {
+    icon: Trees,
+    tint: 'text-green-600 dark:text-green-400',
+    surface: 'bg-green-500/10',
+  },
+  moving: {
+    icon: Truck,
+    tint: 'text-fuchsia-600 dark:text-fuchsia-400',
+    surface: 'bg-fuchsia-500/10',
+  },
+  roofing: {
+    icon: House,
+    tint: 'text-stone-600 dark:text-stone-300',
+    surface: 'bg-stone-500/10',
+  },
+  'pest-control': {
+    icon: Bug,
+    tint: 'text-red-600 dark:text-red-400',
+    surface: 'bg-red-500/10',
+  },
+  welding: {
+    icon: Flame,
+    tint: 'text-yellow-600 dark:text-yellow-400',
+    surface: 'bg-yellow-500/10',
   },
 };
 
