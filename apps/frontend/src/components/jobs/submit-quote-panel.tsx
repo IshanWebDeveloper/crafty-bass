@@ -41,6 +41,7 @@ import type { Dictionary } from '@/i18n/dictionaries';
 const UNITS = [
   'job',
   'hr',
+  'day',
   'visit',
   'point',
   'fitting',
