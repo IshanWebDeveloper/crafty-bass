@@ -375,15 +375,18 @@ function QuoteRow({
                 : ''}
             </p>
           ) : null}
-          {quote.materials.length > 0 ? (
-            <div className="mt-3 max-w-prose">
-              <QuoteMaterials
-                materials={quote.materials}
-                currency={quote.currency}
-                dict={dict}
-              />
-            </div>
-          ) : null}
+          <div className="mt-3 max-w-prose">
+            <QuoteMaterials
+              materials={quote.materials}
+              currency={quote.currency}
+              calloutFee={quote.calloutFee}
+              discount={quote.discount}
+              vatRate={quote.vatRate}
+              validUntil={quote.validUntil}
+              locale={locale}
+              dict={dict}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col items-end gap-2">

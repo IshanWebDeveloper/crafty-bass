@@ -5,7 +5,7 @@ import {
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
-import { maxDeposit } from '@repo/validation';
+import { maxDeposit, computeQuoteTotals, VAT_RATE } from '@repo/validation';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import type { CreateQuoteDto } from './dto/index.js';
 
@@ -71,6 +71,14 @@ export class QuotesService {
       throw new ConflictException('You have already quoted on this job');
     }
 
+    // Build the total server-side from the line items + adjustments so we never
+    // trust client-side maths (it drives escrow and what the homeowner pays).
+    const totals = computeQuoteTotals(dto.lineItems, {
+      calloutFee: dto.calloutFee,
+      discount: dto.discount,
+      applyVat: dto.applyVat,
+    });
+
     // A requested materials deposit must sit within the tradesman's trust tier
     // and never exceed the materials line on the quote.
     const depositRequested = dto.depositRequested ?? 0;
@@ -83,8 +91,8 @@ export class QuotesService {
           completed: profile?.jobsCompleted ?? 0,
           bgChecked: profile?.backgroundChecked ?? false,
         },
-        dto.amount,
-        dto.materialsAmount ?? 0,
+        totals.total,
+        totals.materials,
       );
       if (depositRequested > allowed) {
         throw new BadRequestException(
@@ -93,29 +101,34 @@ export class QuotesService {
       }
     }
 
+    const validUntil = new Date(
+      Date.now() + dto.validityDays * 24 * 60 * 60 * 1000,
+    );
+
     return this.prisma.quote.create({
       data: {
         jobId,
         tradesmanId: userId,
-        amount: dto.amount,
-        materialsAmount: dto.materialsAmount ?? null,
+        amount: totals.total,
+        materialsAmount: totals.materials,
+        calloutFee: dto.calloutFee ?? null,
+        discount: dto.discount ?? null,
+        vatRate: dto.applyVat ? VAT_RATE : null,
         depositRequested: dto.depositRequested ?? null,
         currency: dto.currency,
         message: dto.message ?? null,
         estimatedStart: dto.estimatedStart ?? null,
         estimatedCompletion: dto.estimatedCompletion ?? null,
-        ...(dto.materials && dto.materials.length > 0
-          ? {
-              materials: {
-                create: dto.materials.map((m) => ({
-                  name: m.name,
-                  quantity: m.quantity,
-                  unit: m.unit ?? null,
-                  unitPrice: m.unitPrice ?? null,
-                })),
-              },
-            }
-          : {}),
+        validUntil,
+        materials: {
+          create: dto.lineItems.map((l) => ({
+            category: l.category,
+            name: l.name,
+            quantity: l.quantity,
+            unit: l.unit ?? null,
+            unitPrice: l.unitPrice,
+          })),
+        },
       },
       include: QUOTE_INCLUDE,
     });

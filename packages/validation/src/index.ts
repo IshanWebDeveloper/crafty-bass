@@ -109,55 +109,70 @@ export const UpdateJobSchema = z
   .partial();
 
 // --- Quotes ---
-export const CreateQuoteSchema = z
-  .object({
-    amount: z.coerce.number().positive().max(100_000_000),
-    materialsAmount: z.coerce
-      .number()
-      .nonnegative()
-      .max(100_000_000)
-      .optional(),
-    materials: z
-      .array(
-        z.object({
-          name: z.string().trim().min(1).max(160),
-          quantity: z.coerce.number().positive().max(100_000).default(1),
-          unit: z.string().trim().max(16).optional(),
-          unitPrice: z.coerce
-            .number()
-            .nonnegative()
-            .max(100_000_000)
-            .optional(),
-        }),
-      )
-      .max(40)
-      .optional(),
-    depositRequested: z.coerce
-      .number()
-      .nonnegative()
-      .max(100_000_000)
-      .optional(),
-    currency: z.string().trim().length(3).default('LKR'),
-    message: optionalText(2000),
-    estimatedStart: z.coerce.date().optional(),
-    estimatedCompletion: z.coerce.date().optional(),
-  })
-  .refine(
-    (v) => v.materialsAmount === undefined || v.materialsAmount <= v.amount,
-    {
-      message: 'Materials cannot exceed the quote total',
-      path: ['materialsAmount'],
-    },
-  )
-  .refine(
-    (v) =>
-      v.depositRequested === undefined ||
-      v.depositRequested <= (v.materialsAmount ?? 0),
-    {
-      message: 'Deposit cannot exceed the materials line',
-      path: ['depositRequested'],
-    },
-  );
+// Standard Sri Lanka VAT, applied only when a (VAT-registered) tradesman opts in.
+export const VAT_RATE = 18;
+
+export const QuoteLineCategorySchema = z.enum(['LABOUR', 'MATERIAL']);
+
+const QuoteLineItemSchema = z.object({
+  category: QuoteLineCategorySchema,
+  name: z.string().trim().min(1).max(160),
+  quantity: z.coerce.number().positive().max(100_000).default(1),
+  unit: z.string().trim().max(16).optional(),
+  unitPrice: z.coerce.number().nonnegative().max(100_000_000).default(0),
+});
+
+// The total is built from the line items (labour + materials) plus an optional
+// call-out fee, discount and VAT — all computed server-side, so the client only
+// sends the inputs. The deposit cap is re-enforced server-side too.
+export const CreateQuoteSchema = z.object({
+  lineItems: z.array(QuoteLineItemSchema).min(1).max(60),
+  calloutFee: z.coerce.number().nonnegative().max(100_000_000).optional(),
+  discount: z.coerce.number().nonnegative().max(100_000_000).optional(),
+  applyVat: z.coerce.boolean().default(false),
+  validityDays: z.coerce.number().int().min(1).max(90).default(14),
+  depositRequested: z.coerce.number().nonnegative().max(100_000_000).optional(),
+  currency: z.string().trim().length(3).default('LKR'),
+  message: optionalText(2000),
+  estimatedStart: z.coerce.date().optional(),
+  estimatedCompletion: z.coerce.date().optional(),
+});
+
+// Computes a quote's money breakdown from its line items + adjustments. Shared
+// so the submit form's live preview and the backend agree exactly.
+export interface QuoteLineInput {
+  category: 'LABOUR' | 'MATERIAL';
+  quantity: number;
+  unitPrice: number;
+}
+
+export function computeQuoteTotals(
+  lines: QuoteLineInput[],
+  opts: { calloutFee?: number; discount?: number; applyVat?: boolean },
+) {
+  const sumBy = (cat: 'LABOUR' | 'MATERIAL') =>
+    lines
+      .filter((l) => l.category === cat)
+      .reduce(
+        (s, l) => s + (Number(l.quantity) || 0) * (Number(l.unitPrice) || 0),
+        0,
+      );
+  const labour = sumBy('LABOUR');
+  const materials = sumBy('MATERIAL');
+  const callout = opts.calloutFee ?? 0;
+  const discount = opts.discount ?? 0;
+  const subtotal = Math.max(0, labour + materials + callout - discount);
+  const vat = opts.applyVat ? (subtotal * VAT_RATE) / 100 : 0;
+  return {
+    labour,
+    materials,
+    callout,
+    discount,
+    subtotal,
+    vat,
+    total: subtotal + vat,
+  };
+}
 
 // --- Mid-job material requests ---
 // The assigned tradesman asks the homeowner for extra materials/tools partway

@@ -67,6 +67,13 @@ enum MaterialRequestStatus {
   DECLINED
 }
 
+// Whether a quote line is labour or a material/part. The quote total is built up
+// from these lines (plus call-out/discount/VAT).
+enum QuoteLineCategory {
+  LABOUR
+  MATERIAL
+}
+
 // Materials-deposit escrow lifecycle. Mirrors the homeowner-facing milestone
 // strip: FUNDED (held) -> MATERIALS_RELEASED (paid out to buy parts when work
 // starts) -> WORK_COMPLETED (job done) -> RELEASED (balance paid out). REQUESTED
@@ -435,13 +442,21 @@ model Quote {
   id                  String      @id @default(cuid())
   jobId               String
   tradesmanId         String
+  // Grand total, derived server-side from the line items plus the call-out fee,
+  // discount and VAT. materialsAmount is the sum of MATERIAL lines (used to cap
+  // the escrow deposit).
   amount              Decimal     @db.Decimal(10, 2)
   materialsAmount     Decimal?    @db.Decimal(10, 2)
+  calloutFee          Decimal?    @db.Decimal(10, 2)
+  discount            Decimal?    @db.Decimal(10, 2)
+  vatRate             Decimal?    @db.Decimal(5, 2)
   depositRequested    Decimal?    @db.Decimal(10, 2)
   currency            String      @default("LKR")
   message             String?     @db.Text
   estimatedStart      DateTime?
   estimatedCompletion DateTime?
+  // The quote lapses after this; a cron flips pending quotes past it to EXPIRED.
+  validUntil          DateTime?
   status              QuoteStatus @default(PENDING)
   respondedAt         DateTime?
   withdrawnAt         DateTime?
@@ -462,15 +477,19 @@ model Quote {
 // An itemised material/tool line on a quote so the homeowner sees the scope and
 // estimated costs behind the price. Descriptive only — the deposit/escrow figure
 // is the quote's materialsAmount; unitPrice here is the tradesman's estimate.
+// A single line on a quote — labour or a material/part. The quote total is
+// built up from these (see Quote.amount). Despite the model name it now holds
+// both labour and material lines, distinguished by `category`.
 model QuoteMaterial {
-  id        String   @id @default(cuid())
+  id        String            @id @default(cuid())
   quoteId   String
+  category  QuoteLineCategory @default(MATERIAL)
   name      String
-  quantity  Decimal  @default(1) @db.Decimal(10, 2)
-  // Unit of measurement for the quantity (e.g. kg, m, m², pcs, bag).
+  quantity  Decimal           @default(1) @db.Decimal(10, 2)
+  // Unit of measurement for the quantity (e.g. kg, m, m², pcs, fitting, job).
   unit      String?
-  unitPrice Decimal? @db.Decimal(10, 2)
-  createdAt DateTime @default(now())
+  unitPrice Decimal?          @db.Decimal(10, 2)
+  createdAt DateTime          @default(now())
 
   quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
 
