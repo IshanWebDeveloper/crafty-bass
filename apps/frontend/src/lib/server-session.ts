@@ -55,6 +55,16 @@ export async function requireAuth(locale: Locale): Promise<SessionResponse> {
   return session;
 }
 
+/**
+ * Inverse of {@link requireAuth}: keeps already-signed-in users off the
+ * auth pages (sign-in, sign-up, account-recovery) by bouncing them to their
+ * dashboard. Call at the top of those server pages.
+ */
+export async function redirectIfAuthenticated(locale: Locale): Promise<void> {
+  const session = await getServerSession();
+  if (session) redirect(`/${locale}/dashboard`);
+}
+
 export type AppUserType = 'HOMEOWNER' | 'TRADESMAN';
 
 /**
