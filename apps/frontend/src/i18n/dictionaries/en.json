@@ -14,6 +14,16 @@
     "signOut": "Sign out",
     "roleHomeowner": "Homeowner",
     "roleTradesman": "Tradesman",
+    "trades": {
+      "plumber": "Plumber",
+      "electrician": "Electrician",
+      "carpenter": "Carpenter",
+      "painter": "Painter",
+      "mason": "Mason",
+      "cleaner": "Cleaner",
+      "handyman": "Handyman",
+      "tiler": "Tiler"
+    },
     "hints": {
       "findTrades": "Browse verified tradespeople near you",
       "browseJobs": "Find open jobs to quote on",

@@ -114,14 +114,12 @@ export function HeaderAuth({
         </Avatar>
         <div className="hidden flex-col items-start md:flex">
           <span className="text-sm font-medium leading-tight">{user.name}</span>
-          <span className="mt-0.5 flex items-center gap-1.5">
-            <RoleBadge userType={userType} dict={dict} />
-            {primaryTrade ? (
-              <span className="text-xs leading-tight text-muted-foreground">
-                {primaryTrade}
-              </span>
-            ) : null}
-          </span>
+          <RoleBadge
+            userType={userType}
+            primaryTrade={primaryTrade}
+            dict={dict}
+            className="mt-0.5"
+          />
         </div>
         <ChevronDown
           className="size-4 text-muted-foreground transition-transform group-aria-expanded/button:rotate-180"
@@ -137,14 +135,12 @@ export function HeaderAuth({
             <span className="truncate text-xs font-normal text-muted-foreground">
               {user.email}
             </span>
-            <span className="mt-1.5 flex items-center gap-1.5">
-              <RoleBadge userType={userType} dict={dict} />
-              {primaryTrade ? (
-                <span className="text-xs font-normal text-muted-foreground">
-                  {primaryTrade}
-                </span>
-              ) : null}
-            </span>
+            <RoleBadge
+              userType={userType}
+              primaryTrade={primaryTrade}
+              dict={dict}
+              className="mt-1.5"
+            />
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
