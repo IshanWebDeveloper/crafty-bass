@@ -54,6 +54,8 @@ export class JobsService {
         descriptionLanguage: dto.descriptionLanguage,
         categoryId: dto.categoryId ?? null,
         urgency: dto.urgency,
+        taskSize: dto.taskSize ?? null,
+        vehicleRequirement: dto.vehicleRequirement ?? null,
         expiresAt: expiryFromUrgency(dto.urgency),
         locationText: dto.locationText ?? null,
         city: dto.city ?? null,

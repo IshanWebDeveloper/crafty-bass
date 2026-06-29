@@ -15,7 +15,7 @@ import {
   Sparkles,
   X,
 } from 'lucide-react';
-import { Badge, Button, Combobox, DatePicker, Input } from '@repo/ui';
+import { Badge, Button, Combobox, DatePicker, Input, cn } from '@repo/ui';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +27,13 @@ import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { parseDateInput, formatDateInput } from '@/lib/date';
 import { Textarea } from '@/components/ui/textarea';
-import { createJob, type JobUrgency, type LanguageCode } from '@/lib/api/jobs';
+import {
+  createJob,
+  type JobUrgency,
+  type LanguageCode,
+  type TaskSize,
+  type VehicleRequirement,
+} from '@/lib/api/jobs';
 import { listCategories, type ServiceCategory } from '@/lib/api/categories';
 import { CategoryIcon } from '@/lib/categories';
 import { DISTRICT_OPTIONS } from '@/lib/districts';
@@ -37,6 +43,8 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
 const URGENCY_OPTIONS: JobUrgency[] = ['LOW', 'MEDIUM', 'HIGH', 'EMERGENCY'];
+const TASK_SIZE_OPTIONS: TaskSize[] = ['SMALL', 'MEDIUM', 'LARGE'];
+const VEHICLE_OPTIONS: VehicleRequirement[] = ['NONE', 'CAR', 'TRUCK'];
 
 const PostJobSchema = z
   .object({
@@ -50,6 +58,8 @@ const PostJobSchema = z
     budgetMin: z.string().optional(),
     budgetMax: z.string().optional(),
     scheduledFor: z.string().optional(),
+    taskSize: z.enum(['SMALL', 'MEDIUM', 'LARGE']).optional(),
+    vehicleRequirement: z.enum(['NONE', 'CAR', 'TRUCK']).optional(),
   })
   .refine(
     (v) => {
@@ -296,6 +306,8 @@ export function PostJobForm({
         budgetMin: parseOptionalNumber(values.budgetMin),
         budgetMax: parseOptionalNumber(values.budgetMax),
         scheduledFor: values.scheduledFor || undefined,
+        taskSize: values.taskSize,
+        vehicleRequirement: values.vehicleRequirement,
       });
       toast.success(t.new.success);
       router.push(`/${locale}/jobs/${job.id}`);
@@ -633,6 +645,28 @@ export function PostJobForm({
         />
       </div>
 
+      <RadioCards
+        label={t.fields.taskSize}
+        optional={t.fields.optional}
+        options={TASK_SIZE_OPTIONS}
+        value={watch('taskSize')}
+        onChange={(value) => setValue('taskSize', value, { shouldDirty: true })}
+        getLabel={(option) => t.taskSizeLabels[option]}
+        getHint={(option) => t.taskSizeHints[option]}
+      />
+
+      <RadioCards
+        label={t.fields.vehicle}
+        optional={t.fields.optional}
+        options={VEHICLE_OPTIONS}
+        value={watch('vehicleRequirement')}
+        onChange={(value) =>
+          setValue('vehicleRequirement', value, { shouldDirty: true })
+        }
+        getLabel={(option) => t.vehicleLabels[option]}
+        getHint={(option) => t.vehicleHints[option]}
+      />
+
       <p className="text-[0.7rem] leading-relaxed text-muted-foreground">
         {t.new.contactConsent}
       </p>
@@ -640,5 +674,83 @@ export function PostJobForm({
         {submitting ? t.new.submitting : t.new.submit}
       </Button>
     </form>
+  );
+}
+
+/**
+ * An inline radio-card group — a visible set of selectable options (with an
+ * optional hint per option) used for the "task size" and "vehicle needed"
+ * posting choices. Selection is optional: clicking the active option clears it.
+ */
+function RadioCards<T extends string>({
+  label,
+  optional,
+  options,
+  value,
+  onChange,
+  getLabel,
+  getHint,
+}: {
+  label: string;
+  optional?: string;
+  options: readonly T[];
+  value: T | undefined;
+  onChange: (value: T | undefined) => void;
+  getLabel: (option: T) => string;
+  getHint?: (option: T) => string | undefined;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label>
+        {label}{' '}
+        {optional ? (
+          <span className="font-normal text-muted-foreground">{optional}</span>
+        ) : null}
+      </Label>
+      <div
+        role="radiogroup"
+        aria-label={label}
+        className="grid gap-2 sm:grid-cols-3"
+      >
+        {options.map((option) => {
+          const selected = value === option;
+          return (
+            <button
+              key={option}
+              type="button"
+              role="radio"
+              aria-checked={selected}
+              onClick={() => onChange(selected ? undefined : option)}
+              className={cn(
+                'flex items-center gap-2.5 rounded-lg border px-3.5 py-3 text-left text-sm transition-colors',
+                selected
+                  ? 'border-primary bg-accent-soft text-accent-soft-foreground'
+                  : 'border-border bg-card hover:border-[color-mix(in_oklch,var(--border)_40%,var(--foreground)_20%)]',
+              )}
+            >
+              <span
+                className={cn(
+                  'flex size-4 shrink-0 items-center justify-center rounded-full border',
+                  selected ? 'border-primary' : 'border-muted-foreground/50',
+                )}
+                aria-hidden
+              >
+                {selected ? (
+                  <span className="size-2 rounded-full bg-primary" />
+                ) : null}
+              </span>
+              <span className="flex flex-col">
+                <span className="font-medium">{getLabel(option)}</span>
+                {getHint?.(option) ? (
+                  <span className="text-xs text-muted-foreground">
+                    {getHint(option)}
+                  </span>
+                ) : null}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }

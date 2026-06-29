@@ -9,6 +9,8 @@ export type JobStatus =
   | 'CANCELLED'
   | 'EXPIRED';
 export type LanguageCode = 'EN' | 'SI' | 'TA';
+export type TaskSize = 'SMALL' | 'MEDIUM' | 'LARGE';
+export type VehicleRequirement = 'NONE' | 'CAR' | 'TRUCK';
 
 export type JobListItem = {
   id: string;
@@ -21,6 +23,8 @@ export type JobListItem = {
   budgetMin: number | null;
   budgetMax: number | null;
   scheduledFor: string | null;
+  taskSize: TaskSize | null;
+  vehicleRequirement: VehicleRequirement | null;
   expiresAt: string | null;
   createdAt: string;
   assignedTradesmanId: string | null;
@@ -57,6 +61,8 @@ export type CreateJobBody = {
   budgetMax?: number;
   scheduledFor?: string;
   urgency: JobUrgency;
+  taskSize?: TaskSize;
+  vehicleRequirement?: VehicleRequirement;
 };
 
 export type JobListQuery = {

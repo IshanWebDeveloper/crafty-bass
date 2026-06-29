@@ -3,6 +3,8 @@ import { z } from 'zod';
 // Shared enums (mirror packages/db/prisma/schema.prisma)
 export const LanguageCodeSchema = z.enum(['EN', 'SI', 'TA']);
 export const JobUrgencySchema = z.enum(['LOW', 'MEDIUM', 'HIGH', 'EMERGENCY']);
+export const TaskSizeSchema = z.enum(['SMALL', 'MEDIUM', 'LARGE']);
+export const VehicleRequirementSchema = z.enum(['NONE', 'CAR', 'TRUCK']);
 export const JobStatusSchema = z.enum([
   'OPEN',
   'ASSIGNED',
@@ -81,6 +83,8 @@ export const CreateJobSchema = z
     budgetMax: z.coerce.number().nonnegative().max(100_000_000).optional(),
     scheduledFor: z.coerce.date().optional(),
     urgency: JobUrgencySchema.default('MEDIUM'),
+    taskSize: TaskSizeSchema.optional(),
+    vehicleRequirement: VehicleRequirementSchema.optional(),
   })
   .refine(
     (v) =>
@@ -105,6 +109,8 @@ export const UpdateJobSchema = z
     budgetMax: z.coerce.number().nonnegative().max(100_000_000),
     scheduledFor: z.coerce.date(),
     urgency: JobUrgencySchema,
+    taskSize: TaskSizeSchema,
+    vehicleRequirement: VehicleRequirementSchema,
   })
   .partial();
 

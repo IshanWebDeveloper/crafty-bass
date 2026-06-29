@@ -51,6 +51,21 @@ enum JobUrgency {
   EMERGENCY
 }
 
+// Rough size of a job, used to set duration expectations when posting.
+enum TaskSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+// Whether the job needs the tradesperson to bring a vehicle (e.g. moving,
+// hauling away waste). Helps homeowners surface trades equipped for the work.
+enum VehicleRequirement {
+  NONE
+  CAR
+  TRUCK
+}
+
 enum QuoteStatus {
   PENDING
   ACCEPTED
@@ -374,34 +389,36 @@ model TradesmanSkill {
 }
 
 model Job {
-  id                  String       @id @default(cuid())
+  id                  String              @id @default(cuid())
   homeownerId         String
   title               String
-  description         String       @db.Text
-  descriptionLanguage LanguageCode @default(EN)
+  description         String              @db.Text
+  descriptionLanguage LanguageCode        @default(EN)
   categoryId          String?
   aiCategoryId        String?
-  aiConfidence        Decimal?     @db.Decimal(5, 4)
+  aiConfidence        Decimal?            @db.Decimal(5, 4)
   aiSuggestedTags     Json?
   locationText        String?
   city                String?
   district            String?
-  latitude            Decimal?     @db.Decimal(9, 6)
-  longitude           Decimal?     @db.Decimal(9, 6)
-  budgetMin           Decimal?     @db.Decimal(10, 2)
-  budgetMax           Decimal?     @db.Decimal(10, 2)
+  latitude            Decimal?            @db.Decimal(9, 6)
+  longitude           Decimal?            @db.Decimal(9, 6)
+  budgetMin           Decimal?            @db.Decimal(10, 2)
+  budgetMax           Decimal?            @db.Decimal(10, 2)
   scheduledFor        DateTime?
-  urgency             JobUrgency   @default(MEDIUM)
-  status              JobStatus    @default(OPEN)
+  urgency             JobUrgency          @default(MEDIUM)
+  taskSize            TaskSize?
+  vehicleRequirement  VehicleRequirement?
+  status              JobStatus           @default(OPEN)
   assignedTradesmanId String?
-  acceptedQuoteId     String?      @unique
+  acceptedQuoteId     String?             @unique
   // When an OPEN job stops accepting quotes, derived from urgency at creation. A
   // cron flips lapsed OPEN jobs to EXPIRED; the UI flags those nearing this time.
   expiresAt           DateTime?
   completedAt         DateTime?
   cancelledAt         DateTime?
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
 
   homeowner         User                @relation("HomeownerJobs", fields: [homeownerId], references: [id], onDelete: Cascade)
   category          ServiceCategory?    @relation("PrimaryCategoryJobs", fields: [categoryId], references: [id], onDelete: SetNull)
