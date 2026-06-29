@@ -32,6 +32,7 @@ import {
 import { listCategories } from '@/lib/api/categories';
 import { CategoryIcon } from '@/lib/categories';
 import { DISTRICT_OPTIONS } from '@/lib/districts';
+import { tradeRoleLabel } from '@/lib/trade-role';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -235,9 +236,9 @@ function TradeCard({
               <span className="truncate">{trade.name}</span>
               {trade.isVerified ? <VerifiedBadge size={15} /> : null}
             </p>
-            {trade.primaryTrade ? (
+            {tradeRoleLabel(trade.primaryTrade, dict.header.trades) ? (
               <Tag variant="active" className="mt-1">
-                {trade.primaryTrade}
+                {tradeRoleLabel(trade.primaryTrade, dict.header.trades)}
               </Tag>
             ) : null}
             <RatingStars
