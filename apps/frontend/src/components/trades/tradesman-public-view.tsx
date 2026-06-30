@@ -16,7 +16,7 @@ import {
 } from '@repo/ui';
 import { Card, CardContent } from '@/components/ui/card';
 import { getTradesmanPublic } from '@/lib/api/profiles';
-import { tradeRoleLabel } from '@/lib/trade-role';
+import { RoleBadge } from '@/components/layout/role-badge';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -114,11 +114,12 @@ export function TradesmanPublicView({
                 {trade.name}
                 {trade.isVerified ? <VerifiedBadge size={18} /> : null}
               </h1>
-              {tradeRoleLabel(trade.primaryTrade, dict.header.trades) ? (
-                <Tag variant="active" className="mt-1.5">
-                  {tradeRoleLabel(trade.primaryTrade, dict.header.trades)}
-                </Tag>
-              ) : null}
+              <RoleBadge
+                userType="TRADESMAN"
+                primaryTrade={trade.primaryTrade}
+                dict={dict}
+                className="mt-1.5"
+              />
               <RatingStars
                 value={trade.avgRating}
                 count={trade.ratingCount}

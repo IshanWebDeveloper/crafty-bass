@@ -35,6 +35,34 @@ export function tradeRoleKey(
   return null;
 }
 
+// Maps each recognised trade role to the service-category `slug` that shares its
+// colour + icon, so a tradesman's role badge picks up the same brand styling as
+// the matching category chip (e.g. "Plumber" → the sky-blue plumbing wrench,
+// "Electrician" → the amber electrical bolt). Unknown trades resolve to null and
+// fall back to the neutral default styling.
+const TRADE_ROLE_SLUGS: Record<TradeRoleKey, string> = {
+  plumber: 'plumbing',
+  electrician: 'electrical',
+  carpenter: 'carpentry',
+  painter: 'painting',
+  mason: 'masonry',
+  cleaner: 'cleaning',
+  handyman: 'handyman',
+  tiler: 'masonry',
+};
+
+/**
+ * The category `slug` whose colour + icon represents a tradesman's primary
+ * trade, or null when the trade isn't recognised. Pass the result to
+ * `categoryMeta` / `CategoryBadge`.
+ */
+export function tradeRoleSlug(
+  primaryTrade: string | null | undefined,
+): string | null {
+  const key = tradeRoleKey(primaryTrade);
+  return key ? TRADE_ROLE_SLUGS[key] : null;
+}
+
 /**
  * The practitioner noun to show for a tradesman: the localized noun when the
  * trade is recognised, otherwise the raw trade name. Returns null when there's

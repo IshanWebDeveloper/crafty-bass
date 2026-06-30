@@ -33,7 +33,7 @@ import { listCategories } from '@/lib/api/categories';
 import { CategoryIcon } from '@/lib/categories';
 import { TranslateButton } from '@/components/common/translate-button';
 import { DISTRICT_OPTIONS } from '@/lib/districts';
-import { tradeRoleLabel } from '@/lib/trade-role';
+import { RoleBadge } from '@/components/layout/role-badge';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -237,11 +237,12 @@ function TradeCard({
               <span className="truncate">{trade.name}</span>
               {trade.isVerified ? <VerifiedBadge size={15} /> : null}
             </p>
-            {tradeRoleLabel(trade.primaryTrade, dict.header.trades) ? (
-              <Tag variant="active" className="mt-1">
-                {tradeRoleLabel(trade.primaryTrade, dict.header.trades)}
-              </Tag>
-            ) : null}
+            <RoleBadge
+              userType="TRADESMAN"
+              primaryTrade={trade.primaryTrade}
+              dict={dict}
+              className="mt-1"
+            />
             <RatingStars
               value={trade.avgRating}
               count={trade.ratingCount}
