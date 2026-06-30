@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { Bell } from 'lucide-react';
 import { cn } from '@repo/ui';
 import { useSession } from '@/lib/auth-client';
+import { useNotifications } from '@/lib/hooks/use-notifications';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 import { NotificationRow } from './notification-row';
-import { SEED_NOTIFICATIONS, type AppNotification } from './notifications-data';
+import type { AppNotification } from './notifications-data';
 
 function groupByLabel(items: AppNotification[]) {
   const groups: { label: string; items: AppNotification[] }[] = [];
@@ -33,19 +34,11 @@ export function NotificationBell({
   const { data: session } = useSession();
   const t = dict.notifications;
   const [open, setOpen] = useState(false);
-  const [items, setItems] = useState<AppNotification[]>(SEED_NOTIFICATIONS);
+  const { items, unread, readOne, markAll } = useNotifications(locale);
 
-  const unread = useMemo(() => items.filter((n) => n.unread).length, [items]);
   const groups = useMemo(() => groupByLabel(items), [items]);
 
   if (!session) return null;
-
-  const markAll = () =>
-    setItems((xs) => xs.map((n) => ({ ...n, unread: false })));
-  const readOne = (id: string) =>
-    setItems((xs) =>
-      xs.map((n) => (n.id === id ? { ...n, unread: false } : n)),
-    );
 
   return (
     <span className="relative inline-flex">
@@ -100,6 +93,11 @@ export function NotificationBell({
               </button>
             </div>
             <div className="max-h-[432px] overflow-y-auto">
+              {items.length === 0 ? (
+                <p className="px-4 py-10 text-center text-sm text-muted-foreground">
+                  {t.empty}
+                </p>
+              ) : null}
               {groups.map((g) => (
                 <div key={g.label}>
                   <div className="bg-canvas px-4 pt-2.5 pb-1.5 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
