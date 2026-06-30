@@ -290,6 +290,7 @@ exports.Prisma.JobScalarFieldEnum = {
   assignedTradesmanId: 'assignedTradesmanId',
   acceptedQuoteId: 'acceptedQuoteId',
   expiresAt: 'expiresAt',
+  expiryNoticeSentAt: 'expiryNoticeSentAt',
   completedAt: 'completedAt',
   cancelledAt: 'cancelledAt',
   createdAt: 'createdAt',
@@ -490,6 +491,18 @@ exports.Prisma.ReportScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  href: 'href',
+  jobId: 'jobId',
+  readAt: 'readAt',
+  createdAt: 'createdAt',
+};
+
 exports.Prisma.WebhookEventScalarFieldEnum = {
   id: 'id',
   source: 'source',
@@ -646,6 +659,10 @@ exports.ReportStatus = exports.$Enums.ReportStatus = {
   DISMISSED: 'DISMISSED',
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  JOB_EXPIRING: 'JOB_EXPIRING',
+};
+
 exports.WebhookEventStatus = exports.$Enums.WebhookEventStatus = {
   RECEIVED: 'RECEIVED',
   ACCEPTED: 'ACCEPTED',
@@ -681,6 +698,7 @@ exports.Prisma.ModelName = {
   Review: 'Review',
   JobRecommendation: 'JobRecommendation',
   Report: 'Report',
+  Notification: 'Notification',
   WebhookEvent: 'WebhookEvent',
 };
 

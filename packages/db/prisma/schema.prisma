@@ -148,6 +148,13 @@ enum ReportTargetType {
   MESSAGE
 }
 
+// In-app notification kinds. JOB_EXPIRING warns relevant tradesmen that an OPEN
+// job matching their trade is about to lapse (see JobExpiryNoticeCronService).
+// Kept as an enum so new notification types are added deliberately.
+enum NotificationType {
+  JOB_EXPIRING
+}
+
 model User {
   id                      String    @id @default(cuid())
   name                    String
@@ -187,6 +194,7 @@ model User {
   escrowsAsTradesman    JobEscrow[]               @relation("EscrowTradesman")
   verification          TradesmanVerification?    @relation("TradesmanVerification")
   reviewedVerifications TradesmanVerification[]   @relation("VerificationReviewer")
+  notifications         Notification[]
 
   phoneNumber         String?
   phoneNumberVerified Boolean?
@@ -415,6 +423,10 @@ model Job {
   // When an OPEN job stops accepting quotes, derived from urgency at creation. A
   // cron flips lapsed OPEN jobs to EXPIRED; the UI flags those nearing this time.
   expiresAt           DateTime?
+  // Set once the "job about to expire" notices have been dispatched to relevant
+  // tradesmen, so the notice cron fires at most once per job (see
+  // JobExpiryNoticeCronService).
+  expiryNoticeSentAt  DateTime?
   completedAt         DateTime?
   cancelledAt         DateTime?
   createdAt           DateTime     @default(now())
@@ -433,6 +445,7 @@ model Job {
   reports           Report[]
   escrow            JobEscrow?
   materialRequests  MaterialRequest[]
+  notifications     Notification[]
 
   @@index([homeownerId, status])
   @@index([status, categoryId])
@@ -763,6 +776,32 @@ model Report {
   @@index([status, createdAt])
   @@index([targetType, targetId])
   @@index([assigneeId])
+}
+
+// An in-app notification for a single user. The bell and notifications centre
+// read these; `readAt` tracks the unread badge. `href` is an app-relative deep
+// link (e.g. "jobs/<id>"); `jobId` links to the originating job for cascade
+// delete and dedup. Dynamic copy (title/body) is stored in English — the
+// surrounding chrome is localised on the client.
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String?          @db.Text
+  href      String?
+  jobId     String?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job  Job? @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  // One notification of a given type per user per job — lets the expiry-notice
+  // dispatch use createMany(skipDuplicates) safely if it ever re-runs.
+  @@unique([userId, type, jobId])
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
 }
 
 enum WebhookEventStatus {

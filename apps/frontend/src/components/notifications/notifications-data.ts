@@ -1,8 +1,13 @@
-// TODO(backend): there is no Notification model/endpoint yet (see plan Gap #3).
-// This presentational seed lets the bell + center render real-looking data;
-// swap `useNotifications` for a TanStack Query hook against the API once it
-// exists. Item copy stays in English here (dynamic content); the surrounding
-// chrome is localised via the `notifications` dictionary block.
+// Display model for the notification bell + centre. The backend
+// (`/api/v1/notifications`) returns the raw records; this maps each one to the
+// presentational shape the rows render. Dynamic copy (title/body) is English
+// from the backend; the surrounding chrome is localised via the `notifications`
+// dictionary block, and the date-derived `group`/`time` use the active locale.
+
+import type {
+  ApiNotification,
+  NotificationType,
+} from '@/lib/api/notifications';
 
 export type NotificationTint = 'green' | 'amber' | 'neutral';
 export type NotificationCategory = 'escrow' | 'message' | 'job' | 'account';
@@ -21,101 +26,67 @@ export type AppNotification = {
   action?: string;
 };
 
-export const SEED_NOTIFICATIONS: AppNotification[] = [
-  {
-    id: 'n1',
-    category: 'escrow',
-    group: 'Today',
-    tint: 'green',
-    icon: 'hand-coins',
-    unread: true,
-    time: '20m ago',
-    title: 'Saman Rajapaksa requested a materials deposit',
-    body: 'LKR 5,760 for “Replace bathroom shower mixer”. It goes into escrow — you pay Crafty Bass, not the tradesman.',
-    href: 'jobs',
-    action: 'Review & fund',
-  },
-  {
-    id: 'n2',
-    category: 'message',
-    group: 'Today',
-    tint: 'neutral',
-    icon: 'message-circle',
-    unread: true,
-    time: '2:14 PM',
-    title: 'Tariq Hameed sent you a message',
-    body: '“Sounds good — I’ll bring the cartridge and a spare seal kit.”',
-    href: 'messages',
-  },
-  {
-    id: 'n3',
-    category: 'job',
-    group: 'Today',
-    tint: 'neutral',
-    icon: 'receipt-text',
-    unread: false,
-    time: '11:02 AM',
-    title: 'New quote on your job',
-    body: 'Nuwan Perera quoted LKR 14,000 for the shower mixer replacement.',
-    href: 'jobs',
-  },
-  {
-    id: 'n4',
-    category: 'escrow',
-    group: 'This week',
-    tint: 'green',
-    icon: 'lock',
-    unread: false,
-    time: 'Yesterday',
-    title: 'Deposit secured in escrow',
-    body: 'Your LKR 5,760 is held safely by Crafty Bass and stays refundable until work begins.',
-  },
-  {
-    id: 'n5',
-    category: 'escrow',
-    group: 'This week',
-    tint: 'green',
-    icon: 'wrench',
-    unread: true,
-    time: 'Yesterday',
-    title: 'Saman marked your job complete',
-    body: 'Check the work, then release the balance from escrow and leave a review.',
-    href: 'jobs',
-    action: 'Approve & review',
-  },
-  {
-    id: 'n6',
-    category: 'job',
-    group: 'This week',
-    tint: 'amber',
-    icon: 'star',
-    unread: false,
-    time: 'Wed',
-    title: 'Dilani Fernando left you a 5★ review',
-    body: '“Thanks for the quick work, much appreciated!”',
-  },
-  {
-    id: 'n7',
-    category: 'account',
-    group: 'Earlier',
-    tint: 'neutral',
-    icon: 'badge-check',
-    unread: false,
-    time: '18 Jun',
-    title: 'Your verification is under review',
-    body: 'We’re checking your NIC and trade licence. Quoting unlocks once you’re approved.',
-    href: 'account/get-verified',
-    action: 'View status',
-  },
-  {
-    id: 'n8',
-    category: 'escrow',
-    group: 'Earlier',
-    tint: 'green',
-    icon: 'circle-check-big',
-    unread: false,
-    time: '8 Jun',
-    title: 'Balance released',
-    body: 'LKR 9,800 paid to your tradesman for “Install ceiling fans ×3”. The job is now closed.',
-  },
-];
+// Per-type presentation. Extend this as new NotificationType values land.
+const NOTIFICATION_META: Record<
+  NotificationType,
+  { category: NotificationCategory; tint: NotificationTint; icon: string }
+> = {
+  JOB_EXPIRING: { category: 'job', tint: 'amber', icon: 'clock' },
+};
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function startOfDay(d: Date): Date {
+  const s = new Date(d);
+  s.setHours(0, 0, 0, 0);
+  return s;
+}
+
+// Coarse bucket used as a section header. Matches the original three groups.
+function groupFor(date: Date, now: Date): string {
+  const today = startOfDay(now);
+  if (date >= today) return 'Today';
+  if (date >= new Date(today.getTime() - 6 * DAY_MS)) return 'This week';
+  return 'Earlier';
+}
+
+// Compact, human-friendly timestamp (e.g. "20m ago", "Yesterday", "18 Jun").
+function relativeTime(date: Date, now: Date, locale: string): string {
+  const diff = now.getTime() - date.getTime();
+  if (diff < 60_000) return 'Just now';
+  if (diff < 3_600_000) return `${Math.floor(diff / 60_000)}m ago`;
+
+  const today = startOfDay(now);
+  if (date >= today) return `${Math.floor(diff / 3_600_000)}h ago`;
+  if (date >= new Date(today.getTime() - DAY_MS)) return 'Yesterday';
+  if (date >= new Date(today.getTime() - 6 * DAY_MS)) {
+    return date.toLocaleDateString(locale, { weekday: 'short' });
+  }
+  return date.toLocaleDateString(locale, { day: 'numeric', month: 'short' });
+}
+
+/** Maps a backend notification record to its presentational form. */
+export function toAppNotification(
+  n: ApiNotification,
+  locale: string,
+  now: Date = new Date(),
+): AppNotification {
+  const meta = NOTIFICATION_META[n.type] ?? {
+    category: 'account' as const,
+    tint: 'neutral' as const,
+    icon: 'bell',
+  };
+  const date = new Date(n.createdAt);
+  return {
+    id: n.id,
+    category: meta.category,
+    group: groupFor(date, now),
+    tint: meta.tint,
+    icon: meta.icon,
+    unread: !n.read,
+    time: relativeTime(date, now, locale),
+    title: n.title,
+    body: n.body ?? undefined,
+    href: n.href ?? undefined,
+  };
+}

@@ -3,11 +3,11 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@repo/ui';
 import { Card, CardContent } from '@/components/ui/card';
+import { useNotifications } from '@/lib/hooks/use-notifications';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 import { NotificationRow } from './notification-row';
 import {
-  SEED_NOTIFICATIONS,
   type AppNotification,
   type NotificationCategory,
 } from './notifications-data';
@@ -35,7 +35,7 @@ export function NotificationsView({
   dict: Dictionary;
 }) {
   const t = dict.notifications;
-  const [items, setItems] = useState<AppNotification[]>(SEED_NOTIFICATIONS);
+  const { items, unread, readOne, markAll } = useNotifications(locale);
   const [filter, setFilter] = useState<Filter>('all');
 
   const filtered = useMemo(
@@ -44,14 +44,6 @@ export function NotificationsView({
     [items, filter],
   );
   const groups = useMemo(() => groupByLabel(filtered), [filtered]);
-  const unread = items.filter((n) => n.unread).length;
-
-  const readOne = (id: string) =>
-    setItems((xs) =>
-      xs.map((n) => (n.id === id ? { ...n, unread: false } : n)),
-    );
-  const markAll = () =>
-    setItems((xs) => xs.map((n) => ({ ...n, unread: false })));
 
   const tabs: { key: Filter; label: string }[] = [
     { key: 'all', label: t.filters.all },
