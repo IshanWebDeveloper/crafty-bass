@@ -6,7 +6,8 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
-import type { FundEscrowDto } from './dto/index.js';
+import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
+import type { EscrowListQueryDto, FundEscrowDto } from './dto/index.js';
 
 // Loaded once per request so the service can both authorise the caller and run
 // the state machine without a second round-trip.
@@ -80,6 +81,48 @@ export class EscrowService {
 
   async getById(userId: string, escrowId: string) {
     return this.serialize(await this.loadParty(escrowId, userId));
+  }
+
+  // Admin/support monitoring: every escrow, newest first, optionally filtered by
+  // status. Transactions are omitted from the list payload — the detail view
+  // (getById, which staff can load via loadParty) carries the full ledger.
+  async listAll(query: EscrowListQueryDto) {
+    const { page, limit, status } = query;
+    const skip = (page - 1) * limit;
+    const where = status ? { status } : {};
+    const [rows, total] = await Promise.all([
+      this.prisma.jobEscrow.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          job: { select: { id: true, title: true, status: true } },
+          homeowner: { select: { id: true, name: true, image: true } },
+          tradesman: { select: { id: true, name: true, image: true } },
+        },
+      }),
+      this.prisma.jobEscrow.count({ where }),
+    ]);
+    return {
+      data: rows.map((e) => ({
+        id: e.id,
+        jobId: e.jobId,
+        status: e.status,
+        currency: e.currency,
+        quoteTotal: dec(e.quoteTotal),
+        depositAmount: dec(e.depositAmount),
+        balanceAmount: dec(e.balanceAmount),
+        fundedAt: e.fundedAt,
+        releasedAt: e.releasedAt,
+        refundedAt: e.refundedAt,
+        createdAt: e.createdAt,
+        job: e.job,
+        homeowner: e.homeowner,
+        tradesman: e.tradesman,
+      })),
+      meta: buildPaginationMeta(total, page, limit),
+    };
   }
 
   async getForJob(userId: string, jobId: string) {
