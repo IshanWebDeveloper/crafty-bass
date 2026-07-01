@@ -1,6 +1,10 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { RoleSchema, PaymentMethodSchema } from '@repo/shared-types';
+import {
+  RoleSchema,
+  UserTypeSchema,
+  PaymentMethodSchema,
+} from '@repo/shared-types';
 
 // ─── Update Profile ─────────────────────────────────────────────────────────
 
@@ -62,6 +66,7 @@ const UserListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   role: RoleSchema.optional(),
+  userType: UserTypeSchema.optional(),
   search: z.string().optional(),
 });
 

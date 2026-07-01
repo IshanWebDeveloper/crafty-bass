@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import type { Role } from '@repo/db';
+import type { Role, UserType } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import type { UpdateProfileDto, UserListQueryDto } from './dto/index.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
@@ -95,11 +95,12 @@ export class UsersService {
   }
 
   async listUsers(query: UserListQueryDto) {
-    const { page, limit, role, search } = query;
+    const { page, limit, role, userType, search } = query;
     const skip = (page - 1) * limit;
 
     const where = {
       ...(role && { role: role as Role }),
+      ...(userType && { userType: userType as UserType }),
       ...(search && {
         OR: [
           { name: { contains: search, mode: 'insensitive' as const } },
