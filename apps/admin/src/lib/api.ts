@@ -72,3 +72,16 @@ export type Paginated<T> = {
   data: T[];
   meta: PaginationMeta;
 };
+
+// Serializes a params object into a `?a=b&c=d` query string, dropping
+// undefined/empty values. Shared by the feature API modules.
+export function buildQuery(
+  params: Record<string, string | number | undefined>,
+): string {
+  const sp = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== '') sp.set(key, String(value));
+  }
+  const qs = sp.toString();
+  return qs ? `?${qs}` : '';
+}
