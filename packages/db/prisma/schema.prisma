@@ -195,6 +195,7 @@ model User {
   verification          TradesmanVerification?    @relation("TradesmanVerification")
   reviewedVerifications TradesmanVerification[]   @relation("VerificationReviewer")
   notifications         Notification[]
+  auditLogs             AuditLog[]                @relation("AuditLogActor")
 
   phoneNumber         String?
   phoneNumberVerified Boolean?
@@ -830,5 +831,25 @@ model WebhookEvent {
   processedAt DateTime?
 
   @@index([source, status])
+  @@index([createdAt])
+}
+
+// Admin action audit trail. Every privileged mutation (ban, role change, user
+// creation, moderation decision) writes a row here so the admin console has a
+// tamper-evident history of who did what. actorId is nullable + SetNull so the
+// trail survives even if the acting staff account is later removed.
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String
+  details   Json?
+  createdAt DateTime @default(now())
+
+  actor User? @relation("AuditLogActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId, createdAt])
+  @@index([entity, entityId])
   @@index([createdAt])
 }
