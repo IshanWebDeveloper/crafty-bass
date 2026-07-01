@@ -127,6 +127,14 @@ Next.js 16 exposes an MCP endpoint per running dev server. To diagnose runtime/b
 4. Fix in source (for `@repo/ui` issues, edit `packages/ui/src/` — HMR applies it live).
 5. Verify with `browser_eval`: `start` → `navigate` to the page → `console_messages { errorsOnly: true }`, then re-run `get_errors` to confirm zero. `browser_eval` writes a `.playwright-mcp/` artifact dir — delete it when done.
 
+### Admin (Next.js App Router)
+
+- `apps/admin` is the internal console for `ADMIN`/`SUPPORT` staff — user/job/escrow/review/verification/report management, audit log, categories, settings. Runs on port `3001` (`next dev --port 3001`).
+- Route groups: `src/app/(dashboard)/*` (users, jobs, escrow, reviews, verifications, reports, categories, audit-log, settings) plus a standalone `src/app/sign-in`.
+- **Unlike `apps/frontend`, admin talks to the backend cross-origin, not through a same-origin proxy.** `src/lib/api.ts` and `src/lib/auth-client.ts` hit `NEXT_PUBLIC_API_URL`/`NEXT_PUBLIC_BETTER_AUTH_URL` (default `http://localhost:3005`) directly with `credentials: 'include'`; there is no `next.config.ts` rewrite and no `proxy.ts`. Auth is guarded client-side by `src/components/auth-guard.tsx`, which checks `useSession()` then the role from `/users/me` (`ADMIN`/`SUPPORT` only) — this is a deliberate deviation from the same-origin-proxy + server-guard pattern used in `apps/frontend`, not an oversight; don't "fix" it into that pattern without discussing it first.
+- shadcn config (`apps/admin/components.json`) points its aliases at `@repo/ui` (`components`/`ui`/`lib`/`hooks` all resolve into the `@repo/ui` package) rather than a local `src/components/ui` — new shadcn-generated primitives land in `@repo/ui`, feature components stay in `apps/admin/src/components/`.
+- Backend `CORS_ORIGINS` must include `http://localhost:3001` for local admin dev (already the default in `apps/backend/.env.example`).
+
 ### AI service (FastAPI + LangGraph)
 
 - Entry: `apps/ai-service/app/main.py`. Routes mounted under `settings.api_v1_str` (`/api/v1`).
