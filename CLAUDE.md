@@ -8,9 +8,10 @@ The Prisma schema (`packages/db/prisma/schema.prisma`, owned by the `@repo/db` p
 
 ## Repository
 
-Nx + pnpm monorepo with three apps:
+Nx + pnpm monorepo with four apps:
 
-- `apps/frontend` — Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui
+- `apps/frontend` — Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui — the homeowner/tradesman-facing marketplace, port `3000`
+- `apps/admin` — Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui + TanStack Query/Table + Recharts — the internal admin/support console, port `3001`
 - `apps/backend` — NestJS 11 + Prisma (PostgreSQL) + better-auth + BullMQ + Stripe
 - `apps/ai-service` — Python FastAPI + LangChain/LangGraph (LLM provider is `github` or `openai`)
 
@@ -31,7 +32,8 @@ All run from repo root unless noted.
 
 ```bash
 pnpm install                # install JS deps; ai-service .venv is separate (see below)
-pnpm dev                    # frontend + backend + ai-service in parallel via Nx
+pnpm dev                    # frontend + admin + backend + ai-service in parallel via Nx
+pnpm dev:admin               # only admin via Nx
 pnpm build / lint / test    # nx run-many across all projects (ai-service .venv must exist)
 pnpm format                 # prettier
 pnpm dev:ai                 # only ai-service via Nx (uses .venv)
@@ -39,9 +41,9 @@ pnpm dev:ai:uvicorn         # ai-service via uvicorn directly (no .venv required
 pnpm affected:build / affected:lint / affected:test   # CI-style affected-only
 ```
 
-Per-app: `pnpm nx run <frontend|backend|ai-service>:<dev|build|lint|test>`.
+Per-app: `pnpm nx run <frontend|admin|backend|ai-service>:<dev|build|lint|test>`.
 
-Ports: frontend `3000`, backend `3005` (override with `PORT`), ai-service `8006`. CORS defaults to `http://localhost:3000` (override with `CORS_ORIGINS`).
+Ports: frontend `3000`, admin `3001`, backend `3005` (override with `PORT`), ai-service `8006`. CORS defaults to `http://localhost:3000,http://localhost:3001,http://localhost:5173` (override with `CORS_ORIGINS`, see `apps/backend/.env.example`).
 
 ### Prisma
 
