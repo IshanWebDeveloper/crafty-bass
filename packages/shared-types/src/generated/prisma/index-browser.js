@@ -515,6 +515,16 @@ exports.Prisma.WebhookEventScalarFieldEnum = {
   processedAt: 'processedAt',
 };
 
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  actorId: 'actorId',
+  action: 'action',
+  entity: 'entity',
+  entityId: 'entityId',
+  details: 'details',
+  createdAt: 'createdAt',
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -700,6 +710,7 @@ exports.Prisma.ModelName = {
   Report: 'Report',
   Notification: 'Notification',
   WebhookEvent: 'WebhookEvent',
+  AuditLog: 'AuditLog',
 };
 
 /**
