@@ -1,32 +1,34 @@
 # Crafty Bass
 
-Crafty Bass is an Nx monorepo containing a Next.js frontend, a NestJS backend, and a Python FastAPI AI service for local LangChain and LangGraph workflows.
+Crafty Bass is a tradesman/homeowner marketplace built as an Nx monorepo containing a Next.js frontend, a Next.js admin app, a NestJS backend, and a Python FastAPI AI service for LangChain and LangGraph workflows.
 
 ## Monorepo Structure
 
-- `apps/frontend` - Next.js web app
+- `apps/frontend` - Next.js web app (App Router)
 - `apps/admin` - Next.js admin app
-- `apps/backend` - NestJS API + Prisma
-- `apps/ai-service` - FastAPI + LangChain + LangGraph + Ollama
-- `packages/ui` - Shared shadcn UI primitives
-- `packages/shared-types` - Shared browser-safe Prisma types
-- `packages/validation` - Shared Zod schemas
+- `apps/backend` - NestJS API + Prisma + better-auth + BullMQ + Stripe
+- `apps/ai-service` - FastAPI + LangChain + LangGraph
+- `packages/db` - Owns the Prisma schema, migrations/seeds, and the generated client (`@repo/db`)
+- `packages/auth` - better-auth access-control definitions and shared auth helpers (`@repo/auth`)
+- `packages/ui` - Shared UI primitives (base-ui under the hood) (`@repo/ui`)
+- `packages/shared-types` - Shared browser-safe Prisma types (`@repo/shared-types`)
+- `packages/validation` - Shared Zod schemas (`@repo/validation`)
 - `packages/eslint-config` and `packages/prettier-config` - Shared tooling configs
 
 ## Tech Stack
 
 - Monorepo: Nx
 - Package manager: pnpm
-- Frontend: Next.js + React + TypeScript
-- Backend: NestJS + Prisma + PostgreSQL
-- AI service: FastAPI + LangChain + LangGraph + Ollama
+- Frontend: Next.js 16 + React 19 + Tailwind v4 + TypeScript
+- Backend: NestJS 11 + Prisma (PostgreSQL) + better-auth + BullMQ + Stripe
+- AI service: FastAPI + LangChain + LangGraph (LLM provider is `github` or `openai`)
 
 ## Prerequisites
 
 - Node.js 20+
 - pnpm 10+
-- Python 3.10+ for `apps/ai-service`
-- Ollama for local model inference
+- Python 3.11 for `apps/ai-service`
+- A GitHub token or OpenAI API key for the AI service (`LLM_PROVIDER=github` or `openai`)
 
 ## Getting Started
 
@@ -86,15 +88,18 @@ pnpm nx run ai-service:dev
 pnpm dev:ai
 ```
 
-### Backend Prisma scripts
+### Prisma scripts
+
+The schema and migration/seed scripts live in the `@repo/db` package (`packages/db`).
 
 ```bash
-pnpm --filter backend prisma:generate
-pnpm prisma:generate:all
-pnpm prisma:check:generated
-pnpm --filter backend prisma:migrate:dev
-pnpm --filter backend prisma:migrate:reset
-pnpm --filter backend prisma:migrate:dev:test
+pnpm prisma:generate:all          # generate client + refresh shared-types browser output & hash stamp
+pnpm prisma:check:generated       # CI guard: verify the generated hash stamp matches the schema
+pnpm --filter @repo/db db:migrate:dev
+pnpm --filter @repo/db db:migrate:reset
+pnpm --filter @repo/db db:migrate:dev:test
+pnpm --filter @repo/db db:seed
+pnpm --filter @repo/db db:seed:users
 ```
 
 ### Stripe webhook forwarding (backend)
@@ -106,7 +111,7 @@ pnpm stripe:listen
 ## Notes
 
 - Backend defaults to port `3005` (configurable via `PORT`).
-- AI service defaults to port `8006` and reads local config from `apps/ai-service/.env`.
+- AI service defaults to port `8006` and reads local config from `apps/ai-service/.env` (set `GITHUB_TOKEN` or `OPENAI_API_KEY`).
 - CORS defaults to `http://localhost:3000` when `CORS_ORIGINS` is not set.
 - Backend Prisma scripts expect environment files such as `.env` and `.env.test` in `apps/backend`.
 - AI service expects a local virtual environment at `apps/ai-service/.venv` for Nx targets such as `ai-service:dev`.
@@ -122,7 +127,7 @@ This roadmap is based on the approved project scope
 - Integrate `@repo/auth` with HTTP endpoints and role-based guards (`CUSTOMER`, `SUPPORT`, `ADMIN`); marketplace RBAC in `packages/auth/src/access.ts`.
 - Add seed data for service categories and skills (English, Sinhala, Tamil labels).
 
-Deliverable: authenticated backend APIs with a stable domain model and seeded taxonomy. **Complete** — backend modules `users/`, `profiles/`, `jobs/`, `quotes/`, `categories/`, `reviews/`, `recommendations/`, `consent/`, `legal/`, `admin/` are wired; taxonomy seeded.
+Deliverable: authenticated backend APIs with a stable domain model and seeded taxonomy. **Complete** — backend modules `users/`, `profiles/`, `jobs/`, `quotes/`, `escrow/`, `categories/`, `reviews/`, `recommendations/`, `verification/`, `conversations/`, `reports/`, `consent/`, `legal/`, `admin/`, `webhooks/`, and `health/` are wired; taxonomy seeded.
 
 ### Phase 2: Two-Sided Marketplace Features
 
@@ -170,9 +175,7 @@ Deliverable: validated project outcomes aligned with dissertation/report require
 ## Current Repository Status (Quick Gap View)
 
 - Data model is stable in `packages/db/prisma/schema.prisma` (marketplace domain).
-- Auth foundation lives in `packages/auth/` with marketplace RBAC in `packages/auth/src/access.ts`.
-- Backend modules wired in `apps/backend/src/app.module.ts`: `users`, `profiles`, `jobs`, `quotes`, `categories`, `reviews`, `recommendations`, `consent`, `legal`, `admin`.
+- Auth foundation lives in `packages/auth/` (`@repo/auth`) with marketplace RBAC in `packages/auth/src/access.ts`.
+- Backend modules wired in `apps/backend/src/app.module.ts`: `users`, `profiles`, `jobs`, `quotes`, `escrow`, `categories`, `reviews`, `recommendations`, `verification`, `conversations`, `reports`, `consent`, `legal`, `admin`, `webhooks`, `health`.
 - Frontend has multilingual (en/si/ta) marketplace pages: home, job search, account/privacy.
 - Legacy e-commerce sweep complete (see `apps/backend/LEGACY_SWEEP_PLAN.md`).
-
-Recommended immediate next step: finish Phase C marketplace modules (`conversations/`, `messages/`, `reports/`), then move into Phase 3 AI classification work.
