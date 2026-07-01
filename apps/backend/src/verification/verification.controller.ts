@@ -38,6 +38,22 @@ export class VerificationController {
     );
   }
 
+  @Get(':id')
+  @Permissions('profile', 'verify')
+  @ApiOperation({ summary: 'Get a verification submission detail (reviewer)' })
+  getById(@Param('id') id: string) {
+    return this.verificationService.getById(id);
+  }
+
+  @Get(':id/documents')
+  @Permissions('profile', 'verify')
+  @ApiOperation({
+    summary: 'Get short-lived signed URLs for a submission’s documents',
+  })
+  getDocuments(@Param('id') id: string) {
+    return this.verificationService.getDocuments(id);
+  }
+
   @Post(':id/approve')
   @Permissions('profile', 'verify')
   @ApiOperation({ summary: 'Approve a verification (reviewer)' })

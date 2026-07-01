@@ -5,14 +5,34 @@ import {
 } from '@nestjs/common';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import { PrismaService } from '../common/prisma/prisma.service.js';
+import { S3Service } from '../admin/s3.service.js';
 import type {
   SubmitVerificationDto,
   RejectVerificationDto,
 } from './dto/index.js';
 
+// Short-lived signed URLs for reviewing KYC documents — long enough to open
+// each in a tab, short enough that a leaked link expires quickly.
+const DOCUMENT_URL_TTL_SECONDS = 10 * 60;
+
+// The single-file document keys on a submission, paired with a human label the
+// reviewer UI can render. Portfolio images (an array) are handled separately.
+const DOCUMENT_FIELDS = [
+  ['nicFrontKey', 'NIC (front)'],
+  ['nicBackKey', 'NIC (back)'],
+  ['photoKey', 'Photo'],
+  ['gramaNiladhariKey', 'Grama Niladhari certificate'],
+  ['licenceKey', 'Trade licence'],
+  ['policeClearanceKey', 'Police clearance'],
+  ['voiceIntroKey', 'Voice intro'],
+] as const;
+
 @Injectable()
 export class VerificationService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   // A tradesman submits (or resubmits) their KYC details. Resubmitting always
   // returns the record to PENDING for re-review; an already-approved tradesman
@@ -94,6 +114,73 @@ export class VerificationService {
       this.prisma.tradesmanVerification.count({ where }),
     ]);
     return { data, meta: buildPaginationMeta(total, page, limit) };
+  }
+
+  // Reviewer detail: the full submission plus the applicant. Document *keys*
+  // are returned as-is; call getDocuments to mint viewable signed URLs.
+  async getById(id: string) {
+    const submission = await this.prisma.tradesmanVerification.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            phone: true,
+            createdAt: true,
+          },
+        },
+        reviewedBy: { select: { id: true, name: true, email: true } },
+      },
+    });
+    if (!submission) throw new NotFoundException('Verification not found');
+    return submission;
+  }
+
+  // Mints short-lived signed URLs for every document attached to a submission,
+  // so a reviewer can open the KYC evidence without the keys being public.
+  async getDocuments(id: string) {
+    const submission = await this.prisma.tradesmanVerification.findUnique({
+      where: { id },
+    });
+    if (!submission) throw new NotFoundException('Verification not found');
+
+    const singles = await Promise.all(
+      DOCUMENT_FIELDS.filter(([field]) => submission[field]).map(
+        async ([field, label]) => ({
+          field,
+          label,
+          url: await this.s3Service.getPresignedDownloadUrl(
+            submission[field] as string,
+            DOCUMENT_URL_TTL_SECONDS,
+          ),
+        }),
+      ),
+    );
+
+    // portfolioKeys is a Json column holding a string[]; coerce defensively.
+    const portfolioKeys = Array.isArray(submission.portfolioKeys)
+      ? submission.portfolioKeys.filter(
+          (key): key is string => typeof key === 'string',
+        )
+      : [];
+    const portfolio = await Promise.all(
+      portfolioKeys.map(async (key, index) => ({
+        field: 'portfolioKeys' as const,
+        label: `Portfolio ${index + 1}`,
+        url: await this.s3Service.getPresignedDownloadUrl(
+          key,
+          DOCUMENT_URL_TTL_SECONDS,
+        ),
+      })),
+    );
+
+    return {
+      documents: [...singles, ...portfolio],
+      expiresInSeconds: DOCUMENT_URL_TTL_SECONDS,
+    };
   }
 
   // Reviewer approves: flips the tradesman's profile to verified, and to
