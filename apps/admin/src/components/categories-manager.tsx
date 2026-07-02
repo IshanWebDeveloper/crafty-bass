@@ -82,8 +82,10 @@ export function CategoriesManager() {
               placeholder="e.g. Appliance repair"
             />
           </label>
-          <div className="space-y-1.5">
-            <span className="block text-sm font-medium">Parent (optional)</span>
+          <div>
+            <span className="mb-1.5 block text-sm font-medium">
+              Parent (optional)
+            </span>
             <Select
               items={parentItems}
               value={parentId || 'none'}
@@ -91,7 +93,10 @@ export function CategoriesManager() {
                 setParentId(value === 'none' ? '' : (value as string))
               }
             >
-              <SelectTrigger className="min-w-48" aria-label="Parent category">
+              <SelectTrigger
+                className="h-8 min-w-48"
+                aria-label="Parent category"
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
