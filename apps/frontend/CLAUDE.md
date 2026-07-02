@@ -31,7 +31,7 @@ All app routes live under `src/app/[locale]/` (e.g. `[locale]/dashboard`, `[loca
 - `src/proxy.ts` is this app's Next 16 `proxy.ts` (the renamed `middleware.ts`).
 - Server-side session checks forward cookies to the backend (`server-session.ts` + a `requireAuth()` used at the top of private pages/layouts) rather than gating with a client-only `useSession()` hook.
 
-This is the opposite of how `apps/admin` talks to the backend (admin calls it cross-origin and guards client-side) — don't mix the two patterns up when copying code between the apps; see the root `CLAUDE.md` Architecture section for admin's approach and why it differs.
+`apps/admin` now uses this same pattern (same-origin `/api/*` rewrite + a server-side `requireAdmin()` guard); the main difference is that admin also checks the `ADMIN`/`SUPPORT` role and has no `[locale]` segment. See the root `CLAUDE.md` Admin section for the specifics.
 
 ## Tokens
 

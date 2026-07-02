@@ -3,8 +3,13 @@
 // credentials, JSON handling, and error normalization so the admin app shares
 // the same calling convention as the homeowner/tradesman web app.
 
+// In the browser, calls go through the same-origin /api/* rewrite
+// (next.config.ts), so a relative base keeps the better-auth cookie first-party.
+// On the server there is no proxy hop, so reach the API origin directly.
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3005/api/v1';
+  typeof window === 'undefined'
+    ? `${process.env.API_PROXY_TARGET ?? 'http://localhost:3005'}/api/v1`
+    : '/api/v1';
 
 export class ApiError extends Error {
   constructor(
