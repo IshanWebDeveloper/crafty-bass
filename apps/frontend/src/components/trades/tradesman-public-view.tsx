@@ -209,6 +209,23 @@ export function TradesmanPublicView({
                 </div>
               </section>
             ) : null}
+            {trade.portfolio.length > 0 ? (
+              <section>
+                <h2 className="text-sm font-semibold">{t.portfolio}</h2>
+                <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {trade.portfolio.map((url) => (
+                    // Presigned R2 URL — plain img avoids next/image config.
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={url}
+                      src={url}
+                      alt=""
+                      className="aspect-square w-full rounded-lg border border-border object-cover"
+                    />
+                  ))}
+                </div>
+              </section>
+            ) : null}
           </CardContent>
         </Card>
 

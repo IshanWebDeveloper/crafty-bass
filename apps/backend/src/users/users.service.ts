@@ -32,9 +32,16 @@ export class UsersService {
     }
 
     // Flatten the tradesman's stated primary trade so the header/own-profile can
-    // badge it without a second request.
+    // badge it without a second request. The avatar is stored as a private R2
+    // object key, so mint a short-lived signed URL for it on read.
     const { verification, ...rest } = user;
-    return { ...rest, primaryTrade: verification?.primaryTrade ?? null };
+    return {
+      ...rest,
+      image: rest.image
+        ? await this.s3Service.getPresignedDownloadUrl(rest.image)
+        : rest.image,
+      primaryTrade: verification?.primaryTrade ?? null,
+    };
   }
 
   async updateProfile(userId: string, dto: UpdateProfileDto) {
@@ -51,6 +58,7 @@ export class UsersService {
       data: {
         ...(dto.name !== undefined && { name: dto.name }),
         ...(dto.phone !== undefined && { phone: dto.phone }),
+        ...(dto.image !== undefined && { image: dto.image }),
       },
     });
   }
