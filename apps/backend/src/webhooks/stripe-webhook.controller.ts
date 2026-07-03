@@ -13,6 +13,7 @@ import { WebhookEventStatus, type Prisma } from '@repo/db';
 import { StripeService } from '../common/services/stripe.service.js';
 import { WebhookEventsService } from './webhook-events.service.js';
 import { EscrowService } from '../escrow/escrow.service.js';
+import { Public } from '../common/decorators/public.decorator.js';
 
 // Path matches the existing `stripe:listen` root package.json script
 // (`stripe listen --forward-to http://localhost:3005/api/v1/payments/webhook`).
@@ -27,6 +28,9 @@ export class StripeWebhookController {
     private readonly escrow: EscrowService,
   ) {}
 
+  // Stripe (not a session) is the caller — the signature check below is the
+  // real auth, so this bypasses PermissionsGuard's session requirement.
+  @Public()
   @Post()
   async handle(
     @Req() req: RawBodyRequest<Request>,

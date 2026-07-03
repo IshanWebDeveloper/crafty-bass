@@ -86,11 +86,11 @@ function CardPaymentForm({
       </div>
       <Button
         size="lg"
-        className="w-full"
+        className="h-auto w-full min-h-9 flex-wrap py-2 whitespace-normal"
         onClick={handleSubmit}
         disabled={!stripe || submitting}
       >
-        <Lock className="size-4" aria-hidden />
+        <Lock className="size-4 shrink-0" aria-hidden />
         {submitting ? submittingLabel : submitLabel}
       </Button>
     </div>
