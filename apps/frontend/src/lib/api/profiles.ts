@@ -128,6 +128,8 @@ export type TradesmanPublicProfile = TradesmanListItem & {
   isAvailable: boolean;
   certifications: string[];
   vehicles: string[];
+  // Presigned URLs for the tradesman's uploaded work photos.
+  portfolio: string[];
 };
 
 export type TradesmenQuery = {

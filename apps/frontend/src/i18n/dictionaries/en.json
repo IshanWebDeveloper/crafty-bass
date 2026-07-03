@@ -220,7 +220,10 @@
       "optional": "Optional",
       "gramaNiladhari": "Grama Niladhari certificate",
       "police": "Police clearance report",
-      "policeNote": "Adds the Background-checked tier to your badge."
+      "policeNote": "Adds the Background-checked tier to your badge.",
+      "portfolio": "Work photos",
+      "portfolioSub": "Add up to 10 photos of past jobs (optional).",
+      "addPhotos": "Add photos"
     },
     "details": {
       "title": "A few work details",
@@ -620,6 +623,12 @@
     "subtitle": "Tell people how to find you and what you can offer.",
     "loading": "Loading your profile…",
     "saved": "Profile saved",
+    "avatar": {
+      "title": "Profile photo",
+      "hint": "JPG, PNG or WebP · up to 5 MB",
+      "change": "Change photo",
+      "uploading": "Uploading…"
+    },
     "verification": {
       "verifiedTitle": "Verified",
       "verifiedBody": "You can receive jobs and send quotes.",
@@ -881,6 +890,7 @@
       "available": "Available now",
       "unavailable": "Not taking jobs right now",
       "about": "About",
+      "portfolio": "Work photos",
       "noBio": "This tradesperson hasn't added a bio yet.",
       "skills": "Skills",
       "noSkills": "No skills listed yet.",

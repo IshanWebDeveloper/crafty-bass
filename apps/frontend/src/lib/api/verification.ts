@@ -36,6 +36,8 @@ export type SubmitVerificationBody = {
   licenceKey?: string;
   licenceNumber?: string;
   policeClearanceKey?: string;
+  portfolioKeys?: string[];
+  voiceIntroKey?: string;
   serviceRadiusKm?: number;
   crewType?: 'solo' | 'team';
   helperCount?: number;

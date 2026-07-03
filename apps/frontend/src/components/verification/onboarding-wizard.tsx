@@ -11,9 +11,12 @@ import {
   Clock,
   CreditCard,
   FileBadge,
+  ImagePlus,
+  Loader2,
   Lock,
   ShieldCheck,
   UserRound,
+  X,
 } from 'lucide-react';
 import {
   Badge,
@@ -43,6 +46,7 @@ import {
   submitVerification,
   type SubmitVerificationBody,
 } from '@/lib/api/verification';
+import { uploadFile, type UploadCategory } from '@/lib/api/uploads';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -54,8 +58,6 @@ const BANKS = [
   'Hatton National Bank',
   'Nations Trust Bank',
 ];
-
-const PLACEHOLDER_KEY = 'uploaded'; // stand-in reference (real upload deferred)
 
 // Date-of-birth picker bounds: today back to 100 years ago, so the year
 // dropdown spans a realistic range instead of paging month by month.
@@ -72,14 +74,16 @@ type Form = {
   district: string;
   primaryTrade: string;
   yearsExperience: string;
-  // documents (provided flags)
-  nicFront: boolean;
-  nicBack: boolean;
-  photo: boolean;
-  gramaNiladhari: boolean;
-  licence: boolean;
+  // documents — each holds the uploaded R2 object key (null until uploaded)
+  nicFront: string | null;
+  nicBack: string | null;
+  photo: string | null;
+  gramaNiladhari: string | null;
+  licence: string | null;
   licenceNumber: string;
-  policeClearance: boolean;
+  policeClearance: string | null;
+  // work photos — array of uploaded R2 object keys
+  portfolio: string[];
   // details
   serviceRadiusKm: number;
   crewType: 'solo' | 'team';
@@ -94,6 +98,28 @@ type Form = {
   consent: boolean;
 };
 
+// The single-file document fields (each stores an uploaded R2 key).
+type DocField =
+  | 'nicFront'
+  | 'nicBack'
+  | 'photo'
+  | 'gramaNiladhari'
+  | 'licence'
+  | 'policeClearance';
+
+// Upload wiring threaded into the Documents/Details steps.
+type UploadHandlers = {
+  previews: Record<string, string>;
+  uploading: Record<string, boolean>;
+  onFile: (
+    field: DocField,
+    category: UploadCategory,
+    file: File | null,
+  ) => void;
+  addPortfolio: (files: FileList | null) => void;
+  removePortfolio: (key: string) => void;
+};
+
 const EMPTY: Form = {
   fullName: '',
   gender: '',
@@ -104,13 +130,14 @@ const EMPTY: Form = {
   district: '',
   primaryTrade: '',
   yearsExperience: '',
-  nicFront: false,
-  nicBack: false,
-  photo: false,
-  gramaNiladhari: false,
-  licence: false,
+  nicFront: null,
+  nicBack: null,
+  photo: null,
+  gramaNiladhari: null,
+  licence: null,
   licenceNumber: '',
-  policeClearance: false,
+  policeClearance: null,
+  portfolio: [],
   serviceRadiusKm: 15,
   crewType: 'solo',
   helperCount: '',
@@ -146,6 +173,57 @@ export function OnboardingWizard({
   const set = <K extends keyof Form>(key: K, value: Form[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
 
+  // Per-field upload state: presigned preview URLs (keyed by field name for the
+  // single documents, and by object key for portfolio images) and in-flight
+  // flags so tiles can show a spinner while a file uploads.
+  const [previews, setPreviews] = useState<Record<string, string>>({});
+  const [uploading, setUploading] = useState<Record<string, boolean>>({});
+
+  async function handleUpload(
+    field: DocField,
+    category: UploadCategory,
+    file: File | null,
+  ) {
+    if (!file) return;
+    setUploading((u) => ({ ...u, [field]: true }));
+    try {
+      const { key, url } = await uploadFile(file, category);
+      set(field, key);
+      setPreviews((p) => ({ ...p, [field]: url }));
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading((u) => ({ ...u, [field]: false }));
+    }
+  }
+
+  async function addPortfolio(files: FileList | null) {
+    if (!files || files.length === 0) return;
+    const chosen = Array.from(files).slice(0, 10 - form.portfolio.length);
+    setUploading((u) => ({ ...u, portfolio: true }));
+    for (const file of chosen) {
+      try {
+        const { key, url } = await uploadFile(file, 'portfolio');
+        setForm((f) => ({ ...f, portfolio: [...f.portfolio, key] }));
+        setPreviews((p) => ({ ...p, [key]: url }));
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : 'Upload failed');
+      }
+    }
+    setUploading((u) => ({ ...u, portfolio: false }));
+  }
+
+  const removePortfolio = (key: string) =>
+    setForm((f) => ({ ...f, portfolio: f.portfolio.filter((k) => k !== key) }));
+
+  const up: UploadHandlers = {
+    previews,
+    uploading,
+    onFile: handleUpload,
+    addPortfolio,
+    removePortfolio,
+  };
+
   const mutation = useMutation({
     mutationFn: () => {
       const body: SubmitVerificationBody = {
@@ -160,13 +238,14 @@ export function OnboardingWizard({
         yearsExperience: form.yearsExperience
           ? Number(form.yearsExperience)
           : undefined,
-        nicFrontKey: form.nicFront ? PLACEHOLDER_KEY : undefined,
-        nicBackKey: form.nicBack ? PLACEHOLDER_KEY : undefined,
-        photoKey: form.photo ? PLACEHOLDER_KEY : undefined,
-        gramaNiladhariKey: form.gramaNiladhari ? PLACEHOLDER_KEY : undefined,
-        licenceKey: form.licence ? PLACEHOLDER_KEY : undefined,
+        nicFrontKey: form.nicFront ?? undefined,
+        nicBackKey: form.nicBack ?? undefined,
+        photoKey: form.photo ?? undefined,
+        gramaNiladhariKey: form.gramaNiladhari ?? undefined,
+        licenceKey: form.licence ?? undefined,
         licenceNumber: form.licenceNumber || undefined,
-        policeClearanceKey: form.policeClearance ? PLACEHOLDER_KEY : undefined,
+        policeClearanceKey: form.policeClearance ?? undefined,
+        portfolioKeys: form.portfolio.length ? form.portfolio : undefined,
         serviceRadiusKm: form.serviceRadiusKm,
         crewType: form.crewType,
         helperCount:
@@ -202,7 +281,11 @@ export function OnboardingWizard({
 
   if (isSubmitted || mutation.isSuccess) {
     return (
-      <Submitted dict={dict} locale={locale} police={form.policeClearance} />
+      <Submitted
+        dict={dict}
+        locale={locale}
+        police={Boolean(form.policeClearance)}
+      />
     );
   }
 
@@ -217,8 +300,8 @@ export function OnboardingWizard({
           form.primaryTrade.trim(),
         );
       case 1:
-        // Core identity documents.
-        return form.nicFront && form.nicBack && form.photo;
+        // Core identity documents must be uploaded.
+        return Boolean(form.nicFront && form.nicBack && form.photo);
       case 2:
         // A team must say how many helpers; solo is always fine.
         return form.crewType === 'solo' || Boolean(form.helperCount.trim());
@@ -250,9 +333,9 @@ export function OnboardingWizard({
       {step === 0 ? (
         <Profile t={t} tv={tv} form={form} set={set} />
       ) : step === 1 ? (
-        <Documents t={t} tv={tv} form={form} set={set} />
+        <Documents t={t} tv={tv} form={form} set={set} up={up} />
       ) : step === 2 ? (
-        <Details t={t} form={form} set={set} />
+        <Details t={t} form={form} set={set} up={up} />
       ) : (
         <Payout t={t} tv={tv} form={form} set={set} />
       )}
@@ -353,6 +436,12 @@ type StepProps = {
   set: <K extends keyof Form>(key: K, value: Form[K]) => void;
 };
 
+// Steps that upload files also receive the upload handlers.
+type UploadStepProps = StepProps & { up: UploadHandlers };
+
+// KYC documents accept images or a PDF scan.
+const KYC_ACCEPT = 'image/jpeg,image/png,image/webp,application/pdf';
+
 function Profile({ t, tv, form, set }: StepProps) {
   return (
     <div className="space-y-5">
@@ -429,41 +518,56 @@ function Profile({ t, tv, form, set }: StepProps) {
 function DocTile({
   icon: Icon,
   name,
-  provided,
+  value,
+  previewUrl,
+  uploading,
   sensitive,
-  onToggle,
+  onFile,
   providedLabel,
   uploadLabel,
 }: {
   icon: typeof CreditCard;
   name: string;
-  provided: boolean;
+  value: string | null;
+  previewUrl?: string;
+  uploading: boolean;
   sensitive?: boolean;
-  onToggle: () => void;
+  onFile: (file: File | null) => void;
   providedLabel: string;
   uploadLabel: string;
 }) {
+  const done = Boolean(value);
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-pressed={provided}
+    <label
       className={cn(
-        'flex w-full items-center gap-3.5 rounded-lg border p-3.5 text-left transition-colors',
-        provided
+        'flex w-full cursor-pointer items-center gap-3.5 rounded-lg border p-3.5 text-left transition-colors',
+        done
           ? 'border-success bg-accent-soft'
           : 'border-dashed border-border bg-muted hover:bg-muted/70',
+        uploading && 'pointer-events-none opacity-70',
       )}
     >
+      <input
+        type="file"
+        accept={KYC_ACCEPT}
+        className="sr-only"
+        onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+      />
       <span
         className={cn(
-          'inline-flex size-10 shrink-0 items-center justify-center rounded-md',
-          provided
+          'inline-flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-md',
+          done
             ? 'bg-success text-success-foreground'
             : 'border border-border bg-background text-muted-foreground',
         )}
       >
-        {provided ? (
+        {uploading ? (
+          <Loader2 className="size-5 animate-spin" aria-hidden />
+        ) : previewUrl ? (
+          // Presigned R2 URL — plain img avoids next/image remotePatterns config.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={previewUrl} alt="" className="size-full object-cover" />
+        ) : done ? (
           <Check className="size-5" aria-hidden />
         ) : (
           <Icon className="size-5" aria-hidden />
@@ -476,15 +580,15 @@ function DocTile({
             <Lock className="size-3 text-muted-foreground" aria-hidden />
           ) : null}
         </span>
-        <span className="mt-0.5 block text-xs text-muted-foreground">
-          {provided ? providedLabel : uploadLabel}
+        <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+          {done ? providedLabel : uploadLabel}
         </span>
       </span>
-    </button>
+    </label>
   );
 }
 
-function Documents({ t, tv, form, set }: StepProps) {
+function Documents({ t, tv, form, up }: UploadStepProps) {
   const td = t.documents;
   return (
     <div className="space-y-5">
@@ -493,36 +597,44 @@ function Documents({ t, tv, form, set }: StepProps) {
         <DocTile
           icon={CreditCard}
           name={tv.fields.nicFront}
-          provided={form.nicFront}
+          value={form.nicFront}
+          previewUrl={up.previews.nicFront}
+          uploading={Boolean(up.uploading.nicFront)}
           sensitive
-          onToggle={() => set('nicFront', !form.nicFront)}
+          onFile={(file) => up.onFile('nicFront', 'kyc', file)}
           providedLabel={td.provided}
           uploadLabel={tv.upload.cta}
         />
         <DocTile
           icon={CreditCard}
           name={tv.fields.nicBack}
-          provided={form.nicBack}
+          value={form.nicBack}
+          previewUrl={up.previews.nicBack}
+          uploading={Boolean(up.uploading.nicBack)}
           sensitive
-          onToggle={() => set('nicBack', !form.nicBack)}
+          onFile={(file) => up.onFile('nicBack', 'kyc', file)}
           providedLabel={td.provided}
           uploadLabel={tv.upload.cta}
         />
         <DocTile
           icon={UserRound}
           name={tv.fields.photo}
-          provided={form.photo}
+          value={form.photo}
+          previewUrl={up.previews.photo}
+          uploading={Boolean(up.uploading.photo)}
           sensitive
-          onToggle={() => set('photo', !form.photo)}
+          onFile={(file) => up.onFile('photo', 'kyc', file)}
           providedLabel={td.provided}
           uploadLabel={tv.upload.cta}
         />
         <DocTile
           icon={FileBadge}
           name={td.gramaNiladhari}
-          provided={form.gramaNiladhari}
+          value={form.gramaNiladhari}
+          previewUrl={up.previews.gramaNiladhari}
+          uploading={Boolean(up.uploading.gramaNiladhari)}
           sensitive
-          onToggle={() => set('gramaNiladhari', !form.gramaNiladhari)}
+          onFile={(file) => up.onFile('gramaNiladhari', 'kyc', file)}
           providedLabel={td.provided}
           uploadLabel={tv.upload.cta}
         />
@@ -530,8 +642,10 @@ function Documents({ t, tv, form, set }: StepProps) {
           <DocTile
             icon={Award}
             name={tv.fields.licence}
-            provided={form.licence}
-            onToggle={() => set('licence', !form.licence)}
+            value={form.licence}
+            previewUrl={up.previews.licence}
+            uploading={Boolean(up.uploading.licence)}
+            onFile={(file) => up.onFile('licence', 'kyc', file)}
             providedLabel={td.provided}
             uploadLabel={tv.upload.cta}
           />
@@ -566,13 +680,27 @@ function Documents({ t, tv, form, set }: StepProps) {
               {td.policeNote}
             </p>
           </div>
-          <Button
-            size="sm"
-            variant={form.policeClearance ? 'secondary' : 'outline'}
-            onClick={() => set('policeClearance', !form.policeClearance)}
-            className="shrink-0"
+          <label
+            className={cn(
+              buttonVariants({
+                size: 'sm',
+                variant: form.policeClearance ? 'secondary' : 'outline',
+              }),
+              'shrink-0 cursor-pointer',
+              up.uploading.policeClearance && 'pointer-events-none opacity-70',
+            )}
           >
-            {form.policeClearance ? (
+            <input
+              type="file"
+              accept={KYC_ACCEPT}
+              className="sr-only"
+              onChange={(e) =>
+                up.onFile('policeClearance', 'kyc', e.target.files?.[0] ?? null)
+              }
+            />
+            {up.uploading.policeClearance ? (
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+            ) : form.policeClearance ? (
               <>
                 <Check className="size-4" aria-hidden />
                 {td.provided}
@@ -580,7 +708,7 @@ function Documents({ t, tv, form, set }: StepProps) {
             ) : (
               tv.upload.cta
             )}
-          </Button>
+          </label>
         </div>
       </div>
 
@@ -596,11 +724,73 @@ function Details({
   t,
   form,
   set,
-}: Pick<StepProps, 'form' | 'set'> & { t: Dictionary['onboarding'] }) {
+  up,
+}: Pick<UploadStepProps, 'form' | 'set' | 'up'> & {
+  t: Dictionary['onboarding'];
+}) {
   const td = t.details;
+  const doc = t.documents;
   return (
     <div className="space-y-6">
       <StepHead title={td.title} sub={td.sub} />
+
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label>{doc.portfolio}</Label>
+          <span className="text-xs text-muted-foreground">
+            {form.portfolio.length}/10
+          </span>
+        </div>
+        <p className="text-xs text-muted-foreground">{doc.portfolioSub}</p>
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+          {form.portfolio.map((key) => (
+            <div
+              key={key}
+              className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted"
+            >
+              {up.previews[key] ? (
+                // Presigned R2 URL — plain img avoids next/image config.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={up.previews[key]}
+                  alt=""
+                  className="size-full object-cover"
+                />
+              ) : null}
+              <button
+                type="button"
+                onClick={() => up.removePortfolio(key)}
+                aria-label="Remove"
+                className="absolute right-1 top-1 inline-flex size-6 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm hover:bg-background"
+              >
+                <X className="size-3.5" aria-hidden />
+              </button>
+            </div>
+          ))}
+          {form.portfolio.length < 10 ? (
+            <label
+              className={cn(
+                'flex aspect-square cursor-pointer flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-border bg-muted text-muted-foreground transition-colors hover:bg-muted/70',
+                up.uploading.portfolio && 'pointer-events-none opacity-70',
+              )}
+            >
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                className="sr-only"
+                onChange={(e) => up.addPortfolio(e.target.files)}
+              />
+              {up.uploading.portfolio ? (
+                <Loader2 className="size-5 animate-spin" aria-hidden />
+              ) : (
+                <ImagePlus className="size-5" aria-hidden />
+              )}
+              <span className="text-xs font-medium">{doc.addPhotos}</span>
+            </label>
+          ) : null}
+        </div>
+      </div>
 
       <Card>
         <CardContent className="space-y-3 p-5">
