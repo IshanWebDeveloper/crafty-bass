@@ -1,15 +1,33 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
+import { S3Service } from '../admin/s3.service.js';
 import type {
   BrowseTradesmenDto,
   UpsertHomeownerProfileDto,
   UpsertTradesmanProfileDto,
 } from './dto/index.js';
 
+// Public avatar/portfolio images are stored as private R2 keys and presigned on
+// read; a generous TTL keeps directory/profile URLs valid while the presigned
+// cache dedupes repeated keys.
+const PUBLIC_IMAGE_URL_TTL_SECONDS = 60 * 60;
+
 @Injectable()
 export class ProfilesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly s3Service: S3Service,
+  ) {}
+
+  // Mints a signed URL for a stored object key, passing through null/empty.
+  private async signImage(key: string | null): Promise<string | null> {
+    if (!key) return key;
+    return this.s3Service.getPresignedDownloadUrl(
+      key,
+      PUBLIC_IMAGE_URL_TTL_SECONDS,
+    );
+  }
 
   async getMine(userId: string) {
     const user = await this.prisma.user.findUnique({
@@ -139,22 +157,27 @@ export class ProfilesService {
       this.prisma.tradesmanProfile.count({ where }),
     ]);
 
-    const data = rows.map((p) => ({
-      userId: p.userId,
-      name: p.user.name,
-      image: p.user.image,
-      primaryTrade: p.user.verification?.primaryTrade ?? null,
-      bio: p.bio,
-      city: p.city,
-      district: p.district,
-      yearsExperience: p.yearsExperience,
-      preferredLanguage: p.preferredLanguage,
-      avgRating: Number(p.avgRating),
-      ratingCount: p.ratingCount,
-      jobsCompleted: p.jobsCompleted,
-      isVerified: p.isVerified,
-      skills: p.skills.map((s) => ({ id: s.skill.id, nameEn: s.skill.nameEn })),
-    }));
+    const data = await Promise.all(
+      rows.map(async (p) => ({
+        userId: p.userId,
+        name: p.user.name,
+        image: await this.signImage(p.user.image),
+        primaryTrade: p.user.verification?.primaryTrade ?? null,
+        bio: p.bio,
+        city: p.city,
+        district: p.district,
+        yearsExperience: p.yearsExperience,
+        preferredLanguage: p.preferredLanguage,
+        avgRating: Number(p.avgRating),
+        ratingCount: p.ratingCount,
+        jobsCompleted: p.jobsCompleted,
+        isVerified: p.isVerified,
+        skills: p.skills.map((s) => ({
+          id: s.skill.id,
+          nameEn: s.skill.nameEn,
+        })),
+      })),
+    );
 
     return { data, meta: buildPaginationMeta(total, page, limit) };
   }
@@ -168,17 +191,34 @@ export class ProfilesService {
             id: true,
             name: true,
             image: true,
-            verification: { select: { primaryTrade: true } },
+            verification: {
+              select: { primaryTrade: true, portfolioKeys: true },
+            },
           },
         },
         skills: { include: { skill: true } },
       },
     });
     if (!profile) throw new NotFoundException('Tradesman profile not found');
+
+    // portfolioKeys is a Json column holding string[]; coerce defensively and
+    // mint a signed URL per image.
+    const portfolioKeys = Array.isArray(
+      profile.user.verification?.portfolioKeys,
+    )
+      ? profile.user.verification.portfolioKeys.filter(
+          (key): key is string => typeof key === 'string',
+        )
+      : [];
+    const portfolio = (
+      await Promise.all(portfolioKeys.map((key) => this.signImage(key)))
+    ).filter((url): url is string => typeof url === 'string');
+
     return {
       userId: profile.userId,
       name: profile.user.name,
-      image: profile.user.image,
+      image: await this.signImage(profile.user.image),
+      portfolio,
       primaryTrade: profile.user.verification?.primaryTrade ?? null,
       bio: profile.bio,
       city: profile.city,

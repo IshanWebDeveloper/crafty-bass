@@ -85,6 +85,9 @@ export function HeaderAuth({
   }
 
   const user = session.user;
+  // Prefer the presigned avatar from /users/me; the better-auth session only
+  // carries the raw storage key, which isn't directly loadable.
+  const avatarSrc = me?.image ?? user.image ?? undefined;
   const initials =
     user.name
       ?.split(' ')
@@ -109,7 +112,7 @@ export function HeaderAuth({
         )}
       >
         <Avatar className="h-8 w-8">
-          {user.image ? <AvatarImage src={user.image} alt={user.name} /> : null}
+          {avatarSrc ? <AvatarImage src={avatarSrc} alt={user.name} /> : null}
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
         <div className="hidden flex-col items-start md:flex">
