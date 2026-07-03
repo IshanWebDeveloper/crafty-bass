@@ -32,3 +32,17 @@ export type Me = {
 export function getMe() {
   return apiFetch<Me>('/users/me');
 }
+
+export type UpdateMeBody = {
+  name?: string;
+  phone?: string;
+  // R2 object key returned by uploadFile(file, 'avatar').
+  image?: string;
+};
+
+export function updateMe(body: UpdateMeBody) {
+  return apiFetch<Me>('/users/me', {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  });
+}

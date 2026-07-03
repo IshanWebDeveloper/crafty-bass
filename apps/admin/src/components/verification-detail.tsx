@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { FileText } from 'lucide-react';
 import { Button } from '@repo/ui';
 import { ApiError } from '@/lib/api';
 import { adminKeys } from '@/lib/query-keys';
@@ -158,21 +159,15 @@ export function VerificationDetail({ id }: { id: string }) {
                 Links expire in {Math.round(docs.data.expiresInSeconds / 60)}{' '}
                 minutes.
               </p>
-              <ul className="grid gap-2 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-2">
                 {docs.data.documents.map((doc, i) => (
-                  <li key={`${doc.field}-${i}`}>
-                    <a
-                      href={doc.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-muted/40"
-                    >
-                      <span>{doc.label}</span>
-                      <span className="text-xs text-primary">Open ↗</span>
-                    </a>
-                  </li>
+                  <DocThumb
+                    key={`${doc.field}-${i}`}
+                    label={doc.label}
+                    url={doc.url}
+                  />
                 ))}
-              </ul>
+              </div>
             </>
           )}
 
@@ -242,6 +237,45 @@ export function VerificationDetail({ id }: { id: string }) {
         </div>
       ) : null}
     </div>
+  );
+}
+
+// A KYC document tile: shows the presigned R2 object inline as an image
+// thumbnail (opening the full file in a new tab on click). Non-image documents
+// (e.g. a PDF scan) fail the <img> load and fall back to a file icon.
+function DocThumb({ label, url }: { label: string; url: string }) {
+  const [errored, setErrored] = useState(false);
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex flex-col overflow-hidden rounded-lg border border-border transition-colors hover:bg-muted/40"
+    >
+      <div className="aspect-[4/3] w-full bg-muted">
+        {errored ? (
+          <div className="flex h-full w-full items-center justify-center gap-1.5 text-xs text-muted-foreground">
+            <FileText className="size-4" aria-hidden />
+            Open file
+          </div>
+        ) : (
+          // Presigned R2 URL — plain img avoids next/image remotePatterns config.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={url}
+            alt={label}
+            onError={() => setErrored(true)}
+            className="h-full w-full object-cover"
+          />
+        )}
+      </div>
+      <div className="flex items-center justify-between px-3 py-2">
+        <span className="text-sm">{label}</span>
+        <span className="text-xs text-primary opacity-0 transition-opacity group-hover:opacity-100">
+          Open ↗
+        </span>
+      </div>
+    </a>
   );
 }
 

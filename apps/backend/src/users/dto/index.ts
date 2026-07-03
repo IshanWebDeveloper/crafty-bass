@@ -24,6 +24,9 @@ const ShippingAddressSchema = z.object({
 const UpdateProfileSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   phone: z.string().min(5).max(20).optional(),
+  // Avatar object key returned by POST /uploads (category "avatar"). Stored on
+  // User.image; presigned on read.
+  image: z.string().trim().max(500).optional(),
   shippingAddress: ShippingAddressSchema.optional(),
   paymentPreferences: z
     .object({

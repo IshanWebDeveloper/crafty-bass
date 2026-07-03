@@ -2,9 +2,20 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
-import { ShieldAlert, ShieldCheck } from 'lucide-react';
-import { Badge, Button, Skeleton, VerifiedBadge, cn } from '@repo/ui';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Loader2, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { toast } from 'sonner';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Badge,
+  Button,
+  Skeleton,
+  VerifiedBadge,
+  buttonVariants,
+  cn,
+} from '@repo/ui';
 import {
   Card,
   CardContent,
@@ -13,6 +24,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getMyProfile } from '@/lib/api/profiles';
+import { updateMe } from '@/lib/api/users';
+import { uploadFile } from '@/lib/api/uploads';
 import { useMe } from '@/lib/hooks/use-me';
 import { RoleBadge } from '@/components/layout/role-badge';
 import { HomeownerProfileForm } from './homeowner-profile-form';
@@ -72,6 +85,7 @@ export function ProfileView({
   if (role === 'HOMEOWNER') {
     return (
       <div className="space-y-6">
+        <AvatarCard dict={dict} />
         <Card>
           <CardHeader>
             <CardTitle>{t.homeowner.heading}</CardTitle>
@@ -95,6 +109,7 @@ export function ProfileView({
         locale={locale}
         dict={dict}
       />
+      <AvatarCard dict={dict} />
       <Card>
         <CardHeader>
           <div className="flex flex-wrap items-center gap-2">
@@ -115,6 +130,82 @@ export function ProfileView({
       </Card>
       <PhoneNumberCard dict={dict} />
     </div>
+  );
+}
+
+function AvatarCard({ dict }: { dict: Dictionary }) {
+  const t = dict.profile.avatar;
+  const qc = useQueryClient();
+  const { data: me } = useMe();
+  // Show the just-uploaded presigned preview immediately, before the refetched
+  // /users/me presigns the stored key.
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const mutation = useMutation({
+    mutationFn: async (file: File) => {
+      const { key, url } = await uploadFile(file, 'avatar');
+      setPreview(url);
+      await updateMe({ image: key });
+    },
+    onSuccess: () => {
+      toast.success(dict.profile.saved);
+      void qc.invalidateQueries({ queryKey: ['me'] });
+      void qc.invalidateQueries({ queryKey: ['profile', 'me'] });
+    },
+    onError: (err) =>
+      toast.error(err instanceof Error ? err.message : 'Upload failed'),
+  });
+
+  const initials =
+    (me?.name ?? '?')
+      .split(' ')
+      .map((p) => p[0])
+      .filter(Boolean)
+      .slice(0, 2)
+      .join('')
+      .toUpperCase() || '?';
+  const src = preview ?? me?.image ?? undefined;
+  const busy = mutation.isPending;
+
+  return (
+    <Card>
+      <CardContent className="flex items-center gap-4 py-5">
+        <Avatar className="size-16">
+          {src ? <AvatarImage src={src} alt={me?.name ?? ''} /> : null}
+          <AvatarFallback>{initials}</AvatarFallback>
+        </Avatar>
+        <div className="min-w-0 flex-1">
+          <p className="text-base font-semibold">{t.title}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground">{t.hint}</p>
+        </div>
+        <label
+          className={cn(
+            buttonVariants({ variant: 'outline', size: 'sm' }),
+            'shrink-0 cursor-pointer',
+            busy && 'pointer-events-none opacity-70',
+          )}
+        >
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="sr-only"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) mutation.mutate(file);
+              e.target.value = '';
+            }}
+          />
+          {busy ? (
+            <>
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+              {t.uploading}
+            </>
+          ) : (
+            t.change
+          )}
+        </label>
+      </CardContent>
+    </Card>
   );
 }
 
