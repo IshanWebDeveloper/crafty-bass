@@ -56,10 +56,19 @@ export function getEscrow(id: string) {
   return apiFetch<Escrow>(`/escrows/${id}`);
 }
 
-export function fundEscrow(id: string, paymentMethod: EscrowPaymentMethod) {
-  return apiFetch<Escrow>(`/escrows/${id}/fund`, {
+export type FundEscrowResult = Escrow & {
+  requiresAction?: boolean;
+  clientSecret?: string;
+};
+
+export function fundEscrow(
+  id: string,
+  paymentMethod: EscrowPaymentMethod,
+  stripePaymentMethodId?: string,
+) {
+  return apiFetch<FundEscrowResult>(`/escrows/${id}/fund`, {
     method: 'POST',
-    body: JSON.stringify({ paymentMethod }),
+    body: JSON.stringify({ paymentMethod, stripePaymentMethodId }),
   });
 }
 

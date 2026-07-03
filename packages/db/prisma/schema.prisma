@@ -567,6 +567,7 @@ model JobEscrow {
   status              EscrowStatus @default(REQUESTED)
   paymentMethod       String?
   paymentRef          String?
+  stripePaymentIntentId String?    @unique
   fundedAt            DateTime?
   materialsReleasedAt DateTime?
   workCompletedAt     DateTime?

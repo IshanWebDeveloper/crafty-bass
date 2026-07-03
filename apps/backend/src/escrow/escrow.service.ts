@@ -3,9 +3,11 @@ import {
   NotFoundException,
   ForbiddenException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Prisma } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
+import { StripeService } from '../common/services/stripe.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import type { EscrowListQueryDto, FundEscrowDto } from './dto/index.js';
 
@@ -24,9 +26,16 @@ type EscrowWithRelations = Prisma.JobEscrowGetPayload<{
 
 const dec = (v: Prisma.Decimal | number) => Number(v);
 
+// Stripe amounts are in the currency's minor unit; LKR (the only currency in
+// use) is 2-decimal, so this is a plain cents conversion.
+const toMinorUnits = (amount: number) => Math.round(amount * 100);
+
 @Injectable()
 export class EscrowService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly stripe: StripeService,
+  ) {}
 
   private serialize(e: EscrowWithRelations) {
     return {
@@ -135,8 +144,9 @@ export class EscrowService {
   }
 
   // Homeowner pays the deposit to Crafty Bass; it is now held in escrow.
-  // Payment capture is stubbed (real Stripe / PayHere is Phase C) — we record
-  // the chosen method and a simulated reference.
+  // `card` goes through real Stripe (collection only — see StripeService);
+  // `paypal`/`local` remain stubbed (real integrations are Phase C) with a
+  // simulated reference, same as before.
   async fund(userId: string, escrowId: string, dto: FundEscrowDto) {
     const escrow = await this.loadParty(escrowId, userId);
     if (escrow.homeownerId !== userId) {
@@ -145,6 +155,11 @@ export class EscrowService {
     if (escrow.status !== 'REQUESTED') {
       throw new ConflictException('Deposit is not awaiting funding');
     }
+
+    if (dto.paymentMethod === 'card') {
+      return this.fundWithCard(escrow, dto);
+    }
+
     const updated = await this.prisma.jobEscrow.update({
       where: { id: escrowId },
       data: {
@@ -163,6 +178,96 @@ export class EscrowService {
       include: ESCROW_INCLUDE,
     });
     return this.serialize(updated);
+  }
+
+  // Creates (or reuses, on retry/3DS-completion) a PaymentIntent and confirms
+  // it with the client-collected card. Finalizes synchronously on immediate
+  // success; returns a clientSecret for 3DS when Stripe requires it — the
+  // webhook (`confirmFundedByPaymentIntent`) is the authoritative fallback for
+  // that path and a safety net against duplicate/late delivery either way.
+  private async fundWithCard(escrow: EscrowWithRelations, dto: FundEscrowDto) {
+    if (!dto.stripePaymentMethodId) {
+      throw new BadRequestException(
+        'stripePaymentMethodId is required for card payments',
+      );
+    }
+
+    let paymentIntent = escrow.stripePaymentIntentId
+      ? await this.stripe.retrievePaymentIntent(escrow.stripePaymentIntentId)
+      : null;
+
+    if (!paymentIntent) {
+      paymentIntent = await this.stripe.createAndConfirmPaymentIntent({
+        amount: toMinorUnits(dec(escrow.depositAmount)),
+        currency: escrow.currency.toLowerCase(),
+        paymentMethodId: dto.stripePaymentMethodId,
+        metadata: { escrowId: escrow.id },
+      });
+      await this.prisma.jobEscrow.update({
+        where: { id: escrow.id },
+        data: {
+          stripePaymentIntentId: paymentIntent.id,
+          paymentMethod: 'card',
+        },
+      });
+    }
+
+    if (paymentIntent.status === 'succeeded') {
+      return this.finalizeFunded(escrow.id, paymentIntent.id);
+    }
+    if (paymentIntent.status === 'requires_action') {
+      return {
+        ...this.serialize(escrow),
+        requiresAction: true,
+        clientSecret: paymentIntent.client_secret,
+      };
+    }
+    throw new BadRequestException(
+      paymentIntent.last_payment_error?.message ??
+        `Payment could not be completed (status: ${paymentIntent.status})`,
+    );
+  }
+
+  // Idempotent: no-ops if the escrow has already moved past REQUESTED (e.g.
+  // finalized synchronously in fund(), or a duplicate webhook delivery).
+  private async finalizeFunded(escrowId: string, paymentIntentId: string) {
+    const current = await this.prisma.jobEscrow.findUnique({
+      where: { id: escrowId },
+      include: ESCROW_INCLUDE,
+    });
+    if (!current) throw new NotFoundException('Escrow not found');
+    if (current.status !== 'REQUESTED') {
+      return this.serialize(current);
+    }
+    const updated = await this.prisma.jobEscrow.update({
+      where: { id: escrowId },
+      data: {
+        status: 'FUNDED',
+        paymentMethod: 'card',
+        paymentRef: paymentIntentId,
+        fundedAt: new Date(),
+        transactions: {
+          create: {
+            type: 'FUND',
+            amount: current.depositAmount,
+            note: 'Deposit funded via card (Stripe)',
+          },
+        },
+      },
+      include: ESCROW_INCLUDE,
+    });
+    return this.serialize(updated);
+  }
+
+  // Called only from the Stripe webhook controller once payment_intent.succeeded
+  // fires — the authoritative confirmation path for 3DS completions and a
+  // duplicate-safe fallback for the synchronous path.
+  async confirmFundedByPaymentIntent(paymentIntentId: string): Promise<void> {
+    const escrow = await this.prisma.jobEscrow.findUnique({
+      where: { stripePaymentIntentId: paymentIntentId },
+    });
+    if (!escrow) return;
+    await this.finalizeFunded(escrow.id, paymentIntentId);
   }
 
   // Tradesman confirms they are starting; Crafty Bass releases the held deposit
@@ -269,6 +374,16 @@ export class EscrowService {
         'Only a funded deposit that has not been released can be refunded',
       );
     }
+
+    const isCard =
+      escrow.paymentMethod === 'card' && escrow.stripePaymentIntentId;
+    if (isCard) {
+      // Let a Stripe error abort the request before any DB write.
+      await this.stripe.createRefund({
+        paymentIntentId: escrow.stripePaymentIntentId!,
+      });
+    }
+
     const updated = await this.prisma.jobEscrow.update({
       where: { id: escrowId },
       data: {
@@ -278,7 +393,9 @@ export class EscrowService {
           create: {
             type: 'REFUND',
             amount: escrow.depositAmount,
-            note: 'Deposit refunded to homeowner',
+            note: isCard
+              ? 'Deposit refunded to homeowner via Stripe'
+              : 'Deposit refunded to homeowner',
           },
         },
       },
