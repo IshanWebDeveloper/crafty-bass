@@ -121,7 +121,7 @@ export function FundDepositView({
         </p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+      <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-start">
         <div className="space-y-5">
           <Card>
             <CardContent className="flex items-center justify-between gap-3 p-5">
@@ -198,11 +198,11 @@ export function FundDepositView({
             ) : (
               <Button
                 size="lg"
-                className="w-full"
+                className="h-auto w-full min-h-9 flex-wrap py-2 whitespace-normal"
                 onClick={() => mutation.mutate()}
                 disabled={mutation.isPending}
               >
-                <Lock className="size-4" aria-hidden />
+                <Lock className="size-4 shrink-0" aria-hidden />
                 {mutation.isPending
                   ? t.actions.funding
                   : tf.payCta.replace('{amount}', formatLKR(deposit))}
