@@ -17,7 +17,7 @@ export default async function FundDepositPage({
     <div className="flex min-h-screen flex-col bg-canvas">
       <SiteHeader locale={locale} dict={dict} />
       <main className="flex-1">
-        <div className="mx-auto w-full max-w-4xl px-6 py-10 lg:px-14">
+        <div className="mx-auto w-full max-w-6xl px-6 py-10 lg:px-14">
           <FundDepositView locale={locale} dict={dict} jobId={id} />
         </div>
       </main>

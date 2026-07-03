@@ -29175,6 +29175,7 @@ export namespace Prisma {
     status: $Enums.EscrowStatus | null;
     paymentMethod: string | null;
     paymentRef: string | null;
+    stripePaymentIntentId: string | null;
     fundedAt: Date | null;
     materialsReleasedAt: Date | null;
     workCompletedAt: Date | null;
@@ -29198,6 +29199,7 @@ export namespace Prisma {
     status: $Enums.EscrowStatus | null;
     paymentMethod: string | null;
     paymentRef: string | null;
+    stripePaymentIntentId: string | null;
     fundedAt: Date | null;
     materialsReleasedAt: Date | null;
     workCompletedAt: Date | null;
@@ -29221,6 +29223,7 @@ export namespace Prisma {
     status: number;
     paymentMethod: number;
     paymentRef: number;
+    stripePaymentIntentId: number;
     fundedAt: number;
     materialsReleasedAt: number;
     workCompletedAt: number;
@@ -29259,6 +29262,7 @@ export namespace Prisma {
     status?: true;
     paymentMethod?: true;
     paymentRef?: true;
+    stripePaymentIntentId?: true;
     fundedAt?: true;
     materialsReleasedAt?: true;
     workCompletedAt?: true;
@@ -29282,6 +29286,7 @@ export namespace Prisma {
     status?: true;
     paymentMethod?: true;
     paymentRef?: true;
+    stripePaymentIntentId?: true;
     fundedAt?: true;
     materialsReleasedAt?: true;
     workCompletedAt?: true;
@@ -29305,6 +29310,7 @@ export namespace Prisma {
     status?: true;
     paymentMethod?: true;
     paymentRef?: true;
+    stripePaymentIntentId?: true;
     fundedAt?: true;
     materialsReleasedAt?: true;
     workCompletedAt?: true;
@@ -29420,6 +29426,7 @@ export namespace Prisma {
     status: $Enums.EscrowStatus;
     paymentMethod: string | null;
     paymentRef: string | null;
+    stripePaymentIntentId: string | null;
     fundedAt: Date | null;
     materialsReleasedAt: Date | null;
     workCompletedAt: Date | null;
@@ -29464,6 +29471,7 @@ export namespace Prisma {
       status?: boolean;
       paymentMethod?: boolean;
       paymentRef?: boolean;
+      stripePaymentIntentId?: boolean;
       fundedAt?: boolean;
       materialsReleasedAt?: boolean;
       workCompletedAt?: boolean;
@@ -29498,6 +29506,7 @@ export namespace Prisma {
       status?: boolean;
       paymentMethod?: boolean;
       paymentRef?: boolean;
+      stripePaymentIntentId?: boolean;
       fundedAt?: boolean;
       materialsReleasedAt?: boolean;
       workCompletedAt?: boolean;
@@ -29530,6 +29539,7 @@ export namespace Prisma {
       status?: boolean;
       paymentMethod?: boolean;
       paymentRef?: boolean;
+      stripePaymentIntentId?: boolean;
       fundedAt?: boolean;
       materialsReleasedAt?: boolean;
       workCompletedAt?: boolean;
@@ -29559,6 +29569,7 @@ export namespace Prisma {
     status?: boolean;
     paymentMethod?: boolean;
     paymentRef?: boolean;
+    stripePaymentIntentId?: boolean;
     fundedAt?: boolean;
     materialsReleasedAt?: boolean;
     workCompletedAt?: boolean;
@@ -29584,6 +29595,7 @@ export namespace Prisma {
     | 'status'
     | 'paymentMethod'
     | 'paymentRef'
+    | 'stripePaymentIntentId'
     | 'fundedAt'
     | 'materialsReleasedAt'
     | 'workCompletedAt'
@@ -29646,6 +29658,7 @@ export namespace Prisma {
         status: $Enums.EscrowStatus;
         paymentMethod: string | null;
         paymentRef: string | null;
+        stripePaymentIntentId: string | null;
         fundedAt: Date | null;
         materialsReleasedAt: Date | null;
         workCompletedAt: Date | null;
@@ -30323,6 +30336,7 @@ export namespace Prisma {
     readonly status: FieldRef<'JobEscrow', 'EscrowStatus'>;
     readonly paymentMethod: FieldRef<'JobEscrow', 'String'>;
     readonly paymentRef: FieldRef<'JobEscrow', 'String'>;
+    readonly stripePaymentIntentId: FieldRef<'JobEscrow', 'String'>;
     readonly fundedAt: FieldRef<'JobEscrow', 'DateTime'>;
     readonly materialsReleasedAt: FieldRef<'JobEscrow', 'DateTime'>;
     readonly workCompletedAt: FieldRef<'JobEscrow', 'DateTime'>;
@@ -47283,6 +47297,7 @@ export namespace Prisma {
     status: 'status';
     paymentMethod: 'paymentMethod';
     paymentRef: 'paymentRef';
+    stripePaymentIntentId: 'stripePaymentIntentId';
     fundedAt: 'fundedAt';
     materialsReleasedAt: 'materialsReleasedAt';
     workCompletedAt: 'workCompletedAt';
@@ -50229,6 +50244,7 @@ export namespace Prisma {
     status?: EnumEscrowStatusFilter<'JobEscrow'> | $Enums.EscrowStatus;
     paymentMethod?: StringNullableFilter<'JobEscrow'> | string | null;
     paymentRef?: StringNullableFilter<'JobEscrow'> | string | null;
+    stripePaymentIntentId?: StringNullableFilter<'JobEscrow'> | string | null;
     fundedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
     materialsReleasedAt?:
       | DateTimeNullableFilter<'JobEscrow'>
@@ -50265,6 +50281,7 @@ export namespace Prisma {
     status?: SortOrder;
     paymentMethod?: SortOrderInput | SortOrder;
     paymentRef?: SortOrderInput | SortOrder;
+    stripePaymentIntentId?: SortOrderInput | SortOrder;
     fundedAt?: SortOrderInput | SortOrder;
     materialsReleasedAt?: SortOrderInput | SortOrder;
     workCompletedAt?: SortOrderInput | SortOrder;
@@ -50284,6 +50301,7 @@ export namespace Prisma {
       id?: string;
       jobId?: string;
       quoteId?: string;
+      stripePaymentIntentId?: string;
       AND?: JobEscrowWhereInput | JobEscrowWhereInput[];
       OR?: JobEscrowWhereInput[];
       NOT?: JobEscrowWhereInput | JobEscrowWhereInput[];
@@ -50338,7 +50356,7 @@ export namespace Prisma {
       tradesman?: XOR<UserScalarRelationFilter, UserWhereInput>;
       transactions?: EscrowTransactionListRelationFilter;
     },
-    'id' | 'jobId' | 'quoteId'
+    'id' | 'jobId' | 'quoteId' | 'stripePaymentIntentId'
   >;
 
   export type JobEscrowOrderByWithAggregationInput = {
@@ -50355,6 +50373,7 @@ export namespace Prisma {
     status?: SortOrder;
     paymentMethod?: SortOrderInput | SortOrder;
     paymentRef?: SortOrderInput | SortOrder;
+    stripePaymentIntentId?: SortOrderInput | SortOrder;
     fundedAt?: SortOrderInput | SortOrder;
     materialsReleasedAt?: SortOrderInput | SortOrder;
     workCompletedAt?: SortOrderInput | SortOrder;
@@ -50415,6 +50434,10 @@ export namespace Prisma {
       | string
       | null;
     paymentRef?:
+      | StringNullableWithAggregatesFilter<'JobEscrow'>
+      | string
+      | null;
+    stripePaymentIntentId?:
       | StringNullableWithAggregatesFilter<'JobEscrow'>
       | string
       | null;
@@ -54463,6 +54486,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -54491,6 +54515,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -54531,6 +54556,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54599,6 +54628,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54643,6 +54676,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -54682,6 +54716,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54745,6 +54783,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -57965,6 +58007,7 @@ export namespace Prisma {
     status?: SortOrder;
     paymentMethod?: SortOrder;
     paymentRef?: SortOrder;
+    stripePaymentIntentId?: SortOrder;
     fundedAt?: SortOrder;
     materialsReleasedAt?: SortOrder;
     workCompletedAt?: SortOrder;
@@ -57995,6 +58038,7 @@ export namespace Prisma {
     status?: SortOrder;
     paymentMethod?: SortOrder;
     paymentRef?: SortOrder;
+    stripePaymentIntentId?: SortOrder;
     fundedAt?: SortOrder;
     materialsReleasedAt?: SortOrder;
     workCompletedAt?: SortOrder;
@@ -58018,6 +58062,7 @@ export namespace Prisma {
     status?: SortOrder;
     paymentMethod?: SortOrder;
     paymentRef?: SortOrder;
+    stripePaymentIntentId?: SortOrder;
     fundedAt?: SortOrder;
     materialsReleasedAt?: SortOrder;
     workCompletedAt?: SortOrder;
@@ -66317,6 +66362,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -66343,6 +66389,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -66378,6 +66425,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -66404,6 +66452,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -67627,6 +67676,7 @@ export namespace Prisma {
     status?: EnumEscrowStatusFilter<'JobEscrow'> | $Enums.EscrowStatus;
     paymentMethod?: StringNullableFilter<'JobEscrow'> | string | null;
     paymentRef?: StringNullableFilter<'JobEscrow'> | string | null;
+    stripePaymentIntentId?: StringNullableFilter<'JobEscrow'> | string | null;
     fundedAt?: DateTimeNullableFilter<'JobEscrow'> | Date | string | null;
     materialsReleasedAt?:
       | DateTimeNullableFilter<'JobEscrow'>
@@ -70811,6 +70861,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -70837,6 +70888,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -71723,6 +71775,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -71789,6 +71845,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -72538,6 +72598,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -72564,6 +72625,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -73245,6 +73307,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -73311,6 +73377,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -75272,6 +75342,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -75299,6 +75370,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -75366,6 +75438,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -75433,6 +75509,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -80651,6 +80731,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -80673,6 +80754,7 @@ export namespace Prisma {
     status?: $Enums.EscrowStatus;
     paymentMethod?: string | null;
     paymentRef?: string | null;
+    stripePaymentIntentId?: string | null;
     fundedAt?: Date | string | null;
     materialsReleasedAt?: Date | string | null;
     workCompletedAt?: Date | string | null;
@@ -82175,6 +82257,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -82241,6 +82327,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -82304,6 +82394,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -82363,6 +82457,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -82429,6 +82527,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -82492,6 +82594,10 @@ export namespace Prisma {
     status?: EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus;
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null;
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     fundedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date

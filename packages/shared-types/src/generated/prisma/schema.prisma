@@ -554,26 +554,27 @@ model MaterialRequest {
 // Amounts are snapshotted from the quote at acceptance so later quote edits can't
 // move money. The transactions[] ledger is the audit trail of fund/release/refund.
 model JobEscrow {
-  id                  String       @id @default(cuid())
-  jobId               String       @unique
-  quoteId             String       @unique
-  homeownerId         String
-  tradesmanId         String
-  currency            String       @default("LKR")
-  quoteTotal          Decimal      @db.Decimal(10, 2)
-  materialsAmount     Decimal      @db.Decimal(10, 2)
-  depositAmount       Decimal      @db.Decimal(10, 2)
-  balanceAmount       Decimal      @db.Decimal(10, 2)
-  status              EscrowStatus @default(REQUESTED)
-  paymentMethod       String?
-  paymentRef          String?
-  fundedAt            DateTime?
-  materialsReleasedAt DateTime?
-  workCompletedAt     DateTime?
-  releasedAt          DateTime?
-  refundedAt          DateTime?
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  id                    String       @id @default(cuid())
+  jobId                 String       @unique
+  quoteId               String       @unique
+  homeownerId           String
+  tradesmanId           String
+  currency              String       @default("LKR")
+  quoteTotal            Decimal      @db.Decimal(10, 2)
+  materialsAmount       Decimal      @db.Decimal(10, 2)
+  depositAmount         Decimal      @db.Decimal(10, 2)
+  balanceAmount         Decimal      @db.Decimal(10, 2)
+  status                EscrowStatus @default(REQUESTED)
+  paymentMethod         String?
+  paymentRef            String?
+  stripePaymentIntentId String?      @unique
+  fundedAt              DateTime?
+  materialsReleasedAt   DateTime?
+  workCompletedAt       DateTime?
+  releasedAt            DateTime?
+  refundedAt            DateTime?
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
 
   job          Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
   quote        Quote               @relation(fields: [quoteId], references: [id], onDelete: Cascade)

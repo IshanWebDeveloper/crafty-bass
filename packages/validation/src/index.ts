@@ -243,9 +243,22 @@ export function maxDeposit(
 }
 
 export const EscrowPaymentMethodSchema = z.enum(['card', 'paypal', 'local']);
-export const FundEscrowSchema = z.object({
-  paymentMethod: EscrowPaymentMethodSchema.default('card'),
-});
+export const FundEscrowSchema = z
+  .object({
+    paymentMethod: EscrowPaymentMethodSchema.default('card'),
+    // Required for paymentMethod: 'card' — the Stripe PaymentMethod id created
+    // client-side via Elements. paypal/local are still simulated and don't use it.
+    stripePaymentMethodId: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.paymentMethod === 'card' && !data.stripePaymentMethodId) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['stripePaymentMethodId'],
+        message: 'stripePaymentMethodId is required when paymentMethod is card',
+      });
+    }
+  });
 
 // --- Tradesman verification (KYC onboarding) ---
 // Document fields hold storage references (keys/URLs); the binary upload is a
