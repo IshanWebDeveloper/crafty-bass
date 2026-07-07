@@ -13,6 +13,18 @@ import type {
 // cache dedupes repeated keys.
 const PUBLIC_IMAGE_URL_TTL_SECONDS = 60 * 60;
 
+// Normalises a free-text skill name into a catalog slug: lowercase, non-alphanumerics
+// collapsed to hyphens, trimmed. Non-latin names (e.g. Sinhala/Tamil) collapse to
+// empty, so we fall back to the lowercased name itself — still a stable, unique key.
+function slugifySkill(name: string): string {
+  const base = name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return base || name.trim().toLowerCase();
+}
+
 @Injectable()
 export class ProfilesService {
   constructor(
@@ -72,7 +84,7 @@ export class ProfilesService {
   }
 
   async upsertTradesman(userId: string, dto: UpsertTradesmanProfileDto) {
-    const { skillIds, ...rest } = dto;
+    const { skillIds, skillNames, ...rest } = dto;
     const data = {
       bio: rest.bio ?? null,
       yearsExperience: rest.yearsExperience,
@@ -101,13 +113,31 @@ export class ProfilesService {
         data: { userType: 'TRADESMAN' },
       });
 
-      if (skillIds) {
+      // Only touch the skill set when the client sends either list, so partial
+      // updates don't wipe existing skills. Typed skill names are find-or-created
+      // in the shared catalog (deduped by slug) and merged with the catalog picks.
+      if (skillIds || skillNames) {
+        const resolvedIds: string[] = [];
+        for (const name of skillNames ?? []) {
+          const slug = slugifySkill(name);
+          if (!slug) continue;
+          const skill = await tx.skill.upsert({
+            where: { slug },
+            create: { slug, nameEn: name.trim() },
+            update: {},
+          });
+          resolvedIds.push(skill.id);
+        }
+        const allSkillIds = Array.from(
+          new Set([...(skillIds ?? []), ...resolvedIds]),
+        );
+
         await tx.tradesmanSkill.deleteMany({
           where: { tradesmanProfileId: profile.id },
         });
-        if (skillIds.length > 0) {
+        if (allSkillIds.length > 0) {
           await tx.tradesmanSkill.createMany({
-            data: skillIds.map((skillId) => ({
+            data: allSkillIds.map((skillId) => ({
               tradesmanProfileId: profile.id,
               skillId,
             })),

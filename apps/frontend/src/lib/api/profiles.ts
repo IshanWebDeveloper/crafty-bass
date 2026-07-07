@@ -65,6 +65,8 @@ export type UpsertTradesmanBody = {
   serviceRadiusKm: number;
   preferredLanguage: LanguageCode;
   skillIds?: string[];
+  // Free-text skills the tradesman typed; the backend find-or-creates them.
+  skillNames?: string[];
   certifications?: string[];
   vehicles?: string[];
 };
