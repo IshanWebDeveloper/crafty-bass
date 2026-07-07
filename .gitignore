@@ -73,3 +73,7 @@ apps/backend/RECOMMENDATION_ENGINE_PLAN.md
 
 # Claude Code local project config / skills
 .claude/
+
+# Antigravity Rules
+gemini.md
+GEMINI.md
