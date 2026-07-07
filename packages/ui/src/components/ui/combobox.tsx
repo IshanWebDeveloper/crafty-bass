@@ -2,11 +2,15 @@
 
 import * as React from 'react';
 import { Combobox as ComboboxPrimitive } from '@base-ui/react/combobox';
-import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
+import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from 'lucide-react';
 
 import { cn } from '@repo/ui/lib/utils';
 
 export type ComboboxOption = { value: string; label: string };
+
+// Sentinel value for the synthetic "create new" row shown when `onCreate` is set
+// and the typed query matches no existing option.
+const CREATE_VALUE = '__combobox_create__';
 
 /**
  * shadcn-style searchable select built on Base UI's Combobox. Pass `items`
@@ -16,6 +20,12 @@ export type ComboboxOption = { value: string; label: string };
  *
  * For custom rows (e.g. an icon beside the label) pass `renderItem`; the input
  * still shows the selected option's `label` automatically.
+ *
+ * Pass `onCreate` to make it creatable: when the typed query doesn't match any
+ * option label, an extra "create" row is offered; selecting it calls
+ * `onCreate(query)` instead of `onValueChange`. Customise its text with
+ * `createLabel`. Callers using it as an "add" picker typically hold `value` at
+ * `null` and remount (via `key`) after each pick to reset the input.
  */
 function Combobox<T extends ComboboxOption>({
   items,
@@ -24,6 +34,8 @@ function Combobox<T extends ComboboxOption>({
   placeholder,
   emptyText = 'No results found.',
   renderItem,
+  onCreate,
+  createLabel,
   id,
   className,
   contentClassName,
@@ -36,12 +48,33 @@ function Combobox<T extends ComboboxOption>({
   placeholder?: string;
   emptyText?: string;
   renderItem?: (item: T) => React.ReactNode;
+  onCreate?: (query: string) => void;
+  createLabel?: (query: string) => React.ReactNode;
   id?: string;
   className?: string;
   contentClassName?: string;
   disabled?: boolean;
   'aria-label'?: string;
 }) {
+  const [query, setQuery] = React.useState('');
+  const trimmed = query.trim();
+
+  // Offer a "create" row when the query is non-empty and doesn't already match an
+  // option label (case-insensitive). Its label is the query itself, so Base UI's
+  // own label filter always keeps it visible.
+  const showCreate =
+    Boolean(onCreate) &&
+    trimmed.length > 0 &&
+    !items.some((item) => item.label.toLowerCase() === trimmed.toLowerCase());
+
+  const allItems = React.useMemo(
+    () =>
+      showCreate
+        ? [...items, { value: CREATE_VALUE, label: trimmed } as T]
+        : (items as T[]),
+    [items, showCreate, trimmed],
+  );
+
   const selected = React.useMemo(
     () => items.find((item) => item.value === value) ?? null,
     [items, value],
@@ -49,9 +82,16 @@ function Combobox<T extends ComboboxOption>({
 
   return (
     <ComboboxPrimitive.Root
-      items={items as T[]}
+      items={allItems}
       value={selected}
-      onValueChange={(item) => onValueChange(item ? item.value : null)}
+      onValueChange={(item) => {
+        if (item && item.value === CREATE_VALUE) {
+          onCreate?.(item.label);
+          return;
+        }
+        onValueChange(item ? item.value : null);
+      }}
+      onInputValueChange={(next) => setQuery(next)}
       disabled={disabled}
     >
       <div className="relative">
@@ -90,25 +130,41 @@ function Combobox<T extends ComboboxOption>({
               {emptyText}
             </ComboboxPrimitive.Empty>
             <ComboboxPrimitive.List>
-              {(item: T) => (
-                <ComboboxPrimitive.Item
-                  key={item.value}
-                  value={item}
-                  data-slot="combobox-item"
-                  className={cn(
-                    'relative flex w-full cursor-default items-center gap-2 rounded-md py-1.5 pr-8 pl-2 text-sm outline-hidden select-none',
-                    'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
-                    'data-disabled:pointer-events-none data-disabled:opacity-50',
-                  )}
-                >
-                  {renderItem ? renderItem(item) : item.label}
-                  <span className="pointer-events-none absolute right-2 flex items-center justify-center">
-                    <ComboboxPrimitive.ItemIndicator>
-                      <CheckIcon className="size-4" />
-                    </ComboboxPrimitive.ItemIndicator>
-                  </span>
-                </ComboboxPrimitive.Item>
-              )}
+              {(item: T) => {
+                const isCreate = item.value === CREATE_VALUE;
+                return (
+                  <ComboboxPrimitive.Item
+                    key={item.value}
+                    value={item}
+                    data-slot="combobox-item"
+                    className={cn(
+                      'relative flex w-full cursor-default items-center gap-2 rounded-md py-1.5 pr-8 pl-2 text-sm outline-hidden select-none',
+                      'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
+                      'data-disabled:pointer-events-none data-disabled:opacity-50',
+                    )}
+                  >
+                    {isCreate ? (
+                      <span className="flex items-center gap-1.5 text-muted-foreground">
+                        <PlusIcon className="size-4" />
+                        {createLabel
+                          ? createLabel(item.label)
+                          : `Add “${item.label}”`}
+                      </span>
+                    ) : renderItem ? (
+                      renderItem(item)
+                    ) : (
+                      item.label
+                    )}
+                    {isCreate ? null : (
+                      <span className="pointer-events-none absolute right-2 flex items-center justify-center">
+                        <ComboboxPrimitive.ItemIndicator>
+                          <CheckIcon className="size-4" />
+                        </ComboboxPrimitive.ItemIndicator>
+                      </span>
+                    )}
+                  </ComboboxPrimitive.Item>
+                );
+              }}
             </ComboboxPrimitive.List>
           </ComboboxPrimitive.Popup>
         </ComboboxPrimitive.Positioner>

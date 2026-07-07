@@ -211,7 +211,12 @@
       "sub": "Just the basics — you can do the rest later.",
       "trade": "Primary trade",
       "district": "Base location",
-      "districtEmpty": "No matching district."
+      "districtEmpty": "No matching district.",
+      "skills": "Skills",
+      "skillsHelp": "Search for a skill, or type your own to add it.",
+      "skillsSearchPlaceholder": "Search or add a skill…",
+      "skillsCreate": "Add “{q}”",
+      "skillsEmpty": "No match — keep typing to add it."
     },
     "documents": {
       "title": "Upload your documents",
@@ -690,7 +695,10 @@
       "hourlyRate": "Hourly rate (optional)",
       "serviceRadiusKm": "Service radius (km)",
       "skills": "Skills",
-      "skillsHelp": "Choose all that apply. You can update this list any time.",
+      "skillsHelp": "Search for a skill, or type your own to add it. You can update this list any time.",
+      "skillsSearchPlaceholder": "Search or add a skill…",
+      "skillsCreate": "Add “{q}”",
+      "skillsEmpty": "No match — keep typing to add it.",
       "certifications": "Certifications & licences",
       "certificationsHint": "List any qualifications or licences — one per line. These help homeowners trust your work.",
       "certificationsPlaceholder": "e.g. CIDA registered electrician\nNVQ Level 4 Plumbing",

@@ -47,6 +47,12 @@ import {
   type SubmitVerificationBody,
 } from '@/lib/api/verification';
 import { uploadFile, type UploadCategory } from '@/lib/api/uploads';
+import {
+  listSkills,
+  upsertTradesmanProfile,
+  type Skill,
+} from '@/lib/api/profiles';
+import { SkillsPicker } from '@/components/profile/skills-picker';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -74,6 +80,9 @@ type Form = {
   district: string;
   primaryTrade: string;
   yearsExperience: string;
+  // skills — catalog picks (Skill ids) plus free-text skills the tradesman typed
+  skillIds: string[];
+  customSkills: string[];
   // documents — each holds the uploaded R2 object key (null until uploaded)
   nicFront: string | null;
   nicBack: string | null;
@@ -130,6 +139,8 @@ const EMPTY: Form = {
   district: '',
   primaryTrade: '',
   yearsExperience: '',
+  skillIds: [],
+  customSkills: [],
   nicFront: null,
   nicBack: null,
   photo: null,
@@ -168,6 +179,12 @@ export function OnboardingWizard({
     queryFn: getMyVerification,
     retry: false,
     staleTime: 30_000,
+  });
+
+  const { data: skills } = useQuery({
+    queryKey: ['skills'],
+    queryFn: () => listSkills(),
+    staleTime: 5 * 60_000,
   });
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) =>
@@ -225,7 +242,7 @@ export function OnboardingWizard({
   };
 
   const mutation = useMutation({
-    mutationFn: () => {
+    mutationFn: async () => {
       const body: SubmitVerificationBody = {
         fullName: form.fullName,
         gender: form.gender || undefined,
@@ -259,7 +276,23 @@ export function OnboardingWizard({
         payoutBranch: form.payoutBranch || undefined,
         payoutAccountNumber: form.payoutAccountNumber || undefined,
       };
-      return submitVerification(body);
+      await submitVerification(body);
+      // Skills live on the tradesman profile, not the verification record, so
+      // persist them here. This creates the profile early (unverified); the
+      // reviewer's approval later only flips isVerified and won't touch skills.
+      if (form.skillIds.length || form.customSkills.length) {
+        await upsertTradesmanProfile({
+          preferredLanguage: 'EN',
+          yearsExperience: form.yearsExperience
+            ? Number(form.yearsExperience)
+            : 0,
+          serviceRadiusKm: form.serviceRadiusKm,
+          city: form.city || undefined,
+          district: form.district || undefined,
+          skillIds: form.skillIds,
+          skillNames: form.customSkills,
+        });
+      }
     },
     onSuccess: () => {
       toast.success(tv.submitted);
@@ -331,7 +364,7 @@ export function OnboardingWizard({
       ) : null}
 
       {step === 0 ? (
-        <Profile t={t} tv={tv} form={form} set={set} />
+        <Profile t={t} tv={tv} form={form} set={set} skills={skills} />
       ) : step === 1 ? (
         <Documents t={t} tv={tv} form={form} set={set} up={up} />
       ) : step === 2 ? (
@@ -442,7 +475,13 @@ type UploadStepProps = StepProps & { up: UploadHandlers };
 // KYC documents accept images or a PDF scan.
 const KYC_ACCEPT = 'image/jpeg,image/png,image/webp,application/pdf';
 
-function Profile({ t, tv, form, set }: StepProps) {
+function Profile({
+  t,
+  tv,
+  form,
+  set,
+  skills,
+}: StepProps & { skills: Skill[] | undefined }) {
   return (
     <div className="space-y-5">
       <StepHead title={t.profile.title} sub={t.profile.sub} />
@@ -509,6 +548,39 @@ function Profile({ t, tv, form, set }: StepProps) {
           id="o-address"
           value={form.addressLine}
           onChange={(e) => set('addressLine', e.target.value)}
+        />
+      </div>
+      <div className="space-y-2">
+        <div>
+          <Label>{t.profile.skills}</Label>
+          <p className="text-xs text-muted-foreground">
+            {t.profile.skillsHelp}
+          </p>
+        </div>
+        <SkillsPicker
+          skills={skills}
+          selectedIds={new Set(form.skillIds)}
+          onToggleId={(id, on) =>
+            set(
+              'skillIds',
+              on
+                ? [...form.skillIds, id]
+                : form.skillIds.filter((x) => x !== id),
+            )
+          }
+          customSkills={form.customSkills}
+          onAddCustom={(name) =>
+            set('customSkills', [...form.customSkills, name])
+          }
+          onRemoveCustom={(name) =>
+            set(
+              'customSkills',
+              form.customSkills.filter((x) => x !== name),
+            )
+          }
+          searchPlaceholder={t.profile.skillsSearchPlaceholder}
+          createLabel={t.profile.skillsCreate}
+          emptyText={t.profile.skillsEmpty}
         />
       </div>
     </div>

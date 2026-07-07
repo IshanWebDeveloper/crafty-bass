@@ -14,13 +14,12 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
   Input,
-  cn,
-  tagVariants,
 } from '@repo/ui';
 import { ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { SkillsPicker } from '@/components/profile/skills-picker';
 import {
   upsertTradesmanProfile,
   listSkills,
@@ -78,6 +77,8 @@ export function TradesmanProfileForm({
   const [selectedSkillIds, setSelectedSkillIds] = useState<Set<string>>(
     () => new Set(initial?.skills.map((s) => s.skillId) ?? []),
   );
+  // Typed skills not yet persisted; the backend find-or-creates them on save.
+  const [customSkills, setCustomSkills] = useState<string[]>([]);
 
   const { data: skills } = useQuery({
     queryKey: ['skills'],
@@ -126,12 +127,20 @@ export function TradesmanProfileForm({
         city: values.city || undefined,
         district: values.district || undefined,
         skillIds: Array.from(selectedSkillIds),
+        skillNames: customSkills,
         certifications: toLines(values.certifications),
         vehicles: toLines(values.vehicles),
       }),
-    onSuccess: () => {
+    onSuccess: (profile) => {
       toast.success(t.saved);
+      // Re-sync from the saved profile: typed skills are now catalog rows linked
+      // to this tradesman, so fold them into the selected set and clear the
+      // pending customs — otherwise they'd vanish from the picker until reload.
+      setSelectedSkillIds(new Set(profile.skills.map((s) => s.skillId)));
+      setCustomSkills([]);
       void qc.invalidateQueries({ queryKey: ['profile', 'me'] });
+      // The new skills are catalog rows now — refresh the searchable list.
+      void qc.invalidateQueries({ queryKey: ['skills'] });
     },
     onError: (err) =>
       toast.error(err instanceof Error ? err.message : 'Could not save'),
@@ -280,25 +289,19 @@ export function TradesmanProfileForm({
             {t.tradesman.skillsHelp}
           </p>
         </div>
-        <div className="flex flex-wrap gap-2 rounded-lg border border-border p-3">
-          {skills?.map((skill) => {
-            const checked = selectedSkillIds.has(skill.id);
-            return (
-              <button
-                key={skill.id}
-                type="button"
-                aria-pressed={checked}
-                onClick={() => toggleSkill(skill.id, !checked)}
-                className={cn(
-                  tagVariants({ variant: checked ? 'active' : 'default' }),
-                  'cursor-pointer rounded-md px-2.5 py-1.5 transition-colors',
-                )}
-              >
-                {skill.nameEn}
-              </button>
-            );
-          })}
-        </div>
+        <SkillsPicker
+          skills={skills}
+          selectedIds={selectedSkillIds}
+          onToggleId={toggleSkill}
+          customSkills={customSkills}
+          onAddCustom={(name) => setCustomSkills((prev) => [...prev, name])}
+          onRemoveCustom={(name) =>
+            setCustomSkills((prev) => prev.filter((s) => s !== name))
+          }
+          searchPlaceholder={t.tradesman.skillsSearchPlaceholder}
+          createLabel={t.tradesman.skillsCreate}
+          emptyText={t.tradesman.skillsEmpty}
+        />
       </div>
 
       <div className="space-y-1.5">

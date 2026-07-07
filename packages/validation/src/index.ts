@@ -62,6 +62,10 @@ export const TradesmanProfileSchema = z.object({
   serviceRadiusKm: z.coerce.number().int().min(0).max(500).default(15),
   preferredLanguage: LanguageCodeSchema.default('EN'),
   skillIds: z.array(id).max(50).optional(),
+  // Free-text skills the tradesman typed that aren't in the seeded catalog.
+  // The backend find-or-creates a Skill per name (deduped by slug) and links it,
+  // so these grow the shared catalog and stay filterable in the directory.
+  skillNames: z.array(z.string().trim().min(1).max(80)).max(50).optional(),
   certifications: z.array(z.string().trim().min(1).max(160)).max(30).optional(),
   vehicles: z.array(z.string().trim().min(1).max(120)).max(20).optional(),
 });
