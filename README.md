@@ -82,10 +82,12 @@ pnpm nx run backend:dev
 pnpm nx run ai-service:dev
 ```
 
-### Run the AI service through the root shortcut
+### Run individual apps through the root shortcuts
 
 ```bash
-pnpm dev:ai
+pnpm dev:admin        # only admin
+pnpm dev:ai           # only ai-service (via Nx, requires .venv)
+pnpm dev:ai:uvicorn   # only ai-service (via uvicorn, no .venv required)
 ```
 
 ### Prisma scripts
@@ -112,7 +114,7 @@ pnpm stripe:listen
 
 - Backend defaults to port `3005` (configurable via `PORT`).
 - AI service defaults to port `8006` and reads local config from `apps/ai-service/.env` (set `GITHUB_TOKEN` or `OPENAI_API_KEY`).
-- CORS defaults to `http://localhost:3000` when `CORS_ORIGINS` is not set.
+- CORS defaults to `http://localhost:3000,http://localhost:3001,http://localhost:5173` when `CORS_ORIGINS` is not set.
 - Backend Prisma scripts expect environment files such as `.env` and `.env.test` in `apps/backend`.
 - AI service expects a local virtual environment at `apps/ai-service/.venv` for Nx targets such as `ai-service:dev`.
 - Common local-only artifacts are gitignored, including `node_modules`, `dist`, `.next`, `.turbo`, `.nx/cache`, and `apps/backend/src/generated`.
@@ -127,55 +129,57 @@ This roadmap is based on the approved project scope
 - Integrate `@repo/auth` with HTTP endpoints and role-based guards (`CUSTOMER`, `SUPPORT`, `ADMIN`); marketplace RBAC in `packages/auth/src/access.ts`.
 - Add seed data for service categories and skills (English, Sinhala, Tamil labels).
 
-Deliverable: authenticated backend APIs with a stable domain model and seeded taxonomy. **Complete** — backend modules `users/`, `profiles/`, `jobs/`, `quotes/`, `escrow/`, `categories/`, `reviews/`, `recommendations/`, `verification/`, `conversations/`, `reports/`, `consent/`, `legal/`, `admin/`, `webhooks/`, and `health/` are wired; taxonomy seeded.
+Deliverable: authenticated backend APIs with a stable domain model and seeded taxonomy. **Complete** — backend modules `users/`, `profiles/`, `jobs/`, `quotes/`, `material-requests/`, `escrow/`, `categories/`, `reviews/`, `recommendations/`, `verification/`, `uploads/`, `conversations/`, `reports/`, `consent/`, `legal/`, `admin/`, `webhooks/`, `translation/`, `notifications/`, and `health/` are wired; taxonomy seeded.
 
-### Phase 2: Two-Sided Marketplace Features
+### Phase 2: Two-Sided Marketplace Features ✅
 
 - Homeowner flows: profile setup, create/edit job posts, view quotes, accept quotes, complete jobs.
 - Tradesman flows: profile setup, skills management, availability, submit/withdraw quotes.
 - Job lifecycle: `OPEN -> ASSIGNED -> IN_PROGRESS -> COMPLETED/CANCELLED` with audit-ready status transitions.
 - Messaging: job-linked conversations and direct messaging with unread/read tracking.
 
-Deliverable: end-to-end homeowner and tradesman marketplace workflow.
+Deliverable: end-to-end homeowner and tradesman marketplace workflow. **Complete** — frontend journeys live under `apps/frontend/src/app/[locale]/` (`jobs`, `quotes`, `messages`, `dashboard`, `account`, `notifications`); escrow/Stripe payments and material requests are wired.
 
-### Phase 3: AI-Assisted Job Classification
+### Phase 3: AI-Assisted Job Classification ✅
 
 - Build a LangChain/LangGraph workflow that classifies free-text job descriptions into `ServiceCategory` and likely `Skill` tags.
 - Persist outputs to `Job.aiCategoryId`, `Job.aiConfidence`, and `Job.aiSuggestedTags`.
 - Add confidence thresholds and manual override (homeowner or admin can correct classification).
 
-Deliverable: production-ready classification service with observable confidence metrics.
+Deliverable: production-ready classification service with observable confidence metrics. **Complete** — `apps/ai-service` exposes `POST /api/v1/assistant/classify-job` (and `/classify-jobs/batch`) via a LangGraph classification workflow.
 
-### Phase 4: Recommendation and Trust Scoring
+### Phase 4: Recommendation and Trust Scoring ✅
 
 - Implement recommendation ranking for each job and persist in `JobRecommendation`.
 - Compute score using weighted factors: proximity, average rating, completion reliability, and response speed.
 - Add explanation payloads in `JobRecommendation.reasons` for transparency.
 - Introduce trust signals: verification status, report history, cancellation behavior.
 
-Deliverable: explainable multi-factor tradesman recommendation engine.
+Deliverable: explainable multi-factor tradesman recommendation engine. **Complete** — backend `recommendations/` module ranks and persists `JobRecommendation` records; `verification/` and `reports/` supply trust signals.
 
-### Phase 5: Multilingual and UX Completion
+### Phase 5: Multilingual and UX Completion ✅
 
 - Implement i18n for English/Sinhala/Tamil in frontend copy and category/skill display.
 - Build frontend pages for auth, dashboards, job posting, quote comparison, messaging, and reviews.
 - Ensure mobile responsiveness and accessibility baseline (WCAG-focused form/navigation checks).
 
-Deliverable: usable tri-lingual web app across homeowner and tradesman journeys.
+Deliverable: usable tri-lingual web app across homeowner and tradesman journeys. **Complete** — the frontend is routed under a `[locale]` segment (en/si/ta) backed by the backend `translation/` module, with auth, dashboard, jobs, quotes, and messaging pages built.
 
-### Phase 6: Quality, Evaluation, and Submission
+### Phase 6: Quality, Evaluation, and Submission 🚧
 
 - Backend tests: unit + integration for auth, jobs, quotes, AI classification, and recommendation scoring.
 - Frontend tests: core journey e2e tests (post job, receive quote, accept quote, review tradesman).
 - Run SUS-based usability evaluation with participants and compute average SUS score.
 - Compare results against informal baseline process (time to hire, confidence, transparency).
 
-Deliverable: validated project outcomes aligned with dissertation/report requirements.
+Deliverable: validated project outcomes aligned with dissertation/report requirements. **In progress** — backend Jest/Vitest suites and Playwright e2e (`apps/frontend/e2e/`) are configured; usability evaluation and baseline comparison remain.
 
 ## Current Repository Status (Quick Gap View)
 
 - Data model is stable in `packages/db/prisma/schema.prisma` (marketplace domain).
 - Auth foundation lives in `packages/auth/` (`@repo/auth`) with marketplace RBAC in `packages/auth/src/access.ts`.
-- Backend modules wired in `apps/backend/src/app.module.ts`: `users`, `profiles`, `jobs`, `quotes`, `escrow`, `categories`, `reviews`, `recommendations`, `verification`, `conversations`, `reports`, `consent`, `legal`, `admin`, `webhooks`, `health`.
-- Frontend has multilingual (en/si/ta) marketplace pages: home, job search, account/privacy.
+- Backend modules wired in `apps/backend/src/app.module.ts`: `users`, `profiles`, `jobs`, `quotes`, `material-requests`, `escrow`, `categories`, `reviews`, `recommendations`, `verification`, `uploads`, `conversations`, `reports`, `consent`, `legal`, `admin`, `webhooks`, `translation`, `notifications`, `health`.
+- Frontend has multilingual (en/si/ta) marketplace pages routed under `[locale]`: home, jobs, quotes, messages, dashboard, account, notifications, and legal/marketing pages.
+- Admin console (`apps/admin`, port 3001) covers users, jobs, escrow, reviews, verifications, reports, categories, audit log, and settings.
+- Escrow/Stripe payments are integrated (webhook forwarding via `pnpm stripe:listen`).
 - Legacy e-commerce sweep complete.
