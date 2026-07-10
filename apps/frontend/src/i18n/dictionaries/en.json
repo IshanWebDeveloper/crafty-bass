@@ -491,7 +491,19 @@
       "noQuotes": "No quotes yet. Tradespeople will be notified that the job is open.",
       "cancelJob": "Cancel job",
       "cancelling": "Cancelling…",
-      "cancelConfirm": "Cancel this job? Open quotes will be closed."
+      "cancelConfirm": "Cancel this job? Open quotes will be closed.",
+      "editJob": "Edit job"
+    },
+    "edit": {
+      "title": "Edit job",
+      "subtitle": "Update the details of your posted job. Changes are visible to tradespeople straight away.",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "success": "Job updated",
+      "error": "Couldn't save your changes. Try again.",
+      "back": "Cancel",
+      "notFound": "This job could not be found.",
+      "notEditable": "This job can no longer be edited — it's already been assigned, completed or cancelled."
     },
     "browse": {
       "title": "Open jobs",

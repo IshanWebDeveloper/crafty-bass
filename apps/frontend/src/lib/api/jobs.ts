@@ -65,6 +65,24 @@ export type CreateJobBody = {
   vehicleRequirement?: VehicleRequirement;
 };
 
+// Editing a posted job: every field is optional (a partial patch), and
+// categoryId can be explicitly null to clear the category. Mirrors the
+// backend UpdateJobSchema.
+export type UpdateJobBody = {
+  title?: string;
+  description?: string;
+  categoryId?: string | null;
+  locationText?: string;
+  city?: string;
+  district?: string;
+  budgetMin?: number;
+  budgetMax?: number;
+  scheduledFor?: string;
+  urgency?: JobUrgency;
+  taskSize?: TaskSize;
+  vehicleRequirement?: VehicleRequirement;
+};
+
 export type JobListQuery = {
   page?: number;
   limit?: number;
@@ -99,6 +117,13 @@ export function getJob(id: string) {
 export function createJob(body: CreateJobBody) {
   return apiFetch<Job>('/jobs', {
     method: 'POST',
+    body: JSON.stringify(body),
+  });
+}
+
+export function updateJob(id: string, body: UpdateJobBody) {
+  return apiFetch<Job>(`/jobs/${id}`, {
+    method: 'PATCH',
     body: JSON.stringify(body),
   });
 }

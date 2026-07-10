@@ -12,7 +12,7 @@ import { JobsService } from './jobs.service.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { Permissions } from '../common/decorators/permissions.decorator.js';
 import { Public } from '../common/decorators/public.decorator.js';
-import { CreateJobDto, JobQueryDto } from './dto/index.js';
+import { CreateJobDto, JobQueryDto, UpdateJobDto } from './dto/index.js';
 
 @ApiTags('Jobs')
 @Controller('jobs')
@@ -48,6 +48,18 @@ export class JobsController {
   @ApiOperation({ summary: 'Get a job by id' })
   findOne(@Param('id') id: string) {
     return this.jobsService.findOne(id);
+  }
+
+  @Patch(':id')
+  @Permissions('job', 'edit')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Edit own open job (homeowner)' })
+  update(
+    @CurrentUser('id') userId: string,
+    @Param('id') id: string,
+    @Body() dto: UpdateJobDto,
+  ) {
+    return this.jobsService.update(userId, id, dto);
   }
 
   @Patch(':id/cancel')

@@ -682,7 +682,7 @@ export function PostJobForm({
  * optional hint per option) used for the "task size" and "vehicle needed"
  * posting choices. Selection is optional: clicking the active option clears it.
  */
-function RadioCards<T extends string>({
+export function RadioCards<T extends string>({
   label,
   optional,
   options,
