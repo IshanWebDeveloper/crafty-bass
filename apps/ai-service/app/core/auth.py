@@ -10,20 +10,43 @@ from jwt import PyJWKClient
 from pydantic import BaseModel
 from typing_extensions import NotRequired, TypedDict
 
+from app.core.config import get_settings
+
 logger = logging.getLogger(__name__)
 
 bearer_scheme = HTTPBearer()
 
 
+def _setting(name: str) -> str | None:
+    """Read a value from pydantic settings first (loads the .env file),
+    falling back to the raw process environment.
+
+    auth config lives alongside the LLM keys in ``.env``; pydantic-settings
+    loads that file into the ``Settings`` object but does NOT populate
+    ``os.environ``. Reading ``os.environ`` directly therefore only worked when
+    uvicorn was launched with ``--env-file .env``, and otherwise raised a
+    ``KeyError`` that surfaced as a 401 on authenticated endpoints.
+    """
+    value = getattr(get_settings(), name, None)
+    if value:
+        return str(value)
+    return os.environ.get(name.upper())
+
+
 @lru_cache(maxsize=1)
 def get_jwks_client() -> PyJWKClient:
-    better_auth_url = os.environ["BETTER_AUTH_URL"]
+    better_auth_url = _setting("better_auth_url")
+    if not better_auth_url:
+        raise RuntimeError(
+            "BETTER_AUTH_URL must be set so the AI service can fetch the "
+            "auth server's JWKS to verify tokens.",
+        )
     return PyJWKClient(f"{better_auth_url}/api/auth/jwks")
 
 
 @lru_cache(maxsize=1)
 def _expected_audience() -> str:
-    audience = os.environ.get("JWT_AUDIENCE")
+    audience = _setting("jwt_audience")
     if not audience:
         raise RuntimeError(
             "JWT_AUDIENCE must be set so tokens minted for other services "
@@ -34,7 +57,7 @@ def _expected_audience() -> str:
 
 @lru_cache(maxsize=1)
 def _expected_issuer() -> str:
-    issuer = os.environ.get("JWT_ISSUER")
+    issuer = _setting("jwt_issuer")
     if not issuer:
         raise RuntimeError(
             "JWT_ISSUER must be set (typically the BETTER_AUTH_URL of the "

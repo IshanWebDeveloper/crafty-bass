@@ -1,4 +1,5 @@
 import time
+from types import SimpleNamespace
 
 import jwt
 import pytest
@@ -145,6 +146,8 @@ def test_missing_audience_env_raises_runtime_error(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.delenv("JWT_AUDIENCE", raising=False)
+    # Also neutralise the .env-backed settings source so nothing supplies it.
+    monkeypatch.setattr(auth_module, "get_settings", lambda: SimpleNamespace())
     auth_module._expected_audience.cache_clear()
     with pytest.raises(RuntimeError):
         _expected_audience()
@@ -154,6 +157,7 @@ def test_missing_issuer_env_raises_runtime_error(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.delenv("JWT_ISSUER", raising=False)
+    monkeypatch.setattr(auth_module, "get_settings", lambda: SimpleNamespace())
     auth_module._expected_issuer.cache_clear()
     with pytest.raises(RuntimeError):
         _expected_issuer()
