@@ -1,5 +1,7 @@
 import operator
-from typing_extensions import Annotated, TypedDict
+from typing import Annotated
+
+from typing_extensions import TypedDict
 
 from app.schemas.classification import (
     JobClassificationBatchItem,

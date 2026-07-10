@@ -14,5 +14,5 @@ classification_template = (
     "Job description: {description}\n\n"
     "{taxonomy_prompt}\n"
     "Return JSON only with this exact shape:\n"
-    "{{\"category_slug\": \"string or null\", \"skill_slugs\": [\"skill-slug\"], \"confidence\": 0.0, \"reasoning_summary\": \"short explanation\"}}"
+    '{{"category_slug": "string or null", "skill_slugs": ["skill-slug"], "confidence": 0.0, "reasoning_summary": "short explanation"}}'  # noqa: E501
 )

@@ -1,13 +1,13 @@
 import logging
 import os
-import jwt
-from jwt import PyJWKClient
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from pydantic import BaseModel
 from functools import lru_cache
 from typing import cast
 
+import jwt
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from jwt import PyJWKClient
+from pydantic import BaseModel
 from typing_extensions import NotRequired, TypedDict
 
 logger = logging.getLogger(__name__)

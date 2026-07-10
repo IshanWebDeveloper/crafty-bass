@@ -42,7 +42,10 @@
         "cwd": "apps/ai-service",
         "command": ".\\.venv\\Scripts\\python.exe -m pytest"
       },
-      "outputs": ["{projectRoot}/.pytest_cache/**"]
+      "outputs": [
+        "{projectRoot}/.pytest_cache/**",
+        "{projectRoot}/coverage.xml"
+      ]
     }
   }
 }
