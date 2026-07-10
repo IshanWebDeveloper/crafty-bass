@@ -50,6 +50,11 @@ apps/*/coverage.xml
 apps/*/.coverage
 apps/*/htmlcov
 apps/ai-service/evals/results
+
+# coverage output (js/ts)
+apps/*/coverage
+apps/*/coverage-vitest
+packages/*/coverage
 apps/*/__pycache__
 apps/*/app/__pycache__
 apps/*/tests/__pycache__
