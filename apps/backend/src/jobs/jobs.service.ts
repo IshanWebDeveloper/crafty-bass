@@ -206,6 +206,18 @@ export class JobsService {
     return job;
   }
 
+  // Public marketplace tallies for the landing page — real counts instead of
+  // hardcoded marketing numbers. "matched" = jobs that reached a tradesman
+  // (someone was assigned), which is the outcome the homepage advertises.
+  async publicStats() {
+    const [openJobs, matchedJobs, verifiedTradespeople] = await Promise.all([
+      this.prisma.job.count({ where: { status: 'OPEN' } }),
+      this.prisma.job.count({ where: { assignedTradesmanId: { not: null } } }),
+      this.prisma.tradesmanProfile.count({ where: { isVerified: true } }),
+    ]);
+    return { openJobs, matchedJobs, verifiedTradespeople };
+  }
+
   async update(userId: string, id: string, dto: UpdateJobDto) {
     const job = await this.prisma.job.findUnique({
       where: { id },

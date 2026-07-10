@@ -2,21 +2,36 @@ import Link from 'next/link';
 import { Badge, Card, buttonVariants, cn } from '@repo/ui';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
+import type { JobStats } from '@/lib/api/jobs';
 import { JobSearchPanel } from './job-search-panel';
 
 export function HeroSection({
   locale,
   dict,
+  stats: jobStats,
 }: {
   locale: Locale;
   dict: Dictionary;
+  stats?: JobStats | null;
 }) {
   const hero = dict.hero;
-  const stats = [
-    { value: '420+', label: hero.stats.activeTrades },
-    { value: '2h', label: hero.stats.avgResponse },
-    { value: '9.1k', label: hero.stats.verifiedReviews },
-  ];
+  const fmt = (n: number) => new Intl.NumberFormat(locale).format(n);
+  // Real marketplace counts when the backend is reachable; otherwise fall back
+  // to the static marketing figures so the landing page still renders.
+  const stats = jobStats
+    ? [
+        { value: fmt(jobStats.openJobs), label: hero.stats.openJobs },
+        { value: fmt(jobStats.matchedJobs), label: hero.stats.matchedJobs },
+        {
+          value: fmt(jobStats.verifiedTradespeople),
+          label: hero.stats.verifiedPros,
+        },
+      ]
+    : [
+        { value: '420+', label: hero.stats.activeTrades },
+        { value: '2h', label: hero.stats.avgResponse },
+        { value: '9.1k', label: hero.stats.verifiedReviews },
+      ];
 
   return (
     <section className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-14 lg:py-16">

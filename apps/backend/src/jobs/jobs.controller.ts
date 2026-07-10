@@ -43,6 +43,14 @@ export class JobsController {
     return this.jobsService.findMine(userId, query);
   }
 
+  // Declared before ':id' so "stats" is not captured as a job id.
+  @Public()
+  @Get('stats')
+  @ApiOperation({ summary: 'Public marketplace counts for the landing page' })
+  stats() {
+    return this.jobsService.publicStats();
+  }
+
   @Public()
   @Get(':id')
   @ApiOperation({ summary: 'Get a job by id' })

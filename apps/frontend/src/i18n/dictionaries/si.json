@@ -819,7 +819,10 @@
     "stats": {
       "activeTrades": "ක්‍රියාකාරී ශිල්පීන්",
       "avgResponse": "සාමාන්‍ය ප්‍රතිචාරය",
-      "verifiedReviews": "සත්‍යාපිත සමාලෝචන"
+      "verifiedReviews": "සත්‍යාපිත සමාලෝචන",
+      "openJobs": "විවෘත කාර්ය",
+      "matchedJobs": "ගැළපුණු කාර්ය",
+      "verifiedPros": "සත්‍යාපිත ශිල්පීන්"
     }
   },
   "jobSearch": {

@@ -819,7 +819,10 @@
     "stats": {
       "activeTrades": "active trades",
       "avgResponse": "avg. response",
-      "verifiedReviews": "verified reviews"
+      "verifiedReviews": "verified reviews",
+      "openJobs": "open jobs",
+      "matchedJobs": "jobs matched",
+      "verifiedPros": "verified pros"
     }
   },
   "jobSearch": {
