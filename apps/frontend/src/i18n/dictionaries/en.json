@@ -284,7 +284,7 @@
         "note": "Held by Crafty Bass"
       },
       "materials": {
-        "label": "Materials",
+        "label": "Material Deposit",
         "note": "Released to buy parts"
       },
       "workDone": {
@@ -301,7 +301,7 @@
       "balance": "Balance on completion",
       "total": "Quote total",
       "inEscrow": "in escrow · refundable until work begins",
-      "balancePending": "released when you approve the work"
+      "balancePending": "released when the homeowner approves the work"
     },
     "status": {
       "REQUESTED": "Awaiting deposit",
