@@ -819,7 +819,10 @@
     "stats": {
       "activeTrades": "செயலில் உள்ள கைவினைஞர்கள்",
       "avgResponse": "சராசரி பதில்",
-      "verifiedReviews": "சரிபார்க்கப்பட்ட மதிப்புரைகள்"
+      "verifiedReviews": "சரிபார்க்கப்பட்ட மதிப்புரைகள்",
+      "openJobs": "திறந்த வேலைகள்",
+      "matchedJobs": "பொருத்தப்பட்ட வேலைகள்",
+      "verifiedPros": "சரிபார்க்கப்பட்ட கைவினைஞர்கள்"
     }
   },
   "jobSearch": {

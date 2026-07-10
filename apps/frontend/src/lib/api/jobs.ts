@@ -83,6 +83,13 @@ export type UpdateJobBody = {
   vehicleRequirement?: VehicleRequirement;
 };
 
+// Public landing-page marketplace counts (GET /jobs/stats).
+export type JobStats = {
+  openJobs: number;
+  matchedJobs: number;
+  verifiedTradespeople: number;
+};
+
 export type JobListQuery = {
   page?: number;
   limit?: number;
