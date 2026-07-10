@@ -15,6 +15,7 @@ const AUTH_ATTEMPT_PATH_PREFIXES = [
   '/sign-in',
   '/sign-up',
   '/forget-password',
+  '/request-password-reset',
   '/reset-password',
   '/send-verification-email',
   '/verify-email',

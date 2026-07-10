@@ -9,7 +9,21 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
-    include: ['test/**/*.vitest.test.ts'],
+    include: ['src/**/*.vitest.test.ts'],
+    passWithNoTests: true,
+    coverage: {
+      provider: 'v8',
+      reportsDirectory: 'coverage-vitest',
+      exclude: [
+        'test/**',
+        '**/*.spec.ts',
+        '**/*.test.ts',
+        'src/**/dto/**',
+        'src/**/*.module.ts',
+        'src/main.ts',
+        '**/*.config.ts',
+      ],
+    },
   },
   plugins: [
     swc.vite({
