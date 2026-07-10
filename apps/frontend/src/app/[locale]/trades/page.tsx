@@ -3,6 +3,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { TradesDirectory } from '@/components/trades/trades-directory';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { redirectUserType } from '@/lib/server-session';
 
 export default async function TradesPage({
   params,
@@ -10,6 +11,9 @@ export default async function TradesPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  // The trades directory is for homeowners (and anonymous discovery from the
+  // landing page); tradesmen must not browse other tradesmen.
+  await redirectUserType(locale, 'TRADESMAN');
   const dict = await getDictionary(locale);
   const t = dict.trades;
 
