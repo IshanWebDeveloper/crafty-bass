@@ -55,12 +55,16 @@ apps/ai-service/evals/results
 apps/*/coverage
 apps/*/coverage-vitest
 packages/*/coverage
+
+# Next.js generated env types (regenerated on build)
+apps/*/next-env.d.ts
 apps/*/__pycache__
 apps/*/app/__pycache__
 apps/*/tests/__pycache__
 apps/backend/src/generated
 packages/db/src/generated
 docs/
+TESTING_VALIDATION_PLAN.md
 _pycache__
 *.pyc
 *.pyo
