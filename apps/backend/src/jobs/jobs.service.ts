@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
-import type { CreateJobDto, JobQueryDto } from './dto/index.js';
+import type { CreateJobDto, JobQueryDto, UpdateJobDto } from './dto/index.js';
 
 const JOB_LIST_INCLUDE = {
   category: { select: { id: true, slug: true, nameEn: true } },
@@ -204,6 +204,56 @@ export class JobsService {
     });
     if (!job) throw new NotFoundException('Job not found');
     return job;
+  }
+
+  async update(userId: string, id: string, dto: UpdateJobDto) {
+    const job = await this.prisma.job.findUnique({
+      where: { id },
+      select: { id: true, homeownerId: true, status: true },
+    });
+    if (!job) throw new NotFoundException('Job not found');
+    if (job.homeownerId !== userId) {
+      throw new ForbiddenException('Not your job');
+    }
+    // Only an open job (no tradesman assigned yet) can be edited — once a quote
+    // is accepted the agreed scope must not move under the tradesman's feet.
+    if (job.status !== 'OPEN') {
+      throw new ForbiddenException(
+        `Cannot edit a job that is ${job.status.toLowerCase()}`,
+      );
+    }
+
+    return this.prisma.job.update({
+      where: { id },
+      // Prisma skips `undefined` fields, so a partial DTO patches only what the
+      // homeowner changed. Changing urgency also resets the expiry countdown
+      // from now, mirroring how `create` derives expiresAt from urgency.
+      data: {
+        ...(dto.title !== undefined ? { title: dto.title } : {}),
+        ...(dto.description !== undefined
+          ? { description: dto.description }
+          : {}),
+        ...(dto.categoryId !== undefined ? { categoryId: dto.categoryId } : {}),
+        ...(dto.urgency !== undefined
+          ? { urgency: dto.urgency, expiresAt: expiryFromUrgency(dto.urgency) }
+          : {}),
+        ...(dto.taskSize !== undefined ? { taskSize: dto.taskSize } : {}),
+        ...(dto.vehicleRequirement !== undefined
+          ? { vehicleRequirement: dto.vehicleRequirement }
+          : {}),
+        ...(dto.locationText !== undefined
+          ? { locationText: dto.locationText }
+          : {}),
+        ...(dto.city !== undefined ? { city: dto.city } : {}),
+        ...(dto.district !== undefined ? { district: dto.district } : {}),
+        ...(dto.budgetMin !== undefined ? { budgetMin: dto.budgetMin } : {}),
+        ...(dto.budgetMax !== undefined ? { budgetMax: dto.budgetMax } : {}),
+        ...(dto.scheduledFor !== undefined
+          ? { scheduledFor: dto.scheduledFor }
+          : {}),
+      },
+      include: JOB_LIST_INCLUDE,
+    });
   }
 
   async cancel(userId: string, id: string) {

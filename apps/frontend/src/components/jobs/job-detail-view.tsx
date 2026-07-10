@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -157,6 +158,14 @@ export function JobDetailView({
           </dl>
 
           <div className="flex flex-wrap items-center gap-2 pt-2">
+            {isOwner && job.status === 'OPEN' ? (
+              <Button
+                variant="outline"
+                render={<Link href={`/${locale}/jobs/${job.id}/edit`} />}
+              >
+                {t.detail.editJob}
+              </Button>
+            ) : null}
             {isOwner &&
             (job.status === 'OPEN' ||
               job.status === 'ASSIGNED' ||
