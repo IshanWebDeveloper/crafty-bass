@@ -174,6 +174,7 @@ describe('EscrowService state machine', () => {
       paymentMethod: 'card',
       stripePaymentMethodId: 'pm_test123',
     });
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- asserting on a jest mock method reference
     expect(stripe.createAndConfirmPaymentIntent).toHaveBeenCalledWith(
       expect.objectContaining({
         paymentMethodId: 'pm_test123',
@@ -265,6 +266,7 @@ describe('EscrowService state machine', () => {
     const stripe = makeStripe();
     const service = new EscrowService(prisma, stripe);
     await service.refund('home1', 'esc1');
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- asserting on a jest mock method reference
     expect(stripe.createRefund).toHaveBeenCalledWith({
       paymentIntentId: 'pi_test123',
     });

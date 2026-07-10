@@ -1,27 +1,28 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { PrismaClient, createDbAdapter } from '@repo/db';
+import { toNodeHandler } from 'better-auth/node';
+import { auth } from '@repo/auth';
+import type { Application } from 'express';
 
 import { vi, describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 // Mock Resend to prevent real emails from being sent
 vi.mock('resend', () => {
   return {
-    Resend: vi.fn().mockImplementation(() => ({
-      emails: {
+    Resend: class {
+      emails = {
         send: vi.fn().mockResolvedValue({ id: 'mock-email-id' }),
-      },
-    })),
+      };
+    },
   };
 });
 
 // Since we're using Better Auth with a real database for integration tests,
 // we don't mock AuthModule like in app.e2e-spec.ts
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const { AppModule } = require('../src/app.module');
+import { AppModule } from '../src/app.module.js';
 
 describe('Authentication Flow (e2e)', () => {
   let app: INestApplication<App>;
@@ -37,6 +38,10 @@ describe('Authentication Flow (e2e)', () => {
     app.setGlobalPrefix('api/v1', {
       exclude: ['api/auth/{*path}'],
     });
+
+    const httpAdapter = app.getHttpAdapter();
+    const expressInstance = httpAdapter.getInstance() as Application;
+    expressInstance.all('/api/auth/*splat', toNodeHandler(auth));
 
     prisma = new PrismaClient({ adapter: createDbAdapter() });
     await app.init();
@@ -58,22 +63,32 @@ describe('Authentication Flow (e2e)', () => {
       });
 
       // Register a real user to test against
-      await request(app.getHttpServer()).post('/api/auth/sign-up/email').send({
-        email: testEmail,
-        password: testPassword,
-        name: 'E2E Test User',
-      });
+      const res = await request(app.getHttpServer())
+        .post('/api/auth/sign-up/email')
+        .send({
+          email: testEmail,
+          password: testPassword,
+          name: 'E2E Test User',
+          privacyPolicyAcceptedAt: new Date().toISOString(),
+        });
+      if (res.status !== 200) {
+        throw new Error(
+          `Sign up failed: ${res.status} ${JSON.stringify(res.body)}`,
+        );
+      }
     });
 
     afterAll(async () => {
-      // Clean up
+      // Clean up. Better Auth stores the reset token as a verification row
+      // whose `value` is the user id and whose `identifier` is
+      // `reset-password:<token>`, so cascade-delete via the user id.
       const user = await prisma.user.findFirst({
         where: { email: testEmail },
       });
 
       if (user) {
         await prisma.verification.deleteMany({
-          where: { identifier: testEmail },
+          where: { value: user.id },
         });
         await prisma.user.deleteMany({
           where: { email: testEmail },
@@ -81,9 +96,9 @@ describe('Authentication Flow (e2e)', () => {
       }
     });
 
-    it('POST /api/auth/forget-password — succeeds for existing user', async () => {
+    it('POST /api/auth/request-password-reset — succeeds for existing user', async () => {
       const res = await request(app.getHttpServer())
-        .post('/api/auth/forget-password')
+        .post('/api/auth/request-password-reset')
         .send({
           email: testEmail,
           redirectTo: 'http://localhost:3000/reset-password',
@@ -93,34 +108,50 @@ describe('Authentication Flow (e2e)', () => {
       expect(res.status).toBe(200);
       expect((res.body as { status: boolean }).status).toBe(true);
 
-      // Verify a token was saved in the DB
-      const verification = await prisma.verification.findFirst({
-        where: { identifier: testEmail },
+      // Better Auth persists the reset token as a verification row keyed by
+      // `reset-password:<token>` with the user id as its value.
+      const user = await prisma.user.findFirstOrThrow({
+        where: { email: testEmail },
       });
-      expect(verification).toBeDefined();
-      expect(verification?.value).toBeDefined();
+      const verification = await prisma.verification.findFirst({
+        where: {
+          value: user.id,
+          identifier: { startsWith: 'reset-password:' },
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+      expect(verification).not.toBeNull();
+      expect(verification?.identifier).toMatch(/^reset-password:/);
     });
 
     it('POST /api/auth/reset-password — succeeds with valid token', async () => {
       // First generate a token
       await request(app.getHttpServer())
-        .post('/api/auth/forget-password')
+        .post('/api/auth/request-password-reset')
         .send({
           email: testEmail,
           redirectTo: 'http://localhost:3000/reset-password',
         });
 
+      const user = await prisma.user.findFirstOrThrow({
+        where: { email: testEmail },
+      });
       const verification = await prisma.verification.findFirst({
-        where: { identifier: testEmail },
+        where: {
+          value: user.id,
+          identifier: { startsWith: 'reset-password:' },
+        },
         orderBy: { createdAt: 'desc' },
       });
+      // The raw token is the suffix after the `reset-password:` prefix.
+      const token = verification?.identifier.replace('reset-password:', '');
 
       // Reset the password using the generated token
       const res = await request(app.getHttpServer())
         .post('/api/auth/reset-password')
         .send({
           newPassword: 'NewPassword123!',
-          token: verification?.value,
+          token,
         });
 
       expect(res.status).toBe(200);
