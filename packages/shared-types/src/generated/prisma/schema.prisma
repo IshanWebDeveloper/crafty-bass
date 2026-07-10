@@ -150,9 +150,26 @@ enum ReportTargetType {
 
 // In-app notification kinds. JOB_EXPIRING warns relevant tradesmen that an OPEN
 // job matching their trade is about to lapse (see JobExpiryNoticeCronService).
+// The rest track a job through its lifecycle so both parties are told when the
+// status they care about changes (see NotificationsService dispatch methods):
+//   QUOTE_ACCEPTED / QUOTE_DECLINED — a tradesman won / wasn't picked for a job
+//   ESCROW_FUNDED   — homeowner funded the deposit; the tradesman can start
+//   WORK_STARTED    — the tradesman started the work (job → IN_PROGRESS)
+//   WORK_COMPLETED  — the tradesman marked work done; awaiting homeowner approval
+//   JOB_COMPLETED   — the homeowner approved; the balance was released
+//   JOB_CANCELLED   — the homeowner cancelled an assigned job
+//   JOB_EXPIRED     — an open job lapsed without being assigned
 // Kept as an enum so new notification types are added deliberately.
 enum NotificationType {
   JOB_EXPIRING
+  QUOTE_ACCEPTED
+  QUOTE_DECLINED
+  ESCROW_FUNDED
+  WORK_STARTED
+  WORK_COMPLETED
+  JOB_COMPLETED
+  JOB_CANCELLED
+  JOB_EXPIRED
 }
 
 model User {

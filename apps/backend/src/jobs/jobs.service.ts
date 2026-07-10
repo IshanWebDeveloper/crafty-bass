@@ -4,6 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import type { CreateJobDto, JobQueryDto, UpdateJobDto } from './dto/index.js';
 
@@ -29,7 +30,10 @@ function expiryFromUrgency(urgency: string, from = new Date()): Date {
 
 @Injectable()
 export class JobsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async create(userId: string, dto: CreateJobDto) {
     const user = await this.prisma.user.findUnique({
@@ -282,9 +286,13 @@ export class JobsService {
         `Cannot cancel a ${job.status.toLowerCase()} job`,
       );
     }
-    return this.prisma.job.update({
+    const cancelled = await this.prisma.job.update({
       where: { id },
       data: { status: 'CANCELLED', cancelledAt: new Date() },
     });
+    // If a tradesman had been assigned, let them know it's off. Best-effort;
+    // no-ops for a still-open job with nobody assigned.
+    await this.notifications.notifyJobCancelled(id);
+    return cancelled;
   }
 }

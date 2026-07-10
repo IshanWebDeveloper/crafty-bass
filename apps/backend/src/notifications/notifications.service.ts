@@ -29,6 +29,16 @@ export type NotificationDto = {
   createdAt: string;
 };
 
+// A row to be inserted by the lifecycle dispatch methods below.
+type NotificationRow = {
+  userId: string;
+  type: Notification['type'];
+  title: string;
+  body?: string | null;
+  href?: string | null;
+  jobId?: string | null;
+};
+
 @Injectable()
 export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
@@ -72,6 +82,204 @@ export class NotificationsService {
       data: { readAt: new Date() },
     });
     return { updated: result.count };
+  }
+
+  // --- Job-lifecycle status notifications (notes-outline #40) ------------------
+  //
+  // Each method below is dispatched by the service that owns a transition
+  // (quotes accept, escrow fund/start/complete/approve, job cancel, expiry cron)
+  // once that transition has committed. They are all **best-effort**: any failure
+  // is swallowed and logged so a notification never breaks the underlying
+  // marketplace action. In-app only — the `@@unique([userId, type, jobId])`
+  // constraint keeps each event one-per-recipient-per-job (createMany skips dups).
+
+  /**
+   * Quote accepted → job assigned. Tells the winning tradesman they got the job
+   * and the tradesmen whose quotes were just rejected that they weren't picked.
+   */
+  async notifyQuoteDecision(
+    jobId: string,
+    acceptedTradesmanId: string,
+  ): Promise<void> {
+    try {
+      const job = await this.prisma.job.findUnique({
+        where: { id: jobId },
+        select: {
+          title: true,
+          quotes: { select: { tradesmanId: true, status: true } },
+        },
+      });
+      if (!job) return;
+      const href = `jobs/${jobId}`;
+      const rows: NotificationRow[] = [
+        {
+          userId: acceptedTradesmanId,
+          type: 'QUOTE_ACCEPTED',
+          title: 'Your quote was accepted',
+          body: `You've been hired for "${job.title}". You'll be notified once the homeowner funds the deposit.`,
+          href,
+          jobId,
+        },
+      ];
+      const losers = [
+        ...new Set(
+          job.quotes
+            .filter(
+              (q) =>
+                q.status === 'REJECTED' &&
+                q.tradesmanId !== acceptedTradesmanId,
+            )
+            .map((q) => q.tradesmanId),
+        ),
+      ];
+      for (const tradesmanId of losers) {
+        rows.push({
+          userId: tradesmanId,
+          type: 'QUOTE_DECLINED',
+          title: "Your quote wasn't selected",
+          body: `The homeowner chose another tradesperson for "${job.title}".`,
+          href,
+          jobId,
+        });
+      }
+      await this.createNotifications(rows);
+    } catch (error) {
+      this.logNotifyFailure('quote decision', jobId, error);
+    }
+  }
+
+  /** Deposit funded → tell the assigned tradesman they can start. */
+  async notifyEscrowFunded(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'assignedTradesman', {
+      type: 'ESCROW_FUNDED',
+      title: 'Deposit funded — you can start',
+      body: (title) =>
+        `The homeowner funded the deposit for "${title}". You can begin the work.`,
+    });
+  }
+
+  /** Tradesman started work (job → IN_PROGRESS) → tell the homeowner. */
+  async notifyWorkStarted(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'homeowner', {
+      type: 'WORK_STARTED',
+      title: 'Work has started',
+      body: (title) => `The tradesperson has started work on "${title}".`,
+    });
+  }
+
+  /** Tradesman marked work done → tell the homeowner to review and approve. */
+  async notifyWorkSubmitted(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'homeowner', {
+      type: 'WORK_COMPLETED',
+      title: 'Work marked complete',
+      body: (title) =>
+        `The tradesperson marked "${title}" complete. Review and approve to release the balance.`,
+    });
+  }
+
+  /** Homeowner approved → balance released → tell the tradesman they were paid. */
+  async notifyJobCompleted(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'assignedTradesman', {
+      type: 'JOB_COMPLETED',
+      title: 'Payment released',
+      body: (title) =>
+        `The homeowner approved "${title}". The balance has been released to you.`,
+    });
+  }
+
+  /** Job cancelled → tell the assigned tradesman (no-op if none was assigned). */
+  async notifyJobCancelled(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'assignedTradesman', {
+      type: 'JOB_CANCELLED',
+      title: 'Job cancelled',
+      body: (title) => `The homeowner cancelled "${title}".`,
+    });
+  }
+
+  /**
+   * Open jobs that lapsed to EXPIRED → tell each homeowner their job expired.
+   * Batched: the expiry cron passes the jobs it just expired.
+   */
+  async notifyJobsExpired(
+    jobs: Array<{ id: string; title: string; homeownerId: string }>,
+  ): Promise<void> {
+    if (jobs.length === 0) return;
+    await this.createNotifications(
+      jobs.map((job) => ({
+        userId: job.homeownerId,
+        type: 'JOB_EXPIRED',
+        title: 'Your job expired',
+        body: `"${job.title}" expired without being assigned. You can repost it anytime.`,
+        href: `jobs/${job.id}`,
+        jobId: job.id,
+      })),
+    );
+  }
+
+  // Notifies exactly one party (the job's homeowner or its assigned tradesman)
+  // about a job-lifecycle event. Best-effort.
+  private async notifyOne(
+    jobId: string,
+    recipient: 'homeowner' | 'assignedTradesman',
+    copy: {
+      type: Notification['type'];
+      title: string;
+      body: (title: string) => string;
+    },
+  ): Promise<void> {
+    try {
+      const job = await this.prisma.job.findUnique({
+        where: { id: jobId },
+        select: { title: true, homeownerId: true, assignedTradesmanId: true },
+      });
+      if (!job) return;
+      const userId =
+        recipient === 'homeowner' ? job.homeownerId : job.assignedTradesmanId;
+      if (!userId) return;
+      await this.createNotifications([
+        {
+          userId,
+          type: copy.type,
+          title: copy.title,
+          body: copy.body(job.title),
+          href: `jobs/${jobId}`,
+          jobId,
+        },
+      ]);
+    } catch (error) {
+      this.logNotifyFailure(copy.type, jobId, error);
+    }
+  }
+
+  private async createNotifications(rows: NotificationRow[]): Promise<void> {
+    if (rows.length === 0) return;
+    try {
+      await this.prisma.notification.createMany({
+        data: rows.map((r) => ({
+          userId: r.userId,
+          type: r.type,
+          title: r.title,
+          body: r.body ?? null,
+          href: r.href ?? null,
+          jobId: r.jobId ?? null,
+        })),
+        skipDuplicates: true,
+      });
+    } catch (error) {
+      this.logNotifyFailure('create', rows[0]?.jobId ?? null, error);
+    }
+  }
+
+  private logNotifyFailure(
+    kind: string,
+    jobId: string | null,
+    error: unknown,
+  ): void {
+    this.logger.error(
+      `Failed to send ${kind} notification${jobId ? ` for job ${jobId}` : ''}: ${
+        error instanceof Error ? error.stack || error.message : String(error)
+      }`,
+    );
   }
 
   /**

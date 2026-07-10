@@ -8,6 +8,7 @@ import {
 import { Prisma } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { StripeService } from '../common/services/stripe.service.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import type { EscrowListQueryDto, FundEscrowDto } from './dto/index.js';
 
@@ -35,6 +36,7 @@ export class EscrowService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly stripe: StripeService,
+    private readonly notifications: NotificationsService,
   ) {}
 
   private serialize(e: EscrowWithRelations) {
@@ -256,6 +258,10 @@ export class EscrowService {
       },
       include: ESCROW_INCLUDE,
     });
+    // Only the caller that actually transitions REQUESTED → FUNDED reaches here
+    // (the sync + webhook paths are deduped by the guard above), so the tradesman
+    // is told exactly once that the deposit is funded. Best-effort.
+    await this.notifications.notifyEscrowFunded(current.jobId);
     return this.serialize(updated);
   }
 
@@ -301,6 +307,8 @@ export class EscrowService {
         include: ESCROW_INCLUDE,
       });
     });
+    // Job moved to IN_PROGRESS — tell the homeowner work has started.
+    await this.notifications.notifyWorkStarted(escrow.jobId);
     return this.serialize(updated);
   }
 
@@ -318,6 +326,8 @@ export class EscrowService {
       data: { status: 'WORK_COMPLETED', workCompletedAt: new Date() },
       include: ESCROW_INCLUDE,
     });
+    // Tell the homeowner to review and approve so the balance is released.
+    await this.notifications.notifyWorkSubmitted(escrow.jobId);
     return this.serialize(updated);
   }
 
@@ -352,6 +362,8 @@ export class EscrowService {
         include: ESCROW_INCLUDE,
       });
     });
+    // Job completed and balance released — tell the tradesman they were paid.
+    await this.notifications.notifyJobCompleted(escrow.jobId);
     return this.serialize(updated);
   }
 

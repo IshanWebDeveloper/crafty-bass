@@ -10,7 +10,16 @@ import {
 } from '@nestjs/common';
 import { QuotesService } from './quotes.service.js';
 import type { PrismaService } from '../common/prisma/prisma.service.js';
+import type { NotificationsService } from '../notifications/notifications.service.js';
 import type { CreateQuoteDto } from './dto/index.js';
+
+// No-op notifications: the service fires best-effort lifecycle notices we don't
+// assert on here.
+function makeNotifications() {
+  return {
+    notifyQuoteDecision: vi.fn().mockResolvedValue(undefined),
+  } as unknown as NotificationsService;
+}
 
 // ── Mock Prisma ────────────────────────────────────────────────────────────
 // Mirrors the escrow.service.spec.ts style: hand-rolled vi.fn()s, a
@@ -104,7 +113,10 @@ describe('QuotesService.create', () => {
 
   function build(overrides: PrismaOverrides = {}) {
     prismaBits = makePrisma(overrides);
-    service = new QuotesService(prismaBits.prisma as unknown as PrismaService);
+    service = new QuotesService(
+      prismaBits.prisma as unknown as PrismaService,
+      makeNotifications(),
+    );
   }
 
   beforeEach(() => build());
@@ -320,10 +332,10 @@ describe('QuotesService.accept', () => {
       quote: { findUnique: vi.fn(() => Promise.resolve(null)) },
     });
     await expect(
-      new QuotesService(prisma as unknown as PrismaService).accept(
-        'owner',
-        'q1',
-      ),
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).accept('owner', 'q1'),
     ).rejects.toBeInstanceOf(NotFoundException);
   });
 
@@ -332,10 +344,10 @@ describe('QuotesService.accept', () => {
       quote: { findUnique: vi.fn(() => Promise.resolve(pendingQuote())) },
     });
     await expect(
-      new QuotesService(prisma as unknown as PrismaService).accept(
-        'someone',
-        'q1',
-      ),
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).accept('someone', 'q1'),
     ).rejects.toBeInstanceOf(ForbiddenException);
   });
 
@@ -352,10 +364,10 @@ describe('QuotesService.accept', () => {
       },
     });
     await expect(
-      new QuotesService(prisma as unknown as PrismaService).accept(
-        'owner',
-        'q1',
-      ),
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).accept('owner', 'q1'),
     ).rejects.toBeInstanceOf(ConflictException);
   });
 
@@ -368,10 +380,10 @@ describe('QuotesService.accept', () => {
       },
     });
     await expect(
-      new QuotesService(prisma as unknown as PrismaService).accept(
-        'owner',
-        'q1',
-      ),
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).accept('owner', 'q1'),
     ).rejects.toBeInstanceOf(ConflictException);
   });
 
@@ -379,10 +391,10 @@ describe('QuotesService.accept', () => {
     const { prisma, tx } = makePrisma({
       quote: { findUnique: vi.fn(() => Promise.resolve(pendingQuote())) },
     });
-    await new QuotesService(prisma as unknown as PrismaService).accept(
-      'owner',
-      'q1',
-    );
+    await new QuotesService(
+      prisma as unknown as PrismaService,
+      makeNotifications(),
+    ).accept('owner', 'q1');
     expect(tx.quote.update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ status: 'ACCEPTED' }),
@@ -412,10 +424,10 @@ describe('QuotesService.accept', () => {
         ),
       },
     });
-    await new QuotesService(prisma as unknown as PrismaService).accept(
-      'owner',
-      'q1',
-    );
+    await new QuotesService(
+      prisma as unknown as PrismaService,
+      makeNotifications(),
+    ).accept('owner', 'q1');
     expect(tx.jobEscrow.create).not.toHaveBeenCalled();
   });
 });
@@ -434,10 +446,10 @@ describe('QuotesService.reject / withdraw', () => {
       },
     });
     await expect(
-      new QuotesService(prisma as unknown as PrismaService).reject(
-        'nope',
-        'q1',
-      ),
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).reject('nope', 'q1'),
     ).rejects.toBeInstanceOf(ForbiddenException);
   });
 
@@ -454,10 +466,10 @@ describe('QuotesService.reject / withdraw', () => {
       },
     });
     await expect(
-      new QuotesService(prisma as unknown as PrismaService).reject(
-        'owner',
-        'q1',
-      ),
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).reject('owner', 'q1'),
     ).rejects.toBeInstanceOf(ConflictException);
   });
 
@@ -477,10 +489,10 @@ describe('QuotesService.reject / withdraw', () => {
         update,
       },
     });
-    await new QuotesService(prisma as unknown as PrismaService).reject(
-      'owner',
-      'q1',
-    );
+    await new QuotesService(
+      prisma as unknown as PrismaService,
+      makeNotifications(),
+    ).reject('owner', 'q1');
     expect(update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ status: 'REJECTED' }),
@@ -501,10 +513,10 @@ describe('QuotesService.reject / withdraw', () => {
       },
     });
     await expect(
-      new QuotesService(prisma as unknown as PrismaService).withdraw(
-        'other',
-        'q1',
-      ),
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).withdraw('other', 'q1'),
     ).rejects.toBeInstanceOf(ForbiddenException);
   });
 
@@ -521,10 +533,10 @@ describe('QuotesService.reject / withdraw', () => {
       },
     });
     await expect(
-      new QuotesService(prisma as unknown as PrismaService).withdraw(
-        'trade1',
-        'q1',
-      ),
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).withdraw('trade1', 'q1'),
     ).rejects.toBeInstanceOf(ConflictException);
   });
 
@@ -544,10 +556,10 @@ describe('QuotesService.reject / withdraw', () => {
         update,
       },
     });
-    await new QuotesService(prisma as unknown as PrismaService).withdraw(
-      'trade1',
-      'q1',
-    );
+    await new QuotesService(
+      prisma as unknown as PrismaService,
+      makeNotifications(),
+    ).withdraw('trade1', 'q1');
     expect(update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ status: 'WITHDRAWN' }),
