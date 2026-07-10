@@ -6,6 +6,18 @@ import { ForbiddenException, ConflictException } from '@nestjs/common';
 import { EscrowService } from './escrow.service.js';
 import type { PrismaService } from '../common/prisma/prisma.service.js';
 import type { StripeService } from '../common/services/stripe.service.js';
+import type { NotificationsService } from '../notifications/notifications.service.js';
+
+// No-op notifications: the service fires best-effort lifecycle notices we don't
+// assert on here.
+function makeNotifications() {
+  return {
+    notifyEscrowFunded: vi.fn().mockResolvedValue(undefined),
+    notifyWorkStarted: vi.fn().mockResolvedValue(undefined),
+    notifyWorkSubmitted: vi.fn().mockResolvedValue(undefined),
+    notifyJobCompleted: vi.fn().mockResolvedValue(undefined),
+  } as unknown as NotificationsService;
+}
 
 // A jobEscrow row shaped like the ESCROW_INCLUDE payload the service reads.
 function escrowRow(overrides: Record<string, unknown> = {}) {
@@ -49,7 +61,10 @@ function makeService(row: ReturnType<typeof escrowRow>) {
     user: { findUnique: vi.fn(() => Promise.resolve({ role: 'CUSTOMER' })) },
   } as unknown as PrismaService;
   const stripe = {} as unknown as StripeService;
-  return { service: new EscrowService(prisma, stripe), update };
+  return {
+    service: new EscrowService(prisma, stripe, makeNotifications()),
+    update,
+  };
 }
 
 describe('EscrowService.markWorkDone', () => {

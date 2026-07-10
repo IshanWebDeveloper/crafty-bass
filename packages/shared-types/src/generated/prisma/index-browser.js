@@ -672,6 +672,14 @@ exports.ReportStatus = exports.$Enums.ReportStatus = {
 
 exports.NotificationType = exports.$Enums.NotificationType = {
   JOB_EXPIRING: 'JOB_EXPIRING',
+  QUOTE_ACCEPTED: 'QUOTE_ACCEPTED',
+  QUOTE_DECLINED: 'QUOTE_DECLINED',
+  ESCROW_FUNDED: 'ESCROW_FUNDED',
+  WORK_STARTED: 'WORK_STARTED',
+  WORK_COMPLETED: 'WORK_COMPLETED',
+  JOB_COMPLETED: 'JOB_COMPLETED',
+  JOB_CANCELLED: 'JOB_CANCELLED',
+  JOB_EXPIRED: 'JOB_EXPIRED',
 };
 
 exports.WebhookEventStatus = exports.$Enums.WebhookEventStatus = {

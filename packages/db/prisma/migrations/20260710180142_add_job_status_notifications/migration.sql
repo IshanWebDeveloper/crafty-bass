@@ -1,0 +1,16 @@
+-- AlterEnum
+-- This migration adds more than one value to an enum.
+-- With PostgreSQL versions 11 and earlier, this is not possible
+-- in a single migration. This can be worked around by creating
+-- multiple migrations, each migration adding only one value to
+-- the enum.
+
+
+ALTER TYPE "NotificationType" ADD VALUE 'QUOTE_ACCEPTED';
+ALTER TYPE "NotificationType" ADD VALUE 'QUOTE_DECLINED';
+ALTER TYPE "NotificationType" ADD VALUE 'ESCROW_FUNDED';
+ALTER TYPE "NotificationType" ADD VALUE 'WORK_STARTED';
+ALTER TYPE "NotificationType" ADD VALUE 'WORK_COMPLETED';
+ALTER TYPE "NotificationType" ADD VALUE 'JOB_COMPLETED';
+ALTER TYPE "NotificationType" ADD VALUE 'JOB_CANCELLED';
+ALTER TYPE "NotificationType" ADD VALUE 'JOB_EXPIRED';

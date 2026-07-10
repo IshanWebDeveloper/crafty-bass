@@ -32,6 +32,14 @@ const NOTIFICATION_META: Record<
   { category: NotificationCategory; tint: NotificationTint; icon: string }
 > = {
   JOB_EXPIRING: { category: 'job', tint: 'amber', icon: 'clock' },
+  QUOTE_ACCEPTED: { category: 'job', tint: 'green', icon: 'badge-check' },
+  QUOTE_DECLINED: { category: 'job', tint: 'neutral', icon: 'circle-x' },
+  ESCROW_FUNDED: { category: 'escrow', tint: 'green', icon: 'hand-coins' },
+  WORK_STARTED: { category: 'job', tint: 'green', icon: 'wrench' },
+  WORK_COMPLETED: { category: 'job', tint: 'amber', icon: 'circle-check-big' },
+  JOB_COMPLETED: { category: 'escrow', tint: 'green', icon: 'hand-coins' },
+  JOB_CANCELLED: { category: 'job', tint: 'neutral', icon: 'circle-x' },
+  JOB_EXPIRED: { category: 'job', tint: 'amber', icon: 'clock' },
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;

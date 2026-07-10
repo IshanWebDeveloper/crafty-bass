@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { maxDeposit, computeQuoteTotals, VAT_RATE } from '@repo/validation';
 import { PrismaService } from '../common/prisma/prisma.service.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
 import type { CreateQuoteDto } from './dto/index.js';
 
 const QUOTE_INCLUDE = {
@@ -25,7 +26,10 @@ const QUOTE_INCLUDE = {
 
 @Injectable()
 export class QuotesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async create(userId: string, jobId: string, dto: CreateQuoteDto) {
     const job = await this.prisma.job.findUnique({
@@ -192,8 +196,8 @@ export class QuotesService {
     const total = Number(quote.amount);
     const materials = quote.materialsAmount ? Number(quote.materialsAmount) : 0;
 
-    return this.prisma.$transaction(async (tx) => {
-      const accepted = await tx.quote.update({
+    const accepted = await this.prisma.$transaction(async (tx) => {
+      const acceptedQuote = await tx.quote.update({
         where: { id: quoteId },
         data: { status: 'ACCEPTED', respondedAt: new Date() },
       });
@@ -224,8 +228,16 @@ export class QuotesService {
           },
         });
       }
-      return accepted;
+      return acceptedQuote;
     });
+
+    // After the assignment commits: tell the winner they got the job and the
+    // other bidders they weren't picked. Best-effort (never throws).
+    await this.notifications.notifyQuoteDecision(
+      quote.jobId,
+      quote.tradesmanId,
+    );
+    return accepted;
   }
 
   async reject(userId: string, quoteId: string) {
