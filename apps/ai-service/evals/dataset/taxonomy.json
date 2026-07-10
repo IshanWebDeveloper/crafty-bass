@@ -1,0 +1,315 @@
+{
+  "categories": [
+    {
+      "slug": "plumbing",
+      "name": "Plumbing"
+    },
+    {
+      "slug": "electrical",
+      "name": "Electrical"
+    },
+    {
+      "slug": "carpentry",
+      "name": "Carpentry"
+    },
+    {
+      "slug": "painting",
+      "name": "Painting"
+    },
+    {
+      "slug": "masonry",
+      "name": "Masonry"
+    },
+    {
+      "slug": "cleaning",
+      "name": "Cleaning"
+    },
+    {
+      "slug": "handyman",
+      "name": "Handyman & general repairs"
+    },
+    {
+      "slug": "furniture-assembly",
+      "name": "Furniture assembly"
+    },
+    {
+      "slug": "mounting",
+      "name": "Mounting & installation"
+    },
+    {
+      "slug": "appliances",
+      "name": "Appliance repair & install"
+    },
+    {
+      "slug": "air-conditioning",
+      "name": "Air conditioning"
+    },
+    {
+      "slug": "gardening",
+      "name": "Gardening & landscaping"
+    },
+    {
+      "slug": "moving",
+      "name": "Moving & hauling"
+    },
+    {
+      "slug": "roofing",
+      "name": "Roofing & waterproofing"
+    },
+    {
+      "slug": "pest-control",
+      "name": "Pest control"
+    },
+    {
+      "slug": "welding",
+      "name": "Welding & metalwork"
+    }
+  ],
+  "skills": [
+    {
+      "slug": "plumbing-leak-repair",
+      "name": "Leak repair",
+      "category_slug": "plumbing"
+    },
+    {
+      "slug": "plumbing-boiler-service",
+      "name": "Boiler service",
+      "category_slug": "plumbing"
+    },
+    {
+      "slug": "plumbing-drain-unblocking",
+      "name": "Drain unblocking",
+      "category_slug": "plumbing"
+    },
+    {
+      "slug": "plumbing-fittings",
+      "name": "Taps & fittings",
+      "category_slug": "plumbing"
+    },
+    {
+      "slug": "electrical-wiring",
+      "name": "Wiring & rewiring",
+      "category_slug": "electrical"
+    },
+    {
+      "slug": "electrical-sockets",
+      "name": "Sockets & switches",
+      "category_slug": "electrical"
+    },
+    {
+      "slug": "electrical-lighting",
+      "name": "Lighting install",
+      "category_slug": "electrical"
+    },
+    {
+      "slug": "electrical-safety",
+      "name": "Safety inspection",
+      "category_slug": "electrical"
+    },
+    {
+      "slug": "carpentry-doors-windows",
+      "name": "Doors & windows",
+      "category_slug": "carpentry"
+    },
+    {
+      "slug": "carpentry-flooring",
+      "name": "Flooring",
+      "category_slug": "carpentry"
+    },
+    {
+      "slug": "carpentry-furniture",
+      "name": "Custom furniture",
+      "category_slug": "carpentry"
+    },
+    {
+      "slug": "carpentry-cabinets",
+      "name": "Cabinet fitting",
+      "category_slug": "carpentry"
+    },
+    {
+      "slug": "painting-interior",
+      "name": "Interior painting",
+      "category_slug": "painting"
+    },
+    {
+      "slug": "painting-exterior",
+      "name": "Exterior painting",
+      "category_slug": "painting"
+    },
+    {
+      "slug": "painting-wall-prep",
+      "name": "Wall preparation",
+      "category_slug": "painting"
+    },
+    {
+      "slug": "masonry-bricklaying",
+      "name": "Bricklaying",
+      "category_slug": "masonry"
+    },
+    {
+      "slug": "masonry-plastering",
+      "name": "Plastering",
+      "category_slug": "masonry"
+    },
+    {
+      "slug": "masonry-tiling",
+      "name": "Tiling",
+      "category_slug": "masonry"
+    },
+    {
+      "slug": "cleaning-deep",
+      "name": "Deep cleaning",
+      "category_slug": "cleaning"
+    },
+    {
+      "slug": "cleaning-move-out",
+      "name": "Move-out cleaning",
+      "category_slug": "cleaning"
+    },
+    {
+      "slug": "handyman-general-repairs",
+      "name": "General repairs",
+      "category_slug": "handyman"
+    },
+    {
+      "slug": "handyman-hanging",
+      "name": "Picture & shelf hanging",
+      "category_slug": "handyman"
+    },
+    {
+      "slug": "handyman-doors-locks",
+      "name": "Door & lock repair",
+      "category_slug": "handyman"
+    },
+    {
+      "slug": "furniture-flatpack",
+      "name": "Flat-pack assembly",
+      "category_slug": "furniture-assembly"
+    },
+    {
+      "slug": "furniture-bed-wardrobe",
+      "name": "Bed & wardrobe assembly",
+      "category_slug": "furniture-assembly"
+    },
+    {
+      "slug": "furniture-office",
+      "name": "Office furniture",
+      "category_slug": "furniture-assembly"
+    },
+    {
+      "slug": "mounting-tv",
+      "name": "TV mounting",
+      "category_slug": "mounting"
+    },
+    {
+      "slug": "mounting-shelves-curtains",
+      "name": "Shelves & curtains",
+      "category_slug": "mounting"
+    },
+    {
+      "slug": "mounting-fixtures",
+      "name": "Fixtures & fittings",
+      "category_slug": "mounting"
+    },
+    {
+      "slug": "appliances-washing-machine",
+      "name": "Washing machine",
+      "category_slug": "appliances"
+    },
+    {
+      "slug": "appliances-refrigerator",
+      "name": "Refrigerator",
+      "category_slug": "appliances"
+    },
+    {
+      "slug": "appliances-cooker",
+      "name": "Cooker & oven",
+      "category_slug": "appliances"
+    },
+    {
+      "slug": "ac-installation",
+      "name": "A/C installation",
+      "category_slug": "air-conditioning"
+    },
+    {
+      "slug": "ac-servicing",
+      "name": "A/C servicing",
+      "category_slug": "air-conditioning"
+    },
+    {
+      "slug": "ac-repair",
+      "name": "A/C repair",
+      "category_slug": "air-conditioning"
+    },
+    {
+      "slug": "gardening-lawn",
+      "name": "Lawn mowing",
+      "category_slug": "gardening"
+    },
+    {
+      "slug": "gardening-maintenance",
+      "name": "Garden maintenance",
+      "category_slug": "gardening"
+    },
+    {
+      "slug": "gardening-tree-trimming",
+      "name": "Tree trimming",
+      "category_slug": "gardening"
+    },
+    {
+      "slug": "moving-help",
+      "name": "Help moving",
+      "category_slug": "moving"
+    },
+    {
+      "slug": "moving-junk-removal",
+      "name": "Junk removal",
+      "category_slug": "moving"
+    },
+    {
+      "slug": "moving-delivery",
+      "name": "Furniture delivery",
+      "category_slug": "moving"
+    },
+    {
+      "slug": "roofing-repair",
+      "name": "Roof repair",
+      "category_slug": "roofing"
+    },
+    {
+      "slug": "roofing-waterproofing",
+      "name": "Waterproofing",
+      "category_slug": "roofing"
+    },
+    {
+      "slug": "roofing-gutters",
+      "name": "Gutter cleaning",
+      "category_slug": "roofing"
+    },
+    {
+      "slug": "pest-general",
+      "name": "General pest control",
+      "category_slug": "pest-control"
+    },
+    {
+      "slug": "pest-termite",
+      "name": "Termite treatment",
+      "category_slug": "pest-control"
+    },
+    {
+      "slug": "welding-gates-grills",
+      "name": "Gates & grills",
+      "category_slug": "welding"
+    },
+    {
+      "slug": "welding-fabrication",
+      "name": "Metal fabrication",
+      "category_slug": "welding"
+    },
+    {
+      "slug": "welding-repairs",
+      "name": "Welding repairs",
+      "category_slug": "welding"
+    }
+  ]
+}

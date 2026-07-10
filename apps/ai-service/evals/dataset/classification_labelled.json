@@ -1,0 +1,482 @@
+[
+  {
+    "id": "en-plumb-1",
+    "language": "EN",
+    "title": "Leaking kitchen tap",
+    "description": "The mixer tap under my kitchen sink drips constantly and the washer seems worn. Need it fixed today.",
+    "expected_category": "plumbing",
+    "expected_skills": ["plumbing-leak-repair", "plumbing-fittings"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-plumb-2",
+    "language": "EN",
+    "title": "Blocked bathroom drain",
+    "description": "Water will not drain from the shower and there is a bad smell. Likely a blockage in the pipe.",
+    "expected_category": "plumbing",
+    "expected_skills": ["plumbing-drain-unblocking"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-elec-1",
+    "language": "EN",
+    "title": "Replace faulty sockets",
+    "description": "Two wall sockets in the living room have stopped working and one sparks. Need a certified electrician.",
+    "expected_category": "electrical",
+    "expected_skills": ["electrical-sockets", "electrical-safety"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-elec-2",
+    "language": "EN",
+    "title": "Install ceiling lights",
+    "description": "We renovated the hallway and need three new LED ceiling lights wired and installed.",
+    "expected_category": "electrical",
+    "expected_skills": ["electrical-lighting", "electrical-wiring"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-carp-1",
+    "language": "EN",
+    "title": "Fix a sticking door",
+    "description": "The bedroom door has dropped and no longer closes properly. Hinges may need adjusting or replacing.",
+    "expected_category": "carpentry",
+    "expected_skills": ["carpentry-doors-windows"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-carp-2",
+    "language": "EN",
+    "title": "Build custom bookshelf",
+    "description": "Looking for a carpenter to build and fit a floor-to-ceiling bookshelf in the study.",
+    "expected_category": "carpentry",
+    "expected_skills": ["carpentry-furniture", "carpentry-cabinets"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-paint-1",
+    "language": "EN",
+    "title": "Repaint living room",
+    "description": "Two coats of emulsion on the living room walls and ceiling; walls need light filling first.",
+    "expected_category": "painting",
+    "expected_skills": ["painting-interior", "painting-wall-prep"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-paint-2",
+    "language": "EN",
+    "title": "Exterior wall painting",
+    "description": "The front of the house needs weatherproof exterior paint after some cracks were filled.",
+    "expected_category": "painting",
+    "expected_skills": ["painting-exterior"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-mason-1",
+    "language": "EN",
+    "title": "Re-tile bathroom floor",
+    "description": "Remove old tiles and lay new ceramic tiles on the bathroom floor, about 6 square metres.",
+    "expected_category": "masonry",
+    "expected_skills": ["masonry-tiling"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-mason-2",
+    "language": "EN",
+    "title": "Plaster a damaged wall",
+    "description": "A section of internal wall plaster has come away and needs re-plastering and smoothing.",
+    "expected_category": "masonry",
+    "expected_skills": ["masonry-plastering"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-clean-1",
+    "language": "EN",
+    "title": "Deep clean before guests",
+    "description": "Whole-apartment deep clean including kitchen, two bathrooms and floors before family visit.",
+    "expected_category": "cleaning",
+    "expected_skills": ["cleaning-deep"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-clean-2",
+    "language": "EN",
+    "title": "End of tenancy clean",
+    "description": "Moving out next week and need a full move-out clean to get the deposit back.",
+    "expected_category": "cleaning",
+    "expected_skills": ["cleaning-move-out"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-handy-1",
+    "language": "EN",
+    "title": "Odd jobs around the house",
+    "description": "A few small jobs: rehang a door, fix a loose towel rail and patch a small hole in the wall.",
+    "expected_category": "handyman",
+    "expected_skills": ["handyman-general-repairs", "handyman-doors-locks"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-handy-2",
+    "language": "EN",
+    "title": "Hang pictures and mirror",
+    "description": "Need several framed pictures and a heavy mirror hung securely on plaster walls.",
+    "expected_category": "handyman",
+    "expected_skills": ["handyman-hanging"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-furn-1",
+    "language": "EN",
+    "title": "Assemble flat-pack wardrobe",
+    "description": "Just delivered a large flat-pack wardrobe and two bedside tables that need assembling.",
+    "expected_category": "furniture-assembly",
+    "expected_skills": ["furniture-flatpack", "furniture-bed-wardrobe"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-furn-2",
+    "language": "EN",
+    "title": "Office desk assembly",
+    "description": "Two flat-pack office desks and a chair to be assembled in a home office.",
+    "expected_category": "furniture-assembly",
+    "expected_skills": ["furniture-office", "furniture-flatpack"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-mount-1",
+    "language": "EN",
+    "title": "Mount 55 inch TV",
+    "description": "Wall-mount a 55-inch TV on a brick wall and tidy the cables. Bracket already bought.",
+    "expected_category": "mounting",
+    "expected_skills": ["mounting-tv"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-mount-2",
+    "language": "EN",
+    "title": "Put up curtain rails",
+    "description": "Install curtain poles and a couple of floating shelves in the bedroom.",
+    "expected_category": "mounting",
+    "expected_skills": ["mounting-shelves-curtains"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-appl-1",
+    "language": "EN",
+    "title": "Washing machine not spinning",
+    "description": "My washing machine fills but will not spin or drain. Needs diagnosis and repair.",
+    "expected_category": "appliances",
+    "expected_skills": ["appliances-washing-machine"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-appl-2",
+    "language": "EN",
+    "title": "Install new oven",
+    "description": "Bought a new built-in electric oven and need it installed and connected safely.",
+    "expected_category": "appliances",
+    "expected_skills": ["appliances-cooker"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-ac-1",
+    "language": "EN",
+    "title": "Service two AC units",
+    "description": "Annual service and gas top-up for two split air-conditioning units in the flat.",
+    "expected_category": "air-conditioning",
+    "expected_skills": ["ac-servicing"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-ac-2",
+    "language": "EN",
+    "title": "New AC installation",
+    "description": "Supply and install a new split A/C unit in the master bedroom; wall already marked.",
+    "expected_category": "air-conditioning",
+    "expected_skills": ["ac-installation"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-garden-1",
+    "language": "EN",
+    "title": "Overgrown garden tidy-up",
+    "description": "Lawn mowing, weeding the borders and trimming an overgrown hedge in a small back garden.",
+    "expected_category": "gardening",
+    "expected_skills": ["gardening-lawn", "gardening-maintenance"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-garden-2",
+    "language": "EN",
+    "title": "Trim large tree",
+    "description": "A large tree at the back needs its branches cut back away from the roof.",
+    "expected_category": "gardening",
+    "expected_skills": ["gardening-tree-trimming"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-move-1",
+    "language": "EN",
+    "title": "Help moving flat",
+    "description": "Two people to help load and move furniture from a one-bed flat to a nearby house.",
+    "expected_category": "moving",
+    "expected_skills": ["moving-help"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-move-2",
+    "language": "EN",
+    "title": "Junk removal",
+    "description": "Clear out and dispose of an old sofa, a broken fridge and general junk from the garage.",
+    "expected_category": "moving",
+    "expected_skills": ["moving-junk-removal"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-roof-1",
+    "language": "EN",
+    "title": "Fix leaking roof",
+    "description": "There is a leak in the roof above the bedroom during heavy rain; a few tiles look cracked.",
+    "expected_category": "roofing",
+    "expected_skills": ["roofing-repair"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-roof-2",
+    "language": "EN",
+    "title": "Clean gutters",
+    "description": "Gutters are blocked with leaves and overflowing, need clearing and checking.",
+    "expected_category": "roofing",
+    "expected_skills": ["roofing-gutters"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-pest-1",
+    "language": "EN",
+    "title": "Cockroach infestation",
+    "description": "Recurring cockroaches in the kitchen despite sprays, need professional pest control.",
+    "expected_category": "pest-control",
+    "expected_skills": ["pest-general"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-pest-2",
+    "language": "EN",
+    "title": "Termite treatment",
+    "description": "Signs of termites in a wooden door frame, need inspection and treatment.",
+    "expected_category": "pest-control",
+    "expected_skills": ["pest-termite"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-weld-1",
+    "language": "EN",
+    "title": "Repair metal gate",
+    "description": "The hinge on my steel driveway gate has snapped and needs welding back.",
+    "expected_category": "welding",
+    "expected_skills": ["welding-repairs", "welding-gates-grills"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-plumb-1",
+    "language": "SI",
+    "title": "වතුර කරාමය කාන්දු වෙනවා",
+    "description": "මගේ මුළුතැන්ගෙයි කරාමයෙන් වතුර නිතරම කාන්දු වෙනවා. එය හදන්න ඕන.",
+    "expected_category": "plumbing",
+    "expected_skills": ["plumbing-leak-repair"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-elec-1",
+    "language": "SI",
+    "title": "විදුලි ප්ලග් එක වැඩ නැහැ",
+    "description": "කාමරයේ ප්ලග් දෙකක් වැඩ නවතලා, එකක් පුපුරනවා. විදුලි කාර්මිකයෙක් ඕන.",
+    "expected_category": "electrical",
+    "expected_skills": ["electrical-sockets"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-paint-1",
+    "language": "SI",
+    "title": "කාමරය තීන්ත ගානවා",
+    "description": "නිදන කාමරයේ බිත්ති දෙපැත්තම අලුතින් තීන්ත ගාන්න ඕන.",
+    "expected_category": "painting",
+    "expected_skills": ["painting-interior"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-clean-1",
+    "language": "SI",
+    "title": "ගෙදර ගැඹුරු පිරිසිදු කිරීම",
+    "description": "අමුත්තන් එන නිසා මුළු නිවසම හොඳින් පිරිසිදු කරන්න ඕන.",
+    "expected_category": "cleaning",
+    "expected_skills": ["cleaning-deep"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-ac-1",
+    "language": "SI",
+    "title": "ඒසී එක සර්විස් කරන්න",
+    "description": "නිදන කාමරයේ ඒසී එක සර්විස් කර ගෑස් දාන්න ඕන.",
+    "expected_category": "air-conditioning",
+    "expected_skills": ["ac-servicing"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-garden-1",
+    "language": "SI",
+    "title": "වත්ත පිරිසිදු කිරීම",
+    "description": "පිටිපස්සේ වත්තේ තණකොළ කපලා වැට කප්පාදු කරන්න ඕන.",
+    "expected_category": "gardening",
+    "expected_skills": ["gardening-lawn", "gardening-maintenance"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-mason-1",
+    "language": "SI",
+    "title": "නාන කාමරයට ටයිල් දාන්න",
+    "description": "නාන කාමරයේ බිම පරණ ටයිල් අයින් කර අලුත් ටයිල් දාන්න ඕන.",
+    "expected_category": "masonry",
+    "expected_skills": ["masonry-tiling"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-roof-1",
+    "language": "SI",
+    "title": "වහලය කාන්දු වෙනවා",
+    "description": "වැස්සට නිදන කාමරය උඩ වහලයෙන් වතුර කාන්දු වෙනවා.",
+    "expected_category": "roofing",
+    "expected_skills": ["roofing-repair"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-appl-1",
+    "language": "SI",
+    "title": "රෙදි සෝදන යන්ත්‍රය අළුත්වැඩියාව",
+    "description": "රෙදි සෝදන මැෂිම කැරකෙන්නේ නෑ, හදන්න ඕන.",
+    "expected_category": "appliances",
+    "expected_skills": ["appliances-washing-machine"],
+    "ambiguous": false
+  },
+  {
+    "id": "si-mount-1",
+    "language": "SI",
+    "title": "ටීවී එක බිත්තියේ සවි කරන්න",
+    "description": "අඟල් 55 ටීවී එකක් බිත්තියේ සවි කර වයර් පිළිවෙළ කරන්න ඕන.",
+    "expected_category": "mounting",
+    "expected_skills": ["mounting-tv"],
+    "ambiguous": false
+  },
+  {
+    "id": "ta-carp-1",
+    "language": "TA",
+    "title": "கதவு சரிசெய்ய வேண்டும்",
+    "description": "படுக்கையறை கதவு சரியாக மூடவில்லை, கீல்களை சரிசெய்ய தச்சர் தேவை.",
+    "expected_category": "carpentry",
+    "expected_skills": ["carpentry-doors-windows"],
+    "ambiguous": false
+  },
+  {
+    "id": "ta-handy-1",
+    "language": "TA",
+    "title": "வீட்டு சிறு பழுதுகள்",
+    "description": "சில சிறிய வேலைகள்: கதவை சரிசெய்ய, தளர்வான டவல் ரெயிலை இறுக்க வேண்டும்.",
+    "expected_category": "handyman",
+    "expected_skills": ["handyman-general-repairs"],
+    "ambiguous": false
+  },
+  {
+    "id": "ta-furn-1",
+    "language": "TA",
+    "title": "அலமாரி பொருத்துதல்",
+    "description": "புதிதாக வந்த பிரிக்கக்கூடிய அலமாரி மற்றும் இரண்டு மேசைகளை பொருத்த வேண்டும்.",
+    "expected_category": "furniture-assembly",
+    "expected_skills": ["furniture-flatpack"],
+    "ambiguous": false
+  },
+  {
+    "id": "ta-move-1",
+    "language": "TA",
+    "title": "வீடு மாற்ற உதவி",
+    "description": "ஒரு அறை வீட்டிலிருந்து அருகில் உள்ள வீட்டிற்கு பொருட்களை மாற்ற இருவர் தேவை.",
+    "expected_category": "moving",
+    "expected_skills": ["moving-help"],
+    "ambiguous": false
+  },
+  {
+    "id": "ta-pest-1",
+    "language": "TA",
+    "title": "கரப்பான் பூச்சி தொல்லை",
+    "description": "சமையலறையில் கரப்பான் பூச்சிகள் அதிகம், தொழில்முறை பூச்சி கட்டுப்பாடு தேவை.",
+    "expected_category": "pest-control",
+    "expected_skills": ["pest-general"],
+    "ambiguous": false
+  },
+  {
+    "id": "ta-weld-1",
+    "language": "TA",
+    "title": "இரும்பு கேட் பழுது",
+    "description": "எஃகு கேட்டின் கீல் உடைந்துவிட்டது, வெல்டிங் செய்ய வேண்டும்.",
+    "expected_category": "welding",
+    "expected_skills": ["welding-repairs"],
+    "ambiguous": false
+  },
+  {
+    "id": "ta-elec-2",
+    "language": "TA",
+    "title": "விளக்குகள் பொருத்துதல்",
+    "description": "மண்டபத்தில் மூன்று புதிய எல்ஐடி விளக்குகளை பொருத்த வேண்டும்.",
+    "expected_category": "electrical",
+    "expected_skills": ["electrical-lighting"],
+    "ambiguous": false
+  },
+  {
+    "id": "ta-clean-2",
+    "language": "TA",
+    "title": "வீடு காலி சுத்தம்",
+    "description": "அடுத்த வாரம் வீட்டை காலி செய்கிறேன், முழு சுத்தம் தேவை.",
+    "expected_category": "cleaning",
+    "expected_skills": ["cleaning-move-out"],
+    "ambiguous": false
+  },
+  {
+    "id": "en-amb-1",
+    "language": "EN",
+    "title": "Mount shelves and fix a wobble",
+    "description": "Put up three shelves and while here fix a wobbly cupboard door - could be a handyman or a mounting specialist.",
+    "expected_category": "mounting",
+    "expected_skills": [
+      "mounting-shelves-curtains",
+      "handyman-general-repairs"
+    ],
+    "ambiguous": true
+  },
+  {
+    "id": "en-amb-2",
+    "language": "EN",
+    "title": "Kitchen refresh",
+    "description": "Repaint the kitchen and reseal around the sink - bit of painting, bit of plumbing.",
+    "expected_category": "painting",
+    "expected_skills": ["painting-interior"],
+    "ambiguous": true
+  },
+  {
+    "id": "en-amb-3",
+    "language": "EN",
+    "title": "New bathroom bits",
+    "description": "Install a new toilet and tile the wall behind it.",
+    "expected_category": "plumbing",
+    "expected_skills": ["plumbing-fittings", "masonry-tiling"],
+    "ambiguous": true
+  },
+  {
+    "id": "si-amb-1",
+    "language": "SI",
+    "title": "ගෙදර පොදු වැඩ",
+    "description": "පින්තූර එල්ලන්න සහ ලාච්චුවක් හදන්න ඕන - හෑන්ඩිමෑන් කෙනෙක් හරි.",
+    "expected_category": "handyman",
+    "expected_skills": ["handyman-hanging"],
+    "ambiguous": true
+  }
+]

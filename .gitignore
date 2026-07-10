@@ -49,6 +49,7 @@ apps/*/.ruff_cache
 apps/*/coverage.xml
 apps/*/.coverage
 apps/*/htmlcov
+apps/ai-service/evals/results
 apps/*/__pycache__
 apps/*/app/__pycache__
 apps/*/tests/__pycache__
