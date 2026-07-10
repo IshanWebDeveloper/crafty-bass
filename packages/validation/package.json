@@ -14,7 +14,8 @@
   "scripts": {
     "build": "vite build",
     "lint": "eslint .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:cov": "vitest run --coverage"
   },
   "dependencies": {
     "zod": "^4.3.6"
