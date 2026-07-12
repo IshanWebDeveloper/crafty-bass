@@ -105,6 +105,6 @@ export function escrowStripStep(status: EscrowStatus): number {
     case 'RELEASED':
       return 4;
     default:
-      return 0; // REFUNDED / CANCELLED — strip is shown as inactive
+      return 0; // REFUNDED / CANCELLED - strip is shown as inactive
   }
 }

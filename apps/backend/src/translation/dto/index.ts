@@ -1,7 +1,7 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-// Supported UI locales — the target the content is translated *into*.
+// Supported UI locales - the target the content is translated *into*.
 export const LOCALES = ['en', 'si', 'ta'] as const;
 
 const TranslateSchema = z.object({

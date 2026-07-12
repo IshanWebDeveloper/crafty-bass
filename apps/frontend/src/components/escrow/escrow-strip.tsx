@@ -6,8 +6,8 @@ export type EscrowStep = { label: string; note?: string };
 /**
  * Escrow lifecycle stepper mirroring the design milestone strip:
  * Funded → Materials → Work done → Released. `current` is the number of
- * completed steps (0–steps.length); the step at `current` renders as active.
- * Presentational — pass localized `steps` from the dictionary.
+ * completed steps (0-steps.length); the step at `current` renders as active.
+ * Presentational - pass localized `steps` from the dictionary.
  */
 export function EscrowStrip({
   current,

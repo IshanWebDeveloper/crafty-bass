@@ -11,9 +11,9 @@ import type { Dictionary } from '@/i18n/dictionaries';
 
 /**
  * Role-aware primary navigation. Signed-out visitors see a light marketing nav
- * (browse trades only — posting a job requires an account, so it isn't offered
+ * (browse trades only - posting a job requires an account, so it isn't offered
  * here); homeowners and tradesmen each get the nav the design specifies for
- * their role (homeowners also get a "Post a job" CTA — see {@link HeaderActions}).
+ * their role (homeowners also get a "Post a job" CTA - see {@link HeaderActions}).
  */
 export function MainNav({
   locale,

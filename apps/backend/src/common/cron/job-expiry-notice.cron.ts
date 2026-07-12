@@ -6,7 +6,7 @@ import { NotificationsService } from '../../notifications/notifications.service.
  * Warns relevant tradesmen that an OPEN job matching their trade is about to
  * expire, so they can prioritise their quotes before it lapses (see
  * notes-outline #19). Complements JobExpiryCronService, which flips already-
- * lapsed jobs to EXPIRED — this one fires *ahead* of expiry, once per job.
+ * lapsed jobs to EXPIRED - this one fires *ahead* of expiry, once per job.
  *
  * The matching + dispatch (in-app notification + email) lives in
  * NotificationsService; this just schedules it hourly.

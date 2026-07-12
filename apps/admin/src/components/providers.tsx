@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@repo/ui';
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  // One client per browser session — created lazily so it survives re-renders
+  // One client per browser session - created lazily so it survives re-renders
   // but isn't shared across requests on the server. Defaults live here
   // (cache-defaults) so individual queries only override what they need to.
   const [queryClient] = useState(

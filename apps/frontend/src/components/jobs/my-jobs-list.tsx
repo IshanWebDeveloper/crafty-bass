@@ -63,7 +63,7 @@ export function MyJobsList({
                 <div className="mb-2">
                   <CategoryBadge
                     slug={job.category?.slug}
-                    label={job.category?.nameEn ?? '—'}
+                    label={job.category?.nameEn ?? '-'}
                   />
                 </div>
                 <Link
@@ -74,7 +74,7 @@ export function MyJobsList({
                 </Link>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {new Date(job.createdAt).toLocaleDateString(locale)} ·{' '}
-                  {[job.city, job.district].filter(Boolean).join(', ') || '—'}
+                  {[job.city, job.district].filter(Boolean).join(', ') || '-'}
                 </p>
                 <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
                   {job.description}

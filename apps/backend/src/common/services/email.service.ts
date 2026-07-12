@@ -10,12 +10,12 @@ export interface SendEmailOptions {
 /**
  * Thin wrapper around Resend for transactional email sent from the backend
  * (better-auth handles its own auth emails in `@repo/auth`; this covers
- * everything else — e.g. job-expiry notices).
+ * everything else - e.g. job-expiry notices).
  *
  * Mirrors the auth package's graceful degradation: when `RESEND_API_KEY` is
  * unset (the usual local/dev case) it logs instead of throwing, so features that
  * send email still work end-to-end without a provider configured. Sends are
- * best-effort — `send` never throws; it returns whether the mail went out.
+ * best-effort - `send` never throws; it returns whether the mail went out.
  */
 @Injectable()
 export class EmailService {
@@ -37,7 +37,7 @@ export class EmailService {
 
   /**
    * Sends one email. Returns `true` when it was dispatched, `false` when skipped
-   * (no API key) or the provider call failed — callers treat email as a
+   * (no API key) or the provider call failed - callers treat email as a
    * best-effort side channel and don't fail the request when it doesn't send.
    */
   async send({ to, subject, html }: SendEmailOptions): Promise<boolean> {
@@ -45,7 +45,7 @@ export class EmailService {
 
     if (!this.resend) {
       this.logger.warn(
-        `RESEND_API_KEY not configured — skipped email "${subject}" to ${recipients}.`,
+        `RESEND_API_KEY not configured - skipped email "${subject}" to ${recipients}.`,
       );
       return false;
     }

@@ -148,7 +148,7 @@ export function BrowseJobsView({
               </div>
             ) : null}
 
-            {/* Category filter — shadcn dropdown */}
+            {/* Category filter - shadcn dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -201,7 +201,7 @@ export function BrowseJobsView({
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Location — locked to the tradesman's area when scoped */}
+            {/* Location - locked to the tradesman's area when scoped */}
             {relevant ? (
               <span className="inline-flex h-7 items-center gap-1.5 rounded-lg bg-muted px-2.5 text-[0.8rem] text-muted-foreground">
                 <MapPin className="size-3.5" />
@@ -223,7 +223,7 @@ export function BrowseJobsView({
               </div>
             )}
 
-            {/* Urgency filter — shadcn dropdown */}
+            {/* Urgency filter - shadcn dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -297,7 +297,7 @@ export function BrowseJobsView({
                     <div className="flex flex-wrap items-center gap-2">
                       <CategoryBadge
                         slug={job.category?.slug}
-                        label={job.category?.nameEn ?? '—'}
+                        label={job.category?.nameEn ?? '-'}
                       />
                       <UrgencyBadge
                         urgency={job.urgency}
@@ -314,7 +314,7 @@ export function BrowseJobsView({
                     <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                       <MapPin className="size-3.5 shrink-0" aria-hidden />
                       {[job.city, job.district].filter(Boolean).join(', ') ||
-                        '—'}
+                        '-'}
                     </p>
                     <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
                       {job.description}

@@ -8,7 +8,7 @@ import { cn } from '@repo/ui/lib/utils';
 /**
  * shadcn-style Select built on Base UI. Pass `items` (a `Record<value, label>`
  * or `{ value, label }[]`) to the root so the trigger can render the selected
- * label — otherwise `SelectValue` only knows the raw value.
+ * label - otherwise `SelectValue` only knows the raw value.
  */
 function Select<Value, Multiple extends boolean | undefined = false>(
   props: SelectPrimitive.Root.Props<Value, Multiple>,

@@ -32,7 +32,7 @@ export function TranslateButton({
   const [error, setError] = useState(false);
 
   async function onClick() {
-    // Cached after the first call — just toggle visibility afterwards.
+    // Cached after the first call - just toggle visibility afterwards.
     if (translated) {
       setShown((s) => !s);
       return;

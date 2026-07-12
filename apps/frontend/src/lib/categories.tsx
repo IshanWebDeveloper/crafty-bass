@@ -154,7 +154,7 @@ export function CategoryIcon({
   return <Icon className={cn('size-4', tint, className)} aria-hidden />;
 }
 
-/** A rounded icon bubble — for headers, cards and grids. */
+/** A rounded icon bubble - for headers, cards and grids. */
 export function CategoryIconBubble({
   slug,
   className,

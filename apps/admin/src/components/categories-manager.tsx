@@ -55,7 +55,7 @@ export function CategoriesManager() {
 
   const roots = categories ?? [];
   const parentItems = [
-    { value: 'none', label: '— None (top level) —' },
+    { value: 'none', label: '- None (top level) -' },
     ...roots.map((c) => ({ value: c.id, label: c.nameEn })),
   ];
 

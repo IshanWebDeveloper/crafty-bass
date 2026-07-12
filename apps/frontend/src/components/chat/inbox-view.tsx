@@ -87,7 +87,7 @@ export function InboxView({
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
                       <p className="truncate text-sm font-medium">
-                        {other?.user.name ?? '—'}
+                        {other?.user.name ?? '-'}
                       </p>
                       <p className="shrink-0 text-xs text-muted-foreground">
                         {c.lastMessageAt

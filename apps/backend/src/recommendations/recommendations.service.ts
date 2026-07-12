@@ -12,7 +12,7 @@ import { PrismaService } from '../common/prisma/prisma.service.js';
  * order history (models deleted in the marketplace migration). The marketplace
  * equivalent ranks tradesmen for a job via the `JobRecommendation` model
  * (jobId, tradesmanId, score, rank). This is a minimal compiling shell until
- * that feature is designed — see LEGACY_SWEEP_PLAN.md Phase C.
+ * that feature is designed - see LEGACY_SWEEP_PLAN.md Phase C.
  */
 @Injectable()
 export class RecommendationsService {

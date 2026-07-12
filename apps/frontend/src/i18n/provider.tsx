@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from 'react';
 import type { Locale } from './config';
-// Type-only import — erased at compile time, so `server-only` is not pulled
+// Type-only import - erased at compile time, so `server-only` is not pulled
 // into the client bundle.
 import type { Dictionary } from './dictionaries';
 

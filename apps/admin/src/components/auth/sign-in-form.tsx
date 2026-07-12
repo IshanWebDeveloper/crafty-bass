@@ -7,7 +7,7 @@ import { authClient } from '@/lib/auth-client';
 
 // Email + password sign-in for the admin console (emailAndPassword is enabled in
 // packages/auth/src/index.ts). Role enforcement happens server-side after
-// sign-in (lib/server-session.ts + the dashboard layout) — a non-admin who
+// sign-in (lib/server-session.ts + the dashboard layout) - a non-admin who
 // authenticates here is shown an access-denied screen rather than the dashboard.
 export function SignInForm() {
   const router = useRouter();

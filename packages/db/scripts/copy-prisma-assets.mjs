@@ -22,7 +22,7 @@ const assets = entries.filter((e) => e.isFile() && isAsset(e.name));
 
 if (assets.length === 0) {
   console.warn(
-    `[copy-prisma-assets] no engine assets found in ${srcDir} — did "prisma generate" run?`,
+    `[copy-prisma-assets] no engine assets found in ${srcDir} - did "prisma generate" run?`,
   );
 }
 

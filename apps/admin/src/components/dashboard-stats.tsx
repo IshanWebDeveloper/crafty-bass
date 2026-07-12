@@ -25,7 +25,7 @@ function StatCard({
           />
         ) : query.isError ? (
           <span className="text-destructive" title={query.error.message}>
-            —
+            -
           </span>
         ) : (
           query.data

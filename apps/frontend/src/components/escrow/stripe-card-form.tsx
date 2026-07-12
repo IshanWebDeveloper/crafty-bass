@@ -19,7 +19,7 @@ const stripePromise = loadStripe(
 );
 
 // Stripe Elements render inside an iframe, so the parent document's CSS custom
-// properties (var(--foreground) etc.) are NOT visible to them — the card input
+// properties (var(--foreground) etc.) are NOT visible to them - the card input
 // fell back to Stripe's default dark text, invisible on our dark surface.
 // Resolve a token to the concrete rgb() the browser computes for it so Stripe
 // gets a literal colour it can use inside the iframe.
@@ -37,7 +37,7 @@ function resolveCssColor(token: string, fallback: string): string {
 // Collects card details via a Stripe Element, creates a PaymentMethod
 // client-side, then hands it to POST /escrows/:id/fund. If Stripe requires
 // additional authentication (3DS), confirms it here and re-submits once to
-// finalize — the webhook is the authoritative fallback either way.
+// finalize - the webhook is the authoritative fallback either way.
 function CardPaymentForm({
   escrowId,
   submitLabel,
