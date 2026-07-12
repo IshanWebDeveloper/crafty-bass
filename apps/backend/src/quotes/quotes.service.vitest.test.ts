@@ -49,6 +49,7 @@ function makePrisma(overrides: PrismaOverrides = {}) {
       update: vi.fn(() => Promise.resolve({ id: 'q1', status: 'ACCEPTED' })),
       updateMany: vi.fn(() => Promise.resolve({ count: 0 })),
     },
+    quoteMaterial: { deleteMany: vi.fn(() => Promise.resolve({ count: 0 })) },
     job: { update: vi.fn(() => Promise.resolve({})) },
     jobEscrow: { create: vi.fn(() => Promise.resolve({})) },
   };
@@ -307,6 +308,120 @@ describe('QuotesService.create', () => {
     );
     expect(call.data.validUntil.getTime()).toBeLessThanOrEqual(
       expected + 5 * 60 * 1000,
+    );
+  });
+});
+
+describe('QuotesService.update', () => {
+  // A pending quote owned by trade1 on a still-open job.
+  function editableQuote(overrides: Record<string, unknown> = {}) {
+    return {
+      tradesmanId: 'trade1',
+      status: 'PENDING',
+      job: { status: 'OPEN' },
+      ...overrides,
+    };
+  }
+
+  it('throws NotFound for a missing quote', async () => {
+    const { prisma } = makePrisma({
+      quote: { findUnique: vi.fn(() => Promise.resolve(null)) },
+    });
+    await expect(
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).update('trade1', 'q1', quoteDto()),
+    ).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('forbids editing someone else’s quote', async () => {
+    const { prisma } = makePrisma({
+      quote: { findUnique: vi.fn(() => Promise.resolve(editableQuote())) },
+    });
+    await expect(
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).update('other', 'q1', quoteDto()),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+
+  it('conflicts when the quote is not PENDING', async () => {
+    const { prisma } = makePrisma({
+      quote: {
+        findUnique: vi.fn(() =>
+          Promise.resolve(editableQuote({ status: 'ACCEPTED' })),
+        ),
+      },
+    });
+    await expect(
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).update('trade1', 'q1', quoteDto()),
+    ).rejects.toBeInstanceOf(ConflictException);
+  });
+
+  it('conflicts when the job is no longer OPEN', async () => {
+    const { prisma } = makePrisma({
+      quote: {
+        findUnique: vi.fn(() =>
+          Promise.resolve(editableQuote({ job: { status: 'ASSIGNED' } })),
+        ),
+      },
+    });
+    await expect(
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).update('trade1', 'q1', quoteDto()),
+    ).rejects.toBeInstanceOf(ConflictException);
+  });
+
+  it('rejects a deposit above the tradesman’s cap', async () => {
+    const { prisma } = makePrisma({
+      quote: { findUnique: vi.fn(() => Promise.resolve(editableQuote())) },
+      user: { findUnique: vi.fn(() => Promise.resolve(verifiedTradesman())) },
+    });
+    // allowed = min(30% of 15 340, 40 000, materials 3 000) = 3 000
+    await expect(
+      new QuotesService(
+        prisma as unknown as PrismaService,
+        makeNotifications(),
+      ).update('trade1', 'q1', quoteDto({ depositRequested: 3001 })),
+    ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('replaces line items and recomputes the totals server-side', async () => {
+    const { prisma, tx } = makePrisma({
+      quote: { findUnique: vi.fn(() => Promise.resolve(editableQuote())) },
+      user: { findUnique: vi.fn(() => Promise.resolve(verifiedTradesman())) },
+    });
+    await new QuotesService(
+      prisma as unknown as PrismaService,
+      makeNotifications(),
+    ).update('trade1', 'q1', quoteDto({ depositRequested: 3000 }));
+
+    // old materials wiped, then the quote updated with fresh totals + materials
+    expect(tx.quoteMaterial.deleteMany).toHaveBeenCalledWith({
+      where: { quoteId: 'q1' },
+    });
+    expect(tx.quote.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 'q1' },
+        data: expect.objectContaining({
+          amount: 15340,
+          materialsAmount: 3000,
+          vatRate: 18,
+          materials: expect.objectContaining({
+            create: expect.arrayContaining([
+              expect.objectContaining({ category: 'LABOUR' }),
+              expect.objectContaining({ category: 'MATERIAL' }),
+            ]),
+          }),
+        }),
+      }),
     );
   });
 });

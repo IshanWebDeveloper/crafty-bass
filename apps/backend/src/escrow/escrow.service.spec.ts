@@ -76,7 +76,7 @@ function makePrisma(row: ReturnType<typeof escrowRow>) {
   };
 }
 
-// A card payment defaults to an immediate Stripe success — override methods
+// A card payment defaults to an immediate Stripe success - override methods
 // per test for requires_action / retry scenarios.
 function makeStripe(overrides: Record<string, unknown> = {}) {
   return {
@@ -99,7 +99,7 @@ function makeStripe(overrides: Record<string, unknown> = {}) {
   } as unknown as StripeService;
 }
 
-// Narrow the recorded update() argument to read the status it wrote — the
+// Narrow the recorded update() argument to read the status it wrote - the
 // card-funding path can issue more than one update() call (persisting the
 // PaymentIntent id before finalizing), so scan from the most recent call for
 // one that actually set a status.
@@ -219,7 +219,7 @@ describe('EscrowService state machine', () => {
     })) as { requiresAction?: boolean; clientSecret?: string };
     expect(result.requiresAction).toBe(true);
     expect(result.clientSecret).toBe('secret_action');
-    // Not finalized yet — only the PaymentIntent-id bookkeeping update ran.
+    // Not finalized yet - only the PaymentIntent-id bookkeeping update ran.
     expect(statusWrittenBy(update)).not.toBe('FUNDED');
   });
 
