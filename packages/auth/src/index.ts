@@ -1,7 +1,20 @@
+// The dev-only seed script (packages/db/prisma/seed-users.ts) dynamically
+// imports @repo/auth, creating a build-time @repo/db -> @repo/auth edge that is
+// silenced there. That makes the essential @repo/auth -> @repo/db import below a
+// cycle at the Nx graph level; silence the matching edge here too so linting the
+// auth project doesn't re-flag the same intentional dev-time cycle.
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { prisma } from '@repo/db';
 import { APIError, betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { admin, openAPI, bearer, jwt } from 'better-auth/plugins';
+import {
+  admin,
+  openAPI,
+  bearer,
+  jwt,
+  phoneNumber,
+  emailOTP,
+} from 'better-auth/plugins';
 import {
   ac,
   admin as adminRole,
@@ -35,6 +48,17 @@ const emailFrom =
 const stripeClient = stripeSecretKey ? new Stripe(stripeSecretKey) : undefined;
 
 const frontendURL = process.env.FRONTEND_URL ?? 'http://localhost:3000';
+
+// Dev-only fixed OTP so seeded/test accounts can sign in without reading the
+// console. Disabled in production (see verifyOTP wiring below). Override with
+// DEV_PHONE_OTP.
+const isProduction = process.env.NODE_ENV === 'production';
+const devPhoneOtp = process.env.DEV_PHONE_OTP ?? '123456';
+// Mirror of the phone dev OTP for the email-recovery flow, so seeded/test
+// accounts can recover access without reading an inbox. Override with
+// DEV_EMAIL_OTP; never used in production (the generateOTP override below is
+// only wired in non-prod).
+const devEmailOtp = process.env.DEV_EMAIL_OTP ?? devPhoneOtp;
 
 const parseSeconds = (value: string | undefined, fallback: number) => {
   const parsed = Number(value);
@@ -73,6 +97,90 @@ const plugins = [
       audience: jwtAudience,
     },
   }),
+  phoneNumber({
+    otpLength: 6,
+    expiresIn: 300, // 5 minutes
+    // Phone is the primary credential for the marketplace. In dev we log the
+    // code; wire an SMS provider (e.g. Notify.lk / Twilio) for production.
+    sendOTP: async ({ phoneNumber: to, code }) => {
+      if (!isProduction) {
+        console.log(
+          `[DEV] Crafty Bass OTP for ${to}: ${code} (or use static ${devPhoneOtp})`,
+        );
+        return;
+      }
+      // TODO: integrate an SMS provider here.
+      console.warn(
+        '⚠️ No SMS provider configured — phone OTP not sent in production.',
+      );
+    },
+    // Dev only: accept a fixed OTP (or the real one) so seeded accounts are
+    // trivial to test. Omitted in production, so the plugin's built-in
+    // attempt-limited verification stays in force there.
+    ...(isProduction
+      ? {}
+      : {
+          verifyOTP: async ({ phoneNumber: to, code }, ctx) => {
+            if (code === devPhoneOtp) return true;
+            const stored =
+              await ctx?.context.internalAdapter.findVerificationValue(to);
+            if (!stored || stored.expiresAt < new Date()) return false;
+            return stored.value.split(':')[0] === code;
+          },
+        }),
+    // Verifying an OTP for an unknown number creates the account. The sign-up
+    // form then patches the real name + recovery email onto it.
+    signUpOnVerification: {
+      getTempEmail: (phone) =>
+        `${phone.replace(/[^\d]/g, '')}@phone.craftybass.lk`,
+      getTempName: (phone) => phone,
+    },
+  }),
+  // Account recovery: phone is the primary credential, so a tradesman who
+  // loses their number signs back in with a one-time code emailed to the
+  // recovery address they set at sign-up. `disableSignUp` makes this strictly
+  // a recovery path — an unknown email is rejected rather than silently
+  // creating a new account.
+  emailOTP({
+    otpLength: 6,
+    expiresIn: 300, // 5 minutes
+    disableSignUp: true,
+    // Dev only: accept a fixed code so seeded accounts recover without reading
+    // the inbox (mirrors the phone OTP). Omitted in production, where a random
+    // code is generated and the plugin's attempt-limited verification applies.
+    ...(isProduction ? {} : { generateOTP: () => devEmailOtp }),
+    sendVerificationOTP: async ({ email, otp, type }) => {
+      if (!isProduction) {
+        console.log(
+          `[DEV] Crafty Bass email OTP (${type}) for ${email}: ${otp} (or use static ${devEmailOtp})`,
+        );
+      }
+      if (!resend) {
+        console.warn(
+          '⚠️ RESEND_API_KEY not configured — recovery code email not sent.',
+        );
+        return;
+      }
+      const safeOtp = escapeHtml(otp);
+      await resend.emails.send({
+        to: email,
+        from: emailFrom,
+        subject: 'Your Crafty Bass sign-in code',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2>Sign back in to Crafty Bass</h2>
+            <p>Use this code to recover access to your account:</p>
+            <p style="text-align: center; margin: 32px 0;">
+              <span style="display: inline-block; background-color: #f1f5f9; color: #0f172a; padding: 12px 24px; border-radius: 6px; font-size: 28px; font-weight: 700; letter-spacing: 6px;">
+                ${safeOtp}
+              </span>
+            </p>
+            <p style="color: #64748b; font-size: 14px;">This code expires in 5 minutes. If you didn't request it, you can safely ignore this email.</p>
+          </div>
+        `,
+      });
+    },
+  }),
   ...(stripeClient && stripeWebhookSecret
     ? [
         stripe({
@@ -95,11 +203,65 @@ export const auth = betterAuth({
     provider: 'postgresql',
   }),
   user: {
+    changeEmail: {
+      enabled: true,
+      // better-auth applies the change directly when the *current* email is
+      // unverified (the case for phone sign-up's temp `…@phone.craftybass.lk`
+      // address), so the recovery email entered at sign-up is set immediately.
+      // This handler only fires when changing away from an already-verified
+      // address: it emails an approval link to the current address.
+      sendChangeEmailVerification: async ({ user, newEmail, url }) => {
+        if (!resend) {
+          console.warn(
+            '⚠️ RESEND_API_KEY not configured — change-email verification not sent.',
+          );
+          return;
+        }
+        if (process.env.NODE_ENV !== 'production') {
+          console.log(
+            `[DEV] Change-email approval URL for ${user.email} → ${newEmail}: ${url}`,
+          );
+        }
+        const safeName = escapeHtml(user.name);
+        const safeUrl = escapeHtml(url);
+        const safeNewEmail = escapeHtml(newEmail);
+        await resend.emails.send({
+          to: user.email,
+          from: emailFrom,
+          subject: 'Approve your email change — Crafty Bass',
+          html: `
+          <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2>Confirm your new email address</h2>
+            <p>Hi ${safeName},</p>
+            <p>We received a request to change your account email to <strong>${safeNewEmail}</strong>. Click the button below to approve it:</p>
+            <p style="text-align: center; margin: 32px 0;">
+              <a href="${safeUrl}" style="background-color: #0f172a; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                Approve email change
+              </a>
+            </p>
+            <p style="color: #64748b; font-size: 14px;">If you didn't request this, you can safely ignore this email and your address won't change.</p>
+          </div>
+        `,
+        });
+      },
+    },
     additionalFields: {
       role: {
         type: 'string',
         defaultValue: 'CUSTOMER',
         input: false,
+      },
+      userType: {
+        // Marketplace role (HOMEOWNER | TRADESMAN) — a domain column owned by
+        // @repo/db, surfaced through better-auth so it rides in the session.
+        // This is what lets server guards read it from get-session
+        // (lib/server-session.ts) and lets the sign-up form persist the chosen
+        // role via updateUser. `required: false` — it stays null until the user
+        // commits to a role (the backend also sets it lazily on the first
+        // job/quote, and definitively when a profile is created).
+        type: 'string',
+        required: false,
+        input: true,
       },
       phone: {
         type: 'string',
@@ -114,8 +276,15 @@ export const auth = betterAuth({
         required: false,
       },
       privacyPolicyAcceptedAt: {
+        // Not `required` at the API-input layer: phone sign-up
+        // (signUpOnVerification) never supplies it, and better-auth enforces
+        // required additionalFields *before* databaseHooks run — which would
+        // reject the verify call before the create hook below can default it.
+        // The DB column stays NOT NULL; the user.create.before hook guarantees
+        // a value on both the phone path (defaulted) and /sign-up/email
+        // (validated + rejected if missing).
         type: 'date',
-        required: true,
+        required: false,
       },
     },
   },
@@ -244,6 +413,20 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user, context) => {
+          // Phone sign-up (the phoneNumber plugin) creates the user outside the
+          // /sign-up/email path, so the required privacyPolicyAcceptedAt isn't
+          // supplied. The sign-up form gates on consent before sending the OTP,
+          // so default it here to satisfy the NOT NULL column.
+          if (
+            context?.path !== '/sign-up/email' &&
+            !(user as { privacyPolicyAcceptedAt?: unknown })
+              .privacyPolicyAcceptedAt
+          ) {
+            (
+              user as { privacyPolicyAcceptedAt?: Date }
+            ).privacyPolicyAcceptedAt = new Date();
+          }
+
           if (context?.path === '/sign-up/email') {
             const acceptedAtRaw = (
               user as { privacyPolicyAcceptedAt?: unknown }
@@ -309,6 +492,32 @@ export const auth = betterAuth({
               consentVersion: PRIVACY_POLICY_VERSION,
             },
           });
+        },
+      },
+      update: {
+        before: async (data, context) => {
+          // Set-once guard: userType may be assigned while it's still null (at
+          // sign-up, or lazily on the first job/quote), but never changed
+          // afterwards — otherwise a homeowner could flip to TRADESMAN (or vice
+          // versa) via updateUser and slip past the role checks. Only runs when
+          // an update actually touches userType, so ordinary profile edits
+          // (name, etc.) pay no extra query.
+          if (!('userType' in data)) return;
+          const userId = (
+            context as {
+              context?: { session?: { user?: { id?: string } } };
+            } | null
+          )?.context?.session?.user?.id;
+          if (!userId) return;
+          const existing = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { userType: true },
+          });
+          if (existing?.userType && existing.userType !== data.userType) {
+            throw new APIError('FORBIDDEN', {
+              message: 'Your account role cannot be changed once it is set.',
+            });
+          }
         },
       },
     },

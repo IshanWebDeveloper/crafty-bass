@@ -57,3 +57,9 @@ vite.config.*.timestamp*
 vitest.config.*.timestamp*
 *.tsbuildinfo*
 apps/backend/swagger-error-debug.txt
+apps/admin/next-env.d.ts
+image-1.png
+image-2.png
+image.png
+
+

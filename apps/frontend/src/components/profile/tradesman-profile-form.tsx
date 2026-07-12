@@ -5,17 +5,28 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Checkbox, Input } from '@repo/ui';
+import {
+  Button,
+  Combobox,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+  Input,
+} from '@repo/ui';
+import { ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
-import { NativeSelect } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { SkillsPicker } from '@/components/profile/skills-picker';
 import {
   upsertTradesmanProfile,
   listSkills,
   type TradesmanProfile,
   type LanguageCode,
 } from '@/lib/api/profiles';
+import { DISTRICT_OPTIONS } from '@/lib/districts';
 import type { Dictionary } from '@/i18n/dictionaries';
 
 const LANGUAGE_OPTIONS: LanguageCode[] = ['EN', 'SI', 'TA'];
@@ -39,8 +50,19 @@ const TradesmanSchema = z.object({
   city: z.string().trim().max(80).optional(),
   district: z.string().trim().max(80).optional(),
   preferredLanguage: z.enum(LANGUAGE_OPTIONS),
+  // Edited as newline-separated text; split into arrays on submit.
+  certifications: z.string().max(5000).optional(),
+  vehicles: z.string().max(2500).optional(),
 });
 type TradesmanValues = z.infer<typeof TradesmanSchema>;
+
+/** Split a newline-separated textarea value into a trimmed, non-empty list. */
+function toLines(value: string | undefined): string[] {
+  return (value ?? '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
 
 export function TradesmanProfileForm({
   initial,
@@ -55,6 +77,8 @@ export function TradesmanProfileForm({
   const [selectedSkillIds, setSelectedSkillIds] = useState<Set<string>>(
     () => new Set(initial?.skills.map((s) => s.skillId) ?? []),
   );
+  // Typed skills not yet persisted; the backend find-or-creates them on save.
+  const [customSkills, setCustomSkills] = useState<string[]>([]);
 
   const { data: skills } = useQuery({
     queryKey: ['skills'],
@@ -65,6 +89,8 @@ export function TradesmanProfileForm({
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<TradesmanValues>({
     resolver: zodResolver(TradesmanSchema),
@@ -80,8 +106,11 @@ export function TradesmanProfileForm({
       city: initial?.city ?? '',
       district: initial?.district ?? '',
       preferredLanguage: initial?.preferredLanguage ?? 'EN',
+      certifications: (initial?.certifications ?? []).join('\n'),
+      vehicles: (initial?.vehicles ?? []).join('\n'),
     },
   });
+  const selectedLanguage = watch('preferredLanguage');
 
   const mutation = useMutation({
     mutationFn: (values: TradesmanValues) =>
@@ -98,10 +127,20 @@ export function TradesmanProfileForm({
         city: values.city || undefined,
         district: values.district || undefined,
         skillIds: Array.from(selectedSkillIds),
+        skillNames: customSkills,
+        certifications: toLines(values.certifications),
+        vehicles: toLines(values.vehicles),
       }),
-    onSuccess: () => {
+    onSuccess: (profile) => {
       toast.success(t.saved);
+      // Re-sync from the saved profile: typed skills are now catalog rows linked
+      // to this tradesman, so fold them into the selected set and clear the
+      // pending customs — otherwise they'd vanish from the picker until reload.
+      setSelectedSkillIds(new Set(profile.skills.map((s) => s.skillId)));
+      setCustomSkills([]);
       void qc.invalidateQueries({ queryKey: ['profile', 'me'] });
+      // The new skills are catalog rows now — refresh the searchable list.
+      void qc.invalidateQueries({ queryKey: ['skills'] });
     },
     onError: (err) =>
       toast.error(err instanceof Error ? err.message : 'Could not save'),
@@ -188,22 +227,58 @@ export function TradesmanProfileForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="district">{t.fields.district}</Label>
-          <Input id="district" {...register('district')} />
+          <input type="hidden" {...register('district')} />
+          <Combobox
+            id="district"
+            aria-label={t.fields.district}
+            items={DISTRICT_OPTIONS}
+            value={watch('district') || null}
+            onValueChange={(value) =>
+              setValue('district', value ?? '', { shouldDirty: true })
+            }
+            placeholder={t.fields.districtPlaceholder}
+            emptyText={t.fields.districtEmpty}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="preferredLanguage">
             {t.fields.preferredLanguage}
           </Label>
-          <NativeSelect
-            id="preferredLanguage"
-            {...register('preferredLanguage')}
-          >
-            {LANGUAGE_OPTIONS.map((l) => (
-              <option key={l} value={l}>
-                {t.languages[l]}
-              </option>
-            ))}
-          </NativeSelect>
+          <input type="hidden" {...register('preferredLanguage')} />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  id="preferredLanguage"
+                  variant="outline"
+                  className="w-full justify-between"
+                  aria-label={t.fields.preferredLanguage}
+                >
+                  <span className="truncate">
+                    {t.languages[selectedLanguage]}
+                  </span>
+                  <ChevronDown className="size-4 opacity-60" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="min-w-44">
+              <DropdownMenuRadioGroup
+                value={selectedLanguage}
+                onValueChange={(value) =>
+                  setValue('preferredLanguage', value as LanguageCode, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
+              >
+                {LANGUAGE_OPTIONS.map((l) => (
+                  <DropdownMenuRadioItem key={l} value={l}>
+                    {t.languages[l]}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -214,20 +289,45 @@ export function TradesmanProfileForm({
             {t.tradesman.skillsHelp}
           </p>
         </div>
-        <div className="grid gap-2 rounded-lg border border-border p-3 sm:grid-cols-2 lg:grid-cols-3">
-          {skills?.map((skill) => {
-            const checked = selectedSkillIds.has(skill.id);
-            return (
-              <label key={skill.id} className="flex items-center gap-2 text-sm">
-                <Checkbox
-                  checked={checked}
-                  onCheckedChange={(v) => toggleSkill(skill.id, v === true)}
-                />
-                {skill.nameEn}
-              </label>
-            );
-          })}
-        </div>
+        <SkillsPicker
+          skills={skills}
+          selectedIds={selectedSkillIds}
+          onToggleId={toggleSkill}
+          customSkills={customSkills}
+          onAddCustom={(name) => setCustomSkills((prev) => [...prev, name])}
+          onRemoveCustom={(name) =>
+            setCustomSkills((prev) => prev.filter((s) => s !== name))
+          }
+          searchPlaceholder={t.tradesman.skillsSearchPlaceholder}
+          createLabel={t.tradesman.skillsCreate}
+          emptyText={t.tradesman.skillsEmpty}
+        />
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="certifications">{t.tradesman.certifications}</Label>
+        <Textarea
+          id="certifications"
+          rows={3}
+          placeholder={t.tradesman.certificationsPlaceholder}
+          {...register('certifications')}
+        />
+        <p className="text-xs text-muted-foreground">
+          {t.tradesman.certificationsHint}
+        </p>
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="vehicles">{t.tradesman.vehicles}</Label>
+        <Textarea
+          id="vehicles"
+          rows={2}
+          placeholder={t.tradesman.vehiclesPlaceholder}
+          {...register('vehicles')}
+        />
+        <p className="text-xs text-muted-foreground">
+          {t.tradesman.vehiclesHint}
+        </p>
       </div>
 
       <Button type="submit" className="w-full" disabled={submitting}>

@@ -16,7 +16,9 @@ dependencies = [
   "langchain-core>=1.0,<2.0",
   "langgraph>=1.0,<2.0",
   "langchain-openai>=1.0,<2.0",
-  "PyJWT>=2.0,<3.0",
+  # [crypto] pulls in `cryptography`, required to verify the better-auth JWTs
+  # which are signed with EdDSA (Ed25519).
+  "PyJWT[crypto]>=2.0,<3.0",
 ]
 
 [project.optional-dependencies]

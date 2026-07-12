@@ -11,6 +11,7 @@ import type {
   UpdateReviewDto,
   ReviewQueryDto,
   AdminReviewQueryDto,
+  AdminModerateReviewDto,
 } from './dto/index.js';
 
 const REVIEW_PARTY_SELECT = { id: true, name: true, image: true } as const;
@@ -166,9 +167,17 @@ export class ReviewsService {
     return review;
   }
 
-  async updateForAdmin(reviewId: string, dto: UpdateReviewDto) {
+  async updateForAdmin(reviewId: string, dto: AdminModerateReviewDto) {
     await this.findByIdForAdmin(reviewId);
-    return this.prisma.review.update({ where: { id: reviewId }, data: dto });
+    return this.prisma.review.update({
+      where: { id: reviewId },
+      data: {
+        ...(dto.isPublic !== undefined ? { isPublic: dto.isPublic } : {}),
+        ...(dto.rating !== undefined ? { rating: dto.rating } : {}),
+        ...(dto.title !== undefined ? { title: dto.title } : {}),
+        ...(dto.comment !== undefined ? { comment: dto.comment } : {}),
+      },
+    });
   }
 
   async removeForAdmin(reviewId: string) {

@@ -1,6 +1,10 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { RoleSchema, PaymentMethodSchema } from '@repo/shared-types';
+import {
+  RoleSchema,
+  UserTypeSchema,
+  PaymentMethodSchema,
+} from '@repo/shared-types';
 
 // ─── Update Profile ─────────────────────────────────────────────────────────
 
@@ -20,6 +24,9 @@ const ShippingAddressSchema = z.object({
 const UpdateProfileSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   phone: z.string().min(5).max(20).optional(),
+  // Avatar object key returned by POST /uploads (category "avatar"). Stored on
+  // User.image; presigned on read.
+  image: z.string().trim().max(500).optional(),
   shippingAddress: ShippingAddressSchema.optional(),
   paymentPreferences: z
     .object({
@@ -62,6 +69,7 @@ const UserListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   role: RoleSchema.optional(),
+  userType: UserTypeSchema.optional(),
   search: z.string().optional(),
 });
 

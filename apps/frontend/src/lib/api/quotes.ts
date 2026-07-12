@@ -7,15 +7,33 @@ export type QuoteStatus =
   | 'WITHDRAWN'
   | 'EXPIRED';
 
+export type QuoteLineCategory = 'LABOUR' | 'MATERIAL';
+
+export type QuoteMaterial = {
+  id: string;
+  category: QuoteLineCategory;
+  name: string;
+  quantity: number;
+  unit: string | null;
+  unitPrice: number | null;
+};
+
 export type Quote = {
   id: string;
   jobId: string;
   tradesmanId: string;
   amount: number;
+  materialsAmount: number | null;
+  calloutFee: number | null;
+  discount: number | null;
+  vatRate: number | null;
+  materials: QuoteMaterial[];
+  depositRequested: number | null;
   currency: string;
   message: string | null;
   estimatedStart: string | null;
   estimatedCompletion: string | null;
+  validUntil: string | null;
   status: QuoteStatus;
   respondedAt: string | null;
   withdrawnAt: string | null;
@@ -34,7 +52,18 @@ export type Quote = {
 };
 
 export type CreateQuoteBody = {
-  amount: number;
+  lineItems: {
+    category: QuoteLineCategory;
+    name: string;
+    quantity: number;
+    unit?: string;
+    unitPrice: number;
+  }[];
+  calloutFee?: number;
+  discount?: number;
+  applyVat?: boolean;
+  validityDays: number;
+  depositRequested?: number;
   currency: string;
   message?: string;
   estimatedStart?: string;

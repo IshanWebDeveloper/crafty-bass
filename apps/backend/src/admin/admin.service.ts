@@ -5,8 +5,9 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { type Role } from '@repo/db';
+import { type Role, Prisma } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
+import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import { auth } from '@repo/auth';
 import { AuthService } from '@thallesp/nestjs-better-auth';
 
@@ -48,10 +49,29 @@ export class AdminService {
         id: true,
         name: true,
         email: true,
+        image: true,
+        phone: true,
         role: true,
+        userType: true,
         banned: true,
+        banReason: true,
         createdAt: true,
         updatedAt: true,
+        homeownerProfile: {
+          select: { city: true, district: true, locationText: true },
+        },
+        tradesmanProfile: {
+          select: {
+            city: true,
+            district: true,
+            yearsExperience: true,
+            isVerified: true,
+            backgroundChecked: true,
+            avgRating: true,
+            ratingCount: true,
+            jobsCompleted: true,
+          },
+        },
       },
     });
 
@@ -206,9 +226,136 @@ export class AdminService {
   }
 
   /**
-   * Stub audit hook. The legacy AuditLog model was removed in the marketplace
-   * migration. Until the Phase C marketplace audit trail lands, admin actions
-   * are written to the structured logger so they remain observable.
+   * Aggregated platform metrics for the admin dashboard overview. Returns
+   * headline counts (users, jobs, quotes, moderation queues, escrow) plus a
+   * 30-day daily time series of new jobs and signups for the trend charts.
+   * Available to ADMIN and SUPPORT (moderators need the moderation KPIs).
+   */
+  async getMetrics() {
+    const DAYS = 30;
+    const now = new Date();
+    const since = new Date(now);
+    since.setDate(since.getDate() - (DAYS - 1));
+    since.setHours(0, 0, 0, 0);
+
+    const [
+      userTotal,
+      usersByType,
+      bannedCount,
+      newUsers,
+      jobTotal,
+      jobsByStatus,
+      quoteTotal,
+      quotesByStatus,
+      openReports,
+      underReviewReports,
+      pendingVerifications,
+      hiddenReviews,
+      escrowActive,
+      recentJobs,
+      recentSignups,
+    ] = await Promise.all([
+      this.prisma.user.count(),
+      this.prisma.user.groupBy({ by: ['userType'], _count: { _all: true } }),
+      this.prisma.user.count({ where: { banned: true } }),
+      this.prisma.user.count({ where: { createdAt: { gte: since } } }),
+      this.prisma.job.count(),
+      this.prisma.job.groupBy({ by: ['status'], _count: { _all: true } }),
+      this.prisma.quote.count(),
+      this.prisma.quote.groupBy({ by: ['status'], _count: { _all: true } }),
+      this.prisma.report.count({ where: { status: 'OPEN' } }),
+      this.prisma.report.count({ where: { status: 'UNDER_REVIEW' } }),
+      this.prisma.tradesmanVerification.count({ where: { status: 'PENDING' } }),
+      this.prisma.review.count({ where: { isPublic: false } }),
+      this.prisma.jobEscrow.aggregate({
+        where: {
+          status: { in: ['FUNDED', 'MATERIALS_RELEASED', 'WORK_COMPLETED'] },
+        },
+        _count: { _all: true },
+        _sum: { quoteTotal: true },
+      }),
+      this.prisma.job.findMany({
+        where: { createdAt: { gte: since } },
+        select: { createdAt: true },
+      }),
+      this.prisma.user.findMany({
+        where: { createdAt: { gte: since } },
+        select: { createdAt: true },
+      }),
+    ]);
+
+    const typeCount = (type: 'HOMEOWNER' | 'TRADESMAN') =>
+      usersByType.find((g) => g.userType === type)?._count._all ?? 0;
+    const jobStatus = (status: string) =>
+      jobsByStatus.find((g) => g.status === status)?._count._all ?? 0;
+    const quoteStatus = (status: string) =>
+      quotesByStatus.find((g) => g.status === status)?._count._all ?? 0;
+
+    const jobsByDay = this.bucketByDay(recentJobs);
+    const signupsByDay = this.bucketByDay(recentSignups);
+    const series = Array.from({ length: DAYS }, (_, i) => {
+      const day = new Date(since);
+      day.setDate(since.getDate() + i);
+      const key = day.toISOString().slice(0, 10);
+      return {
+        date: key,
+        jobs: jobsByDay.get(key) ?? 0,
+        signups: signupsByDay.get(key) ?? 0,
+      };
+    });
+
+    return {
+      users: {
+        total: userTotal,
+        homeowners: typeCount('HOMEOWNER'),
+        tradesmen: typeCount('TRADESMAN'),
+        banned: bannedCount,
+        newLast30Days: newUsers,
+      },
+      jobs: {
+        total: jobTotal,
+        open: jobStatus('OPEN'),
+        assigned: jobStatus('ASSIGNED'),
+        inProgress: jobStatus('IN_PROGRESS'),
+        completed: jobStatus('COMPLETED'),
+        cancelled: jobStatus('CANCELLED'),
+        expired: jobStatus('EXPIRED'),
+      },
+      quotes: {
+        total: quoteTotal,
+        pending: quoteStatus('PENDING'),
+        accepted: quoteStatus('ACCEPTED'),
+      },
+      moderation: {
+        openReports,
+        underReviewReports,
+        pendingVerifications,
+        hiddenReviews,
+      },
+      escrow: {
+        activeCount: escrowActive._count._all,
+        activeValue: Number(escrowActive._sum.quoteTotal ?? 0),
+        currency: 'LKR',
+      },
+      series,
+    };
+  }
+
+  /** Buckets createdAt timestamps into a YYYY-MM-DD → count map. */
+  private bucketByDay(rows: { createdAt: Date }[]): Map<string, number> {
+    const counts = new Map<string, number>();
+    for (const row of rows) {
+      const key = row.createdAt.toISOString().slice(0, 10);
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    return counts;
+  }
+
+  /**
+   * Persists an admin action to the AuditLog and mirrors it to the structured
+   * logger. A failure to write the audit row must never break the underlying
+   * admin action, so persistence errors are swallowed (and logged) rather than
+   * propagated.
    */
   async log(
     userId: string,
@@ -217,7 +364,6 @@ export class AdminService {
     entityId: string,
     details?: unknown,
   ): Promise<void> {
-    await Promise.resolve();
     this.logger.log({
       msg: '[admin.audit]',
       userId,
@@ -226,5 +372,53 @@ export class AdminService {
       entityId,
       details,
     });
+    try {
+      await this.prisma.auditLog.create({
+        data: {
+          actorId: userId,
+          action,
+          entity,
+          entityId,
+          details:
+            details === undefined
+              ? undefined
+              : (details as Prisma.InputJsonValue),
+        },
+      });
+    } catch (error) {
+      this.logger.error(
+        `Failed to persist audit log: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }
+
+  /** Paginated audit trail for the admin console, newest first. */
+  async listAuditLog(query: {
+    page: number;
+    limit: number;
+    entity?: string;
+    userId?: string;
+    entityId?: string;
+  }) {
+    const { page, limit, entity, userId, entityId } = query;
+    const skip = (page - 1) * limit;
+    const where = {
+      ...(entity && { entity }),
+      ...(userId && { actorId: userId }),
+      ...(entityId && { entityId }),
+    };
+    const [data, total] = await Promise.all([
+      this.prisma.auditLog.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          actor: { select: { id: true, name: true, email: true } },
+        },
+      }),
+      this.prisma.auditLog.count({ where }),
+    ]);
+    return { data, meta: buildPaginationMeta(total, page, limit) };
   }
 }

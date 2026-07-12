@@ -13,6 +13,20 @@ const JOB_LIST_INCLUDE = {
   _count: { select: { quotes: true } },
 } as const;
 
+// How long an OPEN job stays live before expiring, by urgency. More urgent jobs
+// lapse sooner so the board reflects work that's still actionable.
+const EXPIRY_DAYS_BY_URGENCY: Record<string, number> = {
+  EMERGENCY: 1,
+  HIGH: 3,
+  MEDIUM: 7,
+  LOW: 14,
+};
+
+function expiryFromUrgency(urgency: string, from = new Date()): Date {
+  const days = EXPIRY_DAYS_BY_URGENCY[urgency] ?? 7;
+  return new Date(from.getTime() + days * 24 * 60 * 60 * 1000);
+}
+
 @Injectable()
 export class JobsService {
   constructor(private readonly prisma: PrismaService) {}
@@ -40,9 +54,14 @@ export class JobsService {
         descriptionLanguage: dto.descriptionLanguage,
         categoryId: dto.categoryId ?? null,
         urgency: dto.urgency,
+        taskSize: dto.taskSize ?? null,
+        vehicleRequirement: dto.vehicleRequirement ?? null,
+        expiresAt: expiryFromUrgency(dto.urgency),
         locationText: dto.locationText ?? null,
         city: dto.city ?? null,
         district: dto.district ?? null,
+        latitude: dto.latitude ?? null,
+        longitude: dto.longitude ?? null,
         budgetMin: dto.budgetMin ?? null,
         budgetMax: dto.budgetMax ?? null,
         scheduledFor: dto.scheduledFor ?? null,
@@ -86,6 +105,36 @@ export class JobsService {
     return { data, meta: buildPaginationMeta(total, page, limit) };
   }
 
+  // Admin/support monitoring: unlike `browse` (which defaults to OPEN only),
+  // this lists every job and only narrows by status when one is supplied.
+  async listAllForAdmin(query: JobQueryDto) {
+    const { page, limit, categoryId, district, city, urgency, status } = query;
+    const skip = (page - 1) * limit;
+    const where = {
+      ...(status ? { status } : {}),
+      ...(categoryId ? { categoryId } : {}),
+      ...(district ? { district } : {}),
+      ...(city ? { city } : {}),
+      ...(urgency ? { urgency } : {}),
+    };
+
+    const [data, total] = await Promise.all([
+      this.prisma.job.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          ...JOB_LIST_INCLUDE,
+          assignedTradesman: { select: { id: true, name: true } },
+        },
+      }),
+      this.prisma.job.count({ where }),
+    ]);
+
+    return { data, meta: buildPaginationMeta(total, page, limit) };
+  }
+
   async findMine(userId: string, query: JobQueryDto) {
     const { page, limit, status } = query;
     const skip = (page - 1) * limit;
@@ -116,6 +165,41 @@ export class JobsService {
         homeowner: { select: { id: true, name: true } },
         skills: { include: { skill: true } },
         _count: { select: { quotes: true } },
+      },
+    });
+    if (!job) throw new NotFoundException('Job not found');
+    return job;
+  }
+
+  // Admin/support detail: richer than the public findOne — includes the
+  // assigned tradesman, quotes (with quoter), escrow ledger status, and any
+  // reports filed against the job. Kept out of the public findOne so this data
+  // is never exposed on the public job page.
+  async findOneForAdmin(id: string) {
+    const job = await this.prisma.job.findUnique({
+      where: { id },
+      include: {
+        category: { select: { id: true, slug: true, nameEn: true } },
+        homeowner: { select: { id: true, name: true, email: true } },
+        assignedTradesman: { select: { id: true, name: true, email: true } },
+        skills: { include: { skill: true } },
+        quotes: {
+          orderBy: { createdAt: 'desc' },
+          include: {
+            tradesman: { select: { id: true, name: true } },
+          },
+        },
+        escrow: { select: { id: true, status: true, quoteTotal: true } },
+        reports: {
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            status: true,
+            reason: true,
+            targetType: true,
+            createdAt: true,
+          },
+        },
       },
     });
     if (!job) throw new NotFoundException('Job not found');

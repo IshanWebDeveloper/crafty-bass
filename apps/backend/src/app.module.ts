@@ -27,6 +27,10 @@ import { CategoriesModule } from './categories/categories.module.js';
 import { ProfilesModule } from './profiles/profiles.module.js';
 import { JobsModule } from './jobs/jobs.module.js';
 import { QuotesModule } from './quotes/quotes.module.js';
+import { MaterialRequestsModule } from './material-requests/material-requests.module.js';
+import { EscrowModule } from './escrow/escrow.module.js';
+import { VerificationModule } from './verification/verification.module.js';
+import { UploadsModule } from './uploads/uploads.module.js';
 import { ConversationsModule } from './conversations/conversations.module.js';
 import { ReportsModule } from './reports/reports.module.js';
 import { ReviewsModule } from './reviews/reviews.module.js';
@@ -36,7 +40,12 @@ import { ConsentModule } from './consent/consent.module.js';
 import { LegalModule } from './legal/legal.module.js';
 import { HealthModule } from './health/health.module.js';
 import { WebhooksModule } from './webhooks/webhooks.module.js';
+import { TranslationModule } from './translation/translation.module.js';
+import { NotificationsModule } from './notifications/notifications.module.js';
 import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
+import { JobExpiryCronService } from './common/cron/job-expiry.cron.js';
+import { JobExpiryNoticeCronService } from './common/cron/job-expiry-notice.cron.js';
+import { QuoteExpiryCronService } from './common/cron/quote-expiry.cron.js';
 
 @Module({
   imports: [
@@ -133,6 +142,10 @@ import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
     ProfilesModule,
     JobsModule,
     QuotesModule,
+    MaterialRequestsModule,
+    EscrowModule,
+    VerificationModule,
+    UploadsModule,
     ConversationsModule,
     ReportsModule,
     ReviewsModule,
@@ -142,11 +155,16 @@ import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
     LegalModule,
     HealthModule,
     WebhooksModule,
+    TranslationModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     DataRetentionCronService,
+    JobExpiryCronService,
+    JobExpiryNoticeCronService,
+    QuoteExpiryCronService,
 
     // Global sanitization pipe
     {

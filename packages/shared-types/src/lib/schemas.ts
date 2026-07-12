@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
-import { Role } from './prisma-types.js';
+import { Role, UserType } from './prisma-types.js';
 
 export const RoleSchema = z.nativeEnum(Role);
+
+export const UserTypeSchema = z.nativeEnum(UserType);
 
 export const PaymentMethodSchema = z.enum([
   'CARD',

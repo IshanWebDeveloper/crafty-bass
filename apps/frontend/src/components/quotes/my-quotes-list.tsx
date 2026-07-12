@@ -2,10 +2,13 @@
 
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Skeleton } from '@repo/ui';
+import { ReceiptText } from 'lucide-react';
+import { Badge, Button, Skeleton } from '@repo/ui';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { listMyQuotes, withdrawQuote } from '@/lib/api/quotes';
+import { QuoteMaterials } from '@/components/quotes/quote-materials';
+import { statusVariant } from '@/lib/status';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -50,8 +53,14 @@ export function MyQuotesList({
     return (
       <Card>
         <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
+          <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <ReceiptText className="size-6" aria-hidden />
+          </span>
           <p className="text-sm text-muted-foreground">{tm.empty}</p>
-          <Button render={<Link href={`/${locale}/jobs`} />}>
+          <Button
+            nativeButton={false}
+            render={<Link href={`/${locale}/jobs`} />}
+          >
             {tm.browseJobs}
           </Button>
         </CardContent>
@@ -83,14 +92,26 @@ export function MyQuotesList({
                     {q.message}
                   </p>
                 ) : null}
+                <div className="mt-3">
+                  <QuoteMaterials
+                    materials={q.materials}
+                    currency={q.currency}
+                    calloutFee={q.calloutFee}
+                    discount={q.discount}
+                    vatRate={q.vatRate}
+                    validUntil={q.validUntil}
+                    locale={locale}
+                    dict={dict}
+                  />
+                </div>
               </div>
               <div className="flex flex-col items-end gap-2 text-right">
-                <p className="text-lg font-semibold">
+                <p className="font-mono text-lg font-semibold">
                   {q.currency} {q.amount.toLocaleString(locale)}
                 </p>
-                <span className="rounded-full border border-border px-2 py-0.5 text-xs">
+                <Badge variant={statusVariant(q.status)}>
                   {t.statusLabels[q.status]}
-                </span>
+                </Badge>
                 {q.status === 'PENDING' ? (
                   <Button
                     size="sm"

@@ -1,47 +1,384 @@
 {
   "header": {
     "findTrades": "Find trades",
+    "browseJobs": "Browse jobs",
     "postJob": "Post a job",
     "quotes": "Quotes",
+    "myJobs": "My jobs",
     "messages": "Messages",
     "signIn": "Sign in",
     "getStarted": "Get started",
     "dashboard": "Dashboard",
     "profile": "Profile",
     "privacy": "Privacy",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "roleHomeowner": "Homeowner",
+    "roleTradesman": "Tradesperson",
+    "trades": {
+      "plumber": "Plumber",
+      "electrician": "Electrician",
+      "carpenter": "Carpenter",
+      "painter": "Painter",
+      "mason": "Mason",
+      "cleaner": "Cleaner",
+      "handyman": "Handyman",
+      "tiler": "Tiler"
+    },
+    "hints": {
+      "findTrades": "Browse verified tradespeople near you",
+      "browseJobs": "Find open jobs to quote on",
+      "postJob": "Describe a job and get quotes",
+      "quotes": "Track quotes you've submitted",
+      "myJobs": "Manage the jobs you've posted",
+      "messages": "Your conversations with tradespeople and homeowners"
+    }
   },
   "auth": {
     "signIn": {
       "title": "Welcome back",
-      "subtitle": "Sign in to manage your jobs, quotes, and messages.",
+      "subtitle": "Enter your mobile number and we'll text you a code to sign in — no password needed.",
       "submit": "Sign in",
       "submitting": "Signing in…",
       "forgotPassword": "Forgot password?",
       "noAccount": "Don't have an account?",
       "createAccount": "Create one",
-      "success": "Signed in"
+      "success": "Signed in",
+      "lostPhone": "Lost access to your phone?"
     },
     "signUp": {
       "title": "Create your Crafty Bass account",
-      "subtitle": "Post jobs as a homeowner or quote on jobs as a tradesman.",
+      "subtitle": "First, tell us how you'll use Crafty Bass.",
       "submit": "Create account",
       "submitting": "Creating…",
       "haveAccount": "Already have an account?",
       "signInLink": "Sign in",
-      "success": "Account created"
+      "success": "Account created",
+      "iWantTo": "I want to",
+      "roleHomeowner": "Hire a tradesperson",
+      "roleHomeownerSub": "Post jobs and compare quotes",
+      "roleTradesman": "Work as a tradesperson",
+      "roleTradesmanSub": "Quote on jobs nearby",
+      "nameRequired": "Please enter your name.",
+      "consentRequired": "Please accept the terms to continue.",
+      "consentPre": "I agree to the",
+      "consentAnd": "and",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy",
+      "contactConsent": "By creating an account, I agree that Crafty Bass and the tradespeople I contact (or parties acting on their behalf) may contact me about my jobs and account at the number I provide — including by automated technology, prerecorded messages, SMS and calls. Consent is not a condition of using the service, and message and data rates may apply."
     },
     "fields": {
       "name": "Name",
       "email": "Email",
       "password": "Password",
-      "confirmPassword": "Confirm password"
+      "confirmPassword": "Confirm password",
+      "phoneHint": "We'll text a 6-digit code to verify it. This is how you'll sign in — no password needed.",
+      "recoveryEmail": "Recovery email",
+      "recoveryEmailHint": "You'll verify this so you can recover your account if you lose your number."
+    },
+    "phone": {
+      "number": "Mobile number",
+      "numberHint": "We'll text a 6-digit code to this number.",
+      "send": "Send verification code",
+      "sending": "Sending…",
+      "code": "Verification code",
+      "codeSentTo": "We texted a 6-digit code to {phone}.",
+      "verifySignIn": "Verify & sign in",
+      "verifyCreate": "Verify & create account",
+      "verifying": "Verifying…",
+      "resend": "Resend code",
+      "changeNumber": "Change number",
+      "invalidNumber": "Enter a valid Sri Lankan mobile number.",
+      "sendFailed": "Couldn't send the code. Check the number and try again.",
+      "verifyFailed": "That code didn't match. Try again."
+    },
+    "recovery": {
+      "title": "Recover your account",
+      "subtitle": "Lost access to your phone? Enter the recovery email you added at sign-up and we'll send you a one-time code.",
+      "email": "Recovery email",
+      "emailPlaceholder": "you@example.com",
+      "send": "Send recovery code",
+      "sending": "Sending…",
+      "codeSentTo": "We emailed a 6-digit code to {email}.",
+      "code": "Recovery code",
+      "verify": "Verify & sign in",
+      "verifying": "Verifying…",
+      "resend": "Resend code",
+      "changeEmail": "Use a different email",
+      "backToSignIn": "Back to phone sign-in",
+      "invalidEmail": "Enter a valid email address.",
+      "sendFailed": "Couldn't send a code. Check the email and try again.",
+      "verifyFailed": "That code didn't match. Try again.",
+      "success": "Signed in — update your phone number so you can sign in with it next time.",
+      "noAccountHint": "If an account exists for that email, a code is on its way.",
+      "expiresIn": "Code expires in {time}",
+      "expired": "Code expired — request a new one."
     },
     "errors": {
       "invalidCredentials": "Invalid email or password",
       "signUpFailed": "Could not create your account",
       "sessionRequired": "Please sign in to continue"
     }
+  },
+  "translate": {
+    "action": "Translate",
+    "translating": "Translating…",
+    "hide": "Hide translation",
+    "disclaimer": "AI translation — may not be exact.",
+    "failed": "Couldn't translate. Try again."
+  },
+  "verification": {
+    "title": "Get verified",
+    "subtitle": "Verify your identity and trade so homeowners can trust you. Required before you can receive jobs or send quotes.",
+    "status": {
+      "underReview": "Under review",
+      "heading": "Your details are under review",
+      "body": "Submitted just now. An admin verifies every tradesman manually — most are reviewed within 1–2 business days. You can update anything below and resubmit."
+    },
+    "sections": {
+      "identity": {
+        "title": "Identity",
+        "desc": "Matched against your NIC. Used only to verify you — never shown to homeowners."
+      },
+      "address": {
+        "title": "Address",
+        "desc": "Where you're based. We use your district to match you to nearby jobs."
+      },
+      "trade": {
+        "title": "Trade & credentials",
+        "desc": "Your trade, skills and any licences or certifications."
+      },
+      "payout": {
+        "title": "Payout",
+        "desc": "Where we send payment for completed jobs. Encrypted and never shown to homeowners."
+      },
+      "confirm": {
+        "title": "Confirm & submit",
+        "desc": "Review your details before submitting for verification."
+      }
+    },
+    "fields": {
+      "fullName": "Full name (as on your NIC)",
+      "gender": "Gender",
+      "dob": "Date of birth",
+      "nic": "NIC number",
+      "nicHint": "National Identity Card number.",
+      "nicFront": "NIC — front",
+      "nicBack": "NIC — back",
+      "photo": "Recent passport-size photo",
+      "photoHint": "Clear, front-facing, taken within the last 6 months.",
+      "address": "Residential address",
+      "city": "City",
+      "district": "District",
+      "primaryTrade": "Primary trade",
+      "yearsExperience": "Years of experience",
+      "skills": "Skills",
+      "licence": "Trade licence or certificate",
+      "licenceHint": "Add at least one if you have it.",
+      "additionalCert": "Additional certificate (optional)",
+      "licenceNumber": "Licence / registration number (optional)",
+      "licenceNumberPlaceholder": "e.g. CIDA registration no.",
+      "accountHolder": "Account holder name",
+      "bank": "Bank",
+      "branch": "Branch",
+      "accountNumber": "Account number",
+      "accountNumberHint": "Used only to pay you for completed jobs."
+    },
+    "upload": {
+      "cta": "Click to upload or drag a file",
+      "hint": "JPG, PNG or PDF · up to 5 MB"
+    },
+    "genders": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "preferNot": "Prefer not to say"
+    },
+    "consent": "I confirm these details are accurate and authorise Crafty Bass to verify my identity, trade credentials and bank details. I understand verification is required before I can receive jobs or send quotes.",
+    "submit": "Submit for verification",
+    "submitting": "Submitting…",
+    "submitted": "Submitted for verification"
+  },
+  "onboarding": {
+    "stages": ["Profile", "Documents", "Details", "Payout"],
+    "back": "Back",
+    "continue": "Continue",
+    "submit": "Submit for verification",
+    "submitting": "Submitting…",
+    "stepOf": "{current} / {total}",
+    "completeFields": "Complete the required fields to continue.",
+    "profile": {
+      "title": "Tell us your trade",
+      "sub": "Just the basics — you can do the rest later.",
+      "trade": "Primary trade",
+      "district": "Base location",
+      "districtEmpty": "No matching district.",
+      "skills": "Skills",
+      "skillsHelp": "Search for a skill, or type your own to add it.",
+      "skillsSearchPlaceholder": "Search or add a skill…",
+      "skillsCreate": "Add “{q}”",
+      "skillsEmpty": "No match — keep typing to add it."
+    },
+    "documents": {
+      "title": "Upload your documents",
+      "sub": "Clear photos are fine. We check each one by hand.",
+      "provided": "Provided",
+      "optional": "Optional",
+      "gramaNiladhari": "Grama Niladhari certificate",
+      "police": "Police clearance report",
+      "policeNote": "Adds the Background-checked tier to your badge.",
+      "portfolio": "Work photos",
+      "portfolioSub": "Add up to 10 photos of past jobs (optional).",
+      "addPhotos": "Add photos"
+    },
+    "details": {
+      "title": "A few work details",
+      "sub": "This helps us match you to the right jobs.",
+      "radius": "How far will you travel?",
+      "radiusVal": "Within {n} km of your base",
+      "crew": "Who shows up?",
+      "solo": "Just me",
+      "team": "I bring a team",
+      "helpers": "Helpers (Golayo)",
+      "guarantor": "Guarantor",
+      "guarantorName": "Guarantor's name",
+      "guarantorNic": "Guarantor's NIC",
+      "guarantorHint": "A relative or someone who can vouch for you."
+    },
+    "rejected": {
+      "heading": "Resubmission needed"
+    },
+    "submitted": {
+      "title": "Submitted for review",
+      "sub": "An admin checks every tradesman by hand — most are done within 1–2 business days. We'll text you when you're approved.",
+      "tiers": "Your verification badge",
+      "tier1": "Verified",
+      "tier1desc": "Identity, trade and address confirmed.",
+      "tier2": "Background checked",
+      "tier2desc": "Verified, plus a clean police clearance report.",
+      "active": "Active",
+      "locked": "Locked",
+      "browse": "Browse jobs while you wait"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Your escrow, quotes, messages and account updates.",
+    "newCount": "{count} new",
+    "markAllRead": "Mark all read",
+    "seeAll": "See all notifications",
+    "empty": "You're all caught up.",
+    "filters": {
+      "all": "All",
+      "escrow": "Escrow",
+      "message": "Messages",
+      "job": "Jobs",
+      "account": "Account"
+    }
+  },
+  "escrow": {
+    "heading": "Materials deposit",
+    "subtitle": "Crafty Bass holds the deposit and releases it on agreed milestones.",
+    "steps": {
+      "funded": {
+        "label": "Funded",
+        "note": "Held by Crafty Bass"
+      },
+      "materials": {
+        "label": "Materials",
+        "note": "Released to buy parts"
+      },
+      "workDone": {
+        "label": "Work done",
+        "note": "Job marked complete"
+      },
+      "released": {
+        "label": "Released",
+        "note": "Balance paid out"
+      }
+    },
+    "amounts": {
+      "deposit": "Materials deposit",
+      "balance": "Balance on completion",
+      "total": "Quote total",
+      "inEscrow": "in escrow · refundable until work begins",
+      "balancePending": "released when you approve the work"
+    },
+    "status": {
+      "REQUESTED": "Awaiting deposit",
+      "FUNDED": "Held in escrow",
+      "MATERIALS_RELEASED": "Work in progress",
+      "WORK_COMPLETED": "Awaiting approval",
+      "RELEASED": "Completed & released",
+      "REFUNDED": "Deposit refunded",
+      "CANCELLED": "Cancelled"
+    },
+    "actions": {
+      "fund": "Fund deposit",
+      "funding": "Redirecting…",
+      "startWork": "Start work & release materials",
+      "starting": "Starting…",
+      "markDone": "Mark work done",
+      "marking": "Saving…",
+      "approve": "Approve & release balance",
+      "approving": "Releasing…",
+      "refund": "Refund deposit",
+      "refunding": "Refunding…",
+      "approveConfirm": "Approve the work and release the balance to the tradesman?",
+      "refundConfirm": "Refund the held deposit to the homeowner?"
+    },
+    "methods": {
+      "card": {
+        "label": "Card",
+        "note": "Visa & Mastercard"
+      },
+      "paypal": {
+        "label": "PayPal",
+        "note": "Pay with balance"
+      },
+      "local": {
+        "label": "Local",
+        "note": "PayHere & LankaQR"
+      }
+    },
+    "eligibility": {
+      "title": "Materials deposit",
+      "tier": "{tier} tier",
+      "upTo": "Up to {pct}% of the job total, capped at {cap}.",
+      "locked": "Locked until you're verified.",
+      "youCanRequest": "You can request",
+      "tiers": {
+        "none": "Not yet eligible",
+        "verified": "Verified",
+        "trusted": "Trusted",
+        "background": "Background-checked"
+      },
+      "next": {
+        "none": "Get verified to request materials deposits.",
+        "verified": "Reach a 4.5★ rating and 20 completed jobs to unlock 30% (up to LKR 40,000).",
+        "trusted": "Add a police clearance report (Background-checked tier) to unlock 40% (up to LKR 75,000).",
+        "background": "You're at the highest deposit tier."
+      }
+    },
+    "fund": {
+      "title": "Fund the materials deposit",
+      "subtitle": "Your tradesman asked for a materials deposit so they can buy parts and start. You pay Crafty Bass — not the tradesman — and we hold it in escrow.",
+      "jobLabel": "Job",
+      "protectionHeading": "How your money is protected",
+      "protection1": "Crafty Bass holds the deposit — the tradesman can't touch it until you confirm work has started.",
+      "protection2": "Fully refundable if the job never begins or you cancel before work starts.",
+      "protection3": "If something goes wrong, our team mediates before any money is released.",
+      "payNow": "Pay now",
+      "method": "Payment method",
+      "payCta": "Fund {amount} in escrow",
+      "secured": "Secured by {processor} · funds held by Crafty Bass, not the tradesman",
+      "success": "Deposit funded and held in escrow",
+      "notFound": "There's no deposit awaiting funding for this job.",
+      "back": "Back to job"
+    },
+    "startedToast": "Materials released — job in progress",
+    "doneToast": "Marked complete — awaiting approval",
+    "approvedToast": "Approved — balance released",
+    "refundedToast": "Deposit refunded"
   },
   "dashboard": {
     "title": "Your dashboard",
@@ -57,6 +394,19 @@
     "recent": {
       "heading": "Recent posted jobs",
       "viewAll": "View all"
+    },
+    "tradesman": {
+      "empty": "No quotes yet. Browse open jobs to send your first quote.",
+      "stats": {
+        "submittedQuotes": "Submitted quotes",
+        "pendingQuotes": "Pending quotes",
+        "assignedJobs": "Jobs assigned to you",
+        "reviewsReceived": "Reviews received"
+      },
+      "recent": {
+        "heading": "Recent quotes",
+        "viewAll": "View all"
+      }
     }
   },
   "jobs": {
@@ -65,7 +415,29 @@
       "subtitle": "Describe the work and we'll match you with verified tradespeople.",
       "submit": "Post job",
       "submitting": "Posting…",
-      "success": "Your job has been posted"
+      "contactConsent": "By posting this job, I agree that Crafty Bass and the tradespeople who respond (or parties acting on their behalf) may contact me about it — including by automated technology, prerecorded messages, SMS and calls — at the number on my account. Consent is not a condition of using the service.",
+      "success": "Your job has been posted",
+      "ai": {
+        "hint": "Our AI reads this as you type to detect the right category.",
+        "detected": "Detected",
+        "suggested": "suggested skills",
+        "confidence": "{n}% confidence",
+        "disclaimer": "AI-generated suggestion — AI can make mistakes, so please check it's right before posting."
+      },
+      "photos": {
+        "label": "Photos",
+        "add": "Add photo",
+        "remove": "Remove photo",
+        "hint": "Add up to 8 photos so tradespeople can assess the work and quote accurately."
+      },
+      "location": {
+        "label": "Location pin",
+        "optional": "(optional)",
+        "share": "Share my location pin",
+        "getting": "Getting your location…",
+        "remove": "Remove pin",
+        "hint": "Quoters see your area only — the exact pin is shared with the tradesman you hire."
+      }
     },
     "fields": {
       "title": "Job title",
@@ -75,12 +447,18 @@
       "descriptionLanguage": "Written in",
       "category": "Category",
       "categoryPlaceholder": "Select a category (optional)",
+      "categoryEmpty": "No matching category.",
       "urgency": "How urgent?",
       "city": "City",
       "district": "District",
+      "districtPlaceholder": "Select a district",
+      "districtEmpty": "No matching district.",
       "budgetMin": "Budget (min)",
       "budgetMax": "Budget (max)",
-      "scheduledFor": "Preferred date (optional)"
+      "scheduledFor": "Preferred date (optional)",
+      "taskSize": "Task size",
+      "vehicle": "Vehicle needed",
+      "optional": "Optional"
     },
     "urgencyLabels": {
       "LOW": "No rush",
@@ -121,14 +499,53 @@
       "filters": {
         "category": "Category",
         "allCategories": "All categories",
+        "allMyTrades": "All my trades",
         "district": "District",
         "districtPlaceholder": "Any district",
+        "districtEmpty": "No matching district.",
         "urgency": "Urgency",
         "allUrgencies": "Any urgency",
         "apply": "Apply filters"
       },
       "empty": "No open jobs match your filters right now.",
-      "loadMore": "Load more"
+      "loadMore": "Load more",
+      "quote": "Quote",
+      "expiringIn": "Expiring in {h}h",
+      "expired": "Expired",
+      "gate": {
+        "title": "You can't send quotes until you're verified",
+        "body": "Browse freely — but quoting unlocks once an admin approves your verification.",
+        "cta": "Continue verification",
+        "quoteLocked": "Get verified to quote"
+      },
+      "relevance": {
+        "myTrades": "My trades",
+        "allJobs": "All jobs",
+        "area": "Your area",
+        "anywhere": "Anywhere",
+        "hint": "Showing jobs matched to your trades and service area.",
+        "empty": "No open jobs match your trades and area right now."
+      }
+    },
+    "taskSizeLabels": {
+      "SMALL": "Small",
+      "MEDIUM": "Medium",
+      "LARGE": "Large"
+    },
+    "taskSizeHints": {
+      "SMALL": "Est. 1 hr",
+      "MEDIUM": "Est. 2–3 hrs",
+      "LARGE": "Est. 4+ hrs"
+    },
+    "vehicleLabels": {
+      "NONE": "Not needed",
+      "CAR": "Car",
+      "TRUCK": "Truck / van"
+    },
+    "vehicleHints": {
+      "NONE": "No transport required",
+      "CAR": "Fits in a car",
+      "TRUCK": "Needs a truck or van"
     }
   },
   "myQuotes": {
@@ -203,7 +620,7 @@
       "markedAt": "Read"
     },
     "startCta": "Message homeowner",
-    "startCtaTradesman": "Message tradesman",
+    "startCtaTradesman": "Message tradesperson",
     "started": "Message sent"
   },
   "profile": {
@@ -211,12 +628,55 @@
     "subtitle": "Tell people how to find you and what you can offer.",
     "loading": "Loading your profile…",
     "saved": "Profile saved",
+    "avatar": {
+      "title": "Profile photo",
+      "hint": "JPG, PNG or WebP · up to 5 MB",
+      "change": "Change photo",
+      "uploading": "Uploading…"
+    },
+    "verification": {
+      "verifiedTitle": "Verified",
+      "verifiedBody": "You can receive jobs and send quotes.",
+      "unverifiedTitle": "Verification required",
+      "unverifiedBody": "You can't receive jobs or send quotes until an admin approves your details.",
+      "verifiedBadge": "Verified",
+      "continue": "Continue verification"
+    },
+    "phone": {
+      "title": "Mobile number",
+      "description": "This is how you sign in. Keep it current so you don't lose access.",
+      "none": "No mobile number set.",
+      "change": "Change number",
+      "cancel": "Cancel",
+      "newNumber": "New mobile number",
+      "sendCode": "Send verification code",
+      "sending": "Sending…",
+      "codeSentTo": "We texted a 6-digit code to {phone}.",
+      "code": "Verification code",
+      "verify": "Verify & update",
+      "verifying": "Updating…",
+      "resend": "Resend code",
+      "invalidNumber": "Enter a valid Sri Lankan mobile number.",
+      "sameNumber": "That's already your number.",
+      "sendFailed": "Couldn't send the code. Check the number and try again.",
+      "verifyFailed": "That code didn't match. Try again.",
+      "updated": "Mobile number updated.",
+      "manageTitle": "Mobile number",
+      "manageSubtitle": "Update the number you use to sign in.",
+      "recoveredTitle": "You're back in",
+      "recoveredSubtitle": "Set a new mobile number so you can sign in with it next time.",
+      "currentLabel": "Current number",
+      "save": "Save number",
+      "skip": "Skip for now",
+      "expiresIn": "Code expires in {time}",
+      "expired": "Code expired — request a new one."
+    },
     "chooseRole": {
       "heading": "How will you use Crafty Bass?",
       "subtitle": "Pick the role that fits your activity. You can update later from this page.",
       "homeowner": "I'm a homeowner",
       "homeownerCopy": "Post jobs and hire tradespeople.",
-      "tradesman": "I'm a tradesman",
+      "tradesman": "I'm a tradesperson",
       "tradesmanCopy": "Quote on jobs and grow your business.",
       "continue": "Continue"
     },
@@ -226,7 +686,7 @@
       "submitting": "Saving…"
     },
     "tradesman": {
-      "heading": "Tradesman profile",
+      "heading": "Tradesperson profile",
       "submit": "Save profile",
       "submitting": "Saving…",
       "bio": "Short bio",
@@ -235,12 +695,23 @@
       "hourlyRate": "Hourly rate (optional)",
       "serviceRadiusKm": "Service radius (km)",
       "skills": "Skills",
-      "skillsHelp": "Choose all that apply. You can update this list any time."
+      "skillsHelp": "Search for a skill, or type your own to add it. You can update this list any time.",
+      "skillsSearchPlaceholder": "Search or add a skill…",
+      "skillsCreate": "Add “{q}”",
+      "skillsEmpty": "No match — keep typing to add it.",
+      "certifications": "Certifications & licences",
+      "certificationsHint": "List any qualifications or licences — one per line. These help homeowners trust your work.",
+      "certificationsPlaceholder": "e.g. CIDA registered electrician\nNVQ Level 4 Plumbing",
+      "vehicles": "Vehicles",
+      "vehiclesHint": "List the vehicles you use for jobs — one per line — so homeowners know what you can transport.",
+      "vehiclesPlaceholder": "e.g. Van\nPickup truck"
     },
     "fields": {
       "locationText": "Address (optional)",
       "city": "City",
       "district": "District",
+      "districtPlaceholder": "Select a district",
+      "districtEmpty": "No matching district.",
       "postalCode": "Postal code",
       "preferredLanguage": "Preferred language"
     },
@@ -255,6 +726,7 @@
     "message": "Message",
     "estimatedStart": "Estimated start",
     "estimatedCompletion": "Estimated completion",
+    "verifiedTradesman": "Verified tradesperson",
     "stats": {
       "rating": "{rating} ★ ({count})",
       "jobsCompleted": "{count} completed"
@@ -276,12 +748,54 @@
     },
     "accepted": "Quote accepted",
     "rejected": "Quote rejected",
+    "materialsHeading": "Materials & tools",
+    "materialsEstimate": "Estimated · subject to change",
     "submitQuote": {
       "heading": "Submit a quote",
       "subtitle": "Let the homeowner know your price and timing.",
       "submit": "Submit quote",
       "submitting": "Submitting…",
-      "success": "Quote submitted"
+      "success": "Quote submitted",
+      "currency": "Currency",
+      "materials": "Of which materials",
+      "materialsList": {
+        "heading": "Materials & tools",
+        "hint": "List the materials and tools you'll use, with estimated quantities and prices, so the homeowner understands the scope.",
+        "name": "Item",
+        "namePlaceholder": "e.g. Cement (50kg bag)",
+        "quantity": "Qty",
+        "unit": "Unit",
+        "unitPrice": "Unit price",
+        "add": "Add item",
+        "remove": "Remove item"
+      },
+      "builder": {
+        "estimate": "Your estimate",
+        "estimateHint": "Labour & materials",
+        "labour": "Labour",
+        "material": "Material",
+        "labourPlaceholder": "Labour description",
+        "materialPlaceholder": "Material description",
+        "rate": "Rate",
+        "addLabour": "Add labour",
+        "addMaterial": "Add material",
+        "adjustments": "Adjustments",
+        "callout": "Call-out / visit fee",
+        "discount": "Discount",
+        "applyVat": "Add VAT ({rate}%)",
+        "vatHint": "Only enable if you are VAT-registered.",
+        "subtotal": "Subtotal",
+        "vat": "VAT",
+        "total": "Total",
+        "validity": "Quote valid for (days)",
+        "atLeastOneLine": "Add at least one line with a description and a rate.",
+        "validUntil": "Valid until {date}"
+      },
+      "requestDeposit": "Request a materials deposit",
+      "requestDepositHint": "The homeowner funds this into escrow up front so you can buy parts. You receive it when you start — Crafty Bass releases it, the homeowner never hands you cash.",
+      "depositToRequest": "Deposit to request",
+      "depositMax": "Max {amount}",
+      "depositPercent": "{pct}% of your quote · balance {balance} paid on completion."
     }
   },
   "hero": {
@@ -300,10 +814,26 @@
     "title": "What needs fixing?",
     "findMatches": "Find matches",
     "services": [
-      { "label": "Kitchen tap leak", "meta": "28 plumbers nearby" },
-      { "label": "Electrical socket", "meta": "19 matches" },
-      { "label": "Garden wall", "meta": "26 matches" },
-      { "label": "Bathroom tiling", "meta": "33 matches" }
+      {
+        "label": "Kitchen tap leak",
+        "meta": "28 plumbers nearby",
+        "slug": "plumbing"
+      },
+      {
+        "label": "Electrical socket",
+        "meta": "19 matches",
+        "slug": "electrical"
+      },
+      {
+        "label": "Garden wall",
+        "meta": "26 matches",
+        "slug": "masonry"
+      },
+      {
+        "label": "Bathroom tiling",
+        "meta": "33 matches",
+        "slug": "masonry"
+      }
     ]
   },
   "categories": {
@@ -348,5 +878,230 @@
       "noExport": "No export is ready yet. Request one above and wait for the email.",
       "downloadError": "Unable to fetch download link"
     }
+  },
+  "trades": {
+    "title": "Find a trusted tradesperson",
+    "subtitle": "Browse verified tradespeople near you — see their ratings, completed work and skills.",
+    "filters": {
+      "category": "Category",
+      "allCategories": "All categories",
+      "district": "District",
+      "districtPlaceholder": "Any district",
+      "districtEmpty": "No matching district."
+    },
+    "empty": "No verified tradespeople match your filters yet.",
+    "jobsCompleted": "{count} completed",
+    "viewProfile": "View profile",
+    "profile": {
+      "back": "All trades",
+      "verified": "Verified tradesperson",
+      "available": "Available now",
+      "unavailable": "Not taking jobs right now",
+      "about": "About",
+      "portfolio": "Work photos",
+      "noBio": "This tradesperson hasn't added a bio yet.",
+      "skills": "Skills",
+      "noSkills": "No skills listed yet.",
+      "certifications": "Certifications & licences",
+      "vehicles": "Vehicles",
+      "stats": {
+        "rating": "Rating",
+        "completed": "Jobs completed",
+        "experience": "Experience",
+        "response": "Avg. response"
+      },
+      "years": "{count} yrs",
+      "minutes": "{count} min",
+      "hourlyRate": "Hourly rate",
+      "serviceRadius": "Service radius",
+      "km": "{count} km",
+      "message": "Message",
+      "notFound": "We couldn't find this tradesperson."
+    }
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "updated": "Last updated 24 June 2026",
+    "intro": "These terms govern your use of Crafty Bass. By creating an account or using the service you agree to them.",
+    "sections": [
+      {
+        "heading": "1. About Crafty Bass",
+        "body": "Crafty Bass is a marketplace that connects homeowners with verified tradespeople in Sri Lanka. We help you find, compare and hire — but the work itself is agreed directly between the homeowner and the tradesman. We are not a party to that agreement."
+      },
+      {
+        "heading": "2. Accounts and verification",
+        "body": "You must give accurate details when you sign up and keep them up to date. Tradespeople are verified manually against their NIC, trade credentials, address and bank details. Only verified tradespeople can receive jobs or send quotes."
+      },
+      {
+        "heading": "3. Jobs, quotes and hiring",
+        "body": "Homeowners describe a job; tradespeople submit quotes. Accepting a quote forms an agreement between you and that tradesman to carry out the work for the quoted price, subject to any changes you both agree."
+      },
+      {
+        "heading": "4. Payments and escrow",
+        "body": "Where a materials deposit is requested, you pay Crafty Bass — not the tradesman — and we hold the funds in escrow. Deposits are refundable until work begins. The balance is released to the tradesman when you approve the completed work."
+      },
+      {
+        "heading": "5. Conduct",
+        "body": "Treat other users with respect. Don't post false information, harass others, or attempt to take payments off-platform to avoid protections. We may suspend accounts that break these rules."
+      },
+      {
+        "heading": "6. Liability",
+        "body": "Crafty Bass provides the platform but does not perform the work and does not guarantee outcomes. To the extent permitted by law, our liability is limited to the fees we have charged you."
+      },
+      {
+        "heading": "7. Changes to these terms",
+        "body": "We may update these terms from time to time. We'll show the date of the latest version above and, for significant changes, let you know in the app."
+      }
+    ],
+    "backHome": "Back to home"
+  },
+  "footer": {
+    "tagline": "Sri Lanka's marketplace connecting homeowners with trusted, verified tradespeople.",
+    "explore": "Explore",
+    "company": "Company",
+    "legal": "Legal",
+    "findTrades": "Find tradespeople",
+    "browseJobs": "Browse jobs",
+    "postJob": "Post a job",
+    "about": "About us",
+    "contact": "Contact us",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "rights": "© {year} Crafty Bass. All rights reserved.",
+    "guarantee": "Our guarantee"
+  },
+  "about": {
+    "title": "About Crafty Bass",
+    "intro": "Crafty Bass is a Sri Lankan marketplace that connects homeowners with verified, skilled tradespeople — from plumbers and electricians to painters and masons.",
+    "sections": [
+      {
+        "heading": "Our mission",
+        "body": "Finding a reliable tradesperson shouldn't rely on luck or word of mouth. We verify every tradesperson's identity and credentials so homeowners can hire with confidence, and we give skilled professionals a fair place to grow their business."
+      },
+      {
+        "heading": "How it works",
+        "body": "Homeowners post a job describing what they need. Verified tradespeople nearby send quotes. You compare profiles, ratings and prices, then hire the right person — with payments protected by escrow for added peace of mind."
+      },
+      {
+        "heading": "Built for Sri Lanka",
+        "body": "Crafty Bass works in Sinhala, Tamil and English, covers all 25 districts, and is designed around how trades work locally — so both sides can communicate clearly and get the job done."
+      }
+    ],
+    "backHome": "Back to home"
+  },
+  "contact": {
+    "title": "Contact us",
+    "intro": "Have a question, some feedback, or need a hand with your account? We'd love to hear from you.",
+    "emailHeading": "Email",
+    "email": "hello@craftybass.lk",
+    "supportHeading": "Support hours",
+    "support": "Monday to Friday, 9am–6pm (Sri Lanka Standard Time). We aim to reply within one business day.",
+    "backHome": "Back to home"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated June 2026",
+    "intro": "This policy explains what personal information Crafty Bass collects, how we use it, and the choices you have. We only collect what we need to run the marketplace safely.",
+    "sections": [
+      {
+        "heading": "1. Information we collect",
+        "body": "Account details (name, phone number, email), profile information you add, and — for tradespeople seeking verification — identity and credential documents. We also record activity such as jobs, quotes and messages so the service works."
+      },
+      {
+        "heading": "2. How we use it",
+        "body": "To operate the marketplace: matching jobs to tradespeople, verifying tradespeople, processing escrow payments, sending service notifications, and keeping the platform safe. We do not sell your personal information."
+      },
+      {
+        "heading": "3. Sharing",
+        "body": "We share only what's needed to complete a job — for example, your area and job details with quoting tradespeople. Verification documents and bank details are never shown to other users. We use trusted providers (e.g. payments, SMS) bound by contract."
+      },
+      {
+        "heading": "4. Your choices and rights",
+        "body": "You can view and update your profile, manage contact preferences, and request a copy or deletion of your data from your account settings. Contact us if you need help exercising these rights."
+      }
+    ],
+    "backHome": "Back to home"
+  },
+  "materialRequests": {
+    "heading": "Material & tool requests",
+    "note": "What do you need?",
+    "notePlaceholder": "e.g. 3 extra bags of cement and a tile cutter to finish the bathroom.",
+    "estimatedCost": "Estimated cost (optional)",
+    "submit": "Send request",
+    "submitting": "Sending…",
+    "success": "Request sent to the homeowner",
+    "empty": "No material requests yet.",
+    "approve": "Approve",
+    "decline": "Decline",
+    "approved": "Request approved",
+    "declined": "Request declined",
+    "statusLabels": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "DECLINED": "Declined"
+    }
+  },
+  "guarantee": {
+    "badge": "Crafty Bass Guarantee",
+    "badgeTooltip": "Work hired and paid through Crafty Bass is covered by our guarantee.",
+    "title": "The Crafty Bass Guarantee",
+    "intro": "When you hire and pay through Crafty Bass, your project is protected from the first quote to the final sign-off. Here is exactly what that covers.",
+    "pillarsTitle": "What you are protected by",
+    "pillars": [
+      {
+        "heading": "Verified professionals only",
+        "body": "Every tradesperson who can quote on your job has had their identity and trade credentials checked. You only deal with people we have vetted."
+      },
+      {
+        "heading": "Your money is held safely",
+        "body": "Payments are held in secure escrow and released to the tradesperson only when you confirm the work is done to your satisfaction."
+      },
+      {
+        "heading": "Workmanship guarantee",
+        "body": "If covered work develops a fault within 12 months of completion, we help put it right — through the original tradesperson or a replacement."
+      },
+      {
+        "heading": "Dispute support",
+        "body": "If something goes wrong, our support team steps in to mediate. Where the work is not completed, your escrow balance is refunded."
+      }
+    ],
+    "howTitle": "How the guarantee works",
+    "how": [
+      {
+        "step": "Hire a verified pro",
+        "body": "Accept a quote from a verified tradesperson on Crafty Bass."
+      },
+      {
+        "step": "Pay into escrow",
+        "body": "Fund the job through Crafty Bass. We hold the money — the tradesperson is not paid until you approve."
+      },
+      {
+        "step": "Approve the work",
+        "body": "Once you are happy, release the funds. The 12-month workmanship guarantee starts from this date."
+      },
+      {
+        "step": "Claim if needed",
+        "body": "If a covered fault appears, raise a claim from the job and our team helps resolve it."
+      }
+    ],
+    "coveredTitle": "What is covered",
+    "covered": [
+      "Work agreed and paid for through Crafty Bass escrow",
+      "Defective workmanship reported within 12 months of approval",
+      "Jobs where the tradesperson never started or abandoned the work (full escrow refund)"
+    ],
+    "notCoveredTitle": "What is not covered",
+    "notCovered": [
+      "Cash or off-platform payments made directly to a tradesperson",
+      "Normal wear and tear, or damage caused by misuse after completion",
+      "Changes you request outside the originally agreed scope",
+      "Claims raised more than 12 months after you approved the work"
+    ],
+    "limitsTitle": "Guarantee limits",
+    "limits": "The guarantee covers eligible claims up to the value paid through Crafty Bass for the job, capped at LKR 500,000 per job. It applies only to jobs funded through Crafty Bass escrow and is not an insurance policy — it is our commitment to put covered problems right.",
+    "claimTitle": "Make a claim",
+    "claim": "Open the job in your Crafty Bass account and use Report a problem, or contact our support team. Have your job reference and a description ready, with photos where possible.",
+    "cta": "Post a job",
+    "backHome": "Back to home"
   }
 }

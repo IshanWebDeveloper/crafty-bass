@@ -1,98 +1,109 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Crafty Bass — Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The NestJS API for the Crafty Bass tradesman/homeowner marketplace. Built with NestJS 11, Prisma (PostgreSQL), better-auth, BullMQ, and Stripe. Part of the Crafty Bass Nx monorepo — see the [root README](../../README.md) for workspace-wide setup.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tech Stack
 
-## Description
+- **NestJS 11** (Express platform, ESM build)
+- **Prisma 7** on PostgreSQL — schema owned by the `@repo/db` package (`packages/db/prisma/schema.prisma`), **not** this app
+- **better-auth** for authentication, with RBAC defined in `@repo/auth` (`packages/auth/src/access.ts`)
+- **BullMQ** (Redis) for background jobs; `rediss://` URLs enable TLS automatically (Upstash-compatible)
+- **Stripe** for escrow/payments
+- **nestjs-zod** for validation and serialization (DTOs are Zod schemas, not class-validator)
+- **Swagger** UI at `/api`
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Getting Started
 
-## Project setup
+Install dependencies from the repo root (this is a pnpm workspace):
 
 ```bash
-$ pnpm install
+pnpm install
 ```
 
-## Compile and run the project
+Create the required env files (never commit these):
+
+- `apps/backend/.env` — local development
+- `apps/backend/.env.test` — used by tests and `dev:test`
+
+Run the backend:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm nx run backend:dev          # from repo root
+pnpm --filter backend dev        # equivalent, loads .env
+pnpm --filter backend dev:test   # run against the test database (loads .env.test)
 ```
 
-## Run tests
+The API listens on port **3005** by default (override with `PORT`). CORS defaults to `http://localhost:3000` (override with `CORS_ORIGINS`).
+
+- Swagger UI: <http://localhost:3005/api>
+- API base path: `/api/v1` (better-auth routes are mounted at `/api/auth/*`, outside the global prefix)
+
+## Architecture
+
+- **Bootstrap**: `src/main.ts`. The global prefix `api/v1` is applied to everything **except** `/api/auth/*`, which is mounted manually on the Express instance (a deliberate workaround for Express 5 wildcard syntax — don't "clean it up").
+- **Auth rate limiting** happens in two layers: `express-rate-limit` in `main.ts` (skips non-production, only counts attempt paths) and better-auth's own `rateLimit` config in `auth.ts`. Check both if you see unexpected 429s.
+- **Global providers** wired in `app.module.ts`: `SanitizationPipe`, `ZodValidationPipe`, `ZodSerializerInterceptor`, `GlobalExceptionFilter`, `PermissionsGuard`, `CustomThrottlerGuard`. `disableGlobalAuthGuard: true` is passed to `AuthModule.forRoot` — authentication is enforced by `PermissionsGuard`, not better-auth's default guard.
+- **RBAC**: roles are `CUSTOMER | SUPPORT | ADMIN`. `CUSTOMER` covers both homeowners and tradesmen — the split is `User.userType`, enforced in services (ownership + userType checks), not by a separate role.
+- **ESM imports** use the `.js` suffix (`./app.module.js`) even though source is `.ts` — required for the ESM build. Match this pattern.
+- **Module convention**: `<feature>/<feature>.module.ts`, `.controller.ts`, `.service.ts`, `dto/`. Cross-cutting code lives in `src/common/` (`guards/`, `filters/`, `pipes/`, `middleware/`, `prisma/`, `cron/`, `decorators/`, `services/`, `utils/`).
+
+### Feature modules
+
+`users`, `profiles`, `categories`, `jobs`, `quotes`, `material-requests`, `escrow`, `verification`, `conversations`, `reports`, `reviews`, `recommendations`, `consent`, `legal`, `admin`, `webhooks`, `translation`, `notifications`, `health`.
+
+> Note: message endpoints live under `conversations/` — there is no separate `messages/` module.
+
+## Prisma
+
+The schema and migration/seed scripts live in the `@repo/db` package, not this app. From the repo root:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm --filter @repo/db db:migrate:dev        # create/apply a migration (loads apps/backend/.env)
+pnpm --filter @repo/db db:migrate:dev:test   # migrate the test database (loads .env.test)
+pnpm --filter @repo/db db:migrate:reset
+pnpm --filter @repo/db db:seed               # service categories and skills (en/si/ta)
+pnpm --filter @repo/db db:seed:users
 ```
 
-## Deployment
+If you change `packages/db/prisma/schema.prisma`, run `pnpm prisma:generate:all` from the root and commit the updated hash stamp under `packages/shared-types/src/generated/prisma/`, or the `prisma-generated-check` CI job will fail.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Testing
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Backend has **both Jest and Vitest** configured (they don't overlap):
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Jest unit — config inlined in package.json, testRegex .*\.spec\.ts$ (loads .env.test)
+pnpm --filter backend test
+pnpm --filter backend test -- src/jobs/jobs.service.spec.ts   # single spec
+
+# Jest e2e — config at test/jest-e2e.json, testRegex .e2e-spec.ts$
+pnpm --filter backend test:e2e
+
+# Coverage
+pnpm --filter backend test:cov
+
+# Vitest — test/**/*.vitest.test.ts, not wired to a pnpm script
+pnpm --filter backend exec vitest
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+`apps/backend/.env.test` must exist — the Jest scripts load it via `dotenv -e .env.test`.
 
-## Resources
+## Stripe webhook forwarding
 
-Check out a few resources that may come in handy when working with NestJS:
+From the repo root, forward Stripe events to the local webhook endpoint:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+pnpm stripe:listen        # -> http://localhost:3005/api/v1/payments/webhook
+```
 
-## Support
+## Build & Docker
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+pnpm --filter backend build            # nest build
+pnpm nx run backend:docker-build       # builds the image (depends on build); Dockerfile at apps/backend/Dockerfile
+```
 
-## Stay in touch
+## Environment notes
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- BullMQ uses `REDIS_URL`.
+- Backend Prisma scripts expect `apps/backend/.env` and `apps/backend/.env.test`.

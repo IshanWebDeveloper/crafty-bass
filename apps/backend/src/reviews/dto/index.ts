@@ -24,3 +24,17 @@ const AdminReviewQuerySchema = ReviewQuerySchema.extend({
 });
 
 export class AdminReviewQueryDto extends createZodDto(AdminReviewQuerySchema) {}
+
+// Moderators can additionally toggle a review's visibility (isPublic) on top of
+// the content fields a review's author may edit. Kept separate from the shared
+// UpdateReviewSchema so self-edits can never flip visibility.
+const AdminModerateReviewSchema = z.object({
+  isPublic: z.boolean().optional(),
+  rating: z.coerce.number().int().min(1).max(5).optional(),
+  title: z.string().max(120).nullish(),
+  comment: z.string().max(2000).nullish(),
+});
+
+export class AdminModerateReviewDto extends createZodDto(
+  AdminModerateReviewSchema,
+) {}
