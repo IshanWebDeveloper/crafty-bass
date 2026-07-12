@@ -6,12 +6,19 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Badge,
   Button,
+  RatingStars,
   Skeleton,
+  VerifiedBadge,
 } from '@repo/ui';
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJob, cancelJob, type Job } from '@/lib/api/jobs';
+import { statusVariant } from '@/lib/status';
+import { CategoryBadge, UrgencyBadge } from '@/lib/categories';
+import { formatBudgetRange } from '@/lib/currency';
+import { EscrowSection } from '@/components/escrow/escrow-section';
 import {
   listQuotesForJob,
   acceptQuote,
@@ -19,8 +26,11 @@ import {
   type Quote,
 } from '@/lib/api/quotes';
 import { startConversation } from '@/lib/api/conversations';
+import { QuoteMaterials } from '@/components/quotes/quote-materials';
 import { useSession } from '@/lib/auth-client';
 import { SubmitQuotePanel } from './submit-quote-panel';
+import { MaterialRequestsPanel } from './material-requests-panel';
+import { JobExpiryBadge } from './job-expiry-badge';
 import { LeaveReviewPanel } from '@/components/reviews/leave-review-panel';
 import { PublicReviewsList } from '@/components/reviews/public-reviews-list';
 import { ReportButton } from '@/components/reports/report-button';
@@ -95,9 +105,12 @@ export function JobDetailView({
         <CardHeader className="space-y-2">
           <div className="flex items-start justify-between gap-3">
             <CardTitle className="text-2xl">{job.title}</CardTitle>
-            <span className="shrink-0 rounded-full border border-border px-3 py-1 text-xs font-medium">
-              {t.statusLabels[job.status]}
-            </span>
+            <div className="flex shrink-0 items-center gap-2">
+              <JobExpiryBadge job={job} dict={dict} />
+              <Badge variant={statusVariant(job.status)}>
+                {t.statusLabels[job.status]}
+              </Badge>
+            </div>
           </div>
           <p className="text-xs text-muted-foreground">
             {t.detail.postedBy} {job.homeowner.name} · {t.detail.postedOn}{' '}
@@ -109,19 +122,36 @@ export function JobDetailView({
 
           <dl className="grid gap-3 sm:grid-cols-3 text-sm">
             <Field label={t.fields.category}>
-              {job.category?.nameEn ?? '—'}
+              <CategoryBadge
+                slug={job.category?.slug}
+                label={job.category?.nameEn ?? '—'}
+              />
             </Field>
             <Field label={t.fields.urgency}>
-              {t.urgencyLabels[job.urgency]}
+              <UrgencyBadge
+                urgency={job.urgency}
+                label={t.urgencyLabels[job.urgency]}
+              />
             </Field>
             <Field label={t.detail.budget}>
-              {formatBudget(job.budgetMin, job.budgetMax) ?? t.detail.noBudget}
+              <span className="font-mono">
+                {formatBudgetRange(job.budgetMin, job.budgetMax) ||
+                  t.detail.noBudget}
+              </span>
             </Field>
             <Field label={t.fields.city}>{job.city ?? '—'}</Field>
             <Field label={t.fields.district}>{job.district ?? '—'}</Field>
             <Field label={t.detail.scheduledFor}>
               {job.scheduledFor
                 ? new Date(job.scheduledFor).toLocaleDateString(locale)
+                : '—'}
+            </Field>
+            <Field label={t.fields.taskSize}>
+              {job.taskSize ? t.taskSizeLabels[job.taskSize] : '—'}
+            </Field>
+            <Field label={t.fields.vehicle}>
+              {job.vehicleRequirement
+                ? t.vehicleLabels[job.vehicleRequirement]
                 : '—'}
             </Field>
           </dl>
@@ -162,7 +192,18 @@ export function JobDetailView({
         <SubmitQuotePanel jobId={job.id} dict={dict} />
       ) : null}
 
-      {isOwner ? (
+      {session &&
+      job.status !== 'OPEN' &&
+      (isOwner || session.user.id === job.assignedTradesmanId) ? (
+        <EscrowSection
+          jobId={job.id}
+          userId={session.user.id}
+          locale={locale}
+          dict={dict}
+        />
+      ) : null}
+
+      {isOwner && job.status === 'OPEN' ? (
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">{t.detail.quotesHeading}</CardTitle>
@@ -214,13 +255,29 @@ export function JobDetailView({
         </Card>
       ) : null}
 
+      {session &&
+      (isOwner || session.user.id === job.assignedTradesmanId) &&
+      job.status !== 'OPEN' &&
+      job.status !== 'CANCELLED' ? (
+        <MaterialRequestsPanel
+          jobId={job.id}
+          canRequest={
+            session.user.id === job.assignedTradesmanId &&
+            (job.status === 'ASSIGNED' || job.status === 'IN_PROGRESS')
+          }
+          canRespond={isOwner}
+          locale={locale}
+          dict={dict}
+        />
+      ) : null}
+
       {job.status === 'COMPLETED' && session ? (
         <>
           {session.user.id === job.homeowner.id ||
           session.user.id === job.assignedTradesmanId ? (
             <LeaveReviewPanel jobId={job.id} dict={dict} />
           ) : null}
-          <PublicReviewsList jobId={job.id} dict={dict} />
+          <PublicReviewsList jobId={job.id} locale={locale} dict={dict} />
         </>
       ) : null}
     </div>
@@ -292,18 +349,25 @@ function QuoteRow({
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
         <div className="space-y-1">
-          <p className="text-sm font-medium">{quote.tradesman.name}</p>
+          <p className="flex items-center gap-1.5 text-sm font-medium">
+            {quote.tradesman.name}
+            {/* Quoting is gated on verification, so every quoter is verified. */}
+            <VerifiedBadge size={15} title={tq.verifiedTradesman} />
+          </p>
           {profile ? (
-            <p className="text-xs text-muted-foreground">
-              {tq.stats.rating
-                .replace('{rating}', profile.avgRating.toFixed(1))
-                .replace('{count}', String(profile.ratingCount))}{' '}
-              ·{' '}
-              {tq.stats.jobsCompleted.replace(
-                '{count}',
-                String(profile.jobsCompleted),
-              )}
-            </p>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <RatingStars
+                value={profile.avgRating}
+                count={profile.ratingCount}
+              />
+              <span className="text-xs text-muted-foreground">
+                ·{' '}
+                {tq.stats.jobsCompleted.replace(
+                  '{count}',
+                  String(profile.jobsCompleted),
+                )}
+              </span>
+            </div>
           ) : null}
           {quote.message ? (
             <p className="mt-2 max-w-prose text-sm">{quote.message}</p>
@@ -319,15 +383,27 @@ function QuoteRow({
                 : ''}
             </p>
           ) : null}
+          <div className="mt-3 max-w-prose">
+            <QuoteMaterials
+              materials={quote.materials}
+              currency={quote.currency}
+              calloutFee={quote.calloutFee}
+              discount={quote.discount}
+              vatRate={quote.vatRate}
+              validUntil={quote.validUntil}
+              locale={locale}
+              dict={dict}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col items-end gap-2">
-        <p className="text-lg font-semibold">
+        <p className="font-mono text-lg font-semibold">
           {quote.currency} {quote.amount.toLocaleString(locale)}
         </p>
-        <span className="rounded-full border border-border px-2 py-0.5 text-xs">
+        <Badge variant={statusVariant(quote.status)}>
           {tq.statusLabels[quote.status]}
-        </span>
+        </Badge>
         {canActOnPending ? (
           <div className="flex gap-2">
             <Button
@@ -353,11 +429,4 @@ function QuoteRow({
       </div>
     </li>
   );
-}
-
-function formatBudget(min: number | null, max: number | null) {
-  if (min !== null && max !== null) return `LKR ${min} – ${max}`;
-  if (min !== null) return `LKR ${min}+`;
-  if (max !== null) return `Up to LKR ${max}`;
-  return null;
 }

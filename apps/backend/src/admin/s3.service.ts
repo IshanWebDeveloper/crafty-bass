@@ -27,9 +27,24 @@ export class S3Service {
       'production';
 
     const bucketName = this.config.get<string>('AWS_BUCKET_NAME');
-    const region = this.config.get<string>('AWS_REGION');
     const accessKeyId = this.config.get<string>('AWS_ACCESS_KEY_ID');
     const secretAccessKey = this.config.get<string>('AWS_SECRET_ACCESS_KEY');
+
+    // Optional S3-compatible endpoint. When set, the client talks to a
+    // non-AWS provider (e.g. Cloudflare R2, MinIO, Backblaze B2) using the
+    // same S3 API. R2's endpoint is https://<ACCOUNT_ID>.r2.cloudflarestorage.com
+    // and expects the pseudo-region "auto". `S3_ENDPOINT` takes precedence;
+    // `R2_ENDPOINT` is accepted as an alias for clarity in R2-only deploys.
+    const endpoint =
+      this.config.get<string>('S3_ENDPOINT') ??
+      this.config.get<string>('R2_ENDPOINT');
+    const isCompatibleEndpoint = Boolean(endpoint);
+
+    // R2 uses "auto"; fall back to it when a custom endpoint is set and no
+    // region was provided, otherwise keep the AWS default.
+    const region =
+      this.config.get<string>('AWS_REGION') ??
+      (isCompatibleEndpoint ? 'auto' : undefined);
 
     if (isProduction) {
       const missing = [
@@ -43,7 +58,7 @@ export class S3Service {
 
       if (missing.length > 0) {
         throw new Error(
-          `S3Service refusing to start in production with missing AWS env vars: ${missing.join(
+          `S3Service refusing to start in production with missing storage env vars: ${missing.join(
             ', ',
           )}`,
         );
@@ -64,7 +79,9 @@ export class S3Service {
         : 3600;
 
     this.logger.log(
-      `Initialized S3Service: Bucket=${this.bucketName}, Region=${resolvedRegion}, HasKey=${resolvedAccessKeyId !== 'dummy-key'}`,
+      `Initialized S3Service: Bucket=${this.bucketName}, Region=${resolvedRegion}, ` +
+        `Provider=${isCompatibleEndpoint ? `S3-compatible (${endpoint ?? ''})` : 'AWS S3'}, ` +
+        `HasKey=${resolvedAccessKeyId !== 'dummy-key'}`,
     );
 
     this.s3Client = new S3Client({
@@ -73,6 +90,24 @@ export class S3Service {
         accessKeyId: resolvedAccessKeyId,
         secretAccessKey: resolvedSecretAccessKey,
       },
+      ...(endpoint
+        ? {
+            endpoint,
+            // Path-style keeps the bucket in the URL path rather than the
+            // hostname, which is the reliable addressing mode for R2/MinIO.
+            forcePathStyle: true,
+          }
+        : {}),
+      // AWS SDK v3.729+ adds default integrity checksums that R2 (and some
+      // other S3-compatible stores) reject on presigned PUTs and streamed
+      // uploads. Only compute/validate checksums when the operation requires
+      // it so presigned URLs stay portable.
+      ...(isCompatibleEndpoint
+        ? {
+            requestChecksumCalculation: 'WHEN_REQUIRED' as const,
+            responseChecksumValidation: 'WHEN_REQUIRED' as const,
+          }
+        : {}),
     });
   }
 

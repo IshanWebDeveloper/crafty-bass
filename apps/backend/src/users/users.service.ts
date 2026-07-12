@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import type { Role } from '@repo/db';
+import type { Role, UserType } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import type { UpdateProfileDto, UserListQueryDto } from './dto/index.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
@@ -24,13 +24,24 @@ export class UsersService {
   async getProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
+      include: { verification: { select: { primaryTrade: true } } },
     });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    return user;
+    // Flatten the tradesman's stated primary trade so the header/own-profile can
+    // badge it without a second request. The avatar is stored as a private R2
+    // object key, so mint a short-lived signed URL for it on read.
+    const { verification, ...rest } = user;
+    return {
+      ...rest,
+      image: rest.image
+        ? await this.s3Service.getPresignedDownloadUrl(rest.image)
+        : rest.image,
+      primaryTrade: verification?.primaryTrade ?? null,
+    };
   }
 
   async updateProfile(userId: string, dto: UpdateProfileDto) {
@@ -47,6 +58,7 @@ export class UsersService {
       data: {
         ...(dto.name !== undefined && { name: dto.name }),
         ...(dto.phone !== undefined && { phone: dto.phone }),
+        ...(dto.image !== undefined && { image: dto.image }),
       },
     });
   }
@@ -91,11 +103,12 @@ export class UsersService {
   }
 
   async listUsers(query: UserListQueryDto) {
-    const { page, limit, role, search } = query;
+    const { page, limit, role, userType, search } = query;
     const skip = (page - 1) * limit;
 
     const where = {
       ...(role && { role: role as Role }),
+      ...(userType && { userType: userType as UserType }),
       ...(search && {
         OR: [
           { name: { contains: search, mode: 'insensitive' as const } },

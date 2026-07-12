@@ -4,24 +4,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Domain
 
-The Prisma schema (`apps/backend/prisma/schema.prisma`) and `apps/backend/src/` describe a **tradesman/homeowner marketplace**. Core models: `User`, `HomeownerProfile`, `TradesmanProfile`, `ServiceCategory`, `Skill`, `Job`, `Quote`, `Review`, `Conversation`, `Message`, `JobRecommendation`, `Report`; enums for `Role`, `UserType`, `JobStatus`, etc. Backend modules live under `apps/backend/src/{users,profiles,jobs,quotes,categories,reviews,recommendations,consent,legal,admin}`. RBAC statements/roles live in `packages/auth/src/access.ts` (statements: `profile`, `job`, `quote`, `conversation`, `message`, `review`, `report`, `recommendation`, `category`, `user`; roles: `customer`, `support`, `admin`). The legacy e-commerce sweep (`apps/backend/LEGACY_SWEEP_PLAN.md`) is complete; the remaining marketplace modules (`conversations/`, `messages/`, `reports/`) ship in their own PRs.
+The Prisma schema (`packages/db/prisma/schema.prisma`, owned by the `@repo/db` package — **not** `apps/backend/prisma`, which no longer exists) and `apps/backend/src/` describe a **tradesman/homeowner marketplace**. Core models: `User`, `HomeownerProfile`, `TradesmanProfile`, `ServiceCategory`, `Skill`, `Job`, `Quote`, `Review`, `Conversation`, `Message`, `JobRecommendation`, `Report`; enums for `Role`, `UserType`, `JobStatus`, etc. Backend modules live under `apps/backend/src/{users,profiles,jobs,quotes,escrow,categories,reviews,recommendations,verification,conversations,reports,consent,legal,admin,webhooks,health}`. RBAC statements/roles live in `packages/auth/src/access.ts` (statements: `profile`, `job`, `quote`, `escrow`, `conversation`, `message`, `review`, `report`, `recommendation`, `category`, `user`; roles: `customer`, `support`, `admin`). `CUSTOMER` covers **both** homeowners and tradesmen — the homeowner/tradesman distinction is carried by `User.userType` and enforced at the service layer (ownership + userType checks), not by a dedicated role. The legacy e-commerce sweep is complete and the schema/statements are fully marketplace. Note: there is no separate `messages/` module — message endpoints live under `conversations/`.
 
 ## Repository
 
-Nx + pnpm monorepo with three apps:
+Nx + pnpm monorepo with four apps:
 
-- `apps/frontend` — Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui
+- `apps/frontend` — Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui — the homeowner/tradesman-facing marketplace, port `3000`
+- `apps/admin` — Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui + TanStack Query/Table + Recharts — the internal admin/support console, port `3001`
 - `apps/backend` — NestJS 11 + Prisma (PostgreSQL) + better-auth + BullMQ + Stripe
 - `apps/ai-service` — Python FastAPI + LangChain/LangGraph (LLM provider is `github` or `openai`)
 
-…and five workspace packages under `packages/`, all scoped `@repo/*`:
+…and seven workspace packages under `packages/`, all scoped `@repo/*`:
 
-- `@repo/shared-types` — Prisma-generated browser types (`packages/shared-types/src/generated/prisma/`), consumed by both frontend and backend
-- `@repo/ui` — shared shadcn/ui primitives plus `cn`, `ThemeProvider`, `mode-toggle` (consumed by the frontend)
+- `@repo/db` — owns the Prisma schema (`packages/db/prisma/schema.prisma`), migrations/seeds, and the generated Prisma client; consumed by the backend
+- `@repo/auth` — better-auth access-control definitions (`access.ts`: statements + `customer`/`support`/`admin` roles) plus shared auth helpers; consumed by the backend
+- `@repo/shared-types` — Prisma-generated browser-safe types (`packages/shared-types/src/generated/prisma/`), consumed by both frontend and backend
+- `@repo/ui` — shared UI primitives (base-ui under the hood) plus `cn`, `ThemeProvider`, `mode-toggle` (consumed by the frontend)
 - `@repo/validation` — shared Zod schemas
 - `@repo/eslint-config`, `@repo/prettier-config` — shared lint/format config
 
-`pnpm-workspace.yaml` includes `apps/*` and `packages/*`. (The `feat/monorepo-restrucuture` work moved `shared-types` into `packages/` and added the four other packages — older notes that say "`packages/` doesn't exist yet" are stale.)
+`pnpm-workspace.yaml` includes `apps/*` and `packages/*`. (The monorepo-restructure work moved `shared-types` into `packages/` and later extracted `@repo/db` and `@repo/auth` out of the backend — older notes that say "`packages/` doesn't exist yet" or that the schema lives under `apps/backend/prisma` are stale.)
 
 ## Common commands
 
@@ -29,7 +32,8 @@ All run from repo root unless noted.
 
 ```bash
 pnpm install                # install JS deps; ai-service .venv is separate (see below)
-pnpm dev                    # frontend + backend + ai-service in parallel via Nx
+pnpm dev                    # frontend + admin + backend + ai-service in parallel via Nx
+pnpm dev:admin               # only admin via Nx
 pnpm build / lint / test    # nx run-many across all projects (ai-service .venv must exist)
 pnpm format                 # prettier
 pnpm dev:ai                 # only ai-service via Nx (uses .venv)
@@ -37,20 +41,20 @@ pnpm dev:ai:uvicorn         # ai-service via uvicorn directly (no .venv required
 pnpm affected:build / affected:lint / affected:test   # CI-style affected-only
 ```
 
-Per-app: `pnpm nx run <frontend|backend|ai-service>:<dev|build|lint|test>`.
+Per-app: `pnpm nx run <frontend|admin|backend|ai-service>:<dev|build|lint|test>`.
 
-Ports: frontend `3000`, backend `3005` (override with `PORT`), ai-service `8006`. CORS defaults to `http://localhost:3000` (override with `CORS_ORIGINS`).
+Ports: frontend `3000`, admin `3001`, backend `3005` (override with `PORT`), ai-service `8006`. CORS defaults to `http://localhost:3000,http://localhost:3001,http://localhost:5173` (override with `CORS_ORIGINS`, see `apps/backend/.env.example`).
 
 ### Prisma
 
-Most scripts are in `apps/backend/package.json`. The two that matter at the workspace level:
+The schema and migration/seed scripts live in **`@repo/db`** (`packages/db/package.json`): e.g. `pnpm --filter @repo/db db:migrate:dev`, `db:migrate:reset`, `db:seed`, `db:seed:users` — all load `apps/backend/.env` (or `.env.test`) via dotenv. The two scripts that matter at the workspace level (root `package.json`):
 
 ```bash
-pnpm prisma:generate:all       # generates Prisma client + shared-types browser output
-pnpm prisma:check:generated    # CI guard: verifies packages/shared-types/.../prisma/.schema-hash.json matches schema SHA
+pnpm prisma:generate:all       # @repo/db db:generate (client) + refresh shared-types browser output & hash stamp
+pnpm prisma:check:generated    # CI guard: verifies packages/shared-types/.../prisma/.schema-hash.json matches the schema SHA
 ```
 
-If you change `schema.prisma`, you must run `prisma:generate:all` and commit the updated hash stamp under `packages/shared-types/src/generated/prisma/`, or the `prisma-generated-check` CI job will fail.
+If you change `packages/db/prisma/schema.prisma`, you must run `prisma:generate:all` and commit the updated hash stamp under `packages/shared-types/src/generated/prisma/`, or the `prisma-generated-check` CI job will fail.
 
 ### Backend tests
 
@@ -95,7 +99,7 @@ CI (`.github/workflows/ci.yml`) creates the venv on a self-hosted Windows runner
 - Bootstrap: `apps/backend/src/main.ts`. Global prefix `api/v1` is applied **except** for `/api/auth/*`, which is mounted manually on the Express instance via `expressInstance.all('/api/auth/*splat', toNodeHandler(auth))`. The comment at `main.ts:76` explains why: `@thallesp/nestjs-better-auth` doesn't yet use the Express 5 wildcard syntax, so the manual mount is a deliberate workaround — don't "clean it up."
 - **Two layers of auth rate-limiting** on `/api/auth`: (1) `express-rate-limit` in `main.ts` skipping in non-production and only counting attempt paths (`/sign-in`, `/sign-up`, `/forget-password`, `/reset-password`, `/send-verification-email`, `/verify-email` — session checks are intentionally exempt); (2) better-auth's own `rateLimit` config in `auth.ts:122` (10/min in prod, unlimited in dev). If you see unexpected 429s, check both.
 - Global providers wired in `app.module.ts`: `SanitizationPipe`, `ZodValidationPipe`, `ZodSerializerInterceptor`, `GlobalExceptionFilter`, `PermissionsGuard`, `CustomThrottlerGuard` (proxy-aware). `disableGlobalAuthGuard: true` is passed to `AuthModule.forRoot` — authentication is enforced by `PermissionsGuard`, not by better-auth's default guard.
-- RBAC: defined in `auth-access.ts` using better-auth's access-control DSL (`createAccessControl`). Roles are `CUSTOMER | SUPPORT | ADMIN` (see `Role` enum). See "Where the docs/code lie" above — current statements are for e-commerce.
+- RBAC: defined in `packages/auth/src/access.ts` (the `@repo/auth` package) using better-auth's access-control DSL (`createAccessControl`). Roles are `CUSTOMER | SUPPORT | ADMIN` (see `Role` enum); statements are marketplace-shaped (`profile`, `job`, `quote`, `escrow`, …). `CUSTOMER` covers both homeowners and tradesmen — the split is `User.userType` enforced in services (ownership + userType checks), not a separate role.
 - TypeScript imports use the `.js` ESM suffix (`./app.module.js`) even though source is `.ts` — keep this pattern, it's required for the ESM build.
 - Feature module convention: `<feature>/<feature>.module.ts`, `<feature>.controller.ts`, `<feature>.service.ts`, `dto/`. Cross-cutting code in `src/common/` (`guards/`, `filters/`, `pipes/`, `middleware/`, `prisma/`, `cron/`, `decorators/`, `services/`, `utils/`).
 - Validation: `nestjs-zod` everywhere (DTOs are Zod schemas, not class-validator).
@@ -122,6 +126,15 @@ Next.js 16 exposes an MCP endpoint per running dev server. To diagnose runtime/b
 3. `nextjs_call` with `toolName: "get_errors"` (port `3000`/`3001`) — returns source-mapped runtime + build errors. `get_errors` reports per **browser session**, so a page must be open; if it says "No browser sessions connected", load the page first. Other tools: `get_logs`, `get_routes`, `get_page_metadata`, `get_project_metadata`.
 4. Fix in source (for `@repo/ui` issues, edit `packages/ui/src/` — HMR applies it live).
 5. Verify with `browser_eval`: `start` → `navigate` to the page → `console_messages { errorsOnly: true }`, then re-run `get_errors` to confirm zero. `browser_eval` writes a `.playwright-mcp/` artifact dir — delete it when done.
+
+### Admin (Next.js App Router)
+
+- `apps/admin` is the internal console for `ADMIN`/`SUPPORT` staff — user/job/escrow/review/verification/report management, audit log, categories, settings. Runs on port `3001` (`next dev --port 3001`).
+- Route groups: `src/app/(dashboard)/*` (users, jobs, escrow, reviews, verifications, reports, categories, audit-log, settings) plus a standalone `src/app/sign-in`.
+- **Like `apps/frontend`, admin talks to the backend through a same-origin proxy.** `src/next.config.ts` rewrites `/api/*` to `API_PROXY_TARGET` (default `http://localhost:3005`), so the browser only ever hits the admin origin and the better-auth session cookie is first-party. `src/lib/api.ts` uses a relative `/api/v1` base in the browser (absolute `API_PROXY_TARGET` only as a server-side fallback); `src/lib/auth-client.ts` points at `window.location.origin`. The old `NEXT_PUBLIC_API_URL`/`NEXT_PUBLIC_BETTER_AUTH_URL` vars are gone. Auth is guarded **server-side** by `src/lib/server-session.ts` (`getServerSession()` forwards `cookies()` to `/api/auth/get-session`; `requireAdmin()` reads `role` off the session and reports `authorized` for `ADMIN`/`SUPPORT`), called at the top of the `(dashboard)` route-group layout — signed-out users are redirected to `/sign-in`, signed-in non-staff see `<AccessDenied />`. Real authorization still lives in the backend `PermissionsGuard`; this is UX only.
+- Admins sign in with **email + password** (`authClient.signIn.email`, core better-auth; `emailAndPassword` is enabled in `packages/auth/src/index.ts`) — `src/components/auth/sign-in-form.tsx`. There is no phone-OTP flow in admin.
+- shadcn config (`apps/admin/components.json`) points its aliases at `@repo/ui` (`components`/`ui`/`lib`/`hooks` all resolve into the `@repo/ui` package) rather than a local `src/components/ui` — new shadcn-generated primitives land in `@repo/ui`, feature components stay in `apps/admin/src/components/`.
+- Backend `CORS_ORIGINS` must include `http://localhost:3001` for local admin dev (already the default in `apps/backend/.env.example`).
 
 ### AI service (FastAPI + LangGraph)
 

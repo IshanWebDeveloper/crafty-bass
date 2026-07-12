@@ -73,7 +73,7 @@ export function InboxView({
         return (
           <li key={c.id}>
             <Link href={`/${locale}/messages/${c.id}`}>
-              <Card className="transition-colors hover:bg-accent/40">
+              <Card className="cursor-pointer transition-all hover:shadow-card hover:ring-foreground/20">
                 <CardContent className="flex items-center gap-3 p-4">
                   <Avatar className="h-10 w-10">
                     {other?.user.image ? (

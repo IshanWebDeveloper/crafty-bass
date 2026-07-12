@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Crafty Bass — Frontend
 
-## Getting Started
+The web UI for **Crafty Bass**, a tradesman/homeowner marketplace. Built with the
+Next.js 16 App Router and consumed from the Nx + pnpm monorepo at the repo root.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) + **React 19**, TypeScript.
+- **Tailwind CSS v4** via `@tailwindcss/postcss`; design tokens live in `src/app/globals.css`.
+- Shared UI primitives from **`@repo/ui`** (wrapping [base-ui](https://base-ui.com), not Radix);
+  theming via `next-themes` + the `@repo/ui` provider/toggle.
+- **TanStack Query** for server state, **React Hook Form** + **Zod** for forms,
+  **better-auth** client for auth, **axios** for the data client.
+- Icons: `lucide-react` / `@tabler/icons-react`.
+- Path alias `@/*` → `src/*`.
+
+## Getting started
+
+Install dependencies from the **repo root** (this is a workspace, not a standalone app):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run the dev server (frontend only):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm nx run frontend:dev
+# or, for the whole stack (frontend + backend + ai-service):
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+### Backend proxy & auth
 
-To learn more about Next.js, take a look at the following resources:
+The browser only ever talks to the Next.js origin. `/api/*` is rewritten to the
+backend (default `http://localhost:3005`, override with `API_PROXY_TARGET`), so the
+better-auth session cookie is set first-party and auth guards run server-side. Start
+the backend (`pnpm nx run backend:dev`) for data and auth to work locally.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Run via `pnpm nx run frontend:<target>` from the root, or `pnpm <script>` inside `apps/frontend`:
 
-## Deploy on Vercel
+| Script  | Description                               |
+| ------- | ----------------------------------------- |
+| `dev`   | Start the Next.js dev server on port 3000 |
+| `build` | Production build (output in `dist/`)      |
+| `start` | Serve the production build                |
+| `lint`  | ESLint over the app                       |
+| `test`  | No-op — unit tests are not configured yet |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### End-to-end tests
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Playwright is configured (`playwright.config.ts` + `e2e/`), exposed as an Nx target:
+
+```bash
+pnpm nx run frontend:e2e
+```
+
+## Project structure
+
+- `src/app/` — App Router routes, `layout.tsx`, and `globals.css` (tokens + `@theme inline` aliases).
+- `src/components/` — feature and composed UI (shared primitives come from `@repo/ui`).
+- `public/` — static assets.

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Crafty Bass">
+  <defs>
+    <linearGradient id="cb-mark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="oklch(0.66 0.12 158)" />
+      <stop offset="1" stop-color="oklch(0.56 0.11 158)" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8.5" fill="url(#cb-mark)" />
+  <!-- roof + walls -->
+  <path d="M7.5 15.5 16 8l8.5 7.5" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M9.8 14v9.2a1 1 0 0 0 1 1h10.4a1 1 0 0 0 1-1V14" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- approval check inside the home -->
+  <path d="m12.8 18.8 2.2 2.2 4.2-4.4" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

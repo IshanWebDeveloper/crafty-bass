@@ -64,3 +64,16 @@ vitest.config.*.timestamp*
 SECURITY_AUDIT.md
 .pr-bodies/
 apps/backend/swagger-error-debug.txt
+apps/admin/next-env.d.ts
+notes-outline.md
+image-1.png
+image-2.png
+image.png
+apps/backend/RECOMMENDATION_ENGINE_PLAN.md
+
+# Claude Code local project config / skills
+.claude/
+
+# Antigravity Rules
+gemini.md
+GEMINI.md

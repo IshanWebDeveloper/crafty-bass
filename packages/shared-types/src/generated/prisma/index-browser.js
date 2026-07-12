@@ -133,6 +133,8 @@ exports.Prisma.UserScalarFieldEnum = {
   banExpires: 'banExpires',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  phoneNumber: 'phoneNumber',
+  phoneNumberVerified: 'phoneNumberVerified',
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
@@ -222,8 +224,11 @@ exports.Prisma.TradesmanProfileScalarFieldEnum = {
   jobsCancelled: 'jobsCancelled',
   responseTimeMinutes: 'responseTimeMinutes',
   isVerified: 'isVerified',
+  backgroundChecked: 'backgroundChecked',
   isAvailable: 'isAvailable',
   preferredLanguage: 'preferredLanguage',
+  certifications: 'certifications',
+  vehicles: 'vehicles',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 };
@@ -279,9 +284,13 @@ exports.Prisma.JobScalarFieldEnum = {
   budgetMax: 'budgetMax',
   scheduledFor: 'scheduledFor',
   urgency: 'urgency',
+  taskSize: 'taskSize',
+  vehicleRequirement: 'vehicleRequirement',
   status: 'status',
   assignedTradesmanId: 'assignedTradesmanId',
   acceptedQuoteId: 'acceptedQuoteId',
+  expiresAt: 'expiresAt',
+  expiryNoticeSentAt: 'expiryNoticeSentAt',
   completedAt: 'completedAt',
   cancelledAt: 'cancelledAt',
   createdAt: 'createdAt',
@@ -300,13 +309,114 @@ exports.Prisma.QuoteScalarFieldEnum = {
   jobId: 'jobId',
   tradesmanId: 'tradesmanId',
   amount: 'amount',
+  materialsAmount: 'materialsAmount',
+  calloutFee: 'calloutFee',
+  discount: 'discount',
+  vatRate: 'vatRate',
+  depositRequested: 'depositRequested',
   currency: 'currency',
   message: 'message',
   estimatedStart: 'estimatedStart',
   estimatedCompletion: 'estimatedCompletion',
+  validUntil: 'validUntil',
   status: 'status',
   respondedAt: 'respondedAt',
   withdrawnAt: 'withdrawnAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.QuoteMaterialScalarFieldEnum = {
+  id: 'id',
+  quoteId: 'quoteId',
+  category: 'category',
+  name: 'name',
+  quantity: 'quantity',
+  unit: 'unit',
+  unitPrice: 'unitPrice',
+  createdAt: 'createdAt',
+};
+
+exports.Prisma.MaterialRequestScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  requestedById: 'requestedById',
+  note: 'note',
+  estimatedCost: 'estimatedCost',
+  currency: 'currency',
+  status: 'status',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.JobEscrowScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  quoteId: 'quoteId',
+  homeownerId: 'homeownerId',
+  tradesmanId: 'tradesmanId',
+  currency: 'currency',
+  quoteTotal: 'quoteTotal',
+  materialsAmount: 'materialsAmount',
+  depositAmount: 'depositAmount',
+  balanceAmount: 'balanceAmount',
+  status: 'status',
+  paymentMethod: 'paymentMethod',
+  paymentRef: 'paymentRef',
+  stripePaymentIntentId: 'stripePaymentIntentId',
+  fundedAt: 'fundedAt',
+  materialsReleasedAt: 'materialsReleasedAt',
+  workCompletedAt: 'workCompletedAt',
+  releasedAt: 'releasedAt',
+  refundedAt: 'refundedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.EscrowTransactionScalarFieldEnum = {
+  id: 'id',
+  escrowId: 'escrowId',
+  type: 'type',
+  amount: 'amount',
+  note: 'note',
+  createdAt: 'createdAt',
+};
+
+exports.Prisma.TradesmanVerificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  fullName: 'fullName',
+  gender: 'gender',
+  dateOfBirth: 'dateOfBirth',
+  nicNumber: 'nicNumber',
+  addressLine: 'addressLine',
+  city: 'city',
+  district: 'district',
+  primaryTrade: 'primaryTrade',
+  yearsExperience: 'yearsExperience',
+  nicFrontKey: 'nicFrontKey',
+  nicBackKey: 'nicBackKey',
+  photoKey: 'photoKey',
+  gramaNiladhariKey: 'gramaNiladhariKey',
+  licenceKey: 'licenceKey',
+  licenceNumber: 'licenceNumber',
+  policeClearanceKey: 'policeClearanceKey',
+  serviceRadiusKm: 'serviceRadiusKm',
+  crewType: 'crewType',
+  helperCount: 'helperCount',
+  portfolioKeys: 'portfolioKeys',
+  guarantorName: 'guarantorName',
+  guarantorNic: 'guarantorNic',
+  voiceIntroKey: 'voiceIntroKey',
+  payoutAccountHolder: 'payoutAccountHolder',
+  payoutBank: 'payoutBank',
+  payoutBranch: 'payoutBranch',
+  payoutAccountNumber: 'payoutAccountNumber',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  rejectionReason: 'rejectionReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 };
@@ -382,6 +492,18 @@ exports.Prisma.ReportScalarFieldEnum = {
   updatedAt: 'updatedAt',
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  href: 'href',
+  jobId: 'jobId',
+  readAt: 'readAt',
+  createdAt: 'createdAt',
+};
+
 exports.Prisma.WebhookEventScalarFieldEnum = {
   id: 'id',
   source: 'source',
@@ -392,6 +514,16 @@ exports.Prisma.WebhookEventScalarFieldEnum = {
   error: 'error',
   createdAt: 'createdAt',
   processedAt: 'processedAt',
+};
+
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  actorId: 'actorId',
+  action: 'action',
+  entity: 'entity',
+  entityId: 'entityId',
+  details: 'details',
+  createdAt: 'createdAt',
 };
 
 exports.Prisma.SortOrder = {
@@ -447,6 +579,18 @@ exports.JobUrgency = exports.$Enums.JobUrgency = {
   EMERGENCY: 'EMERGENCY',
 };
 
+exports.TaskSize = exports.$Enums.TaskSize = {
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE',
+};
+
+exports.VehicleRequirement = exports.$Enums.VehicleRequirement = {
+  NONE: 'NONE',
+  CAR: 'CAR',
+  TRUCK: 'TRUCK',
+};
+
 exports.JobStatus = exports.$Enums.JobStatus = {
   OPEN: 'OPEN',
   ASSIGNED: 'ASSIGNED',
@@ -462,6 +606,40 @@ exports.QuoteStatus = exports.$Enums.QuoteStatus = {
   REJECTED: 'REJECTED',
   WITHDRAWN: 'WITHDRAWN',
   EXPIRED: 'EXPIRED',
+};
+
+exports.QuoteLineCategory = exports.$Enums.QuoteLineCategory = {
+  LABOUR: 'LABOUR',
+  MATERIAL: 'MATERIAL',
+};
+
+exports.MaterialRequestStatus = exports.$Enums.MaterialRequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  DECLINED: 'DECLINED',
+};
+
+exports.EscrowStatus = exports.$Enums.EscrowStatus = {
+  REQUESTED: 'REQUESTED',
+  FUNDED: 'FUNDED',
+  MATERIALS_RELEASED: 'MATERIALS_RELEASED',
+  WORK_COMPLETED: 'WORK_COMPLETED',
+  RELEASED: 'RELEASED',
+  REFUNDED: 'REFUNDED',
+  CANCELLED: 'CANCELLED',
+};
+
+exports.EscrowTransactionType = exports.$Enums.EscrowTransactionType = {
+  FUND: 'FUND',
+  RELEASE_MATERIALS: 'RELEASE_MATERIALS',
+  RELEASE_BALANCE: 'RELEASE_BALANCE',
+  REFUND: 'REFUND',
+};
+
+exports.VerificationStatus = exports.$Enums.VerificationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
 };
 
 exports.ConversationType = exports.$Enums.ConversationType = {
@@ -492,6 +670,10 @@ exports.ReportStatus = exports.$Enums.ReportStatus = {
   DISMISSED: 'DISMISSED',
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  JOB_EXPIRING: 'JOB_EXPIRING',
+};
+
 exports.WebhookEventStatus = exports.$Enums.WebhookEventStatus = {
   RECEIVED: 'RECEIVED',
   ACCEPTED: 'ACCEPTED',
@@ -516,13 +698,20 @@ exports.Prisma.ModelName = {
   Job: 'Job',
   JobSkill: 'JobSkill',
   Quote: 'Quote',
+  QuoteMaterial: 'QuoteMaterial',
+  MaterialRequest: 'MaterialRequest',
+  JobEscrow: 'JobEscrow',
+  EscrowTransaction: 'EscrowTransaction',
+  TradesmanVerification: 'TradesmanVerification',
   Conversation: 'Conversation',
   ConversationParticipant: 'ConversationParticipant',
   Message: 'Message',
   Review: 'Review',
   JobRecommendation: 'JobRecommendation',
   Report: 'Report',
+  Notification: 'Notification',
   WebhookEvent: 'WebhookEvent',
+  AuditLog: 'AuditLog',
 };
 
 /**

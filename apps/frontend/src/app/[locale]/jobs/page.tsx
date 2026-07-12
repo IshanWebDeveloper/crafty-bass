@@ -2,6 +2,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { BrowseJobsView } from '@/components/jobs/browse-jobs-view';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { requireUserType } from '@/lib/server-session';
 
 export default async function BrowseJobsPage({
   params,
@@ -9,6 +10,9 @@ export default async function BrowseJobsPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  // The open-jobs board is where tradesmen find work to quote on. Homeowners
+  // post jobs rather than quote, so bounce them to their own jobs page.
+  await requireUserType(locale, 'TRADESMAN');
   const dict = await getDictionary(locale);
   const t = dict.jobs.browse;
 

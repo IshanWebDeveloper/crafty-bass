@@ -51,12 +51,73 @@ enum JobUrgency {
   EMERGENCY
 }
 
+// Rough size of a job, used to set duration expectations when posting.
+enum TaskSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+// Whether the job needs the tradesperson to bring a vehicle (e.g. moving,
+// hauling away waste). Helps homeowners surface trades equipped for the work.
+enum VehicleRequirement {
+  NONE
+  CAR
+  TRUCK
+}
+
 enum QuoteStatus {
   PENDING
   ACCEPTED
   REJECTED
   WITHDRAWN
   EXPIRED
+}
+
+// A tradesman's mid-job request for extra materials/tools, awaiting the
+// homeowner's decision.
+enum MaterialRequestStatus {
+  PENDING
+  APPROVED
+  DECLINED
+}
+
+// Whether a quote line is labour or a material/part. The quote total is built up
+// from these lines (plus call-out/discount/VAT).
+enum QuoteLineCategory {
+  LABOUR
+  MATERIAL
+}
+
+// Materials-deposit escrow lifecycle. Mirrors the homeowner-facing milestone
+// strip: FUNDED (held) -> MATERIALS_RELEASED (paid out to buy parts when work
+// starts) -> WORK_COMPLETED (job done) -> RELEASED (balance paid out). REQUESTED
+// is the pre-funding state (tradesman asked on the quote); REFUNDED/CANCELLED are
+// the exits before release.
+enum EscrowStatus {
+  REQUESTED
+  FUNDED
+  MATERIALS_RELEASED
+  WORK_COMPLETED
+  RELEASED
+  REFUNDED
+  CANCELLED
+}
+
+enum EscrowTransactionType {
+  FUND
+  RELEASE_MATERIALS
+  RELEASE_BALANCE
+  REFUND
+}
+
+// Tradesman KYC verification submission. A tradesman submits one (PENDING); an
+// admin/support reviewer approves it (flips TradesmanProfile.isVerified, and
+// backgroundChecked when a police-clearance document is attached) or rejects it.
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 enum ConversationType {
@@ -87,6 +148,13 @@ enum ReportTargetType {
   MESSAGE
 }
 
+// In-app notification kinds. JOB_EXPIRING warns relevant tradesmen that an OPEN
+// job matching their trade is about to lapse (see JobExpiryNoticeCronService).
+// Kept as an enum so new notification types are added deliberately.
+enum NotificationType {
+  JOB_EXPIRING
+}
+
 model User {
   id                      String    @id @default(cuid())
   name                    String
@@ -105,23 +173,34 @@ model User {
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @updatedAt
 
-  accounts          Account[]
-  sessions          Session[]
-  consents          UserConsent[]
-  homeownerProfile  HomeownerProfile?
-  tradesmanProfile  TradesmanProfile?
-  postedJobs        Job[]                     @relation("HomeownerJobs")
-  assignedJobs      Job[]                     @relation("AssignedTradesman")
-  quotes            Quote[]                   @relation("TradesmanQuotes")
-  sentMessages      Message[]                 @relation("SentMessages")
-  receivedMessages  Message[]                 @relation("ReceivedMessages")
-  reviewsGiven      Review[]                  @relation("ReviewsGiven")
-  reviewsReceived   Review[]                  @relation("ReviewsReceived")
-  createdReports    Report[]                  @relation("ReportsCreated")
-  assignedReports   Report[]                  @relation("ReportsAssigned")
-  recommendations   JobRecommendation[]       @relation("RecommendedTradesman")
-  conversationLinks ConversationParticipant[]
+  accounts              Account[]
+  sessions              Session[]
+  consents              UserConsent[]
+  homeownerProfile      HomeownerProfile?
+  tradesmanProfile      TradesmanProfile?
+  postedJobs            Job[]                     @relation("HomeownerJobs")
+  assignedJobs          Job[]                     @relation("AssignedTradesman")
+  quotes                Quote[]                   @relation("TradesmanQuotes")
+  materialRequests      MaterialRequest[]         @relation("TradesmanMaterialRequests")
+  sentMessages          Message[]                 @relation("SentMessages")
+  receivedMessages      Message[]                 @relation("ReceivedMessages")
+  reviewsGiven          Review[]                  @relation("ReviewsGiven")
+  reviewsReceived       Review[]                  @relation("ReviewsReceived")
+  createdReports        Report[]                  @relation("ReportsCreated")
+  assignedReports       Report[]                  @relation("ReportsAssigned")
+  recommendations       JobRecommendation[]       @relation("RecommendedTradesman")
+  conversationLinks     ConversationParticipant[]
+  escrowsAsHomeowner    JobEscrow[]               @relation("EscrowHomeowner")
+  escrowsAsTradesman    JobEscrow[]               @relation("EscrowTradesman")
+  verification          TradesmanVerification?    @relation("TradesmanVerification")
+  reviewedVerifications TradesmanVerification[]   @relation("VerificationReviewer")
+  notifications         Notification[]
+  auditLogs             AuditLog[]                @relation("AuditLogActor")
 
+  phoneNumber         String?
+  phoneNumberVerified Boolean?
+
+  @@unique([phoneNumber])
   @@index([role])
   @@index([userType])
   @@index([createdAt])
@@ -185,6 +264,7 @@ model Verification {
 // Better Auth's JWT plugin stores rotating sign/verify key pairs here.
 // Without this table the plugin fails at boot with
 // `Model jwks does not exist in the database`, which 500s sign-in.
+
 model Jwks {
   id         String    @id @default(cuid())
   publicKey  String    @db.Text
@@ -246,8 +326,13 @@ model TradesmanProfile {
   jobsCancelled       Int          @default(0)
   responseTimeMinutes Int          @default(0)
   isVerified          Boolean      @default(false)
+  backgroundChecked   Boolean      @default(false)
   isAvailable         Boolean      @default(true)
   preferredLanguage   LanguageCode @default(EN)
+  // Free-text professional certifications/licences and vehicles the tradesman
+  // lists on their profile so homeowners can gauge qualifications and logistics.
+  certifications      String[]     @default([])
+  vehicles            String[]     @default([])
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
@@ -331,9 +416,18 @@ model Job {
   budgetMax           Decimal?     @db.Decimal(10, 2)
   scheduledFor        DateTime?
   urgency             JobUrgency   @default(MEDIUM)
+  taskSize            TaskSize?
+  vehicleRequirement  VehicleRequirement?
   status              JobStatus    @default(OPEN)
   assignedTradesmanId String?
   acceptedQuoteId     String?      @unique
+  // When an OPEN job stops accepting quotes, derived from urgency at creation. A
+  // cron flips lapsed OPEN jobs to EXPIRED; the UI flags those nearing this time.
+  expiresAt           DateTime?
+  // Set once the "job about to expire" notices have been dispatched to relevant
+  // tradesmen, so the notice cron fires at most once per job (see
+  // JobExpiryNoticeCronService).
+  expiryNoticeSentAt  DateTime?
   completedAt         DateTime?
   cancelledAt         DateTime?
   createdAt           DateTime     @default(now())
@@ -350,12 +444,16 @@ model Job {
   reviews           Review[]
   recommendations   JobRecommendation[]
   reports           Report[]
+  escrow            JobEscrow?
+  materialRequests  MaterialRequest[]
+  notifications     Notification[]
 
   @@index([homeownerId, status])
   @@index([status, categoryId])
   @@index([district, city])
   @@index([assignedTradesmanId])
   @@index([createdAt])
+  @@index([status, expiresAt])
 }
 
 model JobSkill {
@@ -375,24 +473,194 @@ model Quote {
   id                  String      @id @default(cuid())
   jobId               String
   tradesmanId         String
+  // Grand total, derived server-side from the line items plus the call-out fee,
+  // discount and VAT. materialsAmount is the sum of MATERIAL lines (used to cap
+  // the escrow deposit).
   amount              Decimal     @db.Decimal(10, 2)
+  materialsAmount     Decimal?    @db.Decimal(10, 2)
+  calloutFee          Decimal?    @db.Decimal(10, 2)
+  discount            Decimal?    @db.Decimal(10, 2)
+  vatRate             Decimal?    @db.Decimal(5, 2)
+  depositRequested    Decimal?    @db.Decimal(10, 2)
   currency            String      @default("LKR")
   message             String?     @db.Text
   estimatedStart      DateTime?
   estimatedCompletion DateTime?
+  // The quote lapses after this; a cron flips pending quotes past it to EXPIRED.
+  validUntil          DateTime?
   status              QuoteStatus @default(PENDING)
   respondedAt         DateTime?
   withdrawnAt         DateTime?
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
 
-  job            Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  tradesman      User @relation("TradesmanQuotes", fields: [tradesmanId], references: [id], onDelete: Cascade)
-  acceptedForJob Job? @relation("AcceptedQuote")
+  job            Job             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  tradesman      User            @relation("TradesmanQuotes", fields: [tradesmanId], references: [id], onDelete: Cascade)
+  acceptedForJob Job?            @relation("AcceptedQuote")
+  escrow         JobEscrow?
+  materials      QuoteMaterial[]
 
   @@unique([jobId, tradesmanId])
   @@index([tradesmanId, status])
   @@index([jobId, status])
+}
+
+// An itemised material/tool line on a quote so the homeowner sees the scope and
+// estimated costs behind the price. Descriptive only — the deposit/escrow figure
+// is the quote's materialsAmount; unitPrice here is the tradesman's estimate.
+// A single line on a quote — labour or a material/part. The quote total is
+// built up from these (see Quote.amount). Despite the model name it now holds
+// both labour and material lines, distinguished by `category`.
+model QuoteMaterial {
+  id        String            @id @default(cuid())
+  quoteId   String
+  category  QuoteLineCategory @default(MATERIAL)
+  name      String
+  quantity  Decimal           @default(1) @db.Decimal(10, 2)
+  // Unit of measurement for the quantity (e.g. kg, m, m², pcs, fitting, job).
+  unit      String?
+  unitPrice Decimal?          @db.Decimal(10, 2)
+  createdAt DateTime          @default(now())
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([quoteId])
+}
+
+// A request from the assigned tradesman for additional materials/tools partway
+// through a job. The homeowner approves or declines it. `estimatedCost` is the
+// tradesman's optional estimate; settling payment is out of scope here.
+model MaterialRequest {
+  id            String                @id @default(cuid())
+  jobId         String
+  requestedById String
+  note          String                @db.Text
+  estimatedCost Decimal?              @db.Decimal(10, 2)
+  currency      String                @default("LKR")
+  status        MaterialRequestStatus @default(PENDING)
+  respondedAt   DateTime?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  job         Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  requestedBy User @relation("TradesmanMaterialRequests", fields: [requestedById], references: [id], onDelete: Cascade)
+
+  @@index([jobId, status])
+  @@index([requestedById])
+}
+
+// One escrow per accepted quote that requested a materials deposit. Crafty Bass
+// holds the deposit (never the tradesman); the balance is settled on completion.
+// Amounts are snapshotted from the quote at acceptance so later quote edits can't
+// move money. The transactions[] ledger is the audit trail of fund/release/refund.
+model JobEscrow {
+  id                  String       @id @default(cuid())
+  jobId               String       @unique
+  quoteId             String       @unique
+  homeownerId         String
+  tradesmanId         String
+  currency            String       @default("LKR")
+  quoteTotal          Decimal      @db.Decimal(10, 2)
+  materialsAmount     Decimal      @db.Decimal(10, 2)
+  depositAmount       Decimal      @db.Decimal(10, 2)
+  balanceAmount       Decimal      @db.Decimal(10, 2)
+  status              EscrowStatus @default(REQUESTED)
+  paymentMethod       String?
+  paymentRef          String?
+  stripePaymentIntentId String?    @unique
+  fundedAt            DateTime?
+  materialsReleasedAt DateTime?
+  workCompletedAt     DateTime?
+  releasedAt          DateTime?
+  refundedAt          DateTime?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  job          Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  quote        Quote               @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  homeowner    User                @relation("EscrowHomeowner", fields: [homeownerId], references: [id], onDelete: Cascade)
+  tradesman    User                @relation("EscrowTradesman", fields: [tradesmanId], references: [id], onDelete: Cascade)
+  transactions EscrowTransaction[]
+
+  @@index([homeownerId])
+  @@index([tradesmanId])
+  @@index([status])
+}
+
+model EscrowTransaction {
+  id        String                @id @default(cuid())
+  escrowId  String
+  type      EscrowTransactionType
+  amount    Decimal               @db.Decimal(10, 2)
+  note      String?
+  createdAt DateTime              @default(now())
+
+  escrow JobEscrow @relation(fields: [escrowId], references: [id], onDelete: Cascade)
+
+  @@index([escrowId])
+}
+
+// One KYC submission per tradesman (resubmittable while not approved). Document
+// fields hold storage references (keys/URLs) — the actual binary upload is a
+// separate concern. Sensitive fields (NIC, payout) are never exposed to
+// homeowners; only the submitting tradesman and reviewers can read them.
+model TradesmanVerification {
+  id     String             @id @default(cuid())
+  userId String             @unique
+  status VerificationStatus @default(PENDING)
+
+  // Identity
+  fullName    String
+  gender      String?
+  dateOfBirth DateTime?
+  nicNumber   String
+
+  // Address
+  addressLine String?
+  city        String?
+  district    String?
+
+  // Trade
+  primaryTrade    String?
+  yearsExperience Int     @default(0)
+
+  // Document references (storage keys/URLs)
+  nicFrontKey        String?
+  nicBackKey         String?
+  photoKey           String?
+  gramaNiladhariKey  String?
+  licenceKey         String?
+  licenceNumber      String?
+  policeClearanceKey String? // presence unlocks the Background-checked tier
+
+  // Work details
+  serviceRadiusKm Int     @default(15)
+  crewType        String? // solo | team
+  helperCount     Int?
+  portfolioKeys   Json? // string[]
+  guarantorName   String?
+  guarantorNic    String?
+  voiceIntroKey   String?
+
+  // Payout (sensitive)
+  payoutAccountHolder String?
+  payoutBank          String?
+  payoutBranch        String?
+  payoutAccountNumber String?
+
+  // Review
+  reviewedById    String?
+  reviewedAt      DateTime?
+  rejectionReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user       User  @relation("TradesmanVerification", fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy User? @relation("VerificationReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([reviewedById])
 }
 
 model Conversation {
@@ -512,6 +780,32 @@ model Report {
   @@index([assigneeId])
 }
 
+// An in-app notification for a single user. The bell and notifications centre
+// read these; `readAt` tracks the unread badge. `href` is an app-relative deep
+// link (e.g. "jobs/<id>"); `jobId` links to the originating job for cascade
+// delete and dedup. Dynamic copy (title/body) is stored in English — the
+// surrounding chrome is localised on the client.
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String?          @db.Text
+  href      String?
+  jobId     String?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job  Job? @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  // One notification of a given type per user per job — lets the expiry-notice
+  // dispatch use createMany(skipDuplicates) safely if it ever re-runs.
+  @@unique([userId, type, jobId])
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+}
+
 enum WebhookEventStatus {
   RECEIVED
   ACCEPTED
@@ -525,6 +819,7 @@ enum WebhookEventStatus {
 // (RECEIVED) and mark()-ed before each return, including on rejection, so the
 // admin surface has a complete record. Wired into the marketplace Stripe Connect
 // payout webhook when that is built (Phase C).
+
 model WebhookEvent {
   id          String             @id @default(cuid())
   source      String
@@ -537,5 +832,25 @@ model WebhookEvent {
   processedAt DateTime?
 
   @@index([source, status])
+  @@index([createdAt])
+}
+
+// Admin action audit trail. Every privileged mutation (ban, role change, user
+// creation, moderation decision) writes a row here so the admin console has a
+// tamper-evident history of who did what. actorId is nullable + SetNull so the
+// trail survives even if the acting staff account is later removed.
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String
+  details   Json?
+  createdAt DateTime @default(now())
+
+  actor User? @relation("AuditLogActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId, createdAt])
+  @@index([entity, entityId])
   @@index([createdAt])
 }

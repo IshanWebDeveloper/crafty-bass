@@ -193,6 +193,264 @@ const categories: CategorySeed[] = [
       },
     ],
   },
+  // Handyman-style categories (inspired by taskrabbit.com/services/handyman),
+  // adapted for Sri Lankan homes — adds the everyday odd-jobs, assembly,
+  // mounting, appliance, A/C, garden, moving, roofing, pest and metalwork
+  // services the original six trades didn't cover.
+  {
+    slug: 'handyman',
+    nameEn: 'Handyman & general repairs',
+    nameSi: 'සාමාන්‍ය අලුත්වැඩියා',
+    nameTa: 'பொது பழுதுபார்ப்பு',
+    skills: [
+      {
+        slug: 'handyman-general-repairs',
+        nameEn: 'General repairs',
+        nameSi: 'සාමාන්‍ය අලුත්වැඩියා',
+        nameTa: 'பொது பழுதுபார்ப்பு',
+      },
+      {
+        slug: 'handyman-hanging',
+        nameEn: 'Picture & shelf hanging',
+        nameSi: 'පින්තූර සහ රාක්ක එල්ලීම',
+        nameTa: 'படம் & அலமாரி பொருத்துதல்',
+      },
+      {
+        slug: 'handyman-doors-locks',
+        nameEn: 'Door & lock repair',
+        nameSi: 'දොර සහ අගුළු අලුත්වැඩියාව',
+        nameTa: 'கதவு & பூட்டு பழுது',
+      },
+    ],
+  },
+  {
+    slug: 'furniture-assembly',
+    nameEn: 'Furniture assembly',
+    nameSi: 'ගෘහ භාණ්ඩ එකලස් කිරීම',
+    nameTa: 'தளபாடம் பொருத்துதல்',
+    skills: [
+      {
+        slug: 'furniture-flatpack',
+        nameEn: 'Flat-pack assembly',
+        nameSi: 'ෆ්ලැට්-පැක් එකලස් කිරීම',
+        nameTa: 'பிளாட்-பேக் பொருத்துதல்',
+      },
+      {
+        slug: 'furniture-bed-wardrobe',
+        nameEn: 'Bed & wardrobe assembly',
+        nameSi: 'ඇඳ සහ අල්මාරි එකලස් කිරීම',
+        nameTa: 'படுக்கை & அலமாரி பொருத்துதல்',
+      },
+      {
+        slug: 'furniture-office',
+        nameEn: 'Office furniture',
+        nameSi: 'කාර්යාල ගෘහ භාණ්ඩ',
+        nameTa: 'அலுவலக தளபாடம்',
+      },
+    ],
+  },
+  {
+    slug: 'mounting',
+    nameEn: 'Mounting & installation',
+    nameSi: 'සවි කිරීම සහ ස්ථාපනය',
+    nameTa: 'பொருத்துதல் & நிறுவல்',
+    skills: [
+      {
+        slug: 'mounting-tv',
+        nameEn: 'TV mounting',
+        nameSi: 'රූපවාහිනී සවි කිරීම',
+        nameTa: 'தொலைக்காட்சி பொருத்துதல்',
+      },
+      {
+        slug: 'mounting-shelves-curtains',
+        nameEn: 'Shelves & curtains',
+        nameSi: 'රාක්ක සහ තිර',
+        nameTa: 'அலமாரிகள் & திரைச்சீலைகள்',
+      },
+      {
+        slug: 'mounting-fixtures',
+        nameEn: 'Fixtures & fittings',
+        nameSi: 'සවිකිරීම් සහ උපාංග',
+        nameTa: 'பொருத்துதல்கள் & இணைப்புகள்',
+      },
+    ],
+  },
+  {
+    slug: 'appliances',
+    nameEn: 'Appliance repair & install',
+    nameSi: 'උපකරණ අලුත්වැඩියාව සහ ස්ථාපනය',
+    nameTa: 'வீட்டு உபகரண பழுது & நிறுவல்',
+    skills: [
+      {
+        slug: 'appliances-washing-machine',
+        nameEn: 'Washing machine',
+        nameSi: 'රෙදි සෝදන යන්ත්‍රය',
+        nameTa: 'சலவை இயந்திரம்',
+      },
+      {
+        slug: 'appliances-refrigerator',
+        nameEn: 'Refrigerator',
+        nameSi: 'ශීතකරණය',
+        nameTa: 'குளிர்சாதனப் பெட்டி',
+      },
+      {
+        slug: 'appliances-cooker',
+        nameEn: 'Cooker & oven',
+        nameSi: 'උදුන සහ ලිප',
+        nameTa: 'அடுப்பு & ஓவன்',
+      },
+    ],
+  },
+  {
+    slug: 'air-conditioning',
+    nameEn: 'Air conditioning',
+    nameSi: 'වායුසමීකරණ',
+    nameTa: 'குளிரூட்டல்',
+    skills: [
+      {
+        slug: 'ac-installation',
+        nameEn: 'A/C installation',
+        nameSi: 'වායුසමීකරණ ස්ථාපනය',
+        nameTa: 'குளிரூட்டி நிறுவல்',
+      },
+      {
+        slug: 'ac-servicing',
+        nameEn: 'A/C servicing',
+        nameSi: 'වායුසමීකරණ සේවාව',
+        nameTa: 'குளிரூட்டி சேவை',
+      },
+      {
+        slug: 'ac-repair',
+        nameEn: 'A/C repair',
+        nameSi: 'වායුසමීකරණ අලුත්වැඩියාව',
+        nameTa: 'குளிரூட்டி பழுது',
+      },
+    ],
+  },
+  {
+    slug: 'gardening',
+    nameEn: 'Gardening & landscaping',
+    nameSi: 'උද්‍යාන සැකසීම',
+    nameTa: 'தோட்டக்கலை',
+    skills: [
+      {
+        slug: 'gardening-lawn',
+        nameEn: 'Lawn mowing',
+        nameSi: 'තණකොළ කැපීම',
+        nameTa: 'புல்வெளி வெட்டுதல்',
+      },
+      {
+        slug: 'gardening-maintenance',
+        nameEn: 'Garden maintenance',
+        nameSi: 'උද්‍යාන නඩත්තුව',
+        nameTa: 'தோட்ட பராமரிப்பு',
+      },
+      {
+        slug: 'gardening-tree-trimming',
+        nameEn: 'Tree trimming',
+        nameSi: 'ගස් කප්පාදුව',
+        nameTa: 'மரம் கத்தரித்தல்',
+      },
+    ],
+  },
+  {
+    slug: 'moving',
+    nameEn: 'Moving & hauling',
+    nameSi: 'ප්‍රවාහනය සහ ගෙනයාම',
+    nameTa: 'இடம்பெயர்வு & எடுத்துச்செல்லல்',
+    skills: [
+      {
+        slug: 'moving-help',
+        nameEn: 'Help moving',
+        nameSi: 'ගෙනයාමට උදව්',
+        nameTa: 'இடம்பெயர உதவி',
+      },
+      {
+        slug: 'moving-junk-removal',
+        nameEn: 'Junk removal',
+        nameSi: 'කසළ ඉවත් කිරීම',
+        nameTa: 'குப்பை அகற்றல்',
+      },
+      {
+        slug: 'moving-delivery',
+        nameEn: 'Furniture delivery',
+        nameSi: 'ගෘහ භාණ්ඩ බෙදාහැරීම',
+        nameTa: 'தளபாடம் விநியோகம்',
+      },
+    ],
+  },
+  {
+    slug: 'roofing',
+    nameEn: 'Roofing & waterproofing',
+    nameSi: 'වහල සහ ජල ආරක්ෂණය',
+    nameTa: 'கூரை & நீர்ப்புகா',
+    skills: [
+      {
+        slug: 'roofing-repair',
+        nameEn: 'Roof repair',
+        nameSi: 'වහල අලුත්වැඩියාව',
+        nameTa: 'கூரை பழுது',
+      },
+      {
+        slug: 'roofing-waterproofing',
+        nameEn: 'Waterproofing',
+        nameSi: 'ජල ආරක්ෂණය',
+        nameTa: 'நீர்ப்புகா',
+      },
+      {
+        slug: 'roofing-gutters',
+        nameEn: 'Gutter cleaning',
+        nameSi: 'වැසි බෑවුම් පිරිසිදු කිරීම',
+        nameTa: 'மழைநீர்க் கால்வாய் சுத்தம்',
+      },
+    ],
+  },
+  {
+    slug: 'pest-control',
+    nameEn: 'Pest control',
+    nameSi: 'පළිබෝධ පාලනය',
+    nameTa: 'பூச்சி கட்டுப்பாடு',
+    skills: [
+      {
+        slug: 'pest-general',
+        nameEn: 'General pest control',
+        nameSi: 'සාමාන්‍ය පළිබෝධ පාලනය',
+        nameTa: 'பொது பூச்சி கட்டுப்பாடு',
+      },
+      {
+        slug: 'pest-termite',
+        nameEn: 'Termite treatment',
+        nameSi: 'වේයන් ප්‍රතිකාර',
+        nameTa: 'கறையான் சிகிச்சை',
+      },
+    ],
+  },
+  {
+    slug: 'welding',
+    nameEn: 'Welding & metalwork',
+    nameSi: 'වෙල්ඩින් සහ ලෝහ වැඩ',
+    nameTa: 'வெல்டிங் & உலோக வேலை',
+    skills: [
+      {
+        slug: 'welding-gates-grills',
+        nameEn: 'Gates & grills',
+        nameSi: 'ගේට්ටු සහ ග්‍රිල්',
+        nameTa: 'வாயில்கள் & கிரில்கள்',
+      },
+      {
+        slug: 'welding-fabrication',
+        nameEn: 'Metal fabrication',
+        nameSi: 'ලෝහ නිෂ්පාදනය',
+        nameTa: 'உலோக உருவாக்கம்',
+      },
+      {
+        slug: 'welding-repairs',
+        nameEn: 'Welding repairs',
+        nameSi: 'වෙල්ඩින් අලුත්වැඩියා',
+        nameTa: 'வெல்டிங் பழுது',
+      },
+    ],
+  },
 ];
 
 async function main() {

@@ -1,10 +1,11 @@
-import { Controller, Get, Put, Param, Body } from '@nestjs/common';
+import { Controller, Get, Put, Param, Body, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ProfilesService } from './profiles.service.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { Permissions } from '../common/decorators/permissions.decorator.js';
 import { Public } from '../common/decorators/public.decorator.js';
 import {
+  BrowseTradesmenDto,
   UpsertHomeownerProfileDto,
   UpsertTradesmanProfileDto,
 } from './dto/index.js';
@@ -42,6 +43,15 @@ export class ProfilesController {
     @Body() dto: UpsertTradesmanProfileDto,
   ) {
     return this.profilesService.upsertTradesman(userId, dto);
+  }
+
+  @Public()
+  @Get('tradesmen')
+  @ApiOperation({
+    summary: 'Browse the public directory of verified tradesmen',
+  })
+  browseTradesmen(@Query() query: BrowseTradesmenDto) {
+    return this.profilesService.listTradesmen(query);
   }
 
   @Public()

@@ -34,6 +34,10 @@ const EnvSchema = z
     CORS_ORIGINS: z.string().optional(),
     FRONTEND_URL: z.url().optional(),
 
+    // AI service (FastAPI). Optional — translation/assist features degrade
+    // gracefully when unset; defaults to the local dev port.
+    AI_SERVICE_URL: z.url().optional(),
+
     // Email (Resend)
     RESEND_API_KEY: z.string().optional(),
     RESEND_FROM_EMAIL: z.string().optional(),

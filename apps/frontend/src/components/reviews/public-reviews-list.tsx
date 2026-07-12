@@ -5,14 +5,18 @@ import { Avatar, AvatarFallback, AvatarImage, cn, Skeleton } from '@repo/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { listReviewsForJob } from '@/lib/api/reviews';
 import { ReportButton } from '@/components/reports/report-button';
+import { TranslateButton } from '@/components/common/translate-button';
 import { useSession } from '@/lib/auth-client';
+import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
 export function PublicReviewsList({
   jobId,
+  locale,
   dict,
 }: {
   jobId: string;
+  locale: Locale;
   dict: Dictionary;
 }) {
   const t = dict.reviews;
@@ -66,6 +70,14 @@ export function PublicReviewsList({
                       <p className="text-sm text-muted-foreground">
                         {r.comment}
                       </p>
+                    ) : null}
+                    {r.title || r.comment ? (
+                      <TranslateButton
+                        text={[r.title, r.comment].filter(Boolean).join('\n\n')}
+                        locale={locale}
+                        dict={dict}
+                        className="pt-0.5"
+                      />
                     ) : null}
                     {session && session.user.id !== r.reviewerId ? (
                       <div className="pt-1">

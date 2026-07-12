@@ -2,6 +2,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { ThreadView } from '@/components/chat/thread-view';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { requireAuth } from '@/lib/server-session';
 
 export default async function MessageThreadPage({
   params,
@@ -9,6 +10,7 @@ export default async function MessageThreadPage({
   params: Promise<{ locale: Locale; id: string }>;
 }) {
   const { locale, id } = await params;
+  await requireAuth(locale);
   const dict = await getDictionary(locale);
 
   return (
