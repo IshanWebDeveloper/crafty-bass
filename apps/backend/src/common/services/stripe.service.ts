@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 
 /**
  * Thin wrapper around the Stripe SDK for real-money escrow collection
- * (card deposits/balances only — see EscrowService). Mirrors EmailService's
+ * (card deposits/balances only - see EscrowService). Mirrors EmailService's
  * graceful-degradation pattern: when STRIPE_SECRET_KEY is unset (local/dev
  * without keys configured) methods throw a clear error only when actually
  * called, so the app still boots.
@@ -26,7 +26,7 @@ export class StripeService {
   private requireClient(): Stripe {
     if (!this.stripe) {
       throw new Error(
-        'STRIPE_SECRET_KEY is not configured — cannot perform this Stripe operation.',
+        'STRIPE_SECRET_KEY is not configured - cannot perform this Stripe operation.',
       );
     }
     return this.stripe;
@@ -35,7 +35,7 @@ export class StripeService {
   /**
    * Creates a PaymentIntent for a card payment method and confirms it in the
    * same call. Card-only (no redirect-based methods), so no return_url is
-   * needed — the intent either succeeds, needs 3DS action, or fails.
+   * needed - the intent either succeeds, needs 3DS action, or fails.
    */
   async createAndConfirmPaymentIntent(input: {
     amount: number;
@@ -57,11 +57,18 @@ export class StripeService {
     return this.requireClient().paymentIntents.retrieve(id);
   }
 
+  /**
+   * Refunds a PaymentIntent. Omit `amount` for a full refund; pass it (in the
+   * currency's minor unit) for a partial refund - used by support during dispute
+   * mediation to return only part of the deposit.
+   */
   async createRefund(input: {
     paymentIntentId: string;
+    amount?: number;
   }): Promise<Stripe.Refund> {
     return this.requireClient().refunds.create({
       payment_intent: input.paymentIntentId,
+      ...(input.amount !== undefined ? { amount: input.amount } : {}),
     });
   }
 

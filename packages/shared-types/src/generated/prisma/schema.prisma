@@ -39,6 +39,10 @@ enum JobStatus {
   OPEN
   ASSIGNED
   IN_PROGRESS
+  // A party raised a report/complaint against an in-progress job. Work is paused
+  // and the job is out of IN_PROGRESS while support reviews and decides whether
+  // to cancel + refund or let it resume. Set in ReportsService.create.
+  DISPUTED
   COMPLETED
   CANCELLED
   EXPIRED

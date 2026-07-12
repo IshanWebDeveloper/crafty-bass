@@ -34,6 +34,7 @@ const JOB_STATUS: Record<string, { label: string; variant: Variant }> = {
   OPEN: { label: 'Open', variant: 'info' },
   ASSIGNED: { label: 'Assigned', variant: 'default' },
   IN_PROGRESS: { label: 'In progress', variant: 'default' },
+  DISPUTED: { label: 'Under review', variant: 'destructive' },
   COMPLETED: { label: 'Completed', variant: 'success' },
   CANCELLED: { label: 'Cancelled', variant: 'muted' },
   EXPIRED: { label: 'Expired', variant: 'muted' },

@@ -317,6 +317,7 @@ export class AdminService {
         open: jobStatus('OPEN'),
         assigned: jobStatus('ASSIGNED'),
         inProgress: jobStatus('IN_PROGRESS'),
+        disputed: jobStatus('DISPUTED'),
         completed: jobStatus('COMPLETED'),
         cancelled: jobStatus('CANCELLED'),
         expired: jobStatus('EXPIRED'),

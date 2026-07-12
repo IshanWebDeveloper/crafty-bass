@@ -14,6 +14,7 @@ export type AdminMetrics = {
     open: number;
     assigned: number;
     inProgress: number;
+    disputed: number;
     completed: number;
     cancelled: number;
     expired: number;

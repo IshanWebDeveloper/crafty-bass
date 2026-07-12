@@ -67,7 +67,12 @@ export class UsersService {
     // Marketplace dashboard: a user's posted jobs (as homeowner), assigned jobs
     // (as tradesman), and the reviews they have received. Replaces the legacy
     // order/wishlist dashboard.
-    const ACTIVE_JOB_STATUSES = ['OPEN', 'ASSIGNED', 'IN_PROGRESS'] as const;
+    const ACTIVE_JOB_STATUSES = [
+      'OPEN',
+      'ASSIGNED',
+      'IN_PROGRESS',
+      'DISPUTED',
+    ] as const;
 
     const [
       recentPostedJobs,
