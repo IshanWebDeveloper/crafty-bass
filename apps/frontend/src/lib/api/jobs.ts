@@ -42,6 +42,22 @@ export type Job = JobListItem & {
   }>;
 };
 
+// Agreed terms for an assigned job (GET /jobs/:id/agreement). Party-only, so
+// this is a separate authenticated fetch rather than part of the public job
+// payload. Either field is null until a quote has been accepted.
+export type JobAgreement = {
+  assignedTradesman: { id: string; name: string; image: string | null } | null;
+  acceptedQuote: {
+    id: string;
+    amount: number;
+    currency: string;
+    depositRequested: number | null;
+    estimatedStart: string | null;
+    estimatedCompletion: string | null;
+    message: string | null;
+  } | null;
+};
+
 export type Paginated<T> = {
   data: T[];
   meta: { total: number; page: number; limit: number; lastPage: number };
@@ -120,6 +136,10 @@ export function listMyJobs(query: JobListQuery = {}) {
 
 export function getJob(id: string) {
   return apiFetch<Job>(`/jobs/${id}`);
+}
+
+export function getJobAgreement(id: string) {
+  return apiFetch<JobAgreement>(`/jobs/${id}/agreement`);
 }
 
 export function createJob(body: CreateJobBody) {

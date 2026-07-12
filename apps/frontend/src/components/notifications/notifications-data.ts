@@ -32,6 +32,7 @@ const NOTIFICATION_META: Record<
   { category: NotificationCategory; tint: NotificationTint; icon: string }
 > = {
   JOB_EXPIRING: { category: 'job', tint: 'amber', icon: 'clock' },
+  QUOTE_RECEIVED: { category: 'job', tint: 'green', icon: 'receipt-text' },
   QUOTE_ACCEPTED: { category: 'job', tint: 'green', icon: 'badge-check' },
   QUOTE_DECLINED: { category: 'job', tint: 'neutral', icon: 'circle-x' },
   ESCROW_FUNDED: { category: 'escrow', tint: 'green', icon: 'hand-coins' },

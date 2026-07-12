@@ -175,6 +175,57 @@ export class JobsService {
     return job;
   }
 
+  // The agreed terms for an assigned job - the winning tradesman and the
+  // accepted quote's headline figures. Party-only (homeowner or the assigned
+  // tradesman), so the agreed price is never exposed on the public job page.
+  // Mirrors the escrow endpoint's gating; powers the job page's agreed-terms
+  // summary for both the deposit and no-deposit paths.
+  async findAgreement(userId: string, id: string) {
+    const job = await this.prisma.job.findUnique({
+      where: { id },
+      select: {
+        homeownerId: true,
+        assignedTradesmanId: true,
+        assignedTradesman: { select: { id: true, name: true, image: true } },
+        acceptedQuote: {
+          select: {
+            id: true,
+            amount: true,
+            currency: true,
+            depositRequested: true,
+            estimatedStart: true,
+            estimatedCompletion: true,
+            message: true,
+          },
+        },
+      },
+    });
+    if (!job) throw new NotFoundException('Job not found');
+    const isParty =
+      job.homeownerId === userId || job.assignedTradesmanId === userId;
+    if (!isParty) {
+      throw new ForbiddenException(
+        'Only the job parties can view the agreement',
+      );
+    }
+    const q = job.acceptedQuote;
+    return {
+      assignedTradesman: job.assignedTradesman,
+      acceptedQuote: q
+        ? {
+            id: q.id,
+            amount: Number(q.amount),
+            currency: q.currency,
+            depositRequested:
+              q.depositRequested === null ? null : Number(q.depositRequested),
+            estimatedStart: q.estimatedStart,
+            estimatedCompletion: q.estimatedCompletion,
+            message: q.message,
+          }
+        : null,
+    };
+  }
+
   // Admin/support detail: richer than the public findOne - includes the
   // assigned tradesman, quotes (with quoter), escrow ledger status, and any
   // reports filed against the job. Kept out of the public findOne so this data

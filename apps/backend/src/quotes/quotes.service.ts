@@ -109,7 +109,7 @@ export class QuotesService {
       Date.now() + dto.validityDays * 24 * 60 * 60 * 1000,
     );
 
-    return this.prisma.quote.create({
+    const quote = await this.prisma.quote.create({
       data: {
         jobId,
         tradesmanId: userId,
@@ -140,6 +140,11 @@ export class QuotesService {
       },
       include: QUOTE_INCLUDE,
     });
+
+    // After the quote commits: alert the homeowner a quote arrived. Best-effort
+    // (never throws), and re-surfaces on each new quote for the same job.
+    await this.notifications.notifyQuoteReceived(jobId);
+    return quote;
   }
 
   async update(userId: string, quoteId: string, dto: CreateQuoteDto) {

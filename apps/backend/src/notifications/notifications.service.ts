@@ -148,6 +148,53 @@ export class NotificationsService {
     }
   }
 
+  /**
+   * A tradesman submitted a quote → tell the homeowner. The
+   * `@@unique([userId, type, jobId])` constraint means one row per job, so we
+   * upsert: each new quote re-surfaces the notice (clears `readAt`, bumps
+   * `createdAt`) and refreshes the body with a running count, instead of the
+   * homeowner being told only about the first quote. Best-effort (never throws).
+   */
+  async notifyQuoteReceived(jobId: string): Promise<void> {
+    try {
+      const job = await this.prisma.job.findUnique({
+        where: { id: jobId },
+        select: {
+          title: true,
+          homeownerId: true,
+          _count: { select: { quotes: true } },
+        },
+      });
+      if (!job) return;
+      const count = job._count.quotes;
+      const title = count > 1 ? 'New quote received' : 'You received a quote';
+      const body =
+        count > 1
+          ? `${count} tradespeople have quoted "${job.title}". Compare their quotes and hire.`
+          : `A tradesperson sent a quote for "${job.title}". Review it to hire them.`;
+      await this.prisma.notification.upsert({
+        where: {
+          userId_type_jobId: {
+            userId: job.homeownerId,
+            type: 'QUOTE_RECEIVED',
+            jobId,
+          },
+        },
+        create: {
+          userId: job.homeownerId,
+          type: 'QUOTE_RECEIVED',
+          title,
+          body,
+          href: `jobs/${jobId}`,
+          jobId,
+        },
+        update: { title, body, readAt: null, createdAt: new Date() },
+      });
+    } catch (error) {
+      this.logNotifyFailure('quote received', jobId, error);
+    }
+  }
+
   /** Deposit funded → tell the assigned tradesman they can start. */
   async notifyEscrowFunded(jobId: string): Promise<void> {
     await this.notifyOne(jobId, 'assignedTradesman', {
