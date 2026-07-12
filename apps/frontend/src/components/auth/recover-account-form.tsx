@@ -11,7 +11,7 @@ import { OtpTimer } from './otp-timer';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
-// Permissive client-side email check — the real validation is the server only
+// Permissive client-side email check - the real validation is the server only
 // emitting a code for an address that actually has an account.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -46,7 +46,7 @@ export function RecoverAccountForm({
         toast.error(error.message ?? tr.sendFailed);
         return;
       }
-      // Don't reveal whether the address has an account — always advance and
+      // Don't reveal whether the address has an account - always advance and
       // show the neutral hint.
       toast.message(tr.noAccountHint);
       setSentAt(Date.now());
@@ -71,7 +71,7 @@ export function RecoverAccountForm({
         return;
       }
       toast.success(tr.success);
-      // Hand off to the dedicated "set a new number" step — the whole point of
+      // Hand off to the dedicated "set a new number" step - the whole point of
       // recovering when the old number is gone.
       router.push(`/${locale}/account/phone?recovered=1`);
       router.refresh();

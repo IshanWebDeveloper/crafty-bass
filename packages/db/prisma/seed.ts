@@ -1,7 +1,7 @@
 /**
  * Seeds the marketplace taxonomy: ServiceCategory + Skill rows with EN/SI/TA
  * labels so the job-posting form and category browse have real options.
- * Idempotent — safe to re-run (upserts by slug).
+ * Idempotent - safe to re-run (upserts by slug).
  *
  * Run: `pnpm --filter @repo/db db:seed` (loads apps/backend/.env via dotenv).
  *
@@ -194,7 +194,7 @@ const categories: CategorySeed[] = [
     ],
   },
   // Handyman-style categories (inspired by taskrabbit.com/services/handyman),
-  // adapted for Sri Lankan homes — adds the everyday odd-jobs, assembly,
+  // adapted for Sri Lankan homes - adds the everyday odd-jobs, assembly,
   // mounting, appliance, A/C, garden, moving, roofing, pest and metalwork
   // services the original six trades didn't cover.
   {

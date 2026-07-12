@@ -19,7 +19,7 @@ const EnvSchema = z
     DIRECT_URL: z.string().min(1).optional(),
     PRISMA_USE_DIRECT_URL: z.string().optional(),
 
-    // Redis (BullMQ). Optional — falls back to localhost in app.module.
+    // Redis (BullMQ). Optional - falls back to localhost in app.module.
     REDIS_URL: z.string().optional(),
 
     // Better Auth
@@ -34,7 +34,7 @@ const EnvSchema = z
     CORS_ORIGINS: z.string().optional(),
     FRONTEND_URL: z.url().optional(),
 
-    // AI service (FastAPI). Optional — translation/assist features degrade
+    // AI service (FastAPI). Optional - translation/assist features degrade
     // gracefully when unset; defaults to the local dev port.
     AI_SERVICE_URL: z.url().optional(),
 

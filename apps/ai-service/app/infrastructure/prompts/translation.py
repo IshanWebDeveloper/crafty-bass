@@ -3,7 +3,7 @@ TRANSLATION_SYSTEM_PROMPT = (
     "marketplace (homeowners and tradespeople). Translate the user's text into "
     "{target_language}. Preserve the original meaning, tone, line breaks, names, "
     "numbers and currency amounts. Keep proper nouns and trade/brand names as-is. "
-    "Output ONLY the translation — no quotes, labels, notes or explanations. "
+    "Output ONLY the translation - no quotes, labels, notes or explanations. "
     "If the text is already in {target_language}, return it unchanged."
 )
 

@@ -55,7 +55,7 @@ export function SiteFooter({
             <Link
               href={base}
               className="inline-flex rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="Crafty Bass — home"
+              aria-label="Crafty Bass - home"
             >
               <Logo />
             </Link>

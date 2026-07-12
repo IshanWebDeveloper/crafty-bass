@@ -84,7 +84,7 @@ export function TradesmanPublicView({
       value:
         trade.responseTimeMinutes > 0
           ? t.minutes.replace('{count}', String(trade.responseTimeMinutes))
-          : '—',
+          : '-',
     },
   ];
 
@@ -214,7 +214,7 @@ export function TradesmanPublicView({
                 <h2 className="text-sm font-semibold">{t.portfolio}</h2>
                 <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {trade.portfolio.map((url) => (
-                    // Presigned R2 URL — plain img avoids next/image config.
+                    // Presigned R2 URL - plain img avoids next/image config.
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       key={url}

@@ -27,7 +27,7 @@ const LeaveReviewSchema = z.object({
     .refine(
       (v) => Number.isInteger(Number(v)) && Number(v) >= 1 && Number(v) <= 5,
       {
-        message: '1–5',
+        message: '1-5',
       },
     ),
   title: z.string().trim().max(120).optional(),

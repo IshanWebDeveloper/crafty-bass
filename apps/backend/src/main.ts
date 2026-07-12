@@ -50,7 +50,7 @@ async function bootstrap() {
     }),
   );
 
-  // Response compression (gzip/brotli — reduces payload sizes ~60-80%)
+  // Response compression (gzip/brotli - reduces payload sizes ~60-80%)
   app.use(compression());
 
   // CORS
@@ -97,7 +97,7 @@ async function bootstrap() {
       new DocumentBuilder()
         .setTitle('Crafty Bass Marketplace API')
         .setDescription(
-          'Back-end API for Crafty Bass — authentication, homeowner/tradesman profiles, jobs, quotes, messaging, reviews, and moderation.',
+          'Back-end API for Crafty Bass - authentication, homeowner/tradesman profiles, jobs, quotes, messaging, reviews, and moderation.',
         )
         .setVersion('1.0')
         .addBearerAuth()

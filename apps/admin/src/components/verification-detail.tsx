@@ -18,7 +18,7 @@ import {
 } from '@/lib/api/verification';
 
 function formatDate(iso: string | null) {
-  if (!iso) return '—';
+  if (!iso) return '-';
   return new Date(iso).toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -100,7 +100,7 @@ export function VerificationDetail({ id }: { id: string }) {
       {decided ? (
         <div className="rounded-xl border border-border bg-muted/30 p-4 text-sm">
           <p>
-            Reviewed by {v.reviewedBy?.name ?? '—'} on{' '}
+            Reviewed by {v.reviewedBy?.name ?? '-'} on{' '}
             {formatDate(v.reviewedAt)}.
           </p>
           {v.rejectionReason ? (
@@ -259,7 +259,7 @@ function DocThumb({ label, url }: { label: string; url: string }) {
             Open file
           </div>
         ) : (
-          // Presigned R2 URL — plain img avoids next/image remotePatterns config.
+          // Presigned R2 URL - plain img avoids next/image remotePatterns config.
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={url}
@@ -283,7 +283,7 @@ function Detail_({ label, value }: { label: string; value: string | null }) {
   return (
     <div className="space-y-0.5">
       <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className="font-medium">{value ?? '—'}</dd>
+      <dd className="font-medium">{value ?? '-'}</dd>
     </div>
   );
 }

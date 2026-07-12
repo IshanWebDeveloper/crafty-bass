@@ -18,7 +18,7 @@ const lkr = new Intl.NumberFormat('en-LK', {
 });
 
 function formatDate(iso: string | null) {
-  if (!iso) return '—';
+  if (!iso) return '-';
   return new Date(iso).toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -49,8 +49,8 @@ export function JobDetail({ id }: { id: string }) {
   const j: AdminJobDetail = data;
   const budget =
     j.budgetMin != null || j.budgetMax != null
-      ? `${j.budgetMin != null ? lkr.format(j.budgetMin) : '—'} – ${
-          j.budgetMax != null ? lkr.format(j.budgetMax) : '—'
+      ? `${j.budgetMin != null ? lkr.format(j.budgetMin) : '-'} - ${
+          j.budgetMax != null ? lkr.format(j.budgetMax) : '-'
         }`
       : 'Not specified';
 
@@ -80,7 +80,7 @@ export function JobDetail({ id }: { id: string }) {
           <Field label="Posted" value={formatDate(j.createdAt)} />
           <Field label="Scheduled for" value={formatDate(j.scheduledFor)} />
           <Field label="Expires" value={formatDate(j.expiresAt)} />
-          <Field label="Homeowner" value={j.homeowner?.name ?? '—'} />
+          <Field label="Homeowner" value={j.homeowner?.name ?? '-'} />
           <Field
             label="Assigned tradesman"
             value={j.assignedTradesman?.name ?? 'Unassigned'}
@@ -133,7 +133,7 @@ export function JobDetail({ id }: { id: string }) {
                 key={q.id}
                 className="flex items-center justify-between py-2 text-sm"
               >
-                <span>{q.tradesman?.name ?? '—'}</span>
+                <span>{q.tradesman?.name ?? '-'}</span>
                 <span className="flex items-center gap-3">
                   <span className="tabular-nums">
                     {lkr.format(Number(q.amount))}

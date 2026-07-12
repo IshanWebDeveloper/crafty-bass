@@ -2,7 +2,7 @@ import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { S3Service } from '../admin/s3.service.js';
 
-// A subset of multer's file shape — @types/multer isn't installed, so we type
+// A subset of multer's file shape - @types/multer isn't installed, so we type
 // only the fields we actually use rather than relying on the ambient
 // Express.Multer.File namespace.
 export interface UploadedFileLike {

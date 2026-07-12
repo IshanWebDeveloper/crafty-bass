@@ -32,7 +32,7 @@ export class TranslationService {
     headers: IncomingHttpHeaders,
   ): Promise<TranslateResponseDto> {
     // Mint the signed-in user's JWT (aud: ai-service) so the AI service can
-    // verify the call via the better-auth JWKS — the AI service is never
+    // verify the call via the better-auth JWKS - the AI service is never
     // exposed to the browser directly.
     const token = await this.getServiceToken(headers);
 

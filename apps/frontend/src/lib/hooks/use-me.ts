@@ -14,8 +14,8 @@ import { useSessionStore, type UserType } from '@/lib/stores/session-store';
  * Side effect: mirrors the resolved `userType` into the session store so client
  * components can read the role synchronously (and so sign-up's optimistic set
  * has a home). The session itself carries `userType` (inferred on the auth
- * client), so we seed the store the moment the session resolves — before the
- * `me` query returns — which is what makes the header role badge appear
+ * client), so we seed the store the moment the session resolves - before the
+ * `me` query returns - which is what makes the header role badge appear
  * immediately on sign-in instead of only after a reload. The query result then
  * refines it. Resets the store to null when the session goes away.
  */

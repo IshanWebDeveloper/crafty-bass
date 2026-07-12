@@ -111,7 +111,7 @@ const plugins = [
       }
       // TODO: integrate an SMS provider here.
       console.warn(
-        '⚠️ No SMS provider configured — phone OTP not sent in production.',
+        '⚠️ No SMS provider configured - phone OTP not sent in production.',
       );
     },
     // Dev only: accept a fixed OTP (or the real one) so seeded accounts are
@@ -139,7 +139,7 @@ const plugins = [
   // Account recovery: phone is the primary credential, so a tradesman who
   // loses their number signs back in with a one-time code emailed to the
   // recovery address they set at sign-up. `disableSignUp` makes this strictly
-  // a recovery path — an unknown email is rejected rather than silently
+  // a recovery path - an unknown email is rejected rather than silently
   // creating a new account.
   emailOTP({
     otpLength: 6,
@@ -157,7 +157,7 @@ const plugins = [
       }
       if (!resend) {
         console.warn(
-          '⚠️ RESEND_API_KEY not configured — recovery code email not sent.',
+          '⚠️ RESEND_API_KEY not configured - recovery code email not sent.',
         );
         return;
       }
@@ -213,7 +213,7 @@ export const auth = betterAuth({
       sendChangeEmailVerification: async ({ user, newEmail, url }) => {
         if (!resend) {
           console.warn(
-            '⚠️ RESEND_API_KEY not configured — change-email verification not sent.',
+            '⚠️ RESEND_API_KEY not configured - change-email verification not sent.',
           );
           return;
         }
@@ -228,7 +228,7 @@ export const auth = betterAuth({
         await resend.emails.send({
           to: user.email,
           from: emailFrom,
-          subject: 'Approve your email change — Crafty Bass',
+          subject: 'Approve your email change - Crafty Bass',
           html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Confirm your new email address</h2>
@@ -252,11 +252,11 @@ export const auth = betterAuth({
         input: false,
       },
       userType: {
-        // Marketplace role (HOMEOWNER | TRADESMAN) — a domain column owned by
+        // Marketplace role (HOMEOWNER | TRADESMAN) - a domain column owned by
         // @repo/db, surfaced through better-auth so it rides in the session.
         // This is what lets server guards read it from get-session
         // (lib/server-session.ts) and lets the sign-up form persist the chosen
-        // role via updateUser. `required: false` — it stays null until the user
+        // role via updateUser. `required: false` - it stays null until the user
         // commits to a role (the backend also sets it lazily on the first
         // job/quote, and definitively when a profile is created).
         type: 'string',
@@ -278,7 +278,7 @@ export const auth = betterAuth({
       privacyPolicyAcceptedAt: {
         // Not `required` at the API-input layer: phone sign-up
         // (signUpOnVerification) never supplies it, and better-auth enforces
-        // required additionalFields *before* databaseHooks run — which would
+        // required additionalFields *before* databaseHooks run - which would
         // reject the verify call before the create hook below can default it.
         // The DB column stays NOT NULL; the user.create.before hook guarantees
         // a value on both the phone path (defaulted) and /sign-up/email
@@ -312,7 +312,7 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, token }) => {
       if (!resend) {
         console.warn(
-          '⚠️ RESEND_API_KEY not configured — password reset email not sent.',
+          '⚠️ RESEND_API_KEY not configured - password reset email not sent.',
         );
         return;
       }
@@ -322,7 +322,7 @@ export const auth = betterAuth({
       await resend.emails.send({
         to: user.email,
         from: emailFrom,
-        subject: 'Reset Your Password — Crafty Bass',
+        subject: 'Reset Your Password - Crafty Bass',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Password Reset Request</h2>
@@ -346,7 +346,7 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, token }) => {
       if (!resend) {
         console.warn(
-          '⚠️ RESEND_API_KEY not configured — verification email not sent.',
+          '⚠️ RESEND_API_KEY not configured - verification email not sent.',
         );
         return;
       }
@@ -362,7 +362,7 @@ export const auth = betterAuth({
       await resend.emails.send({
         to: user.email,
         from: emailFrom,
-        subject: 'Verify Your Email — Crafty Bass',
+        subject: 'Verify Your Email - Crafty Bass',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Verify your email address</h2>
@@ -498,7 +498,7 @@ export const auth = betterAuth({
         before: async (data, context) => {
           // Set-once guard: userType may be assigned while it's still null (at
           // sign-up, or lazily on the first job/quote), but never changed
-          // afterwards — otherwise a homeowner could flip to TRADESMAN (or vice
+          // afterwards - otherwise a homeowner could flip to TRADESMAN (or vice
           // versa) via updateUser and slip past the role checks. Only runs when
           // an update actually touches userType, so ordinary profile edits
           // (name, etc.) pay no extra query.

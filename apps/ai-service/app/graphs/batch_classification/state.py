@@ -17,7 +17,7 @@ class BatchClassificationState(TypedDict):
     - `results` must use the `operator.add` reducer because workers run in
       parallel and each returns a single-element list. Without the reducer,
       LangGraph would apply last-write-wins and only one worker's result would
-      survive — the textbook fix-send-accumulator bug.
+      survive - the textbook fix-send-accumulator bug.
     """
 
     items: list[JobClassificationBatchItem]

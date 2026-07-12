@@ -48,7 +48,7 @@ export type TradesmanProfileContext = {
   jobsCompleted: number;
 };
 
-// GET /admin/users/:id — the enriched detail shape (adds profile context).
+// GET /admin/users/:id - the enriched detail shape (adds profile context).
 export type UserDetail = {
   id: string;
   name: string;

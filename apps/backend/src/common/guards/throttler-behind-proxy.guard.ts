@@ -47,14 +47,14 @@ export class CustomThrottlerGuard extends ThrottlerGuard {
   ): Promise<void> {
     const res = context.switchToHttp().getResponse<Response>();
 
-    // timeToExpire is in milliseconds — convert to whole seconds
+    // timeToExpire is in milliseconds - convert to whole seconds
     const retryAfterSeconds = Math.ceil(
       throttlerLimitDetail.timeToExpire / 1000,
     );
     res.setHeader('Retry-After', String(retryAfterSeconds));
 
     this.logger.warn(
-      `Rate limit exceeded for ${throttlerLimitDetail.tracker} — ` +
+      `Rate limit exceeded for ${throttlerLimitDetail.tracker} - ` +
         `${throttlerLimitDetail.totalHits}/${throttlerLimitDetail.limit} hits, ` +
         `retry in ${retryAfterSeconds}s`,
     );

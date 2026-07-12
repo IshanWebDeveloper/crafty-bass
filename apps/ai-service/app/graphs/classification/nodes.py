@@ -56,7 +56,7 @@ def classify_with_model_node(
         taxonomy_prompt=taxonomy_prompt,
     )
     # Retry hint (if any) is appended to the prompt. The hint is set by the
-    # confidence-gated edge before routing back into call_model — see
+    # confidence-gated edge before routing back into call_model - see
     # graph.py.
     retry_hint = state.get("retry_hint")
     if retry_hint:
@@ -121,7 +121,7 @@ def confidence_gate_node(
       - routes back to "call_model" with `retry_hint` set, kicking off another
         attempt.
 
-    Hard guard: never loop more than MAX_CLASSIFICATION_ATTEMPTS times — if the
+    Hard guard: never loop more than MAX_CLASSIFICATION_ATTEMPTS times - if the
     model still can't produce a confident answer by then, accept what we have
     and let the downstream normalizer apply its fallbacks. This is the
     skill-guide-recommended pattern from fix-infinite-loop-needs-exit.
@@ -130,7 +130,7 @@ def confidence_gate_node(
     attempts = state.get("attempts", 0)
 
     if not isinstance(parsed, JobClassificationDraft):
-        # Defensive — parse_response should always populate `parsed`.
+        # Defensive - parse_response should always populate `parsed`.
         return Command(goto=END)
 
     if attempts >= MAX_CLASSIFICATION_ATTEMPTS:
@@ -144,7 +144,7 @@ def confidence_gate_node(
         f"Your previous attempt picked '{previous_slug}' with confidence "
         f"{parsed.confidence:.2f}. If that slug is correct, raise your "
         "confidence and explain why in reasoning_summary. If it is not, pick "
-        "the next-best slug from the provided list — do not invent new ones."
+        "the next-best slug from the provided list - do not invent new ones."
     )
     return Command(update={"retry_hint": retry_hint}, goto="call_model")
 

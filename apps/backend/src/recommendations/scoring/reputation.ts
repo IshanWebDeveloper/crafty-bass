@@ -1,9 +1,9 @@
 import { SCORING_CONFIG, clamp } from './config.js';
 
 /**
- * A review reduced to what scoring needs: its star rating (1–5) and how old it
+ * A review reduced to what scoring needs: its star rating (1-5) and how old it
  * is in days. Keeping it clock-free (ageDays already computed) makes the score
- * a pure function — the DB/query layer decides "now".
+ * a pure function - the DB/query layer decides "now".
  */
 export interface WeightedReview {
   rating: number;

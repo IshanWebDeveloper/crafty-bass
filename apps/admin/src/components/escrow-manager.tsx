@@ -73,7 +73,7 @@ export function EscrowManager() {
         header: 'Job',
         cell: ({ row }) => (
           <span className="line-clamp-1 max-w-xs font-medium">
-            {row.original.job?.title ?? '—'}
+            {row.original.job?.title ?? '-'}
           </span>
         ),
       },
@@ -101,8 +101,8 @@ export function EscrowManager() {
         header: 'Parties',
         cell: ({ row }) => (
           <span className="whitespace-nowrap text-muted-foreground">
-            {row.original.homeowner?.name ?? '—'} →{' '}
-            {row.original.tradesman?.name ?? '—'}
+            {row.original.homeowner?.name ?? '-'} →{' '}
+            {row.original.tradesman?.name ?? '-'}
           </span>
         ),
       },

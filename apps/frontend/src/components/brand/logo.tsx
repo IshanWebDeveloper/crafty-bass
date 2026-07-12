@@ -1,7 +1,7 @@
 import { cn } from '@repo/ui';
 
 /**
- * Crafty Bass brand mark — a rounded "tile" in the brand green carrying a
+ * Crafty Bass brand mark - a rounded "tile" in the brand green carrying a
  * white house-with-checkmark glyph (the platform promise: a trusted home
  * trade). Drawn with `currentColor`-independent fills so it reads the same in
  * light and dark themes; only the wordmark inherits text colour.

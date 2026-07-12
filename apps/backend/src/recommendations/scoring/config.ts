@@ -2,9 +2,9 @@
  * Tunable constants for the tradesman recommendation score.
  *
  * The four factors (reputation, proximity, completion, response) are each
- * squeezed to a 0–1 sub-score and blended by weight; a small boost rewards
+ * squeezed to a 0-1 sub-score and blended by weight; a small boost rewards
  * verified tradesmen. Formulas are documented in
- * docs/recommendation-scoring-panel2-formulas.svg. These are pure data — the
+ * docs/recommendation-scoring-panel2-formulas.svg. These are pure data - the
  * scoring functions in this folder read them, so tuning happens in one place.
  */
 export const SCORING_CONFIG = {

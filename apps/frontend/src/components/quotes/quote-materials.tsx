@@ -64,7 +64,7 @@ export function QuoteMaterials({
           {discount ? (
             <Adjustment
               label={tb.discount}
-              value={`–${money(Number(discount))}`}
+              value={`-${money(Number(discount))}`}
             />
           ) : null}
           {vatRate ? (
