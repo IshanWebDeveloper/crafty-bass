@@ -43,6 +43,14 @@ export const ReportTargetTypeSchema = z.enum([
 const id = z.string().trim().min(1);
 const optionalText = (max: number) => z.string().trim().max(max).optional();
 
+// Date fields arrive over the wire as a `yyyy-MM-dd` string (what our
+// <input type="date"> / DatePicker fields send) or a full ISO datetime. We keep
+// them as a *string* here rather than `z.coerce.date()` because zod v4 cannot
+// represent a `Date` (or a transform) in JSON Schema, which throws while
+// generating the OpenAPI/Swagger document. Services convert to a `Date` (via
+// `new Date(...)`) before persisting.
+const dateInput = z.union([z.iso.date(), z.iso.datetime({ offset: true })]);
+
 // --- Profiles ---
 export const HomeownerProfileSchema = z.object({
   locationText: optionalText(200),
@@ -85,7 +93,7 @@ export const CreateJobSchema = z
     longitude: z.coerce.number().min(-180).max(180).optional(),
     budgetMin: z.coerce.number().nonnegative().max(100_000_000).optional(),
     budgetMax: z.coerce.number().nonnegative().max(100_000_000).optional(),
-    scheduledFor: z.coerce.date().optional(),
+    scheduledFor: dateInput.optional(),
     urgency: JobUrgencySchema.default('MEDIUM'),
     taskSize: TaskSizeSchema.optional(),
     vehicleRequirement: VehicleRequirementSchema.optional(),
@@ -111,7 +119,7 @@ export const UpdateJobSchema = z
     district: optionalText(80),
     budgetMin: z.coerce.number().nonnegative().max(100_000_000),
     budgetMax: z.coerce.number().nonnegative().max(100_000_000),
-    scheduledFor: z.coerce.date(),
+    scheduledFor: dateInput,
     urgency: JobUrgencySchema,
     taskSize: TaskSizeSchema,
     vehicleRequirement: VehicleRequirementSchema,
@@ -133,7 +141,7 @@ const QuoteLineItemSchema = z.object({
 });
 
 // The total is built from the line items (labour + materials) plus an optional
-// call-out fee, discount and VAT — all computed server-side, so the client only
+// call-out fee, discount and VAT - all computed server-side, so the client only
 // sends the inputs. The deposit cap is re-enforced server-side too.
 export const CreateQuoteSchema = z.object({
   lineItems: z.array(QuoteLineItemSchema).min(1).max(60),
@@ -144,8 +152,8 @@ export const CreateQuoteSchema = z.object({
   depositRequested: z.coerce.number().nonnegative().max(100_000_000).optional(),
   currency: z.string().trim().length(3).default('LKR'),
   message: optionalText(2000),
-  estimatedStart: z.coerce.date().optional(),
-  estimatedCompletion: z.coerce.date().optional(),
+  estimatedStart: dateInput.optional(),
+  estimatedCompletion: dateInput.optional(),
 });
 
 // Computes a quote's money breakdown from its line items + adjustments. Shared
@@ -250,7 +258,7 @@ export const EscrowPaymentMethodSchema = z.enum(['card', 'paypal', 'local']);
 export const FundEscrowSchema = z
   .object({
     paymentMethod: EscrowPaymentMethodSchema.default('card'),
-    // Required for paymentMethod: 'card' — the Stripe PaymentMethod id created
+    // Required for paymentMethod: 'card' - the Stripe PaymentMethod id created
     // client-side via Elements. paypal/local are still simulated and don't use it.
     stripePaymentMethodId: z.string().optional(),
   })
@@ -264,6 +272,22 @@ export const FundEscrowSchema = z
     }
   });
 
+// Support/admin dispute mediation: cancel a disputed job and refund some (or
+// all) of the homeowner's deposit. `refundAmount` is capped at the deposit at
+// the service layer (it can't be validated here without the escrow), and 0 is
+// allowed - a resolution where the tradesman keeps the released deposit.
+export const ResolveDisputeSchema = z.object({
+  refundAmount: z.coerce
+    .number()
+    .nonnegative('Refund amount cannot be negative')
+    .max(99_999_999)
+    // Money is 2-decimal (LKR minor units); reject anything finer.
+    .refine((v) => Number.isInteger(Math.round(v * 100)), {
+      message: 'Refund amount can have at most 2 decimal places',
+    }),
+  resolutionNotes: z.string().trim().max(2000).optional(),
+});
+
 // --- Tradesman verification (KYC onboarding) ---
 // Document fields hold storage references (keys/URLs); the binary upload is a
 // separate concern. Only identity essentials are required so a tradesman can
@@ -273,7 +297,7 @@ const docKey = () => z.string().trim().max(500).optional();
 export const SubmitVerificationSchema = z.object({
   fullName: z.string().trim().min(2).max(120),
   gender: z.string().trim().max(20).optional(),
-  dateOfBirth: z.coerce.date().optional(),
+  dateOfBirth: dateInput.optional(),
   nicNumber: z.string().trim().min(5).max(20),
   addressLine: optionalText(200),
   city: optionalText(80),
@@ -305,8 +329,9 @@ export const RejectVerificationSchema = z.object({
 });
 
 // --- Reviews (marketplace, job-linked) ---
+// The job is identified by the /jobs/:jobId/reviews route param, so the body
+// carries only the review content itself.
 export const CreateReviewSchema = z.object({
-  jobId: id,
   rating: z.coerce.number().int().min(1).max(5),
   title: optionalText(120),
   comment: optionalText(2000),
@@ -366,6 +391,7 @@ export type CreateMaterialRequestInput = z.infer<
 >;
 export type FundEscrowInput = z.infer<typeof FundEscrowSchema>;
 export type EscrowPaymentMethod = z.infer<typeof EscrowPaymentMethodSchema>;
+export type ResolveDisputeInput = z.infer<typeof ResolveDisputeSchema>;
 export type SubmitVerificationInput = z.infer<typeof SubmitVerificationSchema>;
 export type RejectVerificationInput = z.infer<typeof RejectVerificationSchema>;
 export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;

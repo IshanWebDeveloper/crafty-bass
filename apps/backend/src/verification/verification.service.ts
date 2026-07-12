@@ -11,7 +11,7 @@ import type {
   RejectVerificationDto,
 } from './dto/index.js';
 
-// Short-lived signed URLs for reviewing KYC documents — long enough to open
+// Short-lived signed URLs for reviewing KYC documents - long enough to open
 // each in a tab, short enough that a leaked link expires quickly.
 const DOCUMENT_URL_TTL_SECONDS = 10 * 60;
 
@@ -50,7 +50,7 @@ export class VerificationService {
       status: 'PENDING' as const,
       fullName: dto.fullName,
       gender: dto.gender ?? null,
-      dateOfBirth: dto.dateOfBirth ?? null,
+      dateOfBirth: dto.dateOfBirth ? new Date(dto.dateOfBirth) : null,
       nicNumber: dto.nicNumber,
       addressLine: dto.addressLine ?? null,
       city: dto.city ?? null,
