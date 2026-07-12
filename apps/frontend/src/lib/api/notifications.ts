@@ -4,6 +4,7 @@ import { apiFetch } from '../api';
 // warns tradesmen of a lapsing job; the rest track a job through its lifecycle.
 export type NotificationType =
   | 'JOB_EXPIRING'
+  | 'QUOTE_RECEIVED'
   | 'QUOTE_ACCEPTED'
   | 'QUOTE_DECLINED'
   | 'ESCROW_FUNDED'

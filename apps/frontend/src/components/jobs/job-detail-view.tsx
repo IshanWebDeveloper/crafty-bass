@@ -18,8 +18,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJob, cancelJob, type Job } from '@/lib/api/jobs';
 import { statusVariant } from '@/lib/status';
 import { CategoryBadge, UrgencyBadge } from '@/lib/categories';
-import { formatBudgetRange } from '@/lib/currency';
+import { formatBudgetRange, formatLKR } from '@/lib/currency';
 import { EscrowSection } from '@/components/escrow/escrow-section';
+import { AgreedQuoteSummary } from './agreed-quote-summary';
 import {
   listQuotesForJob,
   acceptQuote,
@@ -220,6 +221,17 @@ export function JobDetailView({
 
       {!isOwner && session && job.status === 'OPEN' ? (
         <SubmitQuotePanel jobId={job.id} locale={locale} dict={dict} />
+      ) : null}
+
+      {session &&
+      job.status !== 'OPEN' &&
+      (isOwner || session.user.id === job.assignedTradesmanId) ? (
+        <AgreedQuoteSummary
+          job={job}
+          isOwner={isOwner}
+          locale={locale}
+          dict={dict}
+        />
       ) : null}
 
       {session &&
@@ -431,6 +443,14 @@ function QuoteRow({
         <p className="font-mono text-lg font-semibold">
           {quote.currency} {quote.amount.toLocaleString(locale)}
         </p>
+        {quote.depositRequested && quote.depositRequested > 0 ? (
+          <p className="max-w-[16rem] rounded bg-highlight px-2 py-1 text-right text-xs text-highlight-foreground">
+            {tq.depositRequested.replace(
+              '{amount}',
+              formatLKR(quote.depositRequested, quote.currency),
+            )}
+          </p>
+        ) : null}
         <Badge variant={statusVariant(quote.status)}>
           {tq.statusLabels[quote.status]}
         </Badge>

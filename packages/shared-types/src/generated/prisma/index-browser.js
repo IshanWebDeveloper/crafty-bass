@@ -673,6 +673,7 @@ exports.ReportStatus = exports.$Enums.ReportStatus = {
 
 exports.NotificationType = exports.$Enums.NotificationType = {
   JOB_EXPIRING: 'JOB_EXPIRING',
+  QUOTE_RECEIVED: 'QUOTE_RECEIVED',
   QUOTE_ACCEPTED: 'QUOTE_ACCEPTED',
   QUOTE_DECLINED: 'QUOTE_DECLINED',
   ESCROW_FUNDED: 'ESCROW_FUNDED',

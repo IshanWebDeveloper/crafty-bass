@@ -17,6 +17,7 @@ import type { CreateQuoteDto } from './dto/index.js';
 // assert on here.
 function makeNotifications() {
   return {
+    notifyQuoteReceived: vi.fn().mockResolvedValue(undefined),
     notifyQuoteDecision: vi.fn().mockResolvedValue(undefined),
   } as unknown as NotificationsService;
 }
@@ -282,6 +283,23 @@ describe('QuotesService.create', () => {
     });
     await service.create('u1', 'job1', quoteDto({ depositRequested: 3000 }));
     expect(prismaBits.prisma.quote.create).toHaveBeenCalledOnce();
+  });
+
+  it('notifies the homeowner after the quote is created', async () => {
+    const { prisma } = makePrisma({
+      job: {
+        findUnique: vi.fn(() =>
+          Promise.resolve({ id: 'job1', homeownerId: 'owner', status: 'OPEN' }),
+        ),
+      },
+      user: { findUnique: vi.fn(() => Promise.resolve(verifiedTradesman())) },
+    });
+    const notifications = makeNotifications();
+    await new QuotesService(
+      prisma as unknown as PrismaService,
+      notifications,
+    ).create('u1', 'job1', quoteDto({ depositRequested: 0 }));
+    expect(notifications.notifyQuoteReceived).toHaveBeenCalledWith('job1');
   });
 
   it('sets validUntil ≈ now + validityDays', async () => {
