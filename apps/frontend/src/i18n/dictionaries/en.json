@@ -480,7 +480,8 @@
       "subtitle": "Manage the jobs you have posted.",
       "empty": "You haven't posted any jobs yet.",
       "postOne": "Post a job",
-      "viewQuotes": "{count} quotes"
+      "viewQuotes": "{count} quotes",
+      "viewQuotesOne": "{count} quote"
     },
     "detail": {
       "postedBy": "Posted by",
@@ -488,6 +489,12 @@
       "budget": "Budget",
       "noBudget": "Not specified",
       "scheduledFor": "Preferred date",
+      "agreedSummary": {
+        "heading": "Agreed terms",
+        "agreedPrice": "Agreed price",
+        "counterpartyOwner": "You hired",
+        "counterpartyTradesman": "Homeowner"
+      },
       "quotesHeading": "Quotes received",
       "noQuotes": "No quotes yet. Tradespeople will be notified that the job is open.",
       "cancelJob": "Cancel job",
@@ -745,6 +752,7 @@
     "message": "Message",
     "estimatedStart": "Estimated start",
     "estimatedCompletion": "Estimated completion",
+    "depositRequested": "Requests {amount} materials deposit up front",
     "verifiedTradesman": "Verified tradesperson",
     "stats": {
       "rating": "{rating} ★ ({count})",
