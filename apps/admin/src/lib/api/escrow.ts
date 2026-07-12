@@ -67,3 +67,17 @@ export function refundEscrow(id: string) {
     method: 'POST',
   });
 }
+
+export type ResolveDisputeInput = {
+  refundAmount: number;
+  resolutionNotes?: string;
+};
+
+// Support/admin mediation for a disputed job: cancel it and refund some/all of
+// the deposit in one step.
+export function resolveDispute(id: string, input: ResolveDisputeInput) {
+  return apiFetch<AdminEscrowDetail>(`/admin/escrows/${id}/resolve-dispute`, {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
+}

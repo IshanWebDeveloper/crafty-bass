@@ -29,6 +29,7 @@ const STATUS_FILTERS = [
   { value: 'OPEN', label: 'Open' },
   { value: 'ASSIGNED', label: 'Assigned' },
   { value: 'IN_PROGRESS', label: 'In progress' },
+  { value: 'DISPUTED', label: 'Under review' },
   { value: 'COMPLETED', label: 'Completed' },
   { value: 'CANCELLED', label: 'Cancelled' },
   { value: 'EXPIRED', label: 'Expired' },
@@ -100,7 +101,7 @@ export function JobsManager() {
       },
       {
         header: 'Homeowner',
-        cell: ({ row }) => row.original.homeowner?.name ?? '—',
+        cell: ({ row }) => row.original.homeowner?.name ?? '-',
       },
       {
         header: 'Quotes',

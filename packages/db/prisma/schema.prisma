@@ -39,6 +39,10 @@ enum JobStatus {
   OPEN
   ASSIGNED
   IN_PROGRESS
+  // A party raised a report/complaint against an in-progress job. Work is paused
+  // and the job is out of IN_PROGRESS while support reviews and decides whether
+  // to cancel + refund or let it resume. Set in ReportsService.create.
+  DISPUTED
   COMPLETED
   CANCELLED
   EXPIRED
@@ -152,13 +156,13 @@ enum ReportTargetType {
 // job matching their trade is about to lapse (see JobExpiryNoticeCronService).
 // The rest track a job through its lifecycle so both parties are told when the
 // status they care about changes (see NotificationsService dispatch methods):
-//   QUOTE_ACCEPTED / QUOTE_DECLINED — a tradesman won / wasn't picked for a job
-//   ESCROW_FUNDED   — homeowner funded the deposit; the tradesman can start
-//   WORK_STARTED    — the tradesman started the work (job → IN_PROGRESS)
-//   WORK_COMPLETED  — the tradesman marked work done; awaiting homeowner approval
-//   JOB_COMPLETED   — the homeowner approved; the balance was released
-//   JOB_CANCELLED   — the homeowner cancelled an assigned job
-//   JOB_EXPIRED     — an open job lapsed without being assigned
+//   QUOTE_ACCEPTED / QUOTE_DECLINED - a tradesman won / wasn't picked for a job
+//   ESCROW_FUNDED   - homeowner funded the deposit; the tradesman can start
+//   WORK_STARTED    - the tradesman started the work (job → IN_PROGRESS)
+//   WORK_COMPLETED  - the tradesman marked work done; awaiting homeowner approval
+//   JOB_COMPLETED   - the homeowner approved; the balance was released
+//   JOB_CANCELLED   - the homeowner cancelled an assigned job
+//   JOB_EXPIRED     - an open job lapsed without being assigned
 // Kept as an enum so new notification types are added deliberately.
 enum NotificationType {
   JOB_EXPIRING
@@ -523,9 +527,9 @@ model Quote {
 }
 
 // An itemised material/tool line on a quote so the homeowner sees the scope and
-// estimated costs behind the price. Descriptive only — the deposit/escrow figure
+// estimated costs behind the price. Descriptive only - the deposit/escrow figure
 // is the quote's materialsAmount; unitPrice here is the tradesman's estimate.
-// A single line on a quote — labour or a material/part. The quote total is
+// A single line on a quote - labour or a material/part. The quote total is
 // built up from these (see Quote.amount). Despite the model name it now holds
 // both labour and material lines, distinguished by `category`.
 model QuoteMaterial {
@@ -618,7 +622,7 @@ model EscrowTransaction {
 }
 
 // One KYC submission per tradesman (resubmittable while not approved). Document
-// fields hold storage references (keys/URLs) — the actual binary upload is a
+// fields hold storage references (keys/URLs) - the actual binary upload is a
 // separate concern. Sensitive fields (NIC, payout) are never exposed to
 // homeowners; only the submitting tradesman and reviewers can read them.
 model TradesmanVerification {
@@ -800,7 +804,7 @@ model Report {
 // An in-app notification for a single user. The bell and notifications centre
 // read these; `readAt` tracks the unread badge. `href` is an app-relative deep
 // link (e.g. "jobs/<id>"); `jobId` links to the originating job for cascade
-// delete and dedup. Dynamic copy (title/body) is stored in English — the
+// delete and dedup. Dynamic copy (title/body) is stored in English - the
 // surrounding chrome is localised on the client.
 model Notification {
   id        String           @id @default(cuid())
@@ -816,7 +820,7 @@ model Notification {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   job  Job? @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
-  // One notification of a given type per user per job — lets the expiry-notice
+  // One notification of a given type per user per job - lets the expiry-notice
   // dispatch use createMany(skipDuplicates) safely if it ever re-runs.
   @@unique([userId, type, jobId])
   @@index([userId, readAt])

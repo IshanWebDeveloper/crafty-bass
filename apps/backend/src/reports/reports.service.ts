@@ -30,6 +30,8 @@ export class ReportsService {
     let jobId: string | null = null;
     let messageId: string | null = null;
     let reviewId: string | null = null;
+    // When a party complains about an in-progress job, we pause it (see below).
+    let disputeJobId: string | null = null;
 
     switch (dto.targetType) {
       case 'USER': {
@@ -46,10 +48,24 @@ export class ReportsService {
       case 'JOB': {
         const job = await this.prisma.job.findUnique({
           where: { id: dto.targetId },
-          select: { id: true, homeownerId: true },
+          select: {
+            id: true,
+            homeownerId: true,
+            assignedTradesmanId: true,
+            status: true,
+          },
         });
         if (!job) throw new NotFoundException('Reported job not found');
         jobId = job.id;
+        // A complaint from either party against an in-progress job pauses it:
+        // the materials deposit is already with the tradesman, so instead of a
+        // unilateral cancel the job moves to DISPUTED and support mediates any
+        // refund. Restricted to the parties so unrelated users can't freeze a job.
+        const isParty =
+          job.homeownerId === userId || job.assignedTradesmanId === userId;
+        if (job.status === 'IN_PROGRESS' && isParty) {
+          disputeJobId = job.id;
+        }
         break;
       }
       case 'QUOTE': {
@@ -100,7 +116,7 @@ export class ReportsService {
       );
     }
 
-    return this.prisma.report.create({
+    const createReport = this.prisma.report.create({
       data: {
         reporterId: userId,
         targetType: dto.targetType,
@@ -112,6 +128,22 @@ export class ReportsService {
       },
       include: REPORT_INCLUDE,
     });
+
+    if (!disputeJobId) {
+      return createReport;
+    }
+
+    // Pause the disputed job alongside filing the report. Guard on IN_PROGRESS in
+    // the update so a concurrent transition (e.g. the tradesman marking work done)
+    // can't be clobbered - updateMany is a no-op if the status already moved.
+    const [report] = await this.prisma.$transaction([
+      createReport,
+      this.prisma.job.updateMany({
+        where: { id: disputeJobId, status: 'IN_PROGRESS' },
+        data: { status: 'DISPUTED' },
+      }),
+    ]);
+    return report;
   }
 
   async listMine(userId: string, query: ReportQueryDto) {

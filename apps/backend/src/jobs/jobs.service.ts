@@ -68,7 +68,7 @@ export class JobsService {
         longitude: dto.longitude ?? null,
         budgetMin: dto.budgetMin ?? null,
         budgetMax: dto.budgetMax ?? null,
-        scheduledFor: dto.scheduledFor ?? null,
+        scheduledFor: dto.scheduledFor ? new Date(dto.scheduledFor) : null,
         ...(dto.skillIds && dto.skillIds.length > 0
           ? {
               skills: {
@@ -175,7 +175,7 @@ export class JobsService {
     return job;
   }
 
-  // Admin/support detail: richer than the public findOne — includes the
+  // Admin/support detail: richer than the public findOne - includes the
   // assigned tradesman, quotes (with quoter), escrow ledger status, and any
   // reports filed against the job. Kept out of the public findOne so this data
   // is never exposed on the public job page.
@@ -210,7 +210,7 @@ export class JobsService {
     return job;
   }
 
-  // Public marketplace tallies for the landing page — real counts instead of
+  // Public marketplace tallies for the landing page - real counts instead of
   // hardcoded marketing numbers. "matched" = jobs that reached a tradesman
   // (someone was assigned), which is the outcome the homepage advertises.
   async publicStats() {
@@ -231,7 +231,7 @@ export class JobsService {
     if (job.homeownerId !== userId) {
       throw new ForbiddenException('Not your job');
     }
-    // Only an open job (no tradesman assigned yet) can be edited — once a quote
+    // Only an open job (no tradesman assigned yet) can be edited - once a quote
     // is accepted the agreed scope must not move under the tradesman's feet.
     if (job.status !== 'OPEN') {
       throw new ForbiddenException(
@@ -265,7 +265,11 @@ export class JobsService {
         ...(dto.budgetMin !== undefined ? { budgetMin: dto.budgetMin } : {}),
         ...(dto.budgetMax !== undefined ? { budgetMax: dto.budgetMax } : {}),
         ...(dto.scheduledFor !== undefined
-          ? { scheduledFor: dto.scheduledFor }
+          ? {
+              scheduledFor: dto.scheduledFor
+                ? new Date(dto.scheduledFor)
+                : null,
+            }
           : {}),
       },
       include: JOB_LIST_INCLUDE,
@@ -280,6 +284,24 @@ export class JobsService {
     if (!job) throw new NotFoundException('Job not found');
     if (job.homeownerId !== userId) {
       throw new ForbiddenException('Not your job');
+    }
+    // Once work is underway the materials deposit has already been released to
+    // the tradesman (escrow → MATERIALS_RELEASED flips the job to IN_PROGRESS),
+    // so the homeowner can't unilaterally cancel and claw the money back. They
+    // file a report instead and support mediates any refund. See
+    // EscrowService.releaseMaterials.
+    if (job.status === 'IN_PROGRESS') {
+      throw new ForbiddenException(
+        'Work has already started and the materials deposit has been released, ' +
+          'so this job can no longer be cancelled directly. Please file a report ' +
+          'and our team will review it and arrange any refund.',
+      );
+    }
+    if (job.status === 'DISPUTED') {
+      throw new ForbiddenException(
+        'This job is under review by our team following a report. ' +
+          'They will decide on cancellation and any refund.',
+      );
     }
     if (job.status === 'COMPLETED' || job.status === 'CANCELLED') {
       throw new ForbiddenException(
