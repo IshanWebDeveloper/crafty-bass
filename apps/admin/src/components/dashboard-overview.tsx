@@ -102,11 +102,13 @@ export function DashboardOverview() {
   }
 
   const m: AdminMetrics = data;
-  const activeJobs = m.jobs.open + m.jobs.assigned + m.jobs.inProgress;
+  const activeJobs =
+    m.jobs.open + m.jobs.assigned + m.jobs.inProgress + m.jobs.disputed;
   const statusData = [
     { status: 'Open', count: m.jobs.open },
     { status: 'Assigned', count: m.jobs.assigned },
     { status: 'In progress', count: m.jobs.inProgress },
+    { status: 'Under review', count: m.jobs.disputed },
     { status: 'Completed', count: m.jobs.completed },
     { status: 'Cancelled', count: m.jobs.cancelled },
     { status: 'Expired', count: m.jobs.expired },

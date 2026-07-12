@@ -33,7 +33,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/ai-service",
-        "command": ".\\.venv\\Scripts\\python.exe -m ruff check app tests"
+        "command": ".\\.venv\\Scripts\\python.exe -m ruff check app tests evals"
       }
     },
     "test": {
@@ -42,7 +42,10 @@
         "cwd": "apps/ai-service",
         "command": ".\\.venv\\Scripts\\python.exe -m pytest"
       },
-      "outputs": ["{projectRoot}/.pytest_cache/**"]
+      "outputs": [
+        "{projectRoot}/.pytest_cache/**",
+        "{projectRoot}/coverage.xml"
+      ]
     }
   }
 }

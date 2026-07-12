@@ -15,7 +15,7 @@ const PUBLIC_IMAGE_URL_TTL_SECONDS = 60 * 60;
 
 // Normalises a free-text skill name into a catalog slug: lowercase, non-alphanumerics
 // collapsed to hyphens, trimmed. Non-latin names (e.g. Sinhala/Tamil) collapse to
-// empty, so we fall back to the lowercased name itself — still a stable, unique key.
+// empty, so we fall back to the lowercased name itself - still a stable, unique key.
 function slugifySkill(name: string): string {
   const base = name
     .toLowerCase()

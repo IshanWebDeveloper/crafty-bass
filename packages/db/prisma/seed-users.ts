@@ -13,10 +13,10 @@
  * `databaseHooks.user.create.before` skips the MX-record sanity check for the
  * @example.com fixture addresses. ESM hoists all `import` declarations above
  * any side-effecting top-level statement, so we use `await import(...)` (top
- * level await) instead of static imports — the env mutation runs first, then
+ * level await) instead of static imports - the env mutation runs first, then
  * @repo/auth initialises, then better-auth's hook reads the patched value.
  *
- * Idempotent — re-running is a no-op for already-existing users (signup is
+ * Idempotent - re-running is a no-op for already-existing users (signup is
  * caught as a UNIQUE-email conflict; profiles/jobs upsert).
  *
  * Common password for every seeded account: `Password123!`
@@ -124,7 +124,7 @@ const users: SeedUser[] = [
         'plumbing-fittings',
       ],
       primaryTrade: 'Plumbing',
-      // Verified — can quote on browse-jobs and shows the green seal.
+      // Verified - can quote on browse-jobs and shows the green seal.
       isVerified: true,
     },
   },
@@ -147,7 +147,7 @@ const users: SeedUser[] = [
         'electrical-safety',
       ],
       primaryTrade: 'Electrical',
-      // Unverified — quoting is gated; profile shows "Verification required".
+      // Unverified - quoting is gated; profile shows "Verification required".
       isVerified: false,
     },
   },
@@ -382,7 +382,7 @@ async function main() {
   await seedSampleJobs(emailToId);
 
   console.log(
-    `Seeded ${users.length} users — sign in by phone (OTP prints to this ` +
+    `Seeded ${users.length} users - sign in by phone (OTP prints to this ` +
       `console in dev) or email + password ${COMMON_PASSWORD}.`,
   );
   for (const u of users) {

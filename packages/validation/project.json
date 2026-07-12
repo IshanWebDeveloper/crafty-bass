@@ -27,6 +27,14 @@
         "cwd": "packages/validation",
         "command": "pnpm test"
       }
+    },
+    "test-cov": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/validation",
+        "command": "pnpm test:cov"
+      },
+      "outputs": ["{projectRoot}/coverage/**"]
     }
   }
 }

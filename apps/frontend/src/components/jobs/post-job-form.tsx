@@ -83,7 +83,7 @@ const localeToLanguageCode: Record<Locale, LanguageCode> = {
   ta: 'TA',
 };
 
-// Keyword cues per category slug — a lightweight stand-in for the LLM classifier
+// Keyword cues per category slug - a lightweight stand-in for the LLM classifier
 // (the AI service) that keeps the "detect as you type" UX working client-side.
 const KEYWORDS: Record<string, string[]> = {
   plumbing: [
@@ -246,7 +246,7 @@ export function PostJobForm({
     return () => clearTimeout(handle);
   }, [description, categories, setValue]);
 
-  // --- Photo picker (local preview only — persistence needs image storage +
+  // --- Photo picker (local preview only - persistence needs image storage +
   // a Job.photos field, both follow-ups).
   const [photos, setPhotos] = useState<{ id: string; url: string }[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -337,7 +337,7 @@ export function PostJobForm({
 
   const selectedUrgencyLabel = t.urgencyLabels[selectedUrgency];
 
-  // Searchable category options — label is the localized name, with the slug
+  // Searchable category options - label is the localized name, with the slug
   // carried through so the dropdown row can render the matching icon.
   const categoryOptions = useMemo(
     () =>
@@ -678,11 +678,11 @@ export function PostJobForm({
 }
 
 /**
- * An inline radio-card group — a visible set of selectable options (with an
+ * An inline radio-card group - a visible set of selectable options (with an
  * optional hint per option) used for the "task size" and "vehicle needed"
  * posting choices. Selection is optional: clicking the active option clears it.
  */
-function RadioCards<T extends string>({
+export function RadioCards<T extends string>({
   label,
   optional,
   options,

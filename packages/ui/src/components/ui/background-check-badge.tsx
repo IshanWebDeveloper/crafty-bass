@@ -3,13 +3,13 @@ import * as React from 'react';
 import { cn } from '@repo/ui/lib/utils';
 
 /** Filled shield with the tick as negative space (evenodd), so a single
- *  currentColor path renders the whole badge — same trick as VerifiedBadge. */
+ *  currentColor path renders the whole badge - same trick as VerifiedBadge. */
 const SHIELD =
   'M12 1.6l8 3v6.2c0 5.05-3.4 9.16-8 10.6-4.6-1.44-8-5.55-8-10.6V4.6l8-3z' +
   'M10.7 14.85l-2.55-2.55-1.4 1.4 3.95 3.95 6.95-6.95-1.4-1.4-5.55 5.55z';
 
 /**
- * Background-check seal — shown for tradesmen who cleared Crafty Bass's
+ * Background-check seal - shown for tradesmen who cleared Crafty Bass's
  * background / police-clearance check. Brand blue (`--info`) so it reads as a
  * distinct, stronger signal than the green `VerifiedBadge`, and is shown
  * *alongside* it (never instead of it). Pass `label` to render text beside it.

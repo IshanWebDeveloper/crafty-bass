@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { NotificationsService } from './notifications.service.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 
-// Per-user notification feed. No `@Permissions` decorator — these endpoints only
+// Per-user notification feed. No `@Permissions` decorator - these endpoints only
 // require an authenticated session (the PermissionsGuard treats a route with no
 // permission requirement as authenticate-only). Every query is scoped to the
 // caller's id in the service, so a user only ever sees/touches their own.

@@ -85,7 +85,7 @@ export function ReviewsManager() {
               <span className="block font-medium">{row.original.title}</span>
             ) : null}
             <span className="line-clamp-1 text-muted-foreground">
-              {row.original.comment ?? '—'}
+              {row.original.comment ?? '-'}
             </span>
           </div>
         ),
@@ -94,8 +94,8 @@ export function ReviewsManager() {
         header: 'Reviewer → Reviewee',
         cell: ({ row }) => (
           <span className="whitespace-nowrap text-muted-foreground">
-            {row.original.reviewer?.name ?? '—'} →{' '}
-            {row.original.reviewee?.name ?? '—'}
+            {row.original.reviewer?.name ?? '-'} →{' '}
+            {row.original.reviewee?.name ?? '-'}
           </span>
         ),
       },
@@ -226,7 +226,7 @@ function ReviewSheet({
             <SheetHeader>
               <SheetTitle>Review detail</SheetTitle>
               <SheetDescription>
-                On job “{review.job?.title ?? '—'}” ·{' '}
+                On job “{review.job?.title ?? '-'}” ·{' '}
                 {formatDate(review.createdAt)}
               </SheetDescription>
             </SheetHeader>
@@ -252,7 +252,7 @@ function ReviewSheet({
                 <div className="space-y-0.5">
                   <dt className="text-xs text-muted-foreground">Reviewer</dt>
                   <dd className="font-medium">
-                    {review.reviewer?.name ?? '—'}
+                    {review.reviewer?.name ?? '-'}
                   </dd>
                   <dd className="text-xs text-muted-foreground">
                     {review.reviewer?.email}
@@ -261,7 +261,7 @@ function ReviewSheet({
                 <div className="space-y-0.5">
                   <dt className="text-xs text-muted-foreground">Reviewee</dt>
                   <dd className="font-medium">
-                    {review.reviewee?.name ?? '—'}
+                    {review.reviewee?.name ?? '-'}
                   </dd>
                   <dd className="text-xs text-muted-foreground">
                     {review.reviewee?.email}

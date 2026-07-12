@@ -25,7 +25,7 @@ export function HeaderActions({
   const { data: me } = useMe();
   const userType = useSessionStore((s) => s.userType);
   // Gate session-dependent actions until mounted so SSR (no session) and the
-  // first client paint render the same thing — see {@link useMounted}.
+  // first client paint render the same thing - see {@link useMounted}.
   const mounted = useMounted();
 
   return (

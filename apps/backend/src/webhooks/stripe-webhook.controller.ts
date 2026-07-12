@@ -17,7 +17,7 @@ import { Public } from '../common/decorators/public.decorator.js';
 
 // Path matches the existing `stripe:listen` root package.json script
 // (`stripe listen --forward-to http://localhost:3005/api/v1/payments/webhook`).
-// Escrow collection only (see EscrowService) — payment_intent events are the
+// Escrow collection only (see EscrowService) - payment_intent events are the
 // only ones handled; everything else is recorded and ignored.
 @ApiExcludeController()
 @Controller('payments/webhook')
@@ -28,7 +28,7 @@ export class StripeWebhookController {
     private readonly escrow: EscrowService,
   ) {}
 
-  // Stripe (not a session) is the caller — the signature check below is the
+  // Stripe (not a session) is the caller - the signature check below is the
   // real auth, so this bypasses PermissionsGuard's session requirement.
   @Public()
   @Post()

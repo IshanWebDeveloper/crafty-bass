@@ -81,7 +81,7 @@ export function TradesDirectory({
   });
 
   // Seed the filters from the URL (category slug + district), falling back to
-  // the visitor's profile district — derived during render so there's no
+  // the visitor's profile district - derived during render so there's no
   // setState-in-effect. The seed applies until the visitor edits that filter.
   const seedCategoryId = categorySlug
     ? categories?.find((c) => c.slug === categorySlug)?.id

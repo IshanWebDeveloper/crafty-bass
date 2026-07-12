@@ -9,7 +9,7 @@ export function formatLKR(amount: number, currency = CURRENCY): string {
 }
 
 /** Format a min/max budget range, tolerating an open-ended end:
- *  both → `"LKR 12,000 – 20,000"`, min only → `"LKR 12,000+"`,
+ *  both → `"LKR 12,000 - 20,000"`, min only → `"LKR 12,000+"`,
  *  max only → `"Up to LKR 20,000"`. */
 export function formatBudgetRange(
   min?: number | null,
@@ -18,7 +18,7 @@ export function formatBudgetRange(
 ): string {
   const has = (n?: number | null): n is number => n != null && !Number.isNaN(n);
   if (has(min) && has(max)) {
-    return `${currency} ${min.toLocaleString('en-US')} – ${max.toLocaleString('en-US')}`;
+    return `${currency} ${min.toLocaleString('en-US')} - ${max.toLocaleString('en-US')}`;
   }
   if (has(min)) return `${formatLKR(min, currency)}+`;
   if (has(max)) return `Up to ${formatLKR(max, currency)}`;

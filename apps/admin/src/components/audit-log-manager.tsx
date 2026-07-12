@@ -98,7 +98,7 @@ export function AuditLogManager() {
               {JSON.stringify(row.original.details)}
             </code>
           ) : (
-            <span className="text-muted-foreground">—</span>
+            <span className="text-muted-foreground">-</span>
           ),
       },
     ],

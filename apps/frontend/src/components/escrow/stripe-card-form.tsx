@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 import { loadStripe } from '@stripe/stripe-js';
 import {
   CardElement,
@@ -17,10 +18,26 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '',
 );
 
+// Stripe Elements render inside an iframe, so the parent document's CSS custom
+// properties (var(--foreground) etc.) are NOT visible to them - the card input
+// fell back to Stripe's default dark text, invisible on our dark surface.
+// Resolve a token to the concrete rgb() the browser computes for it so Stripe
+// gets a literal colour it can use inside the iframe.
+function resolveCssColor(token: string, fallback: string): string {
+  if (typeof window === 'undefined') return fallback;
+  const probe = document.createElement('span');
+  probe.style.color = `var(${token})`;
+  probe.style.display = 'none';
+  document.body.appendChild(probe);
+  const computed = getComputedStyle(probe).color;
+  probe.remove();
+  return computed || fallback;
+}
+
 // Collects card details via a Stripe Element, creates a PaymentMethod
 // client-side, then hands it to POST /escrows/:id/fund. If Stripe requires
 // additional authentication (3DS), confirms it here and re-submits once to
-// finalize — the webhook is the authoritative fallback either way.
+// finalize - the webhook is the authoritative fallback either way.
 function CardPaymentForm({
   escrowId,
   submitLabel,
@@ -35,6 +52,18 @@ function CardPaymentForm({
   const stripe = useStripe();
   const elements = useElements();
   const [submitting, setSubmitting] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const [colors, setColors] = useState({
+    foreground: '#0a0a0a',
+    muted: '#71717a',
+  });
+
+  useEffect(() => {
+    setColors({
+      foreground: resolveCssColor('--foreground', '#0a0a0a'),
+      muted: resolveCssColor('--muted-foreground', '#71717a'),
+    });
+  }, [resolvedTheme]);
 
   async function handleSubmit() {
     if (!stripe || !elements) return;
@@ -77,8 +106,9 @@ function CardPaymentForm({
             style: {
               base: {
                 fontSize: '14px',
-                color: 'var(--foreground)',
-                '::placeholder': { color: 'var(--muted-foreground)' },
+                color: colors.foreground,
+                iconColor: colors.muted,
+                '::placeholder': { color: colors.muted },
               },
             },
           }}

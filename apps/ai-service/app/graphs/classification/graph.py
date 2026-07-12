@@ -1,6 +1,6 @@
 from typing import Any, cast
 
-from langgraph.graph import END, START, StateGraph
+from langgraph.graph import START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.types import RetryPolicy
 
@@ -16,7 +16,7 @@ def build_classification_graph(
     parse_response: ClassificationNode,
     confidence_gate: ClassificationNode,
 ) -> CompiledStateGraph[ClassificationState]:
-    """Topology (per skills C + B — Command-driven + confidence loop):
+    """Topology (per skills C + B - Command-driven + confidence loop):
 
         START → prepare_taxonomy → call_model ──┬─► confidence_gate ─► END
                                                 │           │
@@ -40,7 +40,7 @@ def build_classification_graph(
     builder.add_node("confidence_gate", cast(Any, confidence_gate))
     builder.add_edge(START, "prepare_taxonomy")
     builder.add_edge("prepare_taxonomy", "call_model")
-    # No static edges out of call_model or confidence_gate — both use
+    # No static edges out of call_model or confidence_gate - both use
     # Command(goto=...) to pick their successor dynamically.
     builder.add_edge("parse_response", "confidence_gate")
     return builder.compile()

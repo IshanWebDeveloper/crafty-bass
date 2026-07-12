@@ -130,7 +130,7 @@ export class ConversationsService {
       });
       if (!job) throw new NotFoundException('Job not found');
       if (job.homeownerId === userId) {
-        // Homeowner is starting a conversation — counterpart must be supplied
+        // Homeowner is starting a conversation - counterpart must be supplied
         // (typically the tradesman they want to talk to, derived from a quote).
         if (!recipientId) {
           throw new BadRequestException(

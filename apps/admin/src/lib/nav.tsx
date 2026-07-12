@@ -11,7 +11,7 @@ import type { Role } from './api/users';
 // Admin console navigation, with per-item role gating. An item (or group) with
 // no `roles` is visible to any staff member (ADMIN + SUPPORT); otherwise the
 // user's role must be listed. SUPPORT is moderation-only, so user management,
-// categories, audit log and settings are ADMIN-only — mirroring the backend
+// categories, audit log and settings are ADMIN-only - mirroring the backend
 // RBAC in packages/auth/src/access.ts.
 export type NavLink = {
   title: string;

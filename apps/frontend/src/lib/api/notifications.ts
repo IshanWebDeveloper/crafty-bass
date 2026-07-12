@@ -1,6 +1,17 @@
 import { apiFetch } from '../api';
 
-export type NotificationType = 'JOB_EXPIRING';
+// Mirrors the backend NotificationType enum (packages/db schema). JOB_EXPIRING
+// warns tradesmen of a lapsing job; the rest track a job through its lifecycle.
+export type NotificationType =
+  | 'JOB_EXPIRING'
+  | 'QUOTE_ACCEPTED'
+  | 'QUOTE_DECLINED'
+  | 'ESCROW_FUNDED'
+  | 'WORK_STARTED'
+  | 'WORK_COMPLETED'
+  | 'JOB_COMPLETED'
+  | 'JOB_CANCELLED'
+  | 'JOB_EXPIRED';
 
 // Backend notification record (see NotificationsService.toDto). Dynamic copy
 // (title/body) is English; the client derives icon/tint/group/time for display.

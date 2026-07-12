@@ -8,7 +8,7 @@ interface SessionStore {
    * chosen. This is the synchronous, app-wide source of truth the role-aware
    * header reads from. It's seeded from `useMe` (server state) and set
    * optimistically at sign-up so the UI is role-correct the instant the user
-   * lands on their first page — before the `me` query refetches.
+   * lands on their first page - before the `me` query refetches.
    */
   userType: UserType;
   setUserType: (userType: UserType) => void;

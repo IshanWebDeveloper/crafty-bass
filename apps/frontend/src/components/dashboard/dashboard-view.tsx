@@ -26,7 +26,7 @@ import type { Dictionary } from '@/i18n/dictionaries';
  * Role-aware dashboard. Homeowners see their posted-job activity; tradesmen see
  * their quoting activity. We render the homeowner view until the session
  * resolves on the client (and we know the userType) so SSR and the first client
- * paint agree — same approach as the role-aware nav.
+ * paint agree - same approach as the role-aware nav.
  */
 export function DashboardView({
   locale,
@@ -63,7 +63,7 @@ function HomeownerDashboard({
 
   return (
     <div className="space-y-6">
-      {/* Homeowners post jobs — they aren't assigned work and don't receive
+      {/* Homeowners post jobs - they aren't assigned work and don't receive
           reviews, so only the posted/active stats are relevant here. */}
       <div className="grid gap-4 sm:grid-cols-2">
         <StatCard
@@ -105,7 +105,7 @@ function HomeownerDashboard({
                   <div className="flex min-w-0 items-center gap-3">
                     <CategoryBadge
                       slug={job.category?.slug}
-                      label={job.category?.nameEn ?? '—'}
+                      label={job.category?.nameEn ?? '-'}
                       className="hidden shrink-0 sm:inline-flex"
                     />
                     <div className="min-w-0">

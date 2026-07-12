@@ -74,7 +74,7 @@ export class GdprExportProcessor extends WorkerHost {
     });
 
     if (!user) {
-      this.logger.warn(`User ${userId} not found — skipping GDPR export`);
+      this.logger.warn(`User ${userId} not found - skipping GDPR export`);
       return { fileKey: '' };
     }
 
@@ -87,7 +87,7 @@ export class GdprExportProcessor extends WorkerHost {
       'README.txt',
       Buffer.from(
         [
-          'Crafty Bass — GDPR Data Export',
+          'Crafty Bass - GDPR Data Export',
           `Generated for user: ${user.id}`,
           `Generated at: ${new Date().toISOString()}`,
           '',
@@ -114,7 +114,7 @@ export class GdprExportProcessor extends WorkerHost {
   private async sendReadyEmail(email: string, name: string): Promise<void> {
     if (!this.resend || !email) {
       this.logger.warn(
-        'Resend is not configured — skipping GDPR export ready email.',
+        'Resend is not configured - skipping GDPR export ready email.',
       );
       return;
     }
@@ -127,7 +127,7 @@ export class GdprExportProcessor extends WorkerHost {
       await this.resend.emails.send({
         to: email,
         from: this.emailFrom,
-        subject: 'Your data export is ready — Crafty Bass',
+        subject: 'Your data export is ready - Crafty Bass',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
             <h2>Your data export is ready</h2>

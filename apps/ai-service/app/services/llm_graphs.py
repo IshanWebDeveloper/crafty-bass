@@ -191,7 +191,7 @@ class LlmGraphService:
         return prepare_taxonomy_prompt_node(state)
 
     def _classify_with_model(self, state: ClassificationState) -> Any:
-        # Returns langgraph.types.Command — Command(update=..., goto=...).
+        # Returns langgraph.types.Command - Command(update=..., goto=...).
         return classify_with_model_node(
             state,
             llm_builder=self._build_llm,

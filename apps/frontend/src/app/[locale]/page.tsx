@@ -3,6 +3,8 @@ import { HeroSection } from '@/components/home/hero-section';
 import { CategoryGrid } from '@/components/home/category-grid';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { redirectIfAuthenticated } from '@/lib/server-session';
+import { getJobStatsServer } from '@/lib/api/stats.server';
 
 export default async function Home({
   params,
@@ -10,13 +12,18 @@ export default async function Home({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  const dict = await getDictionary(locale);
+  // Signed-in users belong on their dashboard, not the marketing landing page.
+  await redirectIfAuthenticated(locale);
+  const [dict, stats] = await Promise.all([
+    getDictionary(locale),
+    getJobStatsServer(),
+  ]);
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       <SiteHeader locale={locale} dict={dict} />
       <main className="flex-1">
-        <HeroSection locale={locale} dict={dict} />
+        <HeroSection locale={locale} dict={dict} stats={stats} />
         <CategoryGrid locale={locale} dict={dict} />
       </main>
     </div>

@@ -21,7 +21,7 @@ export function SiteHeader({
         <Link
           href={`/${locale}`}
           className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label="Crafty Bass — home"
+          aria-label="Crafty Bass - home"
         >
           <Logo />
         </Link>

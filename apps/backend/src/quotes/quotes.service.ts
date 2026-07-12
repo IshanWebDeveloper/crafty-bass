@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { maxDeposit, computeQuoteTotals, VAT_RATE } from '@repo/validation';
 import { PrismaService } from '../common/prisma/prisma.service.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
 import type { CreateQuoteDto } from './dto/index.js';
 
 const QUOTE_INCLUDE = {
@@ -25,7 +26,10 @@ const QUOTE_INCLUDE = {
 
 @Injectable()
 export class QuotesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async create(userId: string, jobId: string, dto: CreateQuoteDto) {
     const job = await this.prisma.job.findUnique({
@@ -117,8 +121,12 @@ export class QuotesService {
         depositRequested: dto.depositRequested ?? null,
         currency: dto.currency,
         message: dto.message ?? null,
-        estimatedStart: dto.estimatedStart ?? null,
-        estimatedCompletion: dto.estimatedCompletion ?? null,
+        estimatedStart: dto.estimatedStart
+          ? new Date(dto.estimatedStart)
+          : null,
+        estimatedCompletion: dto.estimatedCompletion
+          ? new Date(dto.estimatedCompletion)
+          : null,
         validUntil,
         materials: {
           create: dto.lineItems.map((l) => ({
@@ -131,6 +139,111 @@ export class QuotesService {
         },
       },
       include: QUOTE_INCLUDE,
+    });
+  }
+
+  async update(userId: string, quoteId: string, dto: CreateQuoteDto) {
+    const quote = await this.prisma.quote.findUnique({
+      where: { id: quoteId },
+      select: {
+        tradesmanId: true,
+        status: true,
+        job: { select: { status: true } },
+      },
+    });
+    if (!quote) throw new NotFoundException('Quote not found');
+    if (quote.tradesmanId !== userId) {
+      throw new ForbiddenException('Not your quote');
+    }
+    if (quote.status !== 'PENDING') {
+      throw new ConflictException('Only pending quotes can be edited');
+    }
+    if (quote.job.status !== 'OPEN') {
+      throw new ConflictException('Job is no longer open for quotes');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        tradesmanProfile: {
+          select: {
+            isVerified: true,
+            avgRating: true,
+            jobsCompleted: true,
+            backgroundChecked: true,
+          },
+        },
+      },
+    });
+
+    // Rebuild the total server-side from the edited line items + adjustments so
+    // we never trust client-side maths (it drives escrow and what the homeowner
+    // pays).
+    const totals = computeQuoteTotals(dto.lineItems, {
+      calloutFee: dto.calloutFee,
+      discount: dto.discount,
+      applyVat: dto.applyVat,
+    });
+
+    // A requested materials deposit must sit within the tradesman's trust tier
+    // and never exceed the materials line on the quote.
+    const depositRequested = dto.depositRequested ?? 0;
+    if (depositRequested > 0) {
+      const profile = user?.tradesmanProfile;
+      const allowed = maxDeposit(
+        {
+          verified: profile?.isVerified ?? false,
+          rating: profile ? Number(profile.avgRating) : 0,
+          completed: profile?.jobsCompleted ?? 0,
+          bgChecked: profile?.backgroundChecked ?? false,
+        },
+        totals.total,
+        totals.materials,
+      );
+      if (depositRequested > allowed) {
+        throw new BadRequestException(
+          `Requested deposit exceeds your allowed maximum of ${allowed}`,
+        );
+      }
+    }
+
+    const validUntil = new Date(
+      Date.now() + dto.validityDays * 24 * 60 * 60 * 1000,
+    );
+
+    // Replace the line items wholesale and refresh the derived money fields.
+    return this.prisma.$transaction(async (tx) => {
+      await tx.quoteMaterial.deleteMany({ where: { quoteId } });
+      return tx.quote.update({
+        where: { id: quoteId },
+        data: {
+          amount: totals.total,
+          materialsAmount: totals.materials,
+          calloutFee: dto.calloutFee ?? null,
+          discount: dto.discount ?? null,
+          vatRate: dto.applyVat ? VAT_RATE : null,
+          depositRequested: dto.depositRequested ?? null,
+          currency: dto.currency,
+          message: dto.message ?? null,
+          estimatedStart: dto.estimatedStart
+            ? new Date(dto.estimatedStart)
+            : null,
+          estimatedCompletion: dto.estimatedCompletion
+            ? new Date(dto.estimatedCompletion)
+            : null,
+          validUntil,
+          materials: {
+            create: dto.lineItems.map((l) => ({
+              category: l.category,
+              name: l.name,
+              quantity: l.quantity,
+              unit: l.unit ?? null,
+              unitPrice: l.unitPrice,
+            })),
+          },
+        },
+        include: QUOTE_INCLUDE,
+      });
     });
   }
 
@@ -192,8 +305,8 @@ export class QuotesService {
     const total = Number(quote.amount);
     const materials = quote.materialsAmount ? Number(quote.materialsAmount) : 0;
 
-    return this.prisma.$transaction(async (tx) => {
-      const accepted = await tx.quote.update({
+    const accepted = await this.prisma.$transaction(async (tx) => {
+      const acceptedQuote = await tx.quote.update({
         where: { id: quoteId },
         data: { status: 'ACCEPTED', respondedAt: new Date() },
       });
@@ -224,8 +337,16 @@ export class QuotesService {
           },
         });
       }
-      return accepted;
+      return acceptedQuote;
     });
+
+    // After the assignment commits: tell the winner they got the job and the
+    // other bidders they weren't picked. Best-effort (never throws).
+    await this.notifications.notifyQuoteDecision(
+      quote.jobId,
+      quote.tradesmanId,
+    );
+    return accepted;
   }
 
   async reject(userId: string, quoteId: string) {

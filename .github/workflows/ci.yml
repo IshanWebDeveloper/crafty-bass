@@ -87,5 +87,17 @@ jobs:
       - name: Test affected projects
         run: pnpm affected:test
 
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          if-no-files-found: ignore
+          path: |
+            apps/backend/coverage
+            apps/backend/coverage-vitest
+            packages/validation/coverage
+            apps/ai-service/coverage.xml
+
       - name: Build affected projects
         run: pnpm affected:build

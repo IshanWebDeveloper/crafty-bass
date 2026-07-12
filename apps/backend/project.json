@@ -23,6 +23,14 @@
       },
       "cache": false
     },
+    "dev-built": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/backend",
+        "command": "nest build && dotenv -e .env -- node dist/main.js"
+      },
+      "cache": false
+    },
     "start": {
       "executor": "nx:run-commands",
       "options": {
@@ -42,9 +50,39 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/backend",
-        "command": "dotenv -e .env.test -- jest"
+        "commands": [
+          "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest",
+          "dotenv -e .env.test -- vitest run"
+        ],
+        "parallel": false
       },
-      "outputs": ["{projectRoot}/coverage/**"]
+      "outputs": [
+        "{projectRoot}/coverage/**",
+        "{projectRoot}/coverage-vitest/**"
+      ]
+    },
+    "test-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/backend",
+        "command": "dotenv -e .env.test -- vitest run -c vitest.integration.config.ts"
+      },
+      "cache": false
+    },
+    "test-cov": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/backend",
+        "commands": [
+          "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest --coverage",
+          "dotenv -e .env.test -- vitest run --coverage"
+        ],
+        "parallel": false
+      },
+      "outputs": [
+        "{projectRoot}/coverage/**",
+        "{projectRoot}/coverage-vitest/**"
+      ]
     },
     "docker-build": {
       "dependsOn": ["build"],

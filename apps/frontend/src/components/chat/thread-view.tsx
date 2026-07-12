@@ -7,8 +7,14 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Bubble,
+  BubbleContent,
   Button,
-  cn,
+  Message,
+  MessageAvatar,
+  MessageContent,
+  MessageFooter,
+  MessageGroup,
   Skeleton,
 } from '@repo/ui';
 import { toast } from 'sonner';
@@ -109,11 +115,12 @@ export function ThreadView({
         ) : messages.data.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t.loading}</p>
         ) : (
-          <ul className="flex flex-col gap-3">
+          <MessageGroup className="gap-4">
             {[...messages.data].reverse().map((msg) => {
               const mine = msg.senderId === currentUserId;
+              const name = mine ? session.user.name : other?.user.name;
               const initials =
-                (mine ? session.user.name : other?.user.name)
+                name
                   ?.split(' ')
                   .map((p) => p[0])
                   .filter(Boolean)
@@ -121,52 +128,41 @@ export function ThreadView({
                   .join('')
                   .toUpperCase() ?? '?';
               return (
-                <li
-                  key={msg.id}
-                  className={cn(
-                    'flex max-w-[80%] gap-2',
-                    mine ? 'ml-auto flex-row-reverse' : '',
-                  )}
-                >
-                  <Avatar className="h-7 w-7">
-                    {!mine && other?.user.image ? (
-                      <AvatarImage
-                        src={other.user.image}
-                        alt={other.user.name}
-                      />
-                    ) : null}
-                    <AvatarFallback className="text-[10px]">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div
-                    className={cn(
-                      'rounded-2xl px-3.5 py-2',
-                      mine
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted text-foreground',
-                    )}
-                  >
-                    <p className="whitespace-pre-line text-sm">{msg.body}</p>
-                    <p
-                      className={cn(
-                        'mt-1 text-[10px]',
-                        mine
-                          ? 'text-primary-foreground/70'
-                          : 'text-muted-foreground',
-                      )}
+                <Message key={msg.id} align={mine ? 'end' : 'start'}>
+                  <MessageAvatar>
+                    <Avatar className="h-7 w-7">
+                      {!mine && other?.user.image ? (
+                        <AvatarImage
+                          src={other.user.image}
+                          alt={other.user.name}
+                        />
+                      ) : null}
+                      <AvatarFallback className="text-[10px]">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                  </MessageAvatar>
+                  <MessageContent>
+                    <Bubble
+                      align={mine ? 'end' : 'start'}
+                      variant={mine ? 'default' : 'muted'}
                     >
+                      <BubbleContent>
+                        <p className="whitespace-pre-line">{msg.body}</p>
+                      </BubbleContent>
+                    </Bubble>
+                    <MessageFooter>
                       {new Date(msg.createdAt).toLocaleString(locale, {
                         hour: '2-digit',
                         minute: '2-digit',
                       })}
-                    </p>
-                  </div>
-                </li>
+                    </MessageFooter>
+                  </MessageContent>
+                </Message>
               );
             })}
             <div ref={bottomRef} />
-          </ul>
+          </MessageGroup>
         )}
       </div>
 

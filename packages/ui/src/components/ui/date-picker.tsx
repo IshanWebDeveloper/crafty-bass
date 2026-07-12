@@ -21,21 +21,21 @@ export type DatePickerProps = {
   /** Disables the whole control (the trigger button). */
   disabled?: boolean;
   /**
-   * Restricts which dates can be picked — forwarded to react-day-picker's
+   * Restricts which dates can be picked - forwarded to react-day-picker's
    * `disabled` matcher (e.g. `{ before: new Date() }` for future-only).
    */
   disabledDates?: React.ComponentProps<typeof Calendar>['disabled'];
   /** date-fns format string for the trigger label. Defaults to e.g. "June 26th, 2026". */
   dateFormat?: string;
   /**
-   * Calendar caption style — forwarded to react-day-picker. Use `'dropdown'`
+   * Calendar caption style - forwarded to react-day-picker. Use `'dropdown'`
    * (with `startMonth`/`endMonth`) for far-back dates like a date of birth so
    * users can jump years instead of paging month by month.
    */
   captionLayout?: React.ComponentProps<typeof Calendar>['captionLayout'];
-  /** Earliest navigable month — bounds the dropdown range when using `captionLayout`. */
+  /** Earliest navigable month - bounds the dropdown range when using `captionLayout`. */
   startMonth?: Date;
-  /** Latest navigable month — bounds the dropdown range when using `captionLayout`. */
+  /** Latest navigable month - bounds the dropdown range when using `captionLayout`. */
   endMonth?: Date;
   /** Forwarded to the trigger so a <label htmlFor> can target it. */
   id?: string;
@@ -44,7 +44,7 @@ export type DatePickerProps = {
 };
 
 /**
- * Single-date picker — the shadcn Base-UI composition of Popover + Calendar.
+ * Single-date picker - the shadcn Base-UI composition of Popover + Calendar.
  * The trigger is styled directly with `buttonVariants` (rather than nesting a
  * <Button>) so there's only one real <button>, avoiding Base UI's
  * nested-button hydration error. Controlled: pass `value` + `onChange`.

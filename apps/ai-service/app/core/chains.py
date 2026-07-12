@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import json
-from typing import Optional, Any, TypedDict, cast, Callable
+from collections.abc import Callable
+from typing import Any, TypedDict, cast
 
-from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import BaseMessage
+from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import Runnable
-from .client import get_llm
-from .prompts import chat_prompt, classification_template
+
+from app.core.config import get_settings
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.schemas.classification import (
     JobClassificationDraft,
@@ -15,7 +16,9 @@ from app.schemas.classification import (
     JobClassificationResponse,
     TaxonomyOption,
 )
-from app.core.config import get_settings
+
+from .client import get_llm
+from .prompts import chat_prompt, classification_template
 
 
 class RawClassificationOutput(TypedDict):
@@ -24,7 +27,9 @@ class RawClassificationOutput(TypedDict):
     parsing_error: Any
 
 
-def build_chat_chain(model: Optional[str] = None, temperature: Optional[float] = None) -> Runnable[ChatRequest, str]:
+def build_chat_chain(
+    model: str | None = None, temperature: float | None = None
+) -> Runnable[ChatRequest, str]:
     """Build a chat chain.
 
     If `model` is None the configured provider default from `Settings` is used.
@@ -59,7 +64,9 @@ def run_chat(request: ChatRequest) -> ChatResponse:
     return ChatResponse(model=model, response=text)
 
 
-def build_classification_chain(model: Optional[str] = None, temperature: Optional[float] = None) -> Callable[[str, str, str, Optional[str]], Any]:
+def build_classification_chain(
+    model: str | None = None, temperature: float | None = None
+) -> Callable[[str, str, str, str | None], Any]:
     """Return a callable that runs the classification LLM with structured output.
 
     The returned callable has signature `(title, description, language, taxonomy_prompt) -> dict`.
@@ -70,7 +77,12 @@ def build_classification_chain(model: Optional[str] = None, temperature: Optiona
         llm.with_structured_output(JobClassificationDraft, include_raw=True),
     )
 
-    def classify(title: str, description: str, language: str, taxonomy_prompt: str | None = None) -> Any:
+    def classify(
+        title: str,
+        description: str,
+        language: str,
+        taxonomy_prompt: str | None = None,
+    ) -> Any:
         taxonomy_prompt = taxonomy_prompt or ""
         prompt = classification_template.format(
             language=language,
@@ -106,7 +118,10 @@ def run_classification(request: JobClassificationRequest) -> JobClassificationRe
     skills = _format_taxonomy_lines(
         request.skills, include_parent=True) or "- None provided"
 
-    taxonomy_prompt = f"Available service categories:\n{categories}\n\nAvailable skills:\n{skills}\n"
+    taxonomy_prompt = (
+        f"Available service categories:\n{categories}\n\n"
+        f"Available skills:\n{skills}\n"
+    )
 
     response: RawClassificationOutput = classify(request.title, request.description,
                                                  request.language, taxonomy_prompt)

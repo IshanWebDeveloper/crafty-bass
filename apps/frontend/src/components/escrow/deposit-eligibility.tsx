@@ -8,7 +8,7 @@ import type { Dictionary } from '@/i18n/dictionaries';
 
 /**
  * Shows the tradesman's deposit tier, the amount they may request on this
- * quote, and the next step to unlock a higher tier — mirroring the design's
+ * quote, and the next step to unlock a higher tier - mirroring the design's
  * DepositEligibility band. Uses the shared depositTier/maxDeposit logic so the
  * UI and backend guard agree exactly.
  */

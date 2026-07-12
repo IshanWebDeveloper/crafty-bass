@@ -26,7 +26,7 @@ export type VerificationListItem = {
 };
 
 // The full submission returned by GET /verification/:id. Document *keys* are
-// present but not directly viewable — call getVerificationDocuments for URLs.
+// present but not directly viewable - call getVerificationDocuments for URLs.
 export type VerificationDetail = VerificationListItem & {
   gender: string | null;
   dateOfBirth: string | null;

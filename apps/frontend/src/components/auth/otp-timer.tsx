@@ -17,7 +17,7 @@ export function OtpTimer({
 }: {
   sentAt: number;
   durationSec?: number;
-  /** "Code expires in {time}" — {time} is replaced with M:SS. */
+  /** "Code expires in {time}" - {time} is replaced with M:SS. */
   expiresInLabel: string;
   expiredLabel: string;
 }) {

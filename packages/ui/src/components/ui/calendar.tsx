@@ -27,9 +27,9 @@ function CalendarDropdown({
   'aria-label': ariaLabel,
 }: DropdownProps) {
   const selected = options?.find((o) => String(o.value) === String(value));
-  const handleValueChange = (next: string) => {
+  const handleValueChange = (next: string | null) => {
     onChange?.({
-      target: { value: next },
+      target: { value: next ?? '' },
     } as React.ChangeEvent<HTMLSelectElement>);
   };
   return (

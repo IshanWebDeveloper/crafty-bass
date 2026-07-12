@@ -80,10 +80,10 @@ type Form = {
   district: string;
   primaryTrade: string;
   yearsExperience: string;
-  // skills — catalog picks (Skill ids) plus free-text skills the tradesman typed
+  // skills - catalog picks (Skill ids) plus free-text skills the tradesman typed
   skillIds: string[];
   customSkills: string[];
-  // documents — each holds the uploaded R2 object key (null until uploaded)
+  // documents - each holds the uploaded R2 object key (null until uploaded)
   nicFront: string | null;
   nicBack: string | null;
   photo: string | null;
@@ -91,7 +91,7 @@ type Form = {
   licence: string | null;
   licenceNumber: string;
   policeClearance: string | null;
-  // work photos — array of uploaded R2 object keys
+  // work photos - array of uploaded R2 object keys
   portfolio: string[];
   // details
   serviceRadiusKm: number;
@@ -359,7 +359,7 @@ export function OnboardingWizard({
       {existing?.status === 'REJECTED' ? (
         <div className="rounded-lg bg-warning-subtle px-4 py-3 text-sm text-warning-foreground">
           <span className="font-semibold">{t.rejected.heading}</span>
-          {existing.rejectionReason ? ` — ${existing.rejectionReason}` : ''}
+          {existing.rejectionReason ? ` - ${existing.rejectionReason}` : ''}
         </div>
       ) : null}
 
@@ -636,7 +636,7 @@ function DocTile({
         {uploading ? (
           <Loader2 className="size-5 animate-spin" aria-hidden />
         ) : previewUrl ? (
-          // Presigned R2 URL — plain img avoids next/image remotePatterns config.
+          // Presigned R2 URL - plain img avoids next/image remotePatterns config.
           // eslint-disable-next-line @next/next/no-img-element
           <img src={previewUrl} alt="" className="size-full object-cover" />
         ) : done ? (
@@ -821,7 +821,7 @@ function Details({
               className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted"
             >
               {up.previews[key] ? (
-                // Presigned R2 URL — plain img avoids next/image config.
+                // Presigned R2 URL - plain img avoids next/image config.
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={up.previews[key]}

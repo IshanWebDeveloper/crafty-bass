@@ -5,7 +5,7 @@ import { type Locale } from '@/i18n/config';
 import { requireAuth } from '@/lib/server-session';
 
 export const metadata: Metadata = {
-  title: 'Privacy — Crafty Bass',
+  title: 'Privacy - Crafty Bass',
   description: 'Manage your data exports and privacy settings.',
 };
 

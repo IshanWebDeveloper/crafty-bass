@@ -8,6 +8,18 @@ import { depositTier, maxDeposit } from '@repo/validation';
 import { EscrowService } from './escrow.service.js';
 import type { PrismaService } from '../common/prisma/prisma.service.js';
 import type { StripeService } from '../common/services/stripe.service.js';
+import type { NotificationsService } from '../notifications/notifications.service.js';
+
+// No-op notifications: the service fires best-effort lifecycle notices we don't
+// assert on here.
+function makeNotifications() {
+  return {
+    notifyEscrowFunded: jest.fn(() => Promise.resolve()),
+    notifyWorkStarted: jest.fn(() => Promise.resolve()),
+    notifyWorkSubmitted: jest.fn(() => Promise.resolve()),
+    notifyJobCompleted: jest.fn(() => Promise.resolve()),
+  } as unknown as NotificationsService;
+}
 
 // A minimal escrow row shaped like the ESCROW_INCLUDE payload the service reads.
 function escrowRow(overrides: Record<string, unknown> = {}) {
@@ -64,7 +76,7 @@ function makePrisma(row: ReturnType<typeof escrowRow>) {
   };
 }
 
-// A card payment defaults to an immediate Stripe success — override methods
+// A card payment defaults to an immediate Stripe success - override methods
 // per test for requires_action / retry scenarios.
 function makeStripe(overrides: Record<string, unknown> = {}) {
   return {
@@ -87,7 +99,7 @@ function makeStripe(overrides: Record<string, unknown> = {}) {
   } as unknown as StripeService;
 }
 
-// Narrow the recorded update() argument to read the status it wrote — the
+// Narrow the recorded update() argument to read the status it wrote - the
 // card-funding path can issue more than one update() call (persisting the
 // PaymentIntent id before finalizing), so scan from the most recent call for
 // one that actually set a status.
@@ -161,7 +173,11 @@ describe('deposit tier (shared domain logic)', () => {
 describe('EscrowService state machine', () => {
   it('funds a requested deposit by the homeowner (paypal, still simulated)', async () => {
     const { prisma, update } = makePrisma(escrowRow({ status: 'REQUESTED' }));
-    const service = new EscrowService(prisma, makeStripe());
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+    );
     await service.fund('home1', 'esc1', { paymentMethod: 'paypal' });
     expect(statusWrittenBy(update)).toBe('FUNDED');
   });
@@ -169,11 +185,12 @@ describe('EscrowService state machine', () => {
   it('funds a requested deposit by the homeowner via a real Stripe card payment', async () => {
     const { prisma, update } = makePrisma(escrowRow({ status: 'REQUESTED' }));
     const stripe = makeStripe();
-    const service = new EscrowService(prisma, stripe);
+    const service = new EscrowService(prisma, stripe, makeNotifications());
     await service.fund('home1', 'esc1', {
       paymentMethod: 'card',
       stripePaymentMethodId: 'pm_test123',
     });
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- asserting on a jest mock method reference
     expect(stripe.createAndConfirmPaymentIntent).toHaveBeenCalledWith(
       expect.objectContaining({
         paymentMethodId: 'pm_test123',
@@ -195,20 +212,24 @@ describe('EscrowService state machine', () => {
           }),
       ),
     });
-    const service = new EscrowService(prisma, stripe);
+    const service = new EscrowService(prisma, stripe, makeNotifications());
     const result = (await service.fund('home1', 'esc1', {
       paymentMethod: 'card',
       stripePaymentMethodId: 'pm_test123',
     })) as { requiresAction?: boolean; clientSecret?: string };
     expect(result.requiresAction).toBe(true);
     expect(result.clientSecret).toBe('secret_action');
-    // Not finalized yet — only the PaymentIntent-id bookkeeping update ran.
+    // Not finalized yet - only the PaymentIntent-id bookkeeping update ran.
     expect(statusWrittenBy(update)).not.toBe('FUNDED');
   });
 
   it('rejects card funding without a stripePaymentMethodId', async () => {
     const { prisma } = makePrisma(escrowRow({ status: 'REQUESTED' }));
-    const service = new EscrowService(prisma, makeStripe());
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+    );
     await expect(
       service.fund('home1', 'esc1', { paymentMethod: 'card' }),
     ).rejects.toThrow('stripePaymentMethodId is required for card payments');
@@ -216,7 +237,11 @@ describe('EscrowService state machine', () => {
 
   it('rejects funding by a non-homeowner', async () => {
     const { prisma } = makePrisma(escrowRow({ status: 'REQUESTED' }));
-    const service = new EscrowService(prisma, makeStripe());
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+    );
     await expect(
       service.fund('trade1', 'esc1', { paymentMethod: 'card' }),
     ).rejects.toBeInstanceOf(ForbiddenException);
@@ -224,7 +249,11 @@ describe('EscrowService state machine', () => {
 
   it('refuses to fund a deposit that is not awaiting funding', async () => {
     const { prisma } = makePrisma(escrowRow({ status: 'FUNDED' }));
-    const service = new EscrowService(prisma, makeStripe());
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+    );
     await expect(
       service.fund('home1', 'esc1', { paymentMethod: 'card' }),
     ).rejects.toBeInstanceOf(ConflictException);
@@ -232,7 +261,11 @@ describe('EscrowService state machine', () => {
 
   it('lets the tradesman release materials only once funded', async () => {
     const { prisma, update } = makePrisma(escrowRow({ status: 'FUNDED' }));
-    const service = new EscrowService(prisma, makeStripe());
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+    );
     await service.releaseMaterials('trade1', 'esc1');
     expect(statusWrittenBy(update)).toBe('MATERIALS_RELEASED');
   });
@@ -241,14 +274,22 @@ describe('EscrowService state machine', () => {
     const { prisma, update } = makePrisma(
       escrowRow({ status: 'WORK_COMPLETED' }),
     );
-    const service = new EscrowService(prisma, makeStripe());
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+    );
     await service.approve('home1', 'esc1');
     expect(statusWrittenBy(update)).toBe('RELEASED');
   });
 
   it('refunds only a funded, unreleased deposit', async () => {
     const { prisma } = makePrisma(escrowRow({ status: 'MATERIALS_RELEASED' }));
-    const service = new EscrowService(prisma, makeStripe());
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+    );
     await expect(service.refund('home1', 'esc1')).rejects.toBeInstanceOf(
       ConflictException,
     );
@@ -263,8 +304,9 @@ describe('EscrowService state machine', () => {
       }),
     );
     const stripe = makeStripe();
-    const service = new EscrowService(prisma, stripe);
+    const service = new EscrowService(prisma, stripe, makeNotifications());
     await service.refund('home1', 'esc1');
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- asserting on a jest mock method reference
     expect(stripe.createRefund).toHaveBeenCalledWith({
       paymentIntentId: 'pi_test123',
     });
@@ -276,7 +318,11 @@ describe('EscrowService state machine', () => {
     (prisma.jobEscrow.findUnique as jest.Mock).mockResolvedValueOnce(
       null as never,
     );
-    const service = new EscrowService(prisma, makeStripe());
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+    );
     await expect(service.getById('home1', 'missing')).rejects.toBeInstanceOf(
       NotFoundException,
     );
@@ -298,7 +344,11 @@ describe('EscrowService state machine', () => {
       return Promise.resolve({ ...row, status: 'FUNDED' });
     });
 
-    const service = new EscrowService(prisma, makeStripe());
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+    );
     await service.confirmFundedByPaymentIntent('pi_abc');
     await service.confirmFundedByPaymentIntent('pi_abc');
 

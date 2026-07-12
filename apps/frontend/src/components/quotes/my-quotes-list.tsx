@@ -84,12 +84,23 @@ export function MyQuotesList({
                 <p className="mt-1 text-xs text-muted-foreground">
                   {tj.statusLabels[q.job.status]} ·{' '}
                   {[q.job.city, q.job.district].filter(Boolean).join(', ') ||
-                    '—'}{' '}
+                    '-'}{' '}
                   · {new Date(q.createdAt).toLocaleDateString(locale)}
                 </p>
                 {q.message ? (
                   <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
                     {q.message}
+                  </p>
+                ) : null}
+                {q.estimatedStart || q.estimatedCompletion ? (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {q.estimatedStart
+                      ? `${t.estimatedStart}: ${new Date(q.estimatedStart).toLocaleDateString(locale)}`
+                      : ''}
+                    {q.estimatedStart && q.estimatedCompletion ? ' · ' : ''}
+                    {q.estimatedCompletion
+                      ? `${t.estimatedCompletion}: ${new Date(q.estimatedCompletion).toLocaleDateString(locale)}`
+                      : ''}
                   </p>
                 ) : null}
                 <div className="mt-3">
@@ -107,26 +118,36 @@ export function MyQuotesList({
               </div>
               <div className="flex flex-col items-end gap-2 text-right">
                 <p className="font-mono text-lg font-semibold">
-                  {q.currency} {q.amount.toLocaleString(locale)}
+                  {q.currency} {Number(q.amount).toLocaleString(locale)}
                 </p>
                 <Badge variant={statusVariant(q.status)}>
                   {t.statusLabels[q.status]}
                 </Badge>
                 {q.status === 'PENDING' ? (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      if (window.confirm(tm.withdrawConfirm)) {
-                        withdraw.mutate(q.id);
-                      }
-                    }}
-                    disabled={withdraw.isPending}
-                  >
-                    {withdraw.isPending
-                      ? t.actions.withdrawing
-                      : t.actions.withdraw}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      nativeButton={false}
+                      render={<Link href={`/${locale}/quotes/${q.id}/edit`} />}
+                    >
+                      {t.actions.edit}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        if (window.confirm(tm.withdrawConfirm)) {
+                          withdraw.mutate(q.id);
+                        }
+                      }}
+                      disabled={withdraw.isPending}
+                    >
+                      {withdraw.isPending
+                        ? t.actions.withdrawing
+                        : t.actions.withdraw}
+                    </Button>
+                  </div>
                 ) : null}
               </div>
             </CardContent>

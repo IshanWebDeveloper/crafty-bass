@@ -2,6 +2,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { TradesmanPublicView } from '@/components/trades/tradesman-public-view';
 import { getDictionary } from '@/i18n/dictionaries';
 import { type Locale } from '@/i18n/config';
+import { redirectUserType } from '@/lib/server-session';
 
 export default async function TradesmanProfilePage({
   params,
@@ -9,6 +10,8 @@ export default async function TradesmanProfilePage({
   params: Promise<{ locale: Locale; id: string }>;
 }) {
   const { locale, id } = await params;
+  // Tradesmen must not view other tradesmen's profiles (see /trades guard).
+  await redirectUserType(locale, 'TRADESMAN');
   const dict = await getDictionary(locale);
 
   return (

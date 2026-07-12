@@ -54,7 +54,7 @@ export function HeaderAuth({
   const primaryTrade =
     userType === 'TRADESMAN' ? (me?.primaryTrade ?? null) : null;
   // Until mounted, the server (no session) and client (session may resolve
-  // synchronously) would disagree; render the skeleton on both — see useMounted.
+  // synchronously) would disagree; render the skeleton on both - see useMounted.
   const mounted = useMounted();
   const h = dict.header;
 
