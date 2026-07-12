@@ -85,10 +85,10 @@ export function MyJobsList({
                   {t.statusLabels[job.status]}
                 </Badge>
                 <span className="text-xs text-muted-foreground">
-                  {t.mine.viewQuotes.replace(
-                    '{count}',
-                    String(job._count.quotes),
-                  )}
+                  {(job._count.quotes === 1
+                    ? t.mine.viewQuotesOne
+                    : t.mine.viewQuotes
+                  ).replace('{count}', String(job._count.quotes))}
                 </span>
               </div>
             </CardContent>

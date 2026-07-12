@@ -480,7 +480,8 @@
       "subtitle": "ඔබ පළ කළ කාර්ය කළමනාකරණය කරන්න.",
       "empty": "ඔබ තවම කාර්යක් පළ කර නැත.",
       "postOne": "කාර්යයක් පළ කරන්න",
-      "viewQuotes": "මිල ගණන් {count}ක්"
+      "viewQuotes": "මිල ගණන් {count}ක්",
+      "viewQuotesOne": "මිල ගණන් {count}ක්"
     },
     "detail": {
       "postedBy": "පළ කළේ",
@@ -488,6 +489,12 @@
       "budget": "අයවැය",
       "noBudget": "සඳහන් කර නැත",
       "scheduledFor": "කැමති දිනය",
+      "agreedSummary": {
+        "heading": "එකඟ වූ කොන්දේසි",
+        "agreedPrice": "එකඟ වූ මිල",
+        "counterpartyOwner": "ඔබ බඳවා ගත්තේ",
+        "counterpartyTradesman": "ගෘහ හිමියා"
+      },
       "quotesHeading": "ලැබුණු මිල ගණන්",
       "noQuotes": "තවම මිල ගණන් නෑ. කාර්යය විවෘත බව ශිල්පීන්ට දන්වන්නෙමු.",
       "cancelJob": "කාර්යය අවලංගු කරන්න",
@@ -745,6 +752,7 @@
     "message": "පණිවිඩය",
     "estimatedStart": "ඇස්තමේන්තුගත ආරම්භය",
     "estimatedCompletion": "ඇස්තමේන්තුගත අවසානය",
+    "depositRequested": "කලින් ද්‍රව්‍ය තැන්පතුවක් {amount}ක් ඉල්ලයි",
     "verifiedTradesman": "තහවුරු කළ වෘත්තිකයා",
     "stats": {
       "rating": "{rating} ★ ({count})",

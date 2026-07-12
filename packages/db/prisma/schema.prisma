@@ -166,6 +166,7 @@ enum ReportTargetType {
 // Kept as an enum so new notification types are added deliberately.
 enum NotificationType {
   JOB_EXPIRING
+  QUOTE_RECEIVED
   QUOTE_ACCEPTED
   QUOTE_DECLINED
   ESCROW_FUNDED

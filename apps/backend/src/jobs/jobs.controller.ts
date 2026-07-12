@@ -58,6 +58,16 @@ export class JobsController {
     return this.jobsService.findOne(id);
   }
 
+  @Get(':id/agreement')
+  @Permissions('job', 'view')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get the agreed terms for an assigned job (parties only)',
+  })
+  findAgreement(@CurrentUser('id') userId: string, @Param('id') id: string) {
+    return this.jobsService.findAgreement(userId, id);
+  }
+
   @Patch(':id')
   @Permissions('job', 'edit')
   @ApiBearerAuth()
