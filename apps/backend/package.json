@@ -9,6 +9,7 @@
   "scripts": {
     "build": "nest build",
     "dev": "dotenv -e .env -- nest start --watch",
+    "dev:built": "nest build && dotenv -e .env -- node dist/main.js",
     "dev:test": "dotenv -e .env.test -- nest start --watch",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -19,7 +20,10 @@
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest",
     "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest --watch",
     "test:cov": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest --coverage",
-    "test:e2e": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest --config ./test/jest-e2e.json"
+    "test:e2e": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test -- jest --config ./test/jest-e2e.json",
+    "test:vitest": "dotenv -e .env.test -- vitest run",
+    "test:vitest:cov": "dotenv -e .env.test -- vitest run --coverage",
+    "test:integration": "dotenv -e .env.test -- vitest run -c vitest.integration.config.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.999.0",

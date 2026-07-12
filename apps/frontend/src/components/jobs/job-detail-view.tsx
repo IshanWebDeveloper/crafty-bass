@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -124,7 +125,7 @@ export function JobDetailView({
             <Field label={t.fields.category}>
               <CategoryBadge
                 slug={job.category?.slug}
-                label={job.category?.nameEn ?? '—'}
+                label={job.category?.nameEn ?? '-'}
               />
             </Field>
             <Field label={t.fields.urgency}>
@@ -139,28 +140,34 @@ export function JobDetailView({
                   t.detail.noBudget}
               </span>
             </Field>
-            <Field label={t.fields.city}>{job.city ?? '—'}</Field>
-            <Field label={t.fields.district}>{job.district ?? '—'}</Field>
+            <Field label={t.fields.city}>{job.city ?? '-'}</Field>
+            <Field label={t.fields.district}>{job.district ?? '-'}</Field>
             <Field label={t.detail.scheduledFor}>
               {job.scheduledFor
                 ? new Date(job.scheduledFor).toLocaleDateString(locale)
-                : '—'}
+                : '-'}
             </Field>
             <Field label={t.fields.taskSize}>
-              {job.taskSize ? t.taskSizeLabels[job.taskSize] : '—'}
+              {job.taskSize ? t.taskSizeLabels[job.taskSize] : '-'}
             </Field>
             <Field label={t.fields.vehicle}>
               {job.vehicleRequirement
                 ? t.vehicleLabels[job.vehicleRequirement]
-                : '—'}
+                : '-'}
             </Field>
           </dl>
 
           <div className="flex flex-wrap items-center gap-2 pt-2">
-            {isOwner &&
-            (job.status === 'OPEN' ||
-              job.status === 'ASSIGNED' ||
-              job.status === 'IN_PROGRESS') ? (
+            {isOwner && job.status === 'OPEN' ? (
+              <Button
+                variant="outline"
+                nativeButton={false}
+                render={<Link href={`/${locale}/jobs/${job.id}/edit`} />}
+              >
+                {t.detail.editJob}
+              </Button>
+            ) : null}
+            {isOwner && (job.status === 'OPEN' || job.status === 'ASSIGNED') ? (
               <Button
                 variant="outline"
                 onClick={() => {
@@ -174,6 +181,29 @@ export function JobDetailView({
                   ? t.detail.cancelling
                   : t.detail.cancelJob}
               </Button>
+            ) : null}
+            {/* Once work is underway the deposit is already with the tradesman,
+                so the homeowner can't cancel - they raise a report instead and
+                support mediates any refund. */}
+            {isOwner && session && job.status === 'IN_PROGRESS' ? (
+              <div className="flex w-full flex-col gap-2">
+                <p className="text-sm text-muted-foreground">
+                  {t.detail.cancelUnavailableInProgress}
+                </p>
+                <ReportButton
+                  targetType="JOB"
+                  targetId={job.id}
+                  dict={dict}
+                  variant="outline"
+                  size="default"
+                />
+              </div>
+            ) : null}
+            {/* Already reported and paused for review - no direct actions. */}
+            {isOwner && job.status === 'DISPUTED' ? (
+              <p className="text-sm text-muted-foreground">
+                {t.detail.disputeUnderReview}
+              </p>
             ) : null}
             {!isOwner && session ? (
               <ReportButton
@@ -189,7 +219,7 @@ export function JobDetailView({
       </Card>
 
       {!isOwner && session && job.status === 'OPEN' ? (
-        <SubmitQuotePanel jobId={job.id} dict={dict} />
+        <SubmitQuotePanel jobId={job.id} locale={locale} dict={dict} />
       ) : null}
 
       {session &&

@@ -13,7 +13,7 @@ import type { Skill } from '@/lib/api/profiles';
  *
  * State is owned by the parent so it can be submitted: `selectedIds` are catalog
  * picks; `customSkills` are the not-yet-persisted typed names. `createLabel` may
- * contain `{q}` — replaced with the typed query.
+ * contain `{q}` - replaced with the typed query.
  */
 export function SkillsPicker({
   skills,

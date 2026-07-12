@@ -49,7 +49,7 @@ import { QuoteExpiryCronService } from './common/cron/quote-expiry.cron.js';
 
 @Module({
   imports: [
-    // Global config — Zod-validated env at boot (fails fast on missing/invalid)
+    // Global config - Zod-validated env at boot (fails fast on missing/invalid)
     ConfigModule.forRoot({ isGlobal: true, validate: loadEnv }),
 
     // Structured logging (pino). pino-http logs requests; redacts auth headers.
@@ -70,7 +70,7 @@ import { QuoteExpiryCronService } from './common/cron/quote-expiry.cron.js';
     // Scheduled tasks (cron)
     ScheduleModule.forRoot(),
 
-    // Background job processing (BullMQ — Upstash-compatible with TLS)
+    // Background job processing (BullMQ - Upstash-compatible with TLS)
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -93,7 +93,7 @@ import { QuoteExpiryCronService } from './common/cron/quote-expiry.cron.js';
       },
     }),
 
-    // Rate limiting — 100 requests per minute per IP (global)
+    // Rate limiting - 100 requests per minute per IP (global)
     ThrottlerModule.forRoot({
       throttlers: [{ name: 'global', ttl: 60000, limit: 100 }],
     }),
@@ -101,7 +101,7 @@ import { QuoteExpiryCronService } from './common/cron/quote-expiry.cron.js';
     // Database
     PrismaModule,
 
-    // Caching — in-memory global cache (CacheInterceptor needs CACHE_MANAGER).
+    // Caching - in-memory global cache (CacheInterceptor needs CACHE_MANAGER).
     // TODO: restore Redis-backed registerAsync (below) once Redis is wired for dev.
     CacheModule.register({ isGlobal: true }),
 

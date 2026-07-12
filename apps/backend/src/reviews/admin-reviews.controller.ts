@@ -35,7 +35,7 @@ export class AdminReviewsController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Moderate a review — hide/unhide or edit (Admin)' })
+  @ApiOperation({ summary: 'Moderate a review - hide/unhide or edit (Admin)' })
   update(@Param('id') id: string, @Body() dto: AdminModerateReviewDto) {
     return this.reviewsService.updateForAdmin(id, dto);
   }

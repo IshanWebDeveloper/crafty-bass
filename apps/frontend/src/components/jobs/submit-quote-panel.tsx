@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -28,15 +29,16 @@ import {
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { createQuote } from '@/lib/api/quotes';
+import { createQuote, updateQuote, type MyQuote } from '@/lib/api/quotes';
 import { getMyProfile } from '@/lib/api/profiles';
 import { DepositEligibility } from '@/components/escrow/deposit-eligibility';
 import { formatLKR } from '@/lib/currency';
 import { ApiError } from '@/lib/api';
 import { parseDateInput, formatDateInput } from '@/lib/date';
+import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
-// Units of measurement for a line's quantity — labour (job, hr, point…) and
+// Units of measurement for a line's quantity - labour (job, hr, point…) and
 // materials (kg, m, bag…) share one list.
 const UNITS = [
   'job',
@@ -96,35 +98,88 @@ const emptyLine = (category: 'LABOUR' | 'MATERIAL') => ({
 
 const num = (v: string | undefined) => Number(v) || 0;
 
+// Turns a stored `validUntil` back into the "valid for N days" the builder edits.
+const daysUntil = (iso: string | null): string => {
+  if (!iso) return '14';
+  const days = Math.round(
+    (new Date(iso).getTime() - Date.now()) / (24 * 60 * 60 * 1000),
+  );
+  return String(Math.min(90, Math.max(1, days)));
+};
+
+// Seeds the form: a blank two-line estimate for a new quote, or the stored
+// values when editing an existing one.
+const buildDefaults = (initial?: MyQuote): SubmitQuoteValues => {
+  if (!initial) {
+    return {
+      lineItems: [emptyLine('LABOUR'), emptyLine('MATERIAL')],
+      calloutFee: '',
+      discount: '',
+      applyVat: false,
+      validityDays: '14',
+      currency: 'LKR',
+      message: '',
+      estimatedStart: '',
+      estimatedCompletion: '',
+      wantDeposit: false,
+      deposit: '',
+    };
+  }
+  return {
+    lineItems: initial.materials.length
+      ? initial.materials.map((m) => ({
+          category: m.category,
+          name: m.name,
+          quantity: String(m.quantity),
+          unit: m.unit ?? '',
+          unitPrice: m.unitPrice != null ? String(m.unitPrice) : '',
+        }))
+      : [emptyLine('LABOUR'), emptyLine('MATERIAL')],
+    calloutFee: initial.calloutFee != null ? String(initial.calloutFee) : '',
+    discount: initial.discount != null ? String(initial.discount) : '',
+    applyVat: initial.vatRate != null,
+    validityDays: daysUntil(initial.validUntil),
+    currency: initial.currency,
+    message: initial.message ?? '',
+    estimatedStart: initial.estimatedStart
+      ? formatDateInput(new Date(initial.estimatedStart))
+      : '',
+    estimatedCompletion: initial.estimatedCompletion
+      ? formatDateInput(new Date(initial.estimatedCompletion))
+      : '',
+    wantDeposit: (initial.depositRequested ?? 0) > 0,
+    deposit:
+      initial.depositRequested != null ? String(initial.depositRequested) : '',
+  };
+};
+
 export function SubmitQuotePanel({
   jobId,
+  locale,
   dict,
+  mode = 'create',
+  quoteId,
+  initial,
 }: {
   jobId: string;
+  locale: Locale;
   dict: Dictionary;
+  mode?: 'create' | 'edit';
+  quoteId?: string;
+  initial?: MyQuote;
 }) {
   const qc = useQueryClient();
+  const router = useRouter();
   const t = dict.quotes;
   const ts = t.submitQuote;
   const tb = ts.builder;
+  const isEdit = mode === 'edit';
   const [alreadyQuoted, setAlreadyQuoted] = useState(false);
 
-  const { register, handleSubmit, watch, setValue, control, reset } =
+  const { register, handleSubmit, watch, setValue, control } =
     useForm<SubmitQuoteValues>({
       resolver: zodResolver(SubmitQuoteSchema),
-      defaultValues: {
-        lineItems: [emptyLine('LABOUR'), emptyLine('MATERIAL')],
-        calloutFee: '',
-        discount: '',
-        applyVat: false,
-        validityDays: '14',
-        currency: 'LKR',
-        message: '',
-        estimatedStart: '',
-        estimatedCompletion: '',
-        wantDeposit: false,
-        deposit: '',
-      },
+      defaultValues: buildDefaults(initial),
     });
 
   const lineItems = useFieldArray({ control, name: 'lineItems' });
@@ -134,7 +189,7 @@ export function SubmitQuotePanel({
   const wantDeposit = watch('wantDeposit');
   const deposit = num(watch('deposit'));
 
-  // Live breakdown — computed with the same helper the backend uses, so the
+  // Live breakdown - computed with the same helper the backend uses, so the
   // preview matches what gets stored.
   const totals = computeQuoteTotals(
     watchedLines.map((l) => ({
@@ -179,8 +234,8 @@ export function SubmitQuotePanel({
   const canSubmit = lineForSubmit.length > 0;
 
   const mutation = useMutation({
-    mutationFn: (values: SubmitQuoteValues) =>
-      createQuote(jobId, {
+    mutationFn: (values: SubmitQuoteValues) => {
+      const body = {
         lineItems: lineForSubmit,
         calloutFee: values.calloutFee ? num(values.calloutFee) : undefined,
         discount: values.discount ? num(values.discount) : undefined,
@@ -192,12 +247,18 @@ export function SubmitQuotePanel({
         message: values.message || undefined,
         estimatedStart: values.estimatedStart || undefined,
         estimatedCompletion: values.estimatedCompletion || undefined,
-      }),
+      };
+      return isEdit && quoteId
+        ? updateQuote(quoteId, body)
+        : createQuote(jobId, body);
+    },
     onSuccess: () => {
-      toast.success(ts.success);
-      reset();
+      toast.success(isEdit ? ts.updated : ts.success);
       void qc.invalidateQueries({ queryKey: ['jobs', jobId] });
       void qc.invalidateQueries({ queryKey: ['my-quotes'] });
+      // Send the tradesman to their quotes list, where the new/updated quote
+      // shows - rather than leaving a re-submittable form behind.
+      router.push(`/${locale}/quotes`);
     },
     onError: (err) => {
       if (err instanceof ApiError && err.status === 409) {
@@ -216,8 +277,12 @@ export function SubmitQuotePanel({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">{ts.heading}</CardTitle>
-        <CardDescription>{ts.subtitle}</CardDescription>
+        <CardTitle className="text-lg">
+          {isEdit ? ts.editHeading : ts.heading}
+        </CardTitle>
+        <CardDescription>
+          {isEdit ? ts.editSubtitle : ts.subtitle}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -336,7 +401,7 @@ export function SubmitQuotePanel({
             {totals.discount > 0 ? (
               <BreakdownRow
                 label={tb.discount}
-                value={`–${formatLKR(totals.discount)}`}
+                value={`-${formatLKR(totals.discount)}`}
                 muted
               />
             ) : null}
@@ -481,8 +546,10 @@ export function SubmitQuotePanel({
             disabled={!canSubmit || mutation.isPending}
           >
             {mutation.isPending
-              ? ts.submitting
-              : `${ts.submit} · ${formatLKR(totals.total)}`}
+              ? isEdit
+                ? ts.updating
+                : ts.submitting
+              : `${isEdit ? ts.update : ts.submit} · ${formatLKR(totals.total)}`}
           </Button>
         </form>
       </CardContent>
@@ -557,7 +624,7 @@ function LineRow({
           aria-label={ts.materialsList.quantity}
           type="number"
           min={0}
-          step="0.01"
+          step="0.1"
           className="h-8"
           {...register(`lineItems.${index}.quantity`)}
         />
@@ -568,7 +635,7 @@ function LineRow({
           }
         >
           <SelectTrigger className="h-8" aria-label={ts.materialsList.unit}>
-            <SelectValue placeholder="—" />
+            <SelectValue placeholder="-" />
           </SelectTrigger>
           <SelectContent>
             {UNITS.map((u) => (

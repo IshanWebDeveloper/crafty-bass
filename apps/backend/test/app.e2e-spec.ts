@@ -66,35 +66,11 @@ describe('AppController (e2e)', () => {
     });
   });
 
-  describe('Products (public)', () => {
-    it('GET /api/v1/products — returns 200', async () => {
-      const res = await request(app.getHttpServer()).get('/api/v1/products');
-      expect(res.status).toBe(200);
-    });
-
-    it('GET /api/v1/products?search=test — filtering returns 200', async () => {
-      const res = await request(app.getHttpServer()).get(
-        '/api/v1/products?search=test',
-      );
-      expect(res.status).toBe(200);
-    });
-
-    it('GET /api/v1/products/non-existent — returns 404', async () => {
-      const res = await request(app.getHttpServer()).get(
-        '/api/v1/products/non-existent-product-slug',
-      );
-      expect(res.status).toBe(404);
-    });
-  });
-
   // ─── Protected endpoints return 401 without session ────────────────────
 
   describe('RBAC enforcement — unauthenticated requests should be rejected', () => {
     const protectedEndpoints = [
       { method: 'get' as const, path: '/api/v1/users/me' },
-      { method: 'get' as const, path: '/api/v1/cart' },
-      { method: 'get' as const, path: '/api/v1/orders' },
-      { method: 'get' as const, path: '/api/v1/wishlist' },
       { method: 'get' as const, path: '/api/v1/notifications' },
       { method: 'get' as const, path: '/api/v1/users/me/dashboard' },
     ];
@@ -110,8 +86,6 @@ describe('AppController (e2e)', () => {
   describe('Admin-only endpoints — unauthenticated requests should be rejected', () => {
     const adminEndpoints = [
       { method: 'get' as const, path: '/api/v1/admin/dashboard' },
-      { method: 'get' as const, path: '/api/v1/admin/reports/sales' },
-      { method: 'get' as const, path: '/api/v1/admin/reports/products' },
       { method: 'get' as const, path: '/api/v1/admin/reports/users' },
       { method: 'get' as const, path: '/api/v1/admin/audit-logs' },
       { method: 'get' as const, path: '/api/v1/users' },
@@ -130,13 +104,6 @@ describe('AppController (e2e)', () => {
       const res = await request(app.getHttpServer())
         .post('/api/v1/categories')
         .send({ name: 'Test Category' });
-      expect(res.status).toBe(401);
-    });
-
-    it('POST /api/v1/orders — returns 401 (auth required)', async () => {
-      const res = await request(app.getHttpServer())
-        .post('/api/v1/orders')
-        .send({ shippingAddress: {} });
       expect(res.status).toBe(401);
     });
 

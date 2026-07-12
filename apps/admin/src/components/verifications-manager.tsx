@@ -43,7 +43,7 @@ export function VerificationsManager() {
         cell: ({ row }) => (
           <div>
             <span className="font-medium">
-              {row.original.fullName ?? row.original.user?.name ?? '—'}
+              {row.original.fullName ?? row.original.user?.name ?? '-'}
             </span>
             <span className="block text-xs text-muted-foreground">
               {row.original.user?.email}
@@ -53,14 +53,14 @@ export function VerificationsManager() {
       },
       {
         header: 'Trade',
-        cell: ({ row }) => row.original.primaryTrade ?? '—',
+        cell: ({ row }) => row.original.primaryTrade ?? '-',
       },
       {
         header: 'Location',
         cell: ({ row }) =>
           [row.original.city, row.original.district]
             .filter(Boolean)
-            .join(', ') || '—',
+            .join(', ') || '-',
       },
       {
         header: 'Submitted',

@@ -105,7 +105,7 @@ export function UsersManager() {
                 : 'Homeowner'}
             </Badge>
           ) : (
-            <span className="text-muted-foreground">—</span>
+            <span className="text-muted-foreground">-</span>
           ),
       },
       {

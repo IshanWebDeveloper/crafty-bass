@@ -8,8 +8,13 @@ import {
 import { Prisma } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { StripeService } from '../common/services/stripe.service.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
-import type { EscrowListQueryDto, FundEscrowDto } from './dto/index.js';
+import type {
+  EscrowListQueryDto,
+  FundEscrowDto,
+  ResolveDisputeDto,
+} from './dto/index.js';
 
 // Loaded once per request so the service can both authorise the caller and run
 // the state machine without a second round-trip.
@@ -35,6 +40,7 @@ export class EscrowService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly stripe: StripeService,
+    private readonly notifications: NotificationsService,
   ) {}
 
   private serialize(e: EscrowWithRelations) {
@@ -93,7 +99,7 @@ export class EscrowService {
   }
 
   // Admin/support monitoring: every escrow, newest first, optionally filtered by
-  // status. Transactions are omitted from the list payload — the detail view
+  // status. Transactions are omitted from the list payload - the detail view
   // (getById, which staff can load via loadParty) carries the full ledger.
   async listAll(query: EscrowListQueryDto) {
     const { page, limit, status } = query;
@@ -144,7 +150,7 @@ export class EscrowService {
   }
 
   // Homeowner pays the deposit to Crafty Bass; it is now held in escrow.
-  // `card` goes through real Stripe (collection only — see StripeService);
+  // `card` goes through real Stripe (collection only - see StripeService);
   // `paypal`/`local` remain stubbed (real integrations are Phase C) with a
   // simulated reference, same as before.
   async fund(userId: string, escrowId: string, dto: FundEscrowDto) {
@@ -182,7 +188,7 @@ export class EscrowService {
 
   // Creates (or reuses, on retry/3DS-completion) a PaymentIntent and confirms
   // it with the client-collected card. Finalizes synchronously on immediate
-  // success; returns a clientSecret for 3DS when Stripe requires it — the
+  // success; returns a clientSecret for 3DS when Stripe requires it - the
   // webhook (`confirmFundedByPaymentIntent`) is the authoritative fallback for
   // that path and a safety net against duplicate/late delivery either way.
   private async fundWithCard(escrow: EscrowWithRelations, dto: FundEscrowDto) {
@@ -256,11 +262,15 @@ export class EscrowService {
       },
       include: ESCROW_INCLUDE,
     });
+    // Only the caller that actually transitions REQUESTED → FUNDED reaches here
+    // (the sync + webhook paths are deduped by the guard above), so the tradesman
+    // is told exactly once that the deposit is funded. Best-effort.
+    await this.notifications.notifyEscrowFunded(current.jobId);
     return this.serialize(updated);
   }
 
   // Called only from the Stripe webhook controller once payment_intent.succeeded
-  // fires — the authoritative confirmation path for 3DS completions and a
+  // fires - the authoritative confirmation path for 3DS completions and a
   // duplicate-safe fallback for the synchronous path.
   async confirmFundedByPaymentIntent(paymentIntentId: string): Promise<void> {
     const escrow = await this.prisma.jobEscrow.findUnique({
@@ -301,6 +311,8 @@ export class EscrowService {
         include: ESCROW_INCLUDE,
       });
     });
+    // Job moved to IN_PROGRESS - tell the homeowner work has started.
+    await this.notifications.notifyWorkStarted(escrow.jobId);
     return this.serialize(updated);
   }
 
@@ -318,6 +330,8 @@ export class EscrowService {
       data: { status: 'WORK_COMPLETED', workCompletedAt: new Date() },
       include: ESCROW_INCLUDE,
     });
+    // Tell the homeowner to review and approve so the balance is released.
+    await this.notifications.notifyWorkSubmitted(escrow.jobId);
     return this.serialize(updated);
   }
 
@@ -352,6 +366,8 @@ export class EscrowService {
         include: ESCROW_INCLUDE,
       });
     });
+    // Job completed and balance released - tell the tradesman they were paid.
+    await this.notifications.notifyJobCompleted(escrow.jobId);
     return this.serialize(updated);
   }
 
@@ -400,6 +416,122 @@ export class EscrowService {
         },
       },
       include: ESCROW_INCLUDE,
+    });
+    return this.serialize(updated);
+  }
+
+  // Support/admin mediation for a disputed job (see ReportsService.create, which
+  // pauses an in-progress job to DISPUTED on a party's complaint). The materials
+  // deposit has usually already been released to the tradesman, so this is a
+  // judgement call, not the plain pre-work `refund` above: staff cancel the job
+  // and return some (or none, or all) of the deposit to the homeowner in one
+  // atomic step. Refunding the deposit's original card charge - partially when
+  // `refundAmount` is less than the deposit - is how the money actually flows
+  // back. Any open reports on the job are closed as resolved.
+  async resolveDispute(
+    userId: string,
+    escrowId: string,
+    dto: ResolveDisputeDto,
+  ) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true },
+    });
+    if (user?.role !== 'SUPPORT' && user?.role !== 'ADMIN') {
+      throw new ForbiddenException(
+        'Only support or admin can resolve disputes',
+      );
+    }
+
+    const escrow = await this.prisma.jobEscrow.findUnique({
+      where: { id: escrowId },
+      include: ESCROW_INCLUDE,
+    });
+    if (!escrow) throw new NotFoundException('Escrow not found');
+
+    if (escrow.job.status !== 'DISPUTED') {
+      throw new ConflictException(
+        'Only a job under dispute can be resolved through mediation',
+      );
+    }
+    if (
+      escrow.status === 'REFUNDED' ||
+      escrow.status === 'RELEASED' ||
+      escrow.status === 'CANCELLED'
+    ) {
+      throw new ConflictException('This escrow has already been settled');
+    }
+
+    const deposit = dec(escrow.depositAmount);
+    // Round to the 2-decimal minor unit the schema already guarantees, then cap
+    // at the deposit - Stripe can't refund more than the homeowner actually paid.
+    const refundAmount = Math.round(dto.refundAmount * 100) / 100;
+    if (refundAmount > deposit) {
+      throw new BadRequestException(
+        `Refund cannot exceed the ${deposit} deposit paid by the homeowner`,
+      );
+    }
+
+    const isCard =
+      escrow.paymentMethod === 'card' && !!escrow.stripePaymentIntentId;
+    if (refundAmount > 0 && isCard) {
+      // Let a Stripe error abort the request before any DB write.
+      await this.stripe.createRefund({
+        paymentIntentId: escrow.stripePaymentIntentId!,
+        amount: toMinorUnits(refundAmount),
+      });
+    }
+
+    const notes = dto.resolutionNotes?.trim();
+    const isFull = refundAmount === deposit;
+    const refundNote =
+      `Dispute resolved by support - ${
+        isFull ? 'full' : 'partial'
+      } deposit refund` + (isCard ? ' via Stripe' : '');
+
+    const updated = await this.prisma.$transaction(async (tx) => {
+      await tx.job.update({
+        where: { id: escrow.jobId },
+        data: { status: 'CANCELLED', cancelledAt: new Date() },
+      });
+      // Close any still-open reports on this job - the mediation is their outcome.
+      await tx.report.updateMany({
+        where: {
+          jobId: escrow.jobId,
+          status: { in: ['OPEN', 'UNDER_REVIEW'] },
+        },
+        data: {
+          status: 'RESOLVED',
+          resolvedAt: new Date(),
+          ...(notes ? { resolutionNotes: notes } : {}),
+        },
+      });
+      return tx.jobEscrow.update({
+        where: { id: escrowId },
+        data: {
+          // A settled dispute with money returned is REFUNDED; with nothing
+          // returned (tradesman keeps the released deposit) it's CANCELLED.
+          status: refundAmount > 0 ? 'REFUNDED' : 'CANCELLED',
+          ...(refundAmount > 0 ? { refundedAt: new Date() } : {}),
+          ...(refundAmount > 0
+            ? {
+                transactions: {
+                  create: {
+                    type: 'REFUND',
+                    amount: refundAmount,
+                    note: refundNote,
+                  },
+                },
+              }
+            : {}),
+        },
+        include: ESCROW_INCLUDE,
+      });
+    });
+
+    await this.notifications.notifyDisputeResolved(escrow.jobId, {
+      refundAmount,
+      currency: escrow.currency,
     });
     return this.serialize(updated);
   }

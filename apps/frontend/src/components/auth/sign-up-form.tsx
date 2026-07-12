@@ -82,7 +82,7 @@ export function SignUpForm({
       // verification link).
       const userType = role === 'tradesman' ? 'TRADESMAN' : 'HOMEOWNER';
       // Persist the role the user picked. `userType` is a better-auth custom
-      // field (packages/auth), so this writes it into the session — which is
+      // field (packages/auth), so this writes it into the session - which is
       // what the server-side role guards (lib/server-session.ts) read. Without
       // this the choice was discarded and userType stayed null.
       await authClient

@@ -1,7 +1,7 @@
 /**
  * Escapes a value for safe interpolation into HTML text content / attribute
  * values inside transactional emails. This is intentionally a tiny, dependency-
- * free encoder — not a sanitiser. Callers must NOT pass HTML they want
+ * free encoder - not a sanitiser. Callers must NOT pass HTML they want
  * preserved; everything is encoded as data.
  *
  * Non-string inputs (null / undefined / numbers) are coerced to a string first

@@ -13,11 +13,11 @@ const TERMINAL_STATUSES: WebhookEventStatus[] = [
  * Reusable audit trail for inbound third-party webhooks (table: WebhookEvent).
  *
  * Usage contract: call `record()` on controller entry to create the RECEIVED
- * row, then `mark()` before every return — including reject paths — so the audit
+ * row, then `mark()` before every return - including reject paths - so the audit
  * log is always complete.
  *
  * TODO(Phase C): wire this into the marketplace Stripe Connect payout webhook
- * once that controller exists. There is no live consumer yet — the legacy
+ * once that controller exists. There is no live consumer yet - the legacy
  * payments webhook was removed in the legacy sweep, and the subscription webhook
  * is handled internally by the @better-auth/stripe plugin.
  */

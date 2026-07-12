@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type ColumnDef } from '@tanstack/react-table';
 import {
@@ -81,10 +82,10 @@ export function ReportsManager() {
     () => [
       {
         header: 'Reporter',
-        accessorFn: (r) => r.reporter?.name ?? '—',
+        accessorFn: (r) => r.reporter?.name ?? '-',
         cell: ({ row }) => (
           <span className="font-medium">
-            {row.original.reporter?.name ?? '—'}
+            {row.original.reporter?.name ?? '-'}
           </span>
         ),
       },
@@ -108,7 +109,7 @@ export function ReportsManager() {
       },
       {
         header: 'Assignee',
-        cell: ({ row }) => row.original.assignee?.name ?? '—',
+        cell: ({ row }) => row.original.assignee?.name ?? '-',
       },
       {
         header: 'Filed',
@@ -249,9 +250,12 @@ function ReportSheet({
                 </Field>
                 {report.jobId ? (
                   <Field label="Related job">
-                    <code className="text-xs text-muted-foreground">
-                      {report.jobId}
-                    </code>
+                    <Link
+                      href={`/jobs/${report.jobId}`}
+                      className="text-xs text-primary hover:underline"
+                    >
+                      Open job to mediate →
+                    </Link>
                   </Field>
                 ) : null}
               </div>

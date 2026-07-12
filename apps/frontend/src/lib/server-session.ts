@@ -83,7 +83,7 @@ export function roleHome(locale: Locale, userType: AppUserType): string {
  *
  * A `null` userType (a fresh account that hasn't posted a job or quoted yet) is
  * allowed through: the backend assigns userType lazily on the first job/quote,
- * so the matching page is exactly where that assignment happens — gating it out
+ * so the matching page is exactly where that assignment happens - gating it out
  * would dead-end onboarding. As always this is UX only; real authorization
  * stays in the backend service layer (ownership + userType checks).
  */
@@ -98,4 +98,25 @@ export async function requireUserType(
     redirect(roleHome(locale, userType));
   }
   return session;
+}
+
+/**
+ * Keeps signed-in users of a given userType out of an otherwise-public page,
+ * bouncing them to their role home. Unlike {@link requireUserType} this does
+ * NOT require a session - anonymous visitors pass straight through - so it fits
+ * pages that stay public for discovery (e.g. the trades directory, which the
+ * landing page links anonymous visitors into) but must not be shown to one
+ * role. Here it stops a signed-in tradesman from browsing other tradesmen while
+ * leaving homeowners and logged-out visitors untouched. UX only; the backend
+ * still enforces what data each caller can read.
+ */
+export async function redirectUserType(
+  locale: Locale,
+  blocked: AppUserType,
+): Promise<void> {
+  const session = await getServerSession();
+  const userType = session?.user.userType as AppUserType | null | undefined;
+  if (userType === blocked) {
+    redirect(roleHome(locale, userType));
+  }
 }

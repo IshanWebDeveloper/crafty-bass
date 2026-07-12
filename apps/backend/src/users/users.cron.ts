@@ -58,7 +58,7 @@ export class UsersCronService {
           // TODO(Phase C: GDPR): decide the retention/anonymization policy for
           // the user's Jobs, Quotes, and Conversations. These reference the
           // counterparty and may need to be preserved (and PII-stripped) rather
-          // than deleted outright — flagged as ambiguous during the legacy sweep.
+          // than deleted outright - flagged as ambiguous during the legacy sweep.
 
           // Finally anonymize the user row itself (soft-delete).
           const anonymizedEmail = `deleted+${user.id}@anonymized.invalid`;

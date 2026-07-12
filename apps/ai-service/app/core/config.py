@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     github_inference_endpoint: str = "https://models.github.ai/inference"
     github_model_name: str = "openai/gpt-4o-mini"
     llm_temperature: float = Field(default=0.2, ge=0.0, le=1.0)
+    better_auth_url: str | None = None
+    jwt_audience: str | None = None
+    jwt_issuer: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=str(Path(__file__).resolve().parents[2] / ".env"),

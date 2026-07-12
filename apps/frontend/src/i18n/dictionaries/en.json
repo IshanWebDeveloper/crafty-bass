@@ -36,7 +36,7 @@
   "auth": {
     "signIn": {
       "title": "Welcome back",
-      "subtitle": "Enter your mobile number and we'll text you a code to sign in — no password needed.",
+      "subtitle": "Enter your mobile number and we'll text you a code to sign in - no password needed.",
       "submit": "Sign in",
       "submitting": "Signing in…",
       "forgotPassword": "Forgot password?",
@@ -64,14 +64,14 @@
       "consentAnd": "and",
       "terms": "Terms & Conditions",
       "privacy": "Privacy Policy",
-      "contactConsent": "By creating an account, I agree that Crafty Bass and the tradespeople I contact (or parties acting on their behalf) may contact me about my jobs and account at the number I provide — including by automated technology, prerecorded messages, SMS and calls. Consent is not a condition of using the service, and message and data rates may apply."
+      "contactConsent": "By creating an account, I agree that Crafty Bass and the tradespeople I contact (or parties acting on their behalf) may contact me about my jobs and account at the number I provide - including by automated technology, prerecorded messages, SMS and calls. Consent is not a condition of using the service, and message and data rates may apply."
     },
     "fields": {
       "name": "Name",
       "email": "Email",
       "password": "Password",
       "confirmPassword": "Confirm password",
-      "phoneHint": "We'll text a 6-digit code to verify it. This is how you'll sign in — no password needed.",
+      "phoneHint": "We'll text a 6-digit code to verify it. This is how you'll sign in - no password needed.",
       "recoveryEmail": "Recovery email",
       "recoveryEmailHint": "You'll verify this so you can recover your account if you lose your number."
     },
@@ -108,10 +108,10 @@
       "invalidEmail": "Enter a valid email address.",
       "sendFailed": "Couldn't send a code. Check the email and try again.",
       "verifyFailed": "That code didn't match. Try again.",
-      "success": "Signed in — update your phone number so you can sign in with it next time.",
+      "success": "Signed in - update your phone number so you can sign in with it next time.",
       "noAccountHint": "If an account exists for that email, a code is on its way.",
       "expiresIn": "Code expires in {time}",
-      "expired": "Code expired — request a new one."
+      "expired": "Code expired - request a new one."
     },
     "errors": {
       "invalidCredentials": "Invalid email or password",
@@ -123,7 +123,7 @@
     "action": "Translate",
     "translating": "Translating…",
     "hide": "Hide translation",
-    "disclaimer": "AI translation — may not be exact.",
+    "disclaimer": "AI translation - may not be exact.",
     "failed": "Couldn't translate. Try again."
   },
   "verification": {
@@ -132,12 +132,12 @@
     "status": {
       "underReview": "Under review",
       "heading": "Your details are under review",
-      "body": "Submitted just now. An admin verifies every tradesman manually — most are reviewed within 1–2 business days. You can update anything below and resubmit."
+      "body": "Submitted just now. An admin verifies every tradesman manually - most are reviewed within 1-2 business days. You can update anything below and resubmit."
     },
     "sections": {
       "identity": {
         "title": "Identity",
-        "desc": "Matched against your NIC. Used only to verify you — never shown to homeowners."
+        "desc": "Matched against your NIC. Used only to verify you - never shown to homeowners."
       },
       "address": {
         "title": "Address",
@@ -162,8 +162,8 @@
       "dob": "Date of birth",
       "nic": "NIC number",
       "nicHint": "National Identity Card number.",
-      "nicFront": "NIC — front",
-      "nicBack": "NIC — back",
+      "nicFront": "NIC - front",
+      "nicBack": "NIC - back",
       "photo": "Recent passport-size photo",
       "photoHint": "Clear, front-facing, taken within the last 6 months.",
       "address": "Residential address",
@@ -208,7 +208,7 @@
     "completeFields": "Complete the required fields to continue.",
     "profile": {
       "title": "Tell us your trade",
-      "sub": "Just the basics — you can do the rest later.",
+      "sub": "Just the basics - you can do the rest later.",
       "trade": "Primary trade",
       "district": "Base location",
       "districtEmpty": "No matching district.",
@@ -216,7 +216,7 @@
       "skillsHelp": "Search for a skill, or type your own to add it.",
       "skillsSearchPlaceholder": "Search or add a skill…",
       "skillsCreate": "Add “{q}”",
-      "skillsEmpty": "No match — keep typing to add it."
+      "skillsEmpty": "No match - keep typing to add it."
     },
     "documents": {
       "title": "Upload your documents",
@@ -249,7 +249,7 @@
     },
     "submitted": {
       "title": "Submitted for review",
-      "sub": "An admin checks every tradesman by hand — most are done within 1–2 business days. We'll text you when you're approved.",
+      "sub": "An admin checks every tradesman by hand - most are done within 1-2 business days. We'll text you when you're approved.",
       "tiers": "Your verification badge",
       "tier1": "Verified",
       "tier1desc": "Identity, trade and address confirmed.",
@@ -284,7 +284,7 @@
         "note": "Held by Crafty Bass"
       },
       "materials": {
-        "label": "Materials",
+        "label": "Material Deposit",
         "note": "Released to buy parts"
       },
       "workDone": {
@@ -301,7 +301,7 @@
       "balance": "Balance on completion",
       "total": "Quote total",
       "inEscrow": "in escrow · refundable until work begins",
-      "balancePending": "released when you approve the work"
+      "balancePending": "released when the homeowner approves the work"
     },
     "status": {
       "REQUESTED": "Awaiting deposit",
@@ -361,10 +361,10 @@
     },
     "fund": {
       "title": "Fund the materials deposit",
-      "subtitle": "Your tradesman asked for a materials deposit so they can buy parts and start. You pay Crafty Bass — not the tradesman — and we hold it in escrow.",
+      "subtitle": "Your tradesman asked for a materials deposit so they can buy parts and start. You pay Crafty Bass - not the tradesman - and we hold it in escrow.",
       "jobLabel": "Job",
       "protectionHeading": "How your money is protected",
-      "protection1": "Crafty Bass holds the deposit — the tradesman can't touch it until you confirm work has started.",
+      "protection1": "Crafty Bass holds the deposit - the tradesman can't touch it until you confirm work has started.",
       "protection2": "Fully refundable if the job never begins or you cancel before work starts.",
       "protection3": "If something goes wrong, our team mediates before any money is released.",
       "payNow": "Pay now",
@@ -375,9 +375,9 @@
       "notFound": "There's no deposit awaiting funding for this job.",
       "back": "Back to job"
     },
-    "startedToast": "Materials released — job in progress",
-    "doneToast": "Marked complete — awaiting approval",
-    "approvedToast": "Approved — balance released",
+    "startedToast": "Materials released - job in progress",
+    "doneToast": "Marked complete - awaiting approval",
+    "approvedToast": "Approved - balance released",
     "refundedToast": "Deposit refunded"
   },
   "dashboard": {
@@ -415,14 +415,14 @@
       "subtitle": "Describe the work and we'll match you with verified tradespeople.",
       "submit": "Post job",
       "submitting": "Posting…",
-      "contactConsent": "By posting this job, I agree that Crafty Bass and the tradespeople who respond (or parties acting on their behalf) may contact me about it — including by automated technology, prerecorded messages, SMS and calls — at the number on my account. Consent is not a condition of using the service.",
+      "contactConsent": "By posting this job, I agree that Crafty Bass and the tradespeople who respond (or parties acting on their behalf) may contact me about it - including by automated technology, prerecorded messages, SMS and calls - at the number on my account. Consent is not a condition of using the service.",
       "success": "Your job has been posted",
       "ai": {
         "hint": "Our AI reads this as you type to detect the right category.",
         "detected": "Detected",
         "suggested": "suggested skills",
         "confidence": "{n}% confidence",
-        "disclaimer": "AI-generated suggestion — AI can make mistakes, so please check it's right before posting."
+        "disclaimer": "AI-generated suggestion - AI can make mistakes, so please check it's right before posting."
       },
       "photos": {
         "label": "Photos",
@@ -436,7 +436,7 @@
         "share": "Share my location pin",
         "getting": "Getting your location…",
         "remove": "Remove pin",
-        "hint": "Quoters see your area only — the exact pin is shared with the tradesman you hire."
+        "hint": "Quoters see your area only - the exact pin is shared with the tradesman you hire."
       }
     },
     "fields": {
@@ -470,6 +470,7 @@
       "OPEN": "Open",
       "ASSIGNED": "Assigned",
       "IN_PROGRESS": "In progress",
+      "DISPUTED": "Under review",
       "COMPLETED": "Completed",
       "CANCELLED": "Cancelled",
       "EXPIRED": "Expired"
@@ -491,7 +492,21 @@
       "noQuotes": "No quotes yet. Tradespeople will be notified that the job is open.",
       "cancelJob": "Cancel job",
       "cancelling": "Cancelling…",
-      "cancelConfirm": "Cancel this job? Open quotes will be closed."
+      "cancelConfirm": "Cancel this job? Open quotes will be closed.",
+      "cancelUnavailableInProgress": "Work has started and the materials deposit has been released to the tradesperson, so this job can no longer be cancelled directly. If something's wrong, file a report and our team will review it and arrange any refund.",
+      "disputeUnderReview": "You've reported this job and our team is reviewing it. It's paused while we look into it and decide on any cancellation or refund.",
+      "editJob": "Edit job"
+    },
+    "edit": {
+      "title": "Edit job",
+      "subtitle": "Update the details of your posted job. Changes are visible to tradespeople straight away.",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "success": "Job updated",
+      "error": "Couldn't save your changes. Try again.",
+      "back": "Cancel",
+      "notFound": "This job could not be found.",
+      "notEditable": "This job can no longer be edited - it's already been assigned, completed or cancelled."
     },
     "browse": {
       "title": "Open jobs",
@@ -514,7 +529,7 @@
       "expired": "Expired",
       "gate": {
         "title": "You can't send quotes until you're verified",
-        "body": "Browse freely — but quoting unlocks once an admin approves your verification.",
+        "body": "Browse freely - but quoting unlocks once an admin approves your verification.",
         "cta": "Continue verification",
         "quoteLocked": "Get verified to quote"
       },
@@ -534,7 +549,7 @@
     },
     "taskSizeHints": {
       "SMALL": "Est. 1 hr",
-      "MEDIUM": "Est. 2–3 hrs",
+      "MEDIUM": "Est. 2-3 hrs",
       "LARGE": "Est. 4+ hrs"
     },
     "vehicleLabels": {
@@ -554,13 +569,17 @@
     "empty": "You haven't submitted any quotes yet.",
     "browseJobs": "Browse open jobs",
     "withdrawConfirm": "Withdraw this quote?",
+    "editTitle": "Edit quote",
+    "editSubtitle": "Change your line items, pricing or timing, then resubmit.",
+    "notEditable": "This quote can no longer be edited.",
+    "backToQuotes": "Back to my quotes",
     "withdrawSuccess": "Quote withdrawn"
   },
   "reports": {
     "openButton": "Report",
     "modal": {
       "title": "File a report",
-      "subtitle": "Tell us what's wrong — moderators will review.",
+      "subtitle": "Tell us what's wrong - moderators will review.",
       "reason": "Reason",
       "reasonPlaceholder": "Describe what happened (10+ characters).",
       "submit": "Submit report",
@@ -669,7 +688,7 @@
       "save": "Save number",
       "skip": "Skip for now",
       "expiresIn": "Code expires in {time}",
-      "expired": "Code expired — request a new one."
+      "expired": "Code expired - request a new one."
     },
     "chooseRole": {
       "heading": "How will you use Crafty Bass?",
@@ -698,12 +717,12 @@
       "skillsHelp": "Search for a skill, or type your own to add it. You can update this list any time.",
       "skillsSearchPlaceholder": "Search or add a skill…",
       "skillsCreate": "Add “{q}”",
-      "skillsEmpty": "No match — keep typing to add it.",
+      "skillsEmpty": "No match - keep typing to add it.",
       "certifications": "Certifications & licences",
-      "certificationsHint": "List any qualifications or licences — one per line. These help homeowners trust your work.",
+      "certificationsHint": "List any qualifications or licences - one per line. These help homeowners trust your work.",
       "certificationsPlaceholder": "e.g. CIDA registered electrician\nNVQ Level 4 Plumbing",
       "vehicles": "Vehicles",
-      "vehiclesHint": "List the vehicles you use for jobs — one per line — so homeowners know what you can transport.",
+      "vehiclesHint": "List the vehicles you use for jobs - one per line - so homeowners know what you can transport.",
       "vehiclesPlaceholder": "e.g. Van\nPickup truck"
     },
     "fields": {
@@ -736,6 +755,7 @@
       "accepting": "Accepting…",
       "reject": "Reject",
       "rejecting": "Rejecting…",
+      "edit": "Edit",
       "withdraw": "Withdraw",
       "withdrawing": "Withdrawing…"
     },
@@ -756,6 +776,11 @@
       "submit": "Submit quote",
       "submitting": "Submitting…",
       "success": "Quote submitted",
+      "editHeading": "Edit your quote",
+      "editSubtitle": "Update your price and timing before the homeowner responds.",
+      "update": "Update quote",
+      "updating": "Updating…",
+      "updated": "Quote updated",
       "currency": "Currency",
       "materials": "Of which materials",
       "materialsList": {
@@ -792,7 +817,7 @@
         "validUntil": "Valid until {date}"
       },
       "requestDeposit": "Request a materials deposit",
-      "requestDepositHint": "The homeowner funds this into escrow up front so you can buy parts. You receive it when you start — Crafty Bass releases it, the homeowner never hands you cash.",
+      "requestDepositHint": "The homeowner funds this into escrow up front so you can buy parts. You receive it when you start - Crafty Bass releases it, the homeowner never hands you cash.",
       "depositToRequest": "Deposit to request",
       "depositMax": "Max {amount}",
       "depositPercent": "{pct}% of your quote · balance {balance} paid on completion."
@@ -807,7 +832,10 @@
     "stats": {
       "activeTrades": "active trades",
       "avgResponse": "avg. response",
-      "verifiedReviews": "verified reviews"
+      "verifiedReviews": "verified reviews",
+      "openJobs": "open jobs",
+      "matchedJobs": "jobs matched",
+      "verifiedPros": "verified pros"
     }
   },
   "jobSearch": {
@@ -874,14 +902,14 @@
       "queueError": "Unable to queue export",
       "requestingLink": "Requesting download link…",
       "invalidUrl": "Server returned an invalid download URL",
-      "downloadStarting": "Download starting. The link expires in 15 minutes — request a new one if you need to download again later.",
+      "downloadStarting": "Download starting. The link expires in 15 minutes - request a new one if you need to download again later.",
       "noExport": "No export is ready yet. Request one above and wait for the email.",
       "downloadError": "Unable to fetch download link"
     }
   },
   "trades": {
     "title": "Find a trusted tradesperson",
-    "subtitle": "Browse verified tradespeople near you — see their ratings, completed work and skills.",
+    "subtitle": "Browse verified tradespeople near you - see their ratings, completed work and skills.",
     "filters": {
       "category": "Category",
       "allCategories": "All categories",
@@ -926,7 +954,7 @@
     "sections": [
       {
         "heading": "1. About Crafty Bass",
-        "body": "Crafty Bass is a marketplace that connects homeowners with verified tradespeople in Sri Lanka. We help you find, compare and hire — but the work itself is agreed directly between the homeowner and the tradesman. We are not a party to that agreement."
+        "body": "Crafty Bass is a marketplace that connects homeowners with verified tradespeople in Sri Lanka. We help you find, compare and hire - but the work itself is agreed directly between the homeowner and the tradesman. We are not a party to that agreement."
       },
       {
         "heading": "2. Accounts and verification",
@@ -938,7 +966,7 @@
       },
       {
         "heading": "4. Payments and escrow",
-        "body": "Where a materials deposit is requested, you pay Crafty Bass — not the tradesman — and we hold the funds in escrow. Deposits are refundable until work begins. The balance is released to the tradesman when you approve the completed work."
+        "body": "Where a materials deposit is requested, you pay Crafty Bass - not the tradesman - and we hold the funds in escrow. Deposits are refundable until work begins. The balance is released to the tradesman when you approve the completed work."
       },
       {
         "heading": "5. Conduct",
@@ -972,7 +1000,7 @@
   },
   "about": {
     "title": "About Crafty Bass",
-    "intro": "Crafty Bass is a Sri Lankan marketplace that connects homeowners with verified, skilled tradespeople — from plumbers and electricians to painters and masons.",
+    "intro": "Crafty Bass is a Sri Lankan marketplace that connects homeowners with verified, skilled tradespeople - from plumbers and electricians to painters and masons.",
     "sections": [
       {
         "heading": "Our mission",
@@ -980,11 +1008,11 @@
       },
       {
         "heading": "How it works",
-        "body": "Homeowners post a job describing what they need. Verified tradespeople nearby send quotes. You compare profiles, ratings and prices, then hire the right person — with payments protected by escrow for added peace of mind."
+        "body": "Homeowners post a job describing what they need. Verified tradespeople nearby send quotes. You compare profiles, ratings and prices, then hire the right person - with payments protected by escrow for added peace of mind."
       },
       {
         "heading": "Built for Sri Lanka",
-        "body": "Crafty Bass works in Sinhala, Tamil and English, covers all 25 districts, and is designed around how trades work locally — so both sides can communicate clearly and get the job done."
+        "body": "Crafty Bass works in Sinhala, Tamil and English, covers all 25 districts, and is designed around how trades work locally - so both sides can communicate clearly and get the job done."
       }
     ],
     "backHome": "Back to home"
@@ -995,7 +1023,7 @@
     "emailHeading": "Email",
     "email": "hello@craftybass.lk",
     "supportHeading": "Support hours",
-    "support": "Monday to Friday, 9am–6pm (Sri Lanka Standard Time). We aim to reply within one business day.",
+    "support": "Monday to Friday, 9am-6pm (Sri Lanka Standard Time). We aim to reply within one business day.",
     "backHome": "Back to home"
   },
   "privacyPolicy": {
@@ -1005,7 +1033,7 @@
     "sections": [
       {
         "heading": "1. Information we collect",
-        "body": "Account details (name, phone number, email), profile information you add, and — for tradespeople seeking verification — identity and credential documents. We also record activity such as jobs, quotes and messages so the service works."
+        "body": "Account details (name, phone number, email), profile information you add, and - for tradespeople seeking verification - identity and credential documents. We also record activity such as jobs, quotes and messages so the service works."
       },
       {
         "heading": "2. How we use it",
@@ -1013,7 +1041,7 @@
       },
       {
         "heading": "3. Sharing",
-        "body": "We share only what's needed to complete a job — for example, your area and job details with quoting tradespeople. Verification documents and bank details are never shown to other users. We use trusted providers (e.g. payments, SMS) bound by contract."
+        "body": "We share only what's needed to complete a job - for example, your area and job details with quoting tradespeople. Verification documents and bank details are never shown to other users. We use trusted providers (e.g. payments, SMS) bound by contract."
       },
       {
         "heading": "4. Your choices and rights",
@@ -1058,7 +1086,7 @@
       },
       {
         "heading": "Workmanship guarantee",
-        "body": "If covered work develops a fault within 12 months of completion, we help put it right — through the original tradesperson or a replacement."
+        "body": "If covered work develops a fault within 12 months of completion, we help put it right - through the original tradesperson or a replacement."
       },
       {
         "heading": "Dispute support",
@@ -1073,7 +1101,7 @@
       },
       {
         "step": "Pay into escrow",
-        "body": "Fund the job through Crafty Bass. We hold the money — the tradesperson is not paid until you approve."
+        "body": "Fund the job through Crafty Bass. We hold the money - the tradesperson is not paid until you approve."
       },
       {
         "step": "Approve the work",
@@ -1098,7 +1126,7 @@
       "Claims raised more than 12 months after you approved the work"
     ],
     "limitsTitle": "Guarantee limits",
-    "limits": "The guarantee covers eligible claims up to the value paid through Crafty Bass for the job, capped at LKR 500,000 per job. It applies only to jobs funded through Crafty Bass escrow and is not an insurance policy — it is our commitment to put covered problems right.",
+    "limits": "The guarantee covers eligible claims up to the value paid through Crafty Bass for the job, capped at LKR 500,000 per job. It applies only to jobs funded through Crafty Bass escrow and is not an insurance policy - it is our commitment to put covered problems right.",
     "claimTitle": "Make a claim",
     "claim": "Open the job in your Crafty Bass account and use Report a problem, or contact our support team. Have your job reference and a description ready, with photos where possible.",
     "cta": "Post a job",

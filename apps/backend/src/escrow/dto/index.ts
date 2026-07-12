@@ -1,8 +1,10 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { FundEscrowSchema } from '@repo/validation';
+import { FundEscrowSchema, ResolveDisputeSchema } from '@repo/validation';
 
 export class FundEscrowDto extends createZodDto(FundEscrowSchema) {}
+
+export class ResolveDisputeDto extends createZodDto(ResolveDisputeSchema) {}
 
 // ─── Admin Escrow List Query ────────────────────────────────────────────────
 

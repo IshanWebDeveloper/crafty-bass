@@ -57,7 +57,7 @@ def build_batch_classification_graph(
             skills=payload["skills"],
         )
         response = classify_one(request)
-        # Return a single-element list — the reducer concatenates across workers.
+        # Return a single-element list - the reducer concatenates across workers.
         return {
             "results": [
                 JobClassificationBatchResult(id=payload["id"], response=response)

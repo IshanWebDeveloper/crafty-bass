@@ -230,8 +230,8 @@ export class S3Service {
 
   /**
    * Lists object keys under a prefix. Callers should derive the prefix from
-   * server-side state (e.g. an authenticated user id) — never from raw user
-   * input — so the result set cannot be widened by a malicious caller.
+   * server-side state (e.g. an authenticated user id) - never from raw user
+   * input - so the result set cannot be widened by a malicious caller.
    */
   async listObjectKeysWithPrefix(prefix: string): Promise<string[]> {
     const command = new ListObjectsV2Command({

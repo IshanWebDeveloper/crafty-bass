@@ -1,6 +1,6 @@
 /**
  * Escapes a value for safe interpolation into HTML text/attribute content inside
- * transactional emails. A tiny, dependency-free encoder — not a sanitiser.
+ * transactional emails. A tiny, dependency-free encoder - not a sanitiser.
  * Everything is encoded as data; non-string inputs coerce to ''.
  */
 export function escapeHtml(value: string | null | undefined): string {

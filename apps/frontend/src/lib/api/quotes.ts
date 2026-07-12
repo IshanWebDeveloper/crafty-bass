@@ -101,6 +101,13 @@ export function createQuote(jobId: string, body: CreateQuoteBody) {
   });
 }
 
+export function updateQuote(id: string, body: CreateQuoteBody) {
+  return apiFetch<Quote>(`/quotes/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  });
+}
+
 export function acceptQuote(id: string) {
   return apiFetch<Quote>(`/quotes/${id}/accept`, { method: 'PATCH' });
 }

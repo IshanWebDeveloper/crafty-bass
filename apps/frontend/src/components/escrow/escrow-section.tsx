@@ -44,7 +44,7 @@ export function EscrowSection({
   const { data: escrow, isLoading } = useQuery({
     queryKey: ['escrow', jobId],
     queryFn: () => getEscrowForJob(jobId),
-    // No escrow exists for jobs without a materials deposit — a 404 is expected.
+    // No escrow exists for jobs without a materials deposit - a 404 is expected.
     retry: (count, err) =>
       !(err instanceof ApiError && err.status === 404) && count < 2,
   });

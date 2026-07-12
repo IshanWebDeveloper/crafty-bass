@@ -8,7 +8,7 @@ interface SessionUser {
   email: string | null;
   name: string | null;
   // `role` is a better-auth additionalField (packages/auth/src/index.ts), so it
-  // rides in the get-session payload — no separate /users/me call needed.
+  // rides in the get-session payload - no separate /users/me call needed.
   role?: Role;
 }
 

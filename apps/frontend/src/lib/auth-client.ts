@@ -13,7 +13,7 @@ import {
 export const authClient = createAuthClient({
   baseURL: typeof window === 'undefined' ? '' : window.location.origin,
   // Mirror the server's custom `userType` field (packages/auth) so the client
-  // types updateUser()/useSession() with it — without importing server code.
+  // types updateUser()/useSession() with it - without importing server code.
   plugins: [
     phoneNumberClient(),
     emailOTPClient(),

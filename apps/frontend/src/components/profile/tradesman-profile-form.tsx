@@ -135,11 +135,11 @@ export function TradesmanProfileForm({
       toast.success(t.saved);
       // Re-sync from the saved profile: typed skills are now catalog rows linked
       // to this tradesman, so fold them into the selected set and clear the
-      // pending customs — otherwise they'd vanish from the picker until reload.
+      // pending customs - otherwise they'd vanish from the picker until reload.
       setSelectedSkillIds(new Set(profile.skills.map((s) => s.skillId)));
       setCustomSkills([]);
       void qc.invalidateQueries({ queryKey: ['profile', 'me'] });
-      // The new skills are catalog rows now — refresh the searchable list.
+      // The new skills are catalog rows now - refresh the searchable list.
       void qc.invalidateQueries({ queryKey: ['skills'] });
     },
     onError: (err) =>

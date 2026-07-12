@@ -20,7 +20,7 @@ const badgeVariants = cva(
           'hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50',
         link: 'text-primary underline-offset-4 hover:underline',
         // --- Crafty Bass brand variants (not in the base shadcn registry) ---
-        // Emphasis chips (rounded-md) — soft green / amber tints.
+        // Emphasis chips (rounded-md) - soft green / amber tints.
         soft: 'rounded-md bg-accent-soft text-accent-soft-foreground',
         highlight: 'rounded-md bg-highlight text-highlight-foreground',
         muted: 'bg-muted text-muted-foreground',

@@ -20,6 +20,7 @@ const STATUS_VARIANT: Record<string, BadgeVariant> = {
   assigned: 'warning',
   'in progress': 'warning',
   in_progress: 'warning',
+  disputed: 'destructive',
   accepted: 'success',
   completed: 'success',
   verified: 'success',

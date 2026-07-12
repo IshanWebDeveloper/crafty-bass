@@ -4,6 +4,7 @@ export type JobStatus =
   | 'OPEN'
   | 'ASSIGNED'
   | 'IN_PROGRESS'
+  | 'DISPUTED'
   | 'COMPLETED'
   | 'CANCELLED'
   | 'EXPIRED';

@@ -43,6 +43,18 @@ apps/*/dist
 apps/*/.venv
 apps/*/.pytest_cache
 apps/*/.ruff_cache
+apps/*/coverage.xml
+apps/*/.coverage
+apps/*/htmlcov
+apps/ai-service/evals/results
+
+# coverage output (js/ts)
+apps/*/coverage
+apps/*/coverage-vitest
+packages/*/coverage
+
+# Next.js generated env types (regenerated on build)
+apps/*/next-env.d.ts
 apps/*/__pycache__
 apps/*/app/__pycache__
 apps/*/tests/__pycache__

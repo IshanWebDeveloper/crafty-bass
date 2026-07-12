@@ -10,7 +10,7 @@ import { escapeHtml } from '../common/utils/index.js';
 const EXPIRY_NOTICE_LEAD_MS = 48 * 60 * 60 * 1000;
 
 // Map a tradesman's preferred language to the frontend locale segment used in
-// email deep links (in-app links are locale-agnostic — the client prefixes the
+// email deep links (in-app links are locale-agnostic - the client prefixes the
 // active locale).
 const LOCALE_BY_LANGUAGE: Record<string, string> = {
   EN: 'en',
@@ -27,6 +27,16 @@ export type NotificationDto = {
   jobId: string | null;
   read: boolean;
   createdAt: string;
+};
+
+// A row to be inserted by the lifecycle dispatch methods below.
+type NotificationRow = {
+  userId: string;
+  type: Notification['type'];
+  title: string;
+  body?: string | null;
+  href?: string | null;
+  jobId?: string | null;
 };
 
 @Injectable()
@@ -74,9 +84,259 @@ export class NotificationsService {
     return { updated: result.count };
   }
 
+  // --- Job-lifecycle status notifications (notes-outline #40) ------------------
+  //
+  // Each method below is dispatched by the service that owns a transition
+  // (quotes accept, escrow fund/start/complete/approve, job cancel, expiry cron)
+  // once that transition has committed. They are all **best-effort**: any failure
+  // is swallowed and logged so a notification never breaks the underlying
+  // marketplace action. In-app only - the `@@unique([userId, type, jobId])`
+  // constraint keeps each event one-per-recipient-per-job (createMany skips dups).
+
+  /**
+   * Quote accepted → job assigned. Tells the winning tradesman they got the job
+   * and the tradesmen whose quotes were just rejected that they weren't picked.
+   */
+  async notifyQuoteDecision(
+    jobId: string,
+    acceptedTradesmanId: string,
+  ): Promise<void> {
+    try {
+      const job = await this.prisma.job.findUnique({
+        where: { id: jobId },
+        select: {
+          title: true,
+          quotes: { select: { tradesmanId: true, status: true } },
+        },
+      });
+      if (!job) return;
+      const href = `jobs/${jobId}`;
+      const rows: NotificationRow[] = [
+        {
+          userId: acceptedTradesmanId,
+          type: 'QUOTE_ACCEPTED',
+          title: 'Your quote was accepted',
+          body: `You've been hired for "${job.title}". You'll be notified once the homeowner funds the deposit.`,
+          href,
+          jobId,
+        },
+      ];
+      const losers = [
+        ...new Set(
+          job.quotes
+            .filter(
+              (q) =>
+                q.status === 'REJECTED' &&
+                q.tradesmanId !== acceptedTradesmanId,
+            )
+            .map((q) => q.tradesmanId),
+        ),
+      ];
+      for (const tradesmanId of losers) {
+        rows.push({
+          userId: tradesmanId,
+          type: 'QUOTE_DECLINED',
+          title: "Your quote wasn't selected",
+          body: `The homeowner chose another tradesperson for "${job.title}".`,
+          href,
+          jobId,
+        });
+      }
+      await this.createNotifications(rows);
+    } catch (error) {
+      this.logNotifyFailure('quote decision', jobId, error);
+    }
+  }
+
+  /** Deposit funded → tell the assigned tradesman they can start. */
+  async notifyEscrowFunded(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'assignedTradesman', {
+      type: 'ESCROW_FUNDED',
+      title: 'Deposit funded - you can start',
+      body: (title) =>
+        `The homeowner funded the deposit for "${title}". You can begin the work.`,
+    });
+  }
+
+  /** Tradesman started work (job → IN_PROGRESS) → tell the homeowner. */
+  async notifyWorkStarted(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'homeowner', {
+      type: 'WORK_STARTED',
+      title: 'Work has started',
+      body: (title) => `The tradesperson has started work on "${title}".`,
+    });
+  }
+
+  /** Tradesman marked work done → tell the homeowner to review and approve. */
+  async notifyWorkSubmitted(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'homeowner', {
+      type: 'WORK_COMPLETED',
+      title: 'Work marked complete',
+      body: (title) =>
+        `The tradesperson marked "${title}" complete. Review and approve to release the balance.`,
+    });
+  }
+
+  /** Homeowner approved → balance released → tell the tradesman they were paid. */
+  async notifyJobCompleted(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'assignedTradesman', {
+      type: 'JOB_COMPLETED',
+      title: 'Payment released',
+      body: (title) =>
+        `The homeowner approved "${title}". The balance has been released to you.`,
+    });
+  }
+
+  /** Job cancelled → tell the assigned tradesman (no-op if none was assigned). */
+  async notifyJobCancelled(jobId: string): Promise<void> {
+    await this.notifyOne(jobId, 'assignedTradesman', {
+      type: 'JOB_CANCELLED',
+      title: 'Job cancelled',
+      body: (title) => `The homeowner cancelled "${title}".`,
+    });
+  }
+
+  /**
+   * Support resolved a dispute: the job was cancelled and some/all of the
+   * deposit refunded. Tells both parties the outcome. Reuses the JOB_CANCELLED
+   * type (the job is being cancelled) with dispute-specific copy - a disputed
+   * job can't have been cancelled before, so the per-job unique constraint
+   * never suppresses these.
+   */
+  async notifyDisputeResolved(
+    jobId: string,
+    opts: { refundAmount: number; currency: string },
+  ): Promise<void> {
+    try {
+      const job = await this.prisma.job.findUnique({
+        where: { id: jobId },
+        select: { title: true, homeownerId: true, assignedTradesmanId: true },
+      });
+      if (!job) return;
+      const href = `jobs/${jobId}`;
+      const refunded =
+        opts.refundAmount > 0
+          ? `${opts.currency} ${opts.refundAmount.toLocaleString('en-LK')}`
+          : null;
+      const rows: NotificationRow[] = [
+        {
+          userId: job.homeownerId,
+          type: 'JOB_CANCELLED',
+          title: 'Dispute resolved',
+          body: refunded
+            ? `Our team reviewed your report on "${job.title}", cancelled the job and refunded ${refunded} to you.`
+            : `Our team reviewed your report on "${job.title}" and cancelled the job. No refund was issued.`,
+          href,
+          jobId,
+        },
+      ];
+      if (job.assignedTradesmanId) {
+        rows.push({
+          userId: job.assignedTradesmanId,
+          type: 'JOB_CANCELLED',
+          title: 'Job cancelled after review',
+          body: refunded
+            ? `Following a dispute, our team cancelled "${job.title}" and refunded ${refunded} of the deposit to the homeowner.`
+            : `Following a dispute, our team cancelled "${job.title}".`,
+          href,
+          jobId,
+        });
+      }
+      await this.createNotifications(rows);
+    } catch (error) {
+      this.logNotifyFailure('dispute resolved', jobId, error);
+    }
+  }
+
+  /**
+   * Open jobs that lapsed to EXPIRED → tell each homeowner their job expired.
+   * Batched: the expiry cron passes the jobs it just expired.
+   */
+  async notifyJobsExpired(
+    jobs: Array<{ id: string; title: string; homeownerId: string }>,
+  ): Promise<void> {
+    if (jobs.length === 0) return;
+    await this.createNotifications(
+      jobs.map((job) => ({
+        userId: job.homeownerId,
+        type: 'JOB_EXPIRED',
+        title: 'Your job expired',
+        body: `"${job.title}" expired without being assigned. You can repost it anytime.`,
+        href: `jobs/${job.id}`,
+        jobId: job.id,
+      })),
+    );
+  }
+
+  // Notifies exactly one party (the job's homeowner or its assigned tradesman)
+  // about a job-lifecycle event. Best-effort.
+  private async notifyOne(
+    jobId: string,
+    recipient: 'homeowner' | 'assignedTradesman',
+    copy: {
+      type: Notification['type'];
+      title: string;
+      body: (title: string) => string;
+    },
+  ): Promise<void> {
+    try {
+      const job = await this.prisma.job.findUnique({
+        where: { id: jobId },
+        select: { title: true, homeownerId: true, assignedTradesmanId: true },
+      });
+      if (!job) return;
+      const userId =
+        recipient === 'homeowner' ? job.homeownerId : job.assignedTradesmanId;
+      if (!userId) return;
+      await this.createNotifications([
+        {
+          userId,
+          type: copy.type,
+          title: copy.title,
+          body: copy.body(job.title),
+          href: `jobs/${jobId}`,
+          jobId,
+        },
+      ]);
+    } catch (error) {
+      this.logNotifyFailure(copy.type, jobId, error);
+    }
+  }
+
+  private async createNotifications(rows: NotificationRow[]): Promise<void> {
+    if (rows.length === 0) return;
+    try {
+      await this.prisma.notification.createMany({
+        data: rows.map((r) => ({
+          userId: r.userId,
+          type: r.type,
+          title: r.title,
+          body: r.body ?? null,
+          href: r.href ?? null,
+          jobId: r.jobId ?? null,
+        })),
+        skipDuplicates: true,
+      });
+    } catch (error) {
+      this.logNotifyFailure('create', rows[0]?.jobId ?? null, error);
+    }
+  }
+
+  private logNotifyFailure(
+    kind: string,
+    jobId: string | null,
+    error: unknown,
+  ): void {
+    this.logger.error(
+      `Failed to send ${kind} notification${jobId ? ` for job ${jobId}` : ''}: ${
+        error instanceof Error ? error.stack || error.message : String(error)
+      }`,
+    );
+  }
+
   /**
    * Finds OPEN jobs entering their final stretch before `expiresAt` and, for
-   * each, notifies the tradesmen who could still quote — an in-app notification
+   * each, notifies the tradesmen who could still quote - an in-app notification
    * plus a best-effort email. Runs once per job (guarded by
    * `Job.expiryNoticeSentAt`). Called by JobExpiryNoticeCronService.
    *
@@ -108,7 +368,7 @@ export class NotificationsService {
       try {
         await this.noticeOneJob(job, now);
       } catch (error) {
-        // Keep the batch going — a single bad job shouldn't stall the cron.
+        // Keep the batch going - a single bad job shouldn't stall the cron.
         this.logger.error(
           `Failed to dispatch expiry notices for job ${job.id}: ${
             error instanceof Error
@@ -152,12 +412,12 @@ export class NotificationsService {
               ...(job.district ? { district: job.district } : {}),
               skills: { some: { OR: skillMatch } },
               user: {
-                // Tradesmen only — JOB_EXPIRING is a tradesman-audience notice;
+                // Tradesmen only - JOB_EXPIRING is a tradesman-audience notice;
                 // homeowners never receive "a nearby job is expiring". (Only
                 // tradesmen have a tradesmanProfile, so this is also explicit
                 // belt-and-braces against ever notifying the wrong audience.)
                 userType: 'TRADESMAN',
-                // Skip tradesmen who already quoted — they haven't missed it.
+                // Skip tradesmen who already quoted - they haven't missed it.
                 quotes: { none: { jobId: job.id } },
               },
             },
@@ -197,7 +457,7 @@ export class NotificationsService {
           const locale = LOCALE_BY_LANGUAGE[r.preferredLanguage] ?? 'en';
           return this.email.send({
             to: r.user.email,
-            subject: 'A job is about to expire — Crafty Bass',
+            subject: 'A job is about to expire - Crafty Bass',
             html: this.expiryEmailHtml({
               name: r.user.name,
               jobTitle: job.title,
