@@ -11,7 +11,7 @@ import {
 export const statements = {
   profile: ['view', 'edit', 'verify'],
   job: ['create', 'view', 'list', 'edit', 'cancel', 'assign'],
-  quote: ['create', 'view', 'list', 'accept', 'reject', 'withdraw'],
+  quote: ['create', 'view', 'list', 'accept', 'reject', 'withdraw', 'edit'],
   escrow: ['view', 'fund', 'release', 'approve', 'refund'],
   conversation: ['create', 'view', 'list'],
   message: ['create', 'view', 'list'],
@@ -43,7 +43,7 @@ export const customer = ac.newRole({
   ...userAc.statements,
   profile: ['view', 'edit'],
   job: ['create', 'view', 'list', 'edit', 'cancel'],
-  quote: ['create', 'view', 'list', 'accept', 'reject', 'withdraw'],
+  quote: ['create', 'view', 'list', 'accept', 'reject', 'withdraw', 'edit'],
   escrow: ['view', 'fund', 'release', 'approve', 'refund'],
   conversation: ['create', 'view', 'list'],
   message: ['create', 'view', 'list'],

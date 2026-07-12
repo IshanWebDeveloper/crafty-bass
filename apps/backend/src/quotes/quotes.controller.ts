@@ -36,6 +36,17 @@ export class QuotesController {
     return this.quotesService.listMine(userId);
   }
 
+  @Patch('quotes/:id')
+  @Permissions('quote', 'edit')
+  @ApiOperation({ summary: 'Edit own pending quote (tradesman)' })
+  update(
+    @CurrentUser('id') userId: string,
+    @Param('id') id: string,
+    @Body() dto: CreateQuoteDto,
+  ) {
+    return this.quotesService.update(userId, id, dto);
+  }
+
   @Patch('quotes/:id/accept')
   @Permissions('quote', 'accept')
   @ApiOperation({ summary: 'Accept a quote (job owner → assigns the job)' })
