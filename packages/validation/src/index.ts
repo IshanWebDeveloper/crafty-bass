@@ -367,7 +367,9 @@ export const StartConversationSchema = z
     type: z.enum(['JOB_DIRECT', 'DIRECT']).default('JOB_DIRECT'),
     jobId: id.optional(),
     recipientId: id.optional(),
-    body: z.string().trim().min(1).max(4000),
+    // Optional: when omitted the conversation is just opened (or reused) with no
+    // opening message, so callers can jump straight into an empty thread.
+    body: z.string().trim().min(1).max(4000).optional(),
     messageType: MessageTypeSchema.default('TEXT'),
   })
   .refine((v) => v.jobId !== undefined || v.recipientId !== undefined, {

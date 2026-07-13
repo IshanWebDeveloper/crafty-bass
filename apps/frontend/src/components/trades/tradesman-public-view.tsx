@@ -45,7 +45,6 @@ export function TradesmanPublicView({
   userId: string;
 }) {
   const t = dict.trades.profile;
-  const tc = dict.chat;
   const router = useRouter();
   const {
     data: trade,
@@ -65,9 +64,9 @@ export function TradesmanPublicView({
       const result = await startConversation({
         type: 'DIRECT',
         recipientId: userId,
-        body: tc.started,
+        // No body: open (or reuse) the thread and let the homeowner write their
+        // own message instead of auto-sending a placeholder.
       });
-      toast.success(tc.started);
       router.push(`/${locale}/messages/${result.conversation.id}`);
     } catch (err) {
       toast.error(

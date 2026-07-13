@@ -201,21 +201,27 @@ export class ConversationsService {
         })
       ).id;
 
-    // Send the opening message in the same flow.
-    const message = await this.prisma.message.create({
-      data: {
-        conversationId,
-        senderId: userId,
-        recipientId,
-        body: dto.body,
-        messageType: dto.messageType,
-      },
-    });
+    // Send the opening message in the same flow - but only if one was supplied.
+    // When no body is given the caller just wants the thread opened (or reused),
+    // so we avoid seeding a junk message.
+    const message = dto.body
+      ? await this.prisma.message.create({
+          data: {
+            conversationId,
+            senderId: userId,
+            recipientId,
+            body: dto.body,
+            messageType: dto.messageType,
+          },
+        })
+      : null;
 
-    await this.prisma.conversation.update({
-      where: { id: conversationId },
-      data: { lastMessageAt: now },
-    });
+    if (message) {
+      await this.prisma.conversation.update({
+        where: { id: conversationId },
+        data: { lastMessageAt: now },
+      });
+    }
 
     return this.findOne(userId, conversationId).then((conversation) => ({
       conversation,
