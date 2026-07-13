@@ -500,6 +500,15 @@
       "cancelJob": "Cancel job",
       "cancelling": "Cancelling…",
       "cancelConfirm": "Cancel this job? Open quotes will be closed.",
+      "cancelDialog": {
+        "title": "Cancel this job?",
+        "description": "Open quotes will be closed. Tell us why so any assigned tradesperson understands.",
+        "label": "Reason for cancellation",
+        "placeholder": "e.g. I no longer need this work done.",
+        "cancel": "Keep job",
+        "submit": "Cancel job",
+        "submitting": "Cancelling…"
+      },
       "cancelUnavailableInProgress": "Work has started and the materials deposit has been released to the tradesperson, so this job can no longer be cancelled directly. If something's wrong, file a report and our team will review it and arrange any refund.",
       "disputeUnderReview": "You've reported this job and our team is reviewing it. It's paused while we look into it and decide on any cancellation or refund.",
       "editJob": "Edit job"
@@ -776,6 +785,16 @@
     },
     "accepted": "Quote accepted",
     "rejected": "Quote rejected",
+    "rejectionReasonLabel": "Reason from homeowner",
+    "rejectDialog": {
+      "title": "Reject this quote?",
+      "description": "Let the tradesperson know why so they can improve future quotes.",
+      "label": "Reason for rejection",
+      "placeholder": "e.g. The price is higher than my budget.",
+      "cancel": "Cancel",
+      "submit": "Reject quote",
+      "submitting": "Rejecting…"
+    },
     "materialsHeading": "Materials & tools",
     "materialsEstimate": "Estimated · subject to change",
     "submitQuote": {
@@ -1071,6 +1090,16 @@
     "decline": "Decline",
     "approved": "Request approved",
     "declined": "Request declined",
+    "declineReasonLabel": "Reason from homeowner",
+    "declineDialog": {
+      "title": "Decline this request?",
+      "description": "Let the tradesperson know why you're declining.",
+      "label": "Reason for declining",
+      "placeholder": "e.g. Please use the materials already on site.",
+      "cancel": "Cancel",
+      "submit": "Decline request",
+      "submitting": "Declining…"
+    },
     "statusLabels": {
       "PENDING": "Pending",
       "APPROVED": "Approved",

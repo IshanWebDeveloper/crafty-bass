@@ -12,7 +12,9 @@ export type NotificationType =
   | 'WORK_COMPLETED'
   | 'JOB_COMPLETED'
   | 'JOB_CANCELLED'
-  | 'JOB_EXPIRED';
+  | 'JOB_EXPIRED'
+  | 'MATERIAL_REQUEST_DECLINED'
+  | 'REVIEW_MODERATED';
 
 // Backend notification record (see NotificationsService.toDto). Dynamic copy
 // (title/body) is English; the client derives icon/tint/group/time for display.

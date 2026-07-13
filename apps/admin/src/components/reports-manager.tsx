@@ -199,12 +199,17 @@ function ReportSheet({
     setFormError(null);
   }
 
+  // Dismissing a report requires a rationale (enforced by the backend too) so
+  // the reporter can be told why their concern was set aside.
+  const dismissing = status === 'DISMISSED';
+  const notesRequired = dismissing && notes.trim().length < 3;
+
   const save = useMutation({
     mutationFn: () =>
       updateReport(report!.id, {
         status,
         assigneeId,
-        resolutionNotes: notes.trim() || undefined,
+        resolutionNotes: dismissing ? notes.trim() : notes.trim() || undefined,
       }),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: adminKeys.reports() });
@@ -318,11 +323,17 @@ function ReportSheet({
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-sm font-medium">Resolution notes</span>
+                <span className="text-sm font-medium">
+                  Resolution notes{dismissing ? ' (required to dismiss)' : ''}
+                </span>
                 <Textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Internal notes about how this was handled…"
+                  placeholder={
+                    dismissing
+                      ? 'Explain why this report is being dismissed…'
+                      : 'Internal notes about how this was handled…'
+                  }
                 />
               </div>
 
@@ -340,8 +351,16 @@ function ReportSheet({
                 </Button>
                 <Button
                   type="button"
-                  disabled={save.isPending}
-                  onClick={() => save.mutate()}
+                  disabled={save.isPending || notesRequired}
+                  onClick={() => {
+                    if (notesRequired) {
+                      setFormError(
+                        'Add a reason (at least 3 characters) to dismiss this report.',
+                      );
+                      return;
+                    }
+                    save.mutate();
+                  }}
                 >
                   {save.isPending ? 'Saving…' : 'Save changes'}
                 </Button>

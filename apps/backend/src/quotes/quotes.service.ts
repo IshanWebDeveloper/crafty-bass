@@ -354,7 +354,7 @@ export class QuotesService {
     return accepted;
   }
 
-  async reject(userId: string, quoteId: string) {
+  async reject(userId: string, quoteId: string, reason: string) {
     const quote = await this.prisma.quote.findUnique({
       where: { id: quoteId },
       include: { job: { select: { homeownerId: true } } },
@@ -366,10 +366,17 @@ export class QuotesService {
     if (quote.status !== 'PENDING') {
       throw new ConflictException('Quote is not pending');
     }
-    return this.prisma.quote.update({
+    const rejected = await this.prisma.quote.update({
       where: { id: quoteId },
-      data: { status: 'REJECTED', respondedAt: new Date() },
+      data: {
+        status: 'REJECTED',
+        rejectionReason: reason,
+        respondedAt: new Date(),
+      },
     });
+    // Tell the tradesman their quote was turned down, and why.
+    await this.notifications.notifyQuoteRejected(quoteId, reason);
+    return rejected;
   }
 
   async withdraw(userId: string, quoteId: string) {

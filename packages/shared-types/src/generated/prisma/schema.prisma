@@ -163,6 +163,8 @@ enum ReportTargetType {
 //   JOB_COMPLETED   - the homeowner approved; the balance was released
 //   JOB_CANCELLED   - the homeowner cancelled an assigned job
 //   JOB_EXPIRED     - an open job lapsed without being assigned
+//   MATERIAL_REQUEST_DECLINED - the homeowner declined a mid-job material request
+//   REVIEW_MODERATED - staff hid or removed the author's review
 // Kept as an enum so new notification types are added deliberately.
 enum NotificationType {
   JOB_EXPIRING
@@ -175,6 +177,8 @@ enum NotificationType {
   JOB_COMPLETED
   JOB_CANCELLED
   JOB_EXPIRED
+  MATERIAL_REQUEST_DECLINED
+  REVIEW_MODERATED
 }
 
 model User {
@@ -452,6 +456,9 @@ model Job {
   expiryNoticeSentAt  DateTime?
   completedAt         DateTime?
   cancelledAt         DateTime?
+  // Why the homeowner cancelled the job (required when cancelling; surfaced to
+  // the assigned tradesman). Null unless the job was cancelled by the homeowner.
+  cancellationReason  String?             @db.Text
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
 
@@ -511,6 +518,10 @@ model Quote {
   // The quote lapses after this; a cron flips pending quotes past it to EXPIRED.
   validUntil          DateTime?
   status              QuoteStatus @default(PENDING)
+  // Why the homeowner rejected this quote (required at the API/UI layer when
+  // rejecting; surfaced to the tradesman). Null for quotes rejected in bulk when
+  // another quote is accepted, or still pending.
+  rejectionReason     String?     @db.Text
   respondedAt         DateTime?
   withdrawnAt         DateTime?
   createdAt           DateTime    @default(now())
@@ -560,6 +571,10 @@ model MaterialRequest {
   estimatedCost Decimal?              @db.Decimal(10, 2)
   currency      String                @default("LKR")
   status        MaterialRequestStatus @default(PENDING)
+  // Why the homeowner declined the request (required when declining; surfaced to
+  // the requesting tradesman). Distinct from `note`, which is the tradesman's
+  // own request text. Null for approved/pending requests.
+  declineReason String?               @db.Text
   respondedAt   DateTime?
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @updatedAt
@@ -737,16 +752,19 @@ model Message {
 }
 
 model Review {
-  id         String   @id @default(cuid())
-  jobId      String
-  reviewerId String
-  revieweeId String
-  rating     Int
-  title      String?
-  comment    String?  @db.Text
-  isPublic   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id               String   @id @default(cuid())
+  jobId            String
+  reviewerId       String
+  revieweeId       String
+  rating           Int
+  title            String?
+  comment          String?  @db.Text
+  isPublic         Boolean  @default(true)
+  // Why staff moderated (hid or deleted) this review. Required when moderating;
+  // surfaced to the review author. Null for un-moderated reviews.
+  moderationReason String?  @db.Text
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   job      Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
   reviewer User     @relation("ReviewsGiven", fields: [reviewerId], references: [id], onDelete: Cascade)

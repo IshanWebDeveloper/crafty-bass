@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -36,6 +37,7 @@ import { JobExpiryBadge } from './job-expiry-badge';
 import { LeaveReviewPanel } from '@/components/reviews/leave-review-panel';
 import { PublicReviewsList } from '@/components/reviews/public-reviews-list';
 import { ReportButton } from '@/components/reports/report-button';
+import { RejectReasonDialog } from '@/components/common/reject-reason-dialog';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -68,12 +70,17 @@ export function JobDetailView({
     enabled: isOwner,
   });
 
+  const [cancelOpen, setCancelOpen] = useState(false);
+
   const cancelMutation = useMutation({
-    mutationFn: () => cancelJob(jobId),
+    mutationFn: (reason: string) => cancelJob(jobId, reason),
     onSuccess: () => {
+      setCancelOpen(false);
       void qc.invalidateQueries({ queryKey: ['jobs', jobId] });
       void qc.invalidateQueries({ queryKey: ['jobs', 'mine'] });
     },
+    onError: (err) =>
+      toast.error(err instanceof Error ? err.message : 'Failed to cancel'),
   });
 
   const acceptMutation = useMutation({
@@ -88,7 +95,8 @@ export function JobDetailView({
   });
 
   const rejectMutation = useMutation({
-    mutationFn: (quoteId: string) => rejectQuote(quoteId),
+    mutationFn: ({ quoteId, reason }: { quoteId: string; reason: string }) =>
+      rejectQuote(quoteId, reason),
     onSuccess: () => {
       toast.success(tq.rejected);
       void qc.invalidateQueries({ queryKey: ['jobs', jobId, 'quotes'] });
@@ -169,19 +177,24 @@ export function JobDetailView({
               </Button>
             ) : null}
             {isOwner && (job.status === 'OPEN' || job.status === 'ASSIGNED') ? (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (window.confirm(t.detail.cancelConfirm)) {
-                    cancelMutation.mutate();
-                  }
-                }}
-                disabled={cancelMutation.isPending}
-              >
-                {cancelMutation.isPending
-                  ? t.detail.cancelling
-                  : t.detail.cancelJob}
-              </Button>
+              <>
+                <Button
+                  variant="outline"
+                  onClick={() => setCancelOpen(true)}
+                  disabled={cancelMutation.isPending}
+                >
+                  {cancelMutation.isPending
+                    ? t.detail.cancelling
+                    : t.detail.cancelJob}
+                </Button>
+                <RejectReasonDialog
+                  open={cancelOpen}
+                  onOpenChange={setCancelOpen}
+                  onSubmit={(reason) => cancelMutation.mutate(reason)}
+                  pending={cancelMutation.isPending}
+                  copy={t.detail.cancelDialog}
+                />
+              </>
             ) : null}
             {/* Once work is underway the deposit is already with the tradesman,
                 so the homeowner can't cancel - they raise a report instead and
@@ -265,7 +278,9 @@ export function JobDetailView({
                     locale={locale}
                     dict={dict}
                     onAccept={() => acceptMutation.mutate(quote.id)}
-                    onReject={() => rejectMutation.mutate(quote.id)}
+                    onReject={(reason) =>
+                      rejectMutation.mutate({ quoteId: quote.id, reason })
+                    }
                     acceptPending={acceptMutation.isPending}
                     rejectPending={rejectMutation.isPending}
                     onMessage={async () => {
@@ -360,13 +375,14 @@ function QuoteRow({
   locale: Locale;
   dict: Dictionary;
   onAccept: () => void;
-  onReject: () => void;
+  onReject: (reason: string) => void;
   acceptPending: boolean;
   rejectPending: boolean;
   onMessage: () => void;
   messageLabel: string;
 }) {
   const tq = dict.quotes;
+  const [rejectOpen, setRejectOpen] = useState(false);
   const profile = quote.tradesman.tradesmanProfile;
   const initials =
     quote.tradesman.name
@@ -466,11 +482,21 @@ function QuoteRow({
             <Button
               size="sm"
               variant="outline"
-              onClick={onReject}
+              onClick={() => setRejectOpen(true)}
               disabled={acceptPending || rejectPending}
             >
               {rejectPending ? tq.actions.rejecting : tq.actions.reject}
             </Button>
+            <RejectReasonDialog
+              open={rejectOpen}
+              onOpenChange={setRejectOpen}
+              onSubmit={(reason) => {
+                setRejectOpen(false);
+                onReject(reason);
+              }}
+              pending={rejectPending}
+              copy={tq.rejectDialog}
+            />
           </div>
         ) : null}
         <Button size="sm" variant="ghost" onClick={onMessage}>

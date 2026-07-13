@@ -293,6 +293,7 @@ exports.Prisma.JobScalarFieldEnum = {
   expiryNoticeSentAt: 'expiryNoticeSentAt',
   completedAt: 'completedAt',
   cancelledAt: 'cancelledAt',
+  cancellationReason: 'cancellationReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 };
@@ -320,6 +321,7 @@ exports.Prisma.QuoteScalarFieldEnum = {
   estimatedCompletion: 'estimatedCompletion',
   validUntil: 'validUntil',
   status: 'status',
+  rejectionReason: 'rejectionReason',
   respondedAt: 'respondedAt',
   withdrawnAt: 'withdrawnAt',
   createdAt: 'createdAt',
@@ -345,6 +347,7 @@ exports.Prisma.MaterialRequestScalarFieldEnum = {
   estimatedCost: 'estimatedCost',
   currency: 'currency',
   status: 'status',
+  declineReason: 'declineReason',
   respondedAt: 'respondedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -460,6 +463,7 @@ exports.Prisma.ReviewScalarFieldEnum = {
   title: 'title',
   comment: 'comment',
   isPublic: 'isPublic',
+  moderationReason: 'moderationReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
 };
@@ -682,6 +686,8 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   JOB_COMPLETED: 'JOB_COMPLETED',
   JOB_CANCELLED: 'JOB_CANCELLED',
   JOB_EXPIRED: 'JOB_EXPIRED',
+  MATERIAL_REQUEST_DECLINED: 'MATERIAL_REQUEST_DECLINED',
+  REVIEW_MODERATED: 'REVIEW_MODERATED',
 };
 
 exports.WebhookEventStatus = exports.$Enums.WebhookEventStatus = {
