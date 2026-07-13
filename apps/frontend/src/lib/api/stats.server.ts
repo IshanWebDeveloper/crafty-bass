@@ -21,3 +21,24 @@ export async function getJobStatsServer(): Promise<JobStats | null> {
     return null;
   }
 }
+
+export type CategoryTradesmanCount = { slug: string; count: number };
+
+/**
+ * Server-side fetch of the live per-category available-tradesman counts for the
+ * landing-page category cards. Resilient like getJobStatsServer: returns null on
+ * any failure so the grid falls back to its static counts instead of erroring.
+ */
+export async function getCategoryCountsServer(): Promise<
+  CategoryTradesmanCount[] | null
+> {
+  try {
+    const res = await fetch(`${apiOrigin}/api/v1/categories/tradesmen-counts`, {
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as CategoryTradesmanCount[];
+  } catch {
+    return null;
+  }
+}

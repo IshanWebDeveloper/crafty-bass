@@ -193,3 +193,79 @@
     @apply font-sans;
   }
 }
+
+/* Landing hero backdrop: a faint grid that fades toward the edges, plus three
+   slowly drifting brand glows (see hero-backdrop.tsx). Motion is disabled for
+   users who prefer reduced motion. */
+.hero-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklch, var(--foreground) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--foreground) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 3rem 3rem;
+  -webkit-mask-image: radial-gradient(
+    ellipse 75% 65% at 50% 0%,
+    black 30%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    ellipse 75% 65% at 50% 0%,
+    black 30%,
+    transparent 78%
+  );
+}
+
+@keyframes hero-blob-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3rem, -2rem, 0) scale(1.12);
+  }
+}
+
+@keyframes hero-blob-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-2.5rem, 2rem, 0) scale(1.16);
+  }
+}
+
+@keyframes hero-blob-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2rem, 2.5rem, 0) scale(1.1);
+  }
+}
+
+.animate-hero-blob-a {
+  animation: hero-blob-a 18s ease-in-out infinite;
+}
+.animate-hero-blob-b {
+  animation: hero-blob-b 22s ease-in-out infinite;
+}
+.animate-hero-blob-c {
+  animation: hero-blob-c 26s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-blob-a,
+  .animate-hero-blob-b,
+  .animate-hero-blob-c {
+    animation: none;
+  }
+}
