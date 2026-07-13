@@ -652,10 +652,12 @@
       "send": "Send",
       "sending": "Sending…",
       "loading": "Loading messages…",
+      "empty": "No messages yet. Say hello to get the conversation started.",
       "markedAt": "Read"
     },
     "startCta": "Message homeowner",
     "startCtaTradesman": "Message tradesperson",
+    "startCtaNamed": "Message {name}",
     "started": "Message sent"
   },
   "profile": {
@@ -868,6 +870,7 @@
   "jobSearch": {
     "title": "What needs fixing?",
     "findMatches": "Find matches",
+    "matches": "available",
     "services": [
       {
         "label": "Kitchen tap leak",

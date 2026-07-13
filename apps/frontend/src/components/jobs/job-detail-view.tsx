@@ -289,9 +289,9 @@ export function JobDetailView({
                           type: 'JOB_DIRECT',
                           jobId: job.id,
                           recipientId: quote.tradesman.id,
-                          body: tc.started,
+                          // No body: open (or reuse) the thread and let the user
+                          // write their own message instead of auto-sending one.
                         });
-                        toast.success(tc.started);
                         router.push(
                           `/${locale}/messages/${result.conversation.id}`,
                         );
@@ -303,7 +303,10 @@ export function JobDetailView({
                         );
                       }
                     }}
-                    messageLabel={tc.startCtaTradesman}
+                    messageLabel={tc.startCtaNamed.replace(
+                      '{name}',
+                      quote.tradesman.name,
+                    )}
                   />
                 ))}
               </ul>

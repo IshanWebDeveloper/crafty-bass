@@ -113,7 +113,7 @@ export function ThreadView({
             <Skeleton className="ml-auto h-12 w-1/2" />
           </div>
         ) : messages.data.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t.loading}</p>
+          <p className="text-sm text-muted-foreground">{t.empty}</p>
         ) : (
           <MessageGroup className="gap-4">
             {[...messages.data].reverse().map((msg) => {
