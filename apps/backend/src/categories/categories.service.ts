@@ -33,6 +33,33 @@ export class CategoriesService {
     };
   }
 
+  // Live count of verified, available tradesmen per category, keyed by slug.
+  // A tradesman is counted for a category when they hold at least one skill in
+  // it. Powers the landing-page category cards; small category set + a 5-min
+  // controller cache keep the per-category counts cheap.
+  async getTradesmanCounts(): Promise<Array<{ slug: string; count: number }>> {
+    const categories = await this.prisma.serviceCategory.findMany({
+      select: { id: true, slug: true },
+    });
+
+    const counts = await Promise.all(
+      categories.map((category) =>
+        this.prisma.tradesmanProfile.count({
+          where: {
+            isVerified: true,
+            isAvailable: true,
+            skills: { some: { skill: { categoryId: category.id } } },
+          },
+        }),
+      ),
+    );
+
+    return categories.map((category, i) => ({
+      slug: category.slug,
+      count: counts[i],
+    }));
+  }
+
   async findBySlug(slug: string) {
     const category = await this.prisma.serviceCategory.findUnique({
       where: { slug },

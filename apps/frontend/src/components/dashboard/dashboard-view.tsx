@@ -23,6 +23,19 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
 /**
+ * The dashboard is the landing surface after posting a job or sending a quote,
+ * so its cards must reflect the very latest activity. We override the global
+ * query defaults (staleTime 30s, no focus refetch) to always refetch on mount
+ * and on tab focus - otherwise a freshly submitted quote/job wouldn't appear
+ * when navigating back within the stale window or re-focusing the tab.
+ */
+const liveDashboardQuery = {
+  refetchOnMount: 'always',
+  refetchOnWindowFocus: true,
+  staleTime: 0,
+} as const;
+
+/**
  * Role-aware dashboard. Homeowners see their posted-job activity; tradesmen see
  * their quoting activity. We render the homeowner view until the session
  * resolves on the client (and we know the userType) so SSR and the first client
@@ -56,6 +69,7 @@ function HomeownerDashboard({
   const { data, isLoading, isError } = useQuery({
     queryKey: ['dashboard'],
     queryFn: getDashboard,
+    ...liveDashboardQuery,
   });
 
   if (isLoading) return <StatsSkeleton />;
@@ -149,8 +163,13 @@ function TradesmanDashboard({
   const dashboard = useQuery({
     queryKey: ['dashboard'],
     queryFn: getDashboard,
+    ...liveDashboardQuery,
   });
-  const quotes = useQuery({ queryKey: ['my-quotes'], queryFn: listMyQuotes });
+  const quotes = useQuery({
+    queryKey: ['my-quotes'],
+    queryFn: listMyQuotes,
+    ...liveDashboardQuery,
+  });
 
   if (dashboard.isLoading || quotes.isLoading) return <StatsSkeleton />;
   if (dashboard.isError || !dashboard.data)

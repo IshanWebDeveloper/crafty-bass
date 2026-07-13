@@ -4,7 +4,10 @@ import { Badge } from '@repo/ui';
 import { CategoryImage } from '@/lib/categories';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
+import type { CategoryTradesmanCount } from '@/lib/api/stats.server';
 
+// `count` is a static fallback shown only when the live counts fetch fails
+// (backend unreachable); otherwise the live per-category count is used.
 const categories = [
   { key: 'plumbing', count: 18, href: '/trades?category=plumbing' },
   { key: 'electrical', count: 27, href: '/trades?category=electrical' },
@@ -15,17 +18,27 @@ const categories = [
 export function CategoryGrid({
   locale,
   dict,
+  counts,
 }: {
   locale: Locale;
   dict: Dictionary;
+  counts: CategoryTradesmanCount[] | null;
 }) {
   const t = dict.categories;
+  // Map slug -> live count. When the fetch failed (null) we keep the static
+  // fallback; when it succeeded, a slug with no available tradesmen is 0.
+  const countBySlug = counts
+    ? new Map(counts.map((c) => [c.slug, c.count]))
+    : null;
 
   return (
     <section className="mx-auto max-w-7xl px-6 pb-20 lg:px-14">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {categories.map((category) => {
           const item = t.items[category.key];
+          const count = countBySlug
+            ? (countBySlug.get(category.key) ?? 0)
+            : category.count;
           return (
             <Link
               key={category.key}
@@ -48,7 +61,7 @@ export function CategoryGrid({
                 </p>
                 <div className="mt-auto pt-5">
                   <Badge variant="soft">
-                    {category.count} {t.available}
+                    {count} {t.available}
                   </Badge>
                 </div>
               </div>
