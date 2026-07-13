@@ -43,7 +43,7 @@ pnpm affected:build / affected:lint / affected:test   # CI-style affected-only
 
 Per-app: `pnpm nx run <frontend|admin|backend|ai-service>:<dev|build|lint|test>`.
 
-Ports: frontend `3000`, admin `3001`, backend `3005` (override with `PORT`), ai-service `8006`. CORS defaults to `http://localhost:3000,http://localhost:3001,http://localhost:5173` (override with `CORS_ORIGINS`, see `apps/backend/.env.example`).
+Ports: frontend `3000`, admin `3001`, backend `3005` (override with `PORT`), ai-service `8006`. CORS defaults to `http://localhost:3000,http://admin.localhost:3001,http://localhost:3001,http://localhost:5173` (override with `CORS_ORIGINS`, see `apps/backend/.env.example`). Note admin is opened at `http://admin.localhost:3001` (see Admin section for why).
 
 ### Prisma
 
@@ -129,12 +129,12 @@ Next.js 16 exposes an MCP endpoint per running dev server. To diagnose runtime/b
 
 ### Admin (Next.js App Router)
 
-- `apps/admin` is the internal console for `ADMIN`/`SUPPORT` staff - user/job/escrow/review/verification/report management, audit log, categories, settings. Runs on port `3001` (`next dev --port 3001`).
+- `apps/admin` is the internal console for `ADMIN`/`SUPPORT` staff - user/job/escrow/review/verification/report management, audit log, categories, settings. Runs on port `3001` (`next dev --port 3001`). **Open it at `http://admin.localhost:3001`, not `localhost:3001`** - the distinct host keeps its better-auth session cookie out of the frontend's `localhost` cookie jar (cookies ignore the port, so `localhost:3000` and `localhost:3001` would otherwise share/clobber one session, blocking simultaneous admin + homeowner/tradesman sign-in). `admin.localhost` is in `allowedDevOrigins` (`apps/admin/next.config.ts`) and `CORS_ORIGINS`; `localhost:3001` stays trusted for backwards compat.
 - Route groups: `src/app/(dashboard)/*` (users, jobs, escrow, reviews, verifications, reports, categories, audit-log, settings) plus a standalone `src/app/sign-in`.
 - **Like `apps/frontend`, admin talks to the backend through a same-origin proxy.** `src/next.config.ts` rewrites `/api/*` to `API_PROXY_TARGET` (default `http://localhost:3005`), so the browser only ever hits the admin origin and the better-auth session cookie is first-party. `src/lib/api.ts` uses a relative `/api/v1` base in the browser (absolute `API_PROXY_TARGET` only as a server-side fallback); `src/lib/auth-client.ts` points at `window.location.origin`. The old `NEXT_PUBLIC_API_URL`/`NEXT_PUBLIC_BETTER_AUTH_URL` vars are gone. Auth is guarded **server-side** by `src/lib/server-session.ts` (`getServerSession()` forwards `cookies()` to `/api/auth/get-session`; `requireAdmin()` reads `role` off the session and reports `authorized` for `ADMIN`/`SUPPORT`), called at the top of the `(dashboard)` route-group layout - signed-out users are redirected to `/sign-in`, signed-in non-staff see `<AccessDenied />`. Real authorization still lives in the backend `PermissionsGuard`; this is UX only.
 - Admins sign in with **email + password** (`authClient.signIn.email`, core better-auth; `emailAndPassword` is enabled in `packages/auth/src/index.ts`) - `src/components/auth/sign-in-form.tsx`. There is no phone-OTP flow in admin.
 - shadcn config (`apps/admin/components.json`) points its aliases at `@repo/ui` (`components`/`ui`/`lib`/`hooks` all resolve into the `@repo/ui` package) rather than a local `src/components/ui` - new shadcn-generated primitives land in `@repo/ui`, feature components stay in `apps/admin/src/components/`.
-- Backend `CORS_ORIGINS` must include `http://localhost:3001` for local admin dev (already the default in `apps/backend/.env.example`).
+- Backend `CORS_ORIGINS` must include `http://admin.localhost:3001` (and `http://localhost:3001`) for local admin dev (already the default in `apps/backend/.env.example`).
 
 ### AI service (FastAPI + LangGraph)
 
