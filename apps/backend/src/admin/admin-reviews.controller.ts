@@ -10,7 +10,11 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { Roles } from '../common/decorators/roles.decorator.js';
 import { ReviewsService } from '../reviews/reviews.service.js';
-import { AdminReviewQueryDto, UpdateReviewDto } from '../reviews/dto/index.js';
+import {
+  AdminReviewQueryDto,
+  AdminModerateReviewDto,
+  AdminDeleteReviewDto,
+} from '../reviews/dto/index.js';
 
 @ApiTags('Admin')
 @ApiBearerAuth()
@@ -38,14 +42,14 @@ export class AdminReviewsController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update any review (Admin)' })
-  update(@Param('id') reviewId: string, @Body() dto: UpdateReviewDto) {
+  @ApiOperation({ summary: 'Moderate any review (Admin)' })
+  update(@Param('id') reviewId: string, @Body() dto: AdminModerateReviewDto) {
     return this.reviewsService.updateForAdmin(reviewId, dto);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete any review (Admin)' })
-  remove(@Param('id') reviewId: string) {
-    return this.reviewsService.removeForAdmin(reviewId);
+  @ApiOperation({ summary: 'Delete any review with a reason (Admin)' })
+  remove(@Param('id') reviewId: string, @Body() dto: AdminDeleteReviewDto) {
+    return this.reviewsService.removeForAdmin(reviewId, dto.reason);
   }
 }

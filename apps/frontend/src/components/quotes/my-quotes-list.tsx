@@ -115,6 +115,14 @@ export function MyQuotesList({
                     dict={dict}
                   />
                 </div>
+                {q.status === 'REJECTED' && q.rejectionReason ? (
+                  <p className="mt-3 rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
+                    <span className="font-medium">
+                      {t.rejectionReasonLabel}:
+                    </span>{' '}
+                    {q.rejectionReason}
+                  </p>
+                ) : null}
               </div>
               <div className="flex flex-col items-end gap-2 text-right">
                 <p className="font-mono text-lg font-semibold">

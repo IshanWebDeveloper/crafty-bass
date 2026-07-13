@@ -12,7 +12,12 @@ import { JobsService } from './jobs.service.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { Permissions } from '../common/decorators/permissions.decorator.js';
 import { Public } from '../common/decorators/public.decorator.js';
-import { CreateJobDto, JobQueryDto, UpdateJobDto } from './dto/index.js';
+import {
+  CreateJobDto,
+  JobQueryDto,
+  UpdateJobDto,
+  CancelJobDto,
+} from './dto/index.js';
 
 @ApiTags('Jobs')
 @Controller('jobs')
@@ -84,7 +89,11 @@ export class JobsController {
   @Permissions('job', 'cancel')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Cancel own job' })
-  cancel(@CurrentUser('id') userId: string, @Param('id') id: string) {
-    return this.jobsService.cancel(userId, id);
+  cancel(
+    @CurrentUser('id') userId: string,
+    @Param('id') id: string,
+    @Body() dto: CancelJobDto,
+  ) {
+    return this.jobsService.cancel(userId, id, dto.reason);
   }
 }

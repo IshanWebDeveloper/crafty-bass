@@ -35,6 +35,7 @@ export type Quote = {
   estimatedCompletion: string | null;
   validUntil: string | null;
   status: QuoteStatus;
+  rejectionReason: string | null;
   respondedAt: string | null;
   withdrawnAt: string | null;
   createdAt: string;
@@ -112,8 +113,11 @@ export function acceptQuote(id: string) {
   return apiFetch<Quote>(`/quotes/${id}/accept`, { method: 'PATCH' });
 }
 
-export function rejectQuote(id: string) {
-  return apiFetch<Quote>(`/quotes/${id}/reject`, { method: 'PATCH' });
+export function rejectQuote(id: string, reason: string) {
+  return apiFetch<Quote>(`/quotes/${id}/reject`, {
+    method: 'PATCH',
+    body: JSON.stringify({ reason }),
+  });
 }
 
 export function withdrawQuote(id: string) {

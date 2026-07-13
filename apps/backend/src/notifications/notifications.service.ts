@@ -149,6 +149,47 @@ export class NotificationsService {
   }
 
   /**
+   * A homeowner explicitly rejected a single quote (not the bulk auto-reject on
+   * accept) → tell that tradesman, including the reason they gave. Upserts so a
+   * re-quote-then-reject refreshes the same row (mirrors notifyQuoteReceived).
+   */
+  async notifyQuoteRejected(quoteId: string, reason: string): Promise<void> {
+    try {
+      const quote = await this.prisma.quote.findUnique({
+        where: { id: quoteId },
+        select: {
+          tradesmanId: true,
+          jobId: true,
+          job: { select: { title: true } },
+        },
+      });
+      if (!quote) return;
+      const title = "Your quote wasn't selected";
+      const body = `The homeowner rejected your quote for "${quote.job.title}". Reason: ${reason}`;
+      await this.prisma.notification.upsert({
+        where: {
+          userId_type_jobId: {
+            userId: quote.tradesmanId,
+            type: 'QUOTE_DECLINED',
+            jobId: quote.jobId,
+          },
+        },
+        create: {
+          userId: quote.tradesmanId,
+          type: 'QUOTE_DECLINED',
+          title,
+          body,
+          href: `jobs/${quote.jobId}`,
+          jobId: quote.jobId,
+        },
+        update: { title, body, readAt: null, createdAt: new Date() },
+      });
+    } catch (error) {
+      this.logNotifyFailure('quote rejected', quoteId, error);
+    }
+  }
+
+  /**
    * A tradesman submitted a quote → tell the homeowner. The
    * `@@unique([userId, type, jobId])` constraint means one row per job, so we
    * upsert: each new quote re-surfaces the notice (clears `readAt`, bumps
@@ -234,12 +275,18 @@ export class NotificationsService {
     });
   }
 
-  /** Job cancelled → tell the assigned tradesman (no-op if none was assigned). */
-  async notifyJobCancelled(jobId: string): Promise<void> {
+  /**
+   * Job cancelled → tell the assigned tradesman (no-op if none was assigned),
+   * including the homeowner's reason when one was given.
+   */
+  async notifyJobCancelled(jobId: string, reason?: string): Promise<void> {
     await this.notifyOne(jobId, 'assignedTradesman', {
       type: 'JOB_CANCELLED',
       title: 'Job cancelled',
-      body: (title) => `The homeowner cancelled "${title}".`,
+      body: (title) =>
+        reason
+          ? `The homeowner cancelled "${title}". Reason: ${reason}`
+          : `The homeowner cancelled "${title}".`,
     });
   }
 
@@ -313,6 +360,93 @@ export class NotificationsService {
         jobId: job.id,
       })),
     );
+  }
+
+  /**
+   * A homeowner declined a mid-job material request → tell the tradesman who
+   * raised it, with the reason. Upserts so a later decline on the same job
+   * refreshes the notice (one per job, matching the unique constraint).
+   */
+  async notifyMaterialRequestDeclined(
+    requestId: string,
+    reason: string,
+  ): Promise<void> {
+    try {
+      const request = await this.prisma.materialRequest.findUnique({
+        where: { id: requestId },
+        select: {
+          requestedById: true,
+          jobId: true,
+          job: { select: { title: true } },
+        },
+      });
+      if (!request) return;
+      const title = 'Material request declined';
+      const body = `The homeowner declined your material request for "${request.job.title}". Reason: ${reason}`;
+      await this.prisma.notification.upsert({
+        where: {
+          userId_type_jobId: {
+            userId: request.requestedById,
+            type: 'MATERIAL_REQUEST_DECLINED',
+            jobId: request.jobId,
+          },
+        },
+        create: {
+          userId: request.requestedById,
+          type: 'MATERIAL_REQUEST_DECLINED',
+          title,
+          body,
+          href: `jobs/${request.jobId}`,
+          jobId: request.jobId,
+        },
+        update: { title, body, readAt: null, createdAt: new Date() },
+      });
+    } catch (error) {
+      this.logNotifyFailure('material request declined', requestId, error);
+    }
+  }
+
+  /**
+   * Staff hid or removed a review → tell its author, with the reason. Callers
+   * pass the review's fields explicitly (the row may be about to be deleted).
+   * Upserts on the per-job constraint so hiding-then-removing refreshes one row.
+   */
+  async notifyReviewModerated(opts: {
+    reviewerId: string;
+    jobId: string;
+    jobTitle: string | null;
+    action: 'hidden' | 'removed';
+    reason: string;
+  }): Promise<void> {
+    try {
+      const jobName = opts.jobTitle ? `"${opts.jobTitle}"` : 'a job';
+      const title =
+        opts.action === 'hidden'
+          ? 'Your review was hidden'
+          : 'Your review was removed';
+      const verb = opts.action === 'hidden' ? 'hid' : 'removed';
+      const body = `An administrator ${verb} your review on ${jobName}. Reason: ${opts.reason}`;
+      await this.prisma.notification.upsert({
+        where: {
+          userId_type_jobId: {
+            userId: opts.reviewerId,
+            type: 'REVIEW_MODERATED',
+            jobId: opts.jobId,
+          },
+        },
+        create: {
+          userId: opts.reviewerId,
+          type: 'REVIEW_MODERATED',
+          title,
+          body,
+          href: `jobs/${opts.jobId}`,
+          jobId: opts.jobId,
+        },
+        update: { title, body, readAt: null, createdAt: new Date() },
+      });
+    } catch (error) {
+      this.logNotifyFailure('review moderated', opts.jobId, error);
+    }
   }
 
   // Notifies exactly one party (the job's homeowner or its assigned tradesman)

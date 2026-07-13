@@ -3,7 +3,10 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { MaterialRequestsService } from './material-requests.service.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { Permissions } from '../common/decorators/permissions.decorator.js';
-import { CreateMaterialRequestDto } from './dto/index.js';
+import {
+  CreateMaterialRequestDto,
+  DeclineMaterialRequestDto,
+} from './dto/index.js';
 
 // Mid-job material requests. RBAC reuses the `job` statements (every customer
 // has them); the assigned-tradesman / homeowner specifics are enforced in the
@@ -44,7 +47,11 @@ export class MaterialRequestsController {
   @Patch('material-requests/:id/decline')
   @Permissions('job', 'edit')
   @ApiOperation({ summary: 'Decline a material request (homeowner)' })
-  decline(@CurrentUser('id') userId: string, @Param('id') id: string) {
-    return this.service.respond(userId, id, false);
+  decline(
+    @CurrentUser('id') userId: string,
+    @Param('id') id: string,
+    @Body() dto: DeclineMaterialRequestDto,
+  ) {
+    return this.service.respond(userId, id, false, dto.reason);
   }
 }

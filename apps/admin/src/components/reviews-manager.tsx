@@ -20,6 +20,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@repo/ui/components/ui/sheet';
+import { Textarea } from '@/components/ui/textarea';
 import { ApiError } from '@/lib/api';
 import { adminKeys } from '@/lib/query-keys';
 import { DataTable } from '@/components/data-table';
@@ -176,6 +177,8 @@ function ReviewSheet({
   const qc = useQueryClient();
   const [formError, setFormError] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [hideReason, setHideReason] = useState('');
+  const [deleteReason, setDeleteReason] = useState('');
 
   const invalidate = () => {
     void qc.invalidateQueries({ queryKey: adminKeys.reviews() });
@@ -190,9 +193,18 @@ function ReviewSheet({
           : fallback,
     );
 
+  // Hiding a review needs a reason (shown to the author); re-publishing doesn't.
+  const willHide = !!review?.isPublic;
+  const reasonRequired = willHide && hideReason.trim().length < 3;
+
   const toggleVisibility = useMutation({
     mutationFn: () =>
-      moderateReview(review!.id, { isPublic: !review!.isPublic }),
+      moderateReview(
+        review!.id,
+        willHide
+          ? { isPublic: false, reason: hideReason.trim() }
+          : { isPublic: true },
+      ),
     onSuccess: () => {
       invalidate();
       onOpenChange(false);
@@ -200,8 +212,11 @@ function ReviewSheet({
     onError: onError('Failed to update review'),
   });
 
+  // Deleting always needs a reason (shown to the author before the row is gone).
+  const deleteReasonMissing = deleteReason.trim().length < 3;
+
   const remove = useMutation({
-    mutationFn: () => deleteReview(review!.id),
+    mutationFn: () => deleteReview(review!.id, deleteReason.trim()),
     onSuccess: () => {
       invalidate();
       onOpenChange(false);
@@ -216,6 +231,8 @@ function ReviewSheet({
         if (!open) {
           setConfirmDelete(false);
           setFormError(null);
+          setHideReason('');
+          setDeleteReason('');
         }
         onOpenChange(open);
       }}
@@ -269,15 +286,46 @@ function ReviewSheet({
                 </div>
               </dl>
 
+              {!review.isPublic && review.moderationReason ? (
+                <div className="space-y-0.5">
+                  <p className="text-xs text-muted-foreground">
+                    Reason shown to author
+                  </p>
+                  <p className="rounded-md bg-muted/40 p-3 text-sm whitespace-pre-wrap">
+                    {review.moderationReason}
+                  </p>
+                </div>
+              ) : null}
+
               {formError ? (
                 <p className="text-sm text-destructive">{formError}</p>
               ) : null}
 
               <div className="flex flex-col gap-2">
+                {willHide ? (
+                  <div className="space-y-1.5">
+                    <span className="text-sm font-medium">
+                      Reason for hiding (shown to the author)
+                    </span>
+                    <Textarea
+                      value={hideReason}
+                      onChange={(e) => setHideReason(e.target.value)}
+                      placeholder="Explain why this review is being hidden…"
+                    />
+                  </div>
+                ) : null}
                 <Button
                   variant="outline"
-                  disabled={toggleVisibility.isPending}
-                  onClick={() => toggleVisibility.mutate()}
+                  disabled={toggleVisibility.isPending || reasonRequired}
+                  onClick={() => {
+                    if (reasonRequired) {
+                      setFormError(
+                        'Add a reason (at least 3 characters) to hide this review.',
+                      );
+                      return;
+                    }
+                    toggleVisibility.mutate();
+                  }}
                 >
                   {toggleVisibility.isPending
                     ? 'Saving…'
@@ -287,20 +335,40 @@ function ReviewSheet({
                 </Button>
 
                 {confirmDelete ? (
-                  <div className="flex gap-2">
-                    <Button
-                      variant="destructive"
-                      disabled={remove.isPending}
-                      onClick={() => remove.mutate()}
-                    >
-                      {remove.isPending ? 'Deleting…' : 'Confirm delete'}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      onClick={() => setConfirmDelete(false)}
-                    >
-                      Cancel
-                    </Button>
+                  <div className="space-y-2">
+                    <div className="space-y-1.5">
+                      <span className="text-sm font-medium">
+                        Reason for deletion (shown to the author)
+                      </span>
+                      <Textarea
+                        value={deleteReason}
+                        onChange={(e) => setDeleteReason(e.target.value)}
+                        placeholder="Explain why this review is being removed…"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="destructive"
+                        disabled={remove.isPending || deleteReasonMissing}
+                        onClick={() => {
+                          if (deleteReasonMissing) {
+                            setFormError(
+                              'Add a reason (at least 3 characters) to delete this review.',
+                            );
+                            return;
+                          }
+                          remove.mutate();
+                        }}
+                      >
+                        {remove.isPending ? 'Deleting…' : 'Confirm delete'}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setConfirmDelete(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <Button

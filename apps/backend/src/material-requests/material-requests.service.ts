@@ -5,6 +5,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
 import type { CreateMaterialRequestDto } from './dto/index.js';
 
 const REQUEST_INCLUDE = {
@@ -16,7 +17,10 @@ const ACTIVE_STATUSES: readonly string[] = ['ASSIGNED', 'IN_PROGRESS'];
 
 @Injectable()
 export class MaterialRequestsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   // Only the job's assigned tradesman may raise a request, and only while the
   // job is active. Ownership/role is enforced here (not via RBAC statements).
@@ -65,8 +69,10 @@ export class MaterialRequestsService {
     });
   }
 
-  // The homeowner approves or declines a pending request.
-  async respond(userId: string, id: string, approve: boolean) {
+  // The homeowner approves or declines a pending request. When declining, a
+  // reason is required (validated at the controller) and stored so the
+  // requesting tradesman is told why (surfaced in the material-requests panel).
+  async respond(userId: string, id: string, approve: boolean, reason?: string) {
     const request = await this.prisma.materialRequest.findUnique({
       where: { id },
       include: { job: { select: { homeownerId: true } } },
@@ -80,13 +86,19 @@ export class MaterialRequestsService {
     if (request.status !== 'PENDING') {
       throw new ConflictException('This request has already been answered');
     }
-    return this.prisma.materialRequest.update({
+    const updated = await this.prisma.materialRequest.update({
       where: { id },
       data: {
         status: approve ? 'APPROVED' : 'DECLINED',
+        declineReason: approve ? null : reason,
         respondedAt: new Date(),
       },
       include: REQUEST_INCLUDE,
     });
+    // Tell the requesting tradesman it was turned down, and why. Best-effort.
+    if (!approve && reason) {
+      await this.notifications.notifyMaterialRequestDeclined(id, reason);
+    }
+    return updated;
   }
 }
