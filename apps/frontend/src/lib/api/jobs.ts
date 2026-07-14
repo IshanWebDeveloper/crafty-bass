@@ -156,6 +156,9 @@ export function updateJob(id: string, body: UpdateJobBody) {
   });
 }
 
-export function cancelJob(id: string) {
-  return apiFetch<Job>(`/jobs/${id}/cancel`, { method: 'PATCH' });
+export function cancelJob(id: string, reason: string) {
+  return apiFetch<Job>(`/jobs/${id}/cancel`, {
+    method: 'PATCH',
+    body: JSON.stringify({ reason }),
+  });
 }

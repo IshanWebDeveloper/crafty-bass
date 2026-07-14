@@ -5,10 +5,12 @@ import {
   UpdateJobSchema,
   JobUrgencySchema,
   JobStatusSchema,
+  CancelJobSchema,
 } from '@repo/validation';
 
 export class CreateJobDto extends createZodDto(CreateJobSchema) {}
 export class UpdateJobDto extends createZodDto(UpdateJobSchema) {}
+export class CancelJobDto extends createZodDto(CancelJobSchema) {}
 
 const JobQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),

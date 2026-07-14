@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { QuotesService } from './quotes.service.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { Permissions } from '../common/decorators/permissions.decorator.js';
-import { CreateQuoteDto } from './dto/index.js';
+import { CreateQuoteDto, RejectQuoteDto } from './dto/index.js';
 
 @ApiTags('Quotes')
 @ApiBearerAuth()
@@ -57,8 +57,12 @@ export class QuotesController {
   @Patch('quotes/:id/reject')
   @Permissions('quote', 'reject')
   @ApiOperation({ summary: 'Reject a quote (job owner)' })
-  reject(@CurrentUser('id') userId: string, @Param('id') id: string) {
-    return this.quotesService.reject(userId, id);
+  reject(
+    @CurrentUser('id') userId: string,
+    @Param('id') id: string,
+    @Body() dto: RejectQuoteDto,
+  ) {
+    return this.quotesService.reject(userId, id, dto.reason);
   }
 
   @Patch('quotes/:id/withdraw')

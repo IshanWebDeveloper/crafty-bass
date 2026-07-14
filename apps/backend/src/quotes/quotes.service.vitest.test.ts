@@ -19,6 +19,7 @@ function makeNotifications() {
   return {
     notifyQuoteReceived: vi.fn().mockResolvedValue(undefined),
     notifyQuoteDecision: vi.fn().mockResolvedValue(undefined),
+    notifyQuoteRejected: vi.fn().mockResolvedValue(undefined),
   } as unknown as NotificationsService;
 }
 
@@ -582,7 +583,7 @@ describe('QuotesService.reject / withdraw', () => {
       new QuotesService(
         prisma as unknown as PrismaService,
         makeNotifications(),
-      ).reject('nope', 'q1'),
+      ).reject('nope', 'q1', 'Too expensive'),
     ).rejects.toBeInstanceOf(ForbiddenException);
   });
 
@@ -602,11 +603,11 @@ describe('QuotesService.reject / withdraw', () => {
       new QuotesService(
         prisma as unknown as PrismaService,
         makeNotifications(),
-      ).reject('owner', 'q1'),
+      ).reject('owner', 'q1', 'Too expensive'),
     ).rejects.toBeInstanceOf(ConflictException);
   });
 
-  it('reject: happy path marks the quote REJECTED', async () => {
+  it('reject: happy path stores the reason and notifies the tradesman', async () => {
     const update = vi.fn(() =>
       Promise.resolve({ id: 'q1', status: 'REJECTED' }),
     );
@@ -622,14 +623,22 @@ describe('QuotesService.reject / withdraw', () => {
         update,
       },
     });
+    const notifications = makeNotifications();
     await new QuotesService(
       prisma as unknown as PrismaService,
-      makeNotifications(),
-    ).reject('owner', 'q1');
+      notifications,
+    ).reject('owner', 'q1', 'Price too high');
     expect(update).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({ status: 'REJECTED' }),
+        data: expect.objectContaining({
+          status: 'REJECTED',
+          rejectionReason: 'Price too high',
+        }),
       }),
+    );
+    expect(notifications.notifyQuoteRejected).toHaveBeenCalledWith(
+      'q1',
+      'Price too high',
     );
   });
 

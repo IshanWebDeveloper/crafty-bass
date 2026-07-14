@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Award, MapPin, Truck } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Avatar,
   AvatarFallback,
@@ -16,6 +18,7 @@ import {
 } from '@repo/ui';
 import { Card, CardContent } from '@/components/ui/card';
 import { getTradesmanPublic } from '@/lib/api/profiles';
+import { startConversation } from '@/lib/api/conversations';
 import { RoleBadge } from '@/components/layout/role-badge';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
@@ -42,6 +45,7 @@ export function TradesmanPublicView({
   userId: string;
 }) {
   const t = dict.trades.profile;
+  const router = useRouter();
   const {
     data: trade,
     isLoading,
@@ -51,6 +55,25 @@ export function TradesmanPublicView({
     queryFn: () => getTradesmanPublic(userId),
     retry: false,
   });
+
+  // Open (or reuse) a direct thread with this tradesman and jump straight to it,
+  // rather than dropping the homeowner in the inbox. Mirrors the message action
+  // on the job detail / agreed-quote cards.
+  const onMessage = async () => {
+    try {
+      const result = await startConversation({
+        type: 'DIRECT',
+        recipientId: userId,
+        // No body: open (or reuse) the thread and let the homeowner write their
+        // own message instead of auto-sending a placeholder.
+      });
+      router.push(`/${locale}/messages/${result.conversation.id}`);
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : 'Failed to start conversation',
+      );
+    }
+  };
 
   if (isLoading) {
     return (
@@ -138,12 +161,7 @@ export function TradesmanPublicView({
               </div>
             </div>
           </div>
-          <Button
-            nativeButton={false}
-            render={<Link href={`/${locale}/messages`} />}
-          >
-            {t.message}
-          </Button>
+          <Button onClick={onMessage}>{t.message}</Button>
         </CardContent>
       </Card>
 

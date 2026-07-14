@@ -15,6 +15,7 @@ import {
   declineMaterialRequest,
   type MaterialRequestStatus,
 } from '@/lib/api/material-requests';
+import { RejectReasonDialog } from '@/components/common/reject-reason-dialog';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -49,6 +50,8 @@ export function MaterialRequestsPanel({
   const t = dict.materialRequests;
   const [note, setNote] = useState('');
   const [estimatedCost, setEstimatedCost] = useState('');
+  // The id of the request currently being declined (drives the reason prompt).
+  const [declineId, setDeclineId] = useState<string | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ['material-requests', jobId],
@@ -77,10 +80,21 @@ export function MaterialRequestsPanel({
   });
 
   const respond = useMutation({
-    mutationFn: ({ id, approve }: { id: string; approve: boolean }) =>
-      approve ? approveMaterialRequest(id) : declineMaterialRequest(id),
+    mutationFn: ({
+      id,
+      approve,
+      reason,
+    }: {
+      id: string;
+      approve: boolean;
+      reason?: string;
+    }) =>
+      approve
+        ? approveMaterialRequest(id)
+        : declineMaterialRequest(id, reason ?? ''),
     onSuccess: (_data, vars) => {
       toast.success(vars.approve ? t.approved : t.declined);
+      setDeclineId(null);
       void invalidate();
     },
     onError: (err) =>
@@ -162,6 +176,14 @@ export function MaterialRequestsPanel({
                       : ''}
                     {new Date(r.createdAt).toLocaleDateString(locale)}
                   </p>
+                  {r.status === 'DECLINED' && r.declineReason ? (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      <span className="font-medium">
+                        {t.declineReasonLabel}:
+                      </span>{' '}
+                      {r.declineReason}
+                    </p>
+                  ) : null}
                 </div>
                 {canRespond && r.status === 'PENDING' ? (
                   <div className="flex shrink-0 flex-col gap-2">
@@ -177,9 +199,7 @@ export function MaterialRequestsPanel({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() =>
-                        respond.mutate({ id: r.id, approve: false })
-                      }
+                      onClick={() => setDeclineId(r.id)}
                       disabled={respond.isPending}
                     >
                       {t.decline}
@@ -191,6 +211,18 @@ export function MaterialRequestsPanel({
           </ul>
         )}
       </CardContent>
+      <RejectReasonDialog
+        open={declineId !== null}
+        onOpenChange={(open) => {
+          if (!open) setDeclineId(null);
+        }}
+        onSubmit={(reason) => {
+          if (declineId)
+            respond.mutate({ id: declineId, approve: false, reason });
+        }}
+        pending={respond.isPending}
+        copy={t.declineDialog}
+      />
     </Card>
   );
 }

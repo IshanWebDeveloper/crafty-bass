@@ -76,9 +76,9 @@ export function AgreedQuoteSummary({
         recipientId: isOwner
           ? (job.assignedTradesmanId ?? undefined)
           : undefined,
-        body: tc.started,
+        // No body: just open (or reuse) the thread and let the user type their
+        // own message, rather than auto-sending a placeholder.
       });
-      toast.success(tc.started);
       router.push(`/${locale}/messages/${result.conversation.id}`);
     } catch (err) {
       toast.error(
@@ -116,7 +116,11 @@ export function AgreedQuoteSummary({
             <span />
           )}
           <Button size="sm" variant="outline" onClick={onMessage}>
-            {isOwner ? tc.startCtaTradesman : tc.startCta}
+            {counterparty
+              ? tc.startCtaNamed.replace('{name}', counterparty.name)
+              : isOwner
+                ? tc.startCtaTradesman
+                : tc.startCta}
           </Button>
         </div>
 

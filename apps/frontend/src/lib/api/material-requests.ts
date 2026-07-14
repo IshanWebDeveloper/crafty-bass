@@ -10,6 +10,7 @@ export type MaterialRequest = {
   estimatedCost: number | null;
   currency: string;
   status: MaterialRequestStatus;
+  declineReason: string | null;
   respondedAt: string | null;
   createdAt: string;
   requestedBy: { id: string; name: string; image: string | null };
@@ -41,8 +42,9 @@ export function approveMaterialRequest(id: string) {
   });
 }
 
-export function declineMaterialRequest(id: string) {
+export function declineMaterialRequest(id: string, reason: string) {
   return apiFetch<MaterialRequest>(`/material-requests/${id}/decline`, {
     method: 'PATCH',
+    body: JSON.stringify({ reason }),
   });
 }
