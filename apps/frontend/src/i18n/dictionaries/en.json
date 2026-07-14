@@ -492,7 +492,14 @@
       "empty": "You haven't posted any jobs yet.",
       "postOne": "Post a job",
       "viewQuotes": "{count} quotes",
-      "viewQuotesOne": "{count} quote"
+      "viewQuotesOne": "{count} quote",
+      "searchPlaceholder": "Search your jobs",
+      "allStatuses": "Any status",
+      "allCategories": "All categories",
+      "noMatches": "No jobs match your search.",
+      "clearFilters": "Clear filters",
+      "resultCount": "{count} of {total} jobs",
+      "resultCountOne": "{count} of {total} job"
     },
     "detail": {
       "postedBy": "Posted by",
