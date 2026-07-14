@@ -276,16 +276,17 @@
     }
   },
   "escrow": {
-    "heading": "Materials deposit",
+    "heading": "Deposit to start",
     "subtitle": "Crafty Bass holds the deposit and releases it on agreed milestones.",
+    "jobRef": "Job ID",
     "steps": {
       "funded": {
         "label": "Funded",
         "note": "Held by Crafty Bass"
       },
       "materials": {
-        "label": "Material Deposit",
-        "note": "Released to buy parts"
+        "label": "Released to start",
+        "note": "Released when work starts"
       },
       "workDone": {
         "label": "Work done",
@@ -297,7 +298,7 @@
       }
     },
     "amounts": {
-      "deposit": "Materials deposit",
+      "deposit": "Deposit to start",
       "balance": "Balance on completion",
       "total": "Quote total",
       "inEscrow": "in escrow · refundable until work begins",
@@ -315,7 +316,7 @@
     "actions": {
       "fund": "Fund deposit",
       "funding": "Redirecting…",
-      "startWork": "Start work & release materials",
+      "startWork": "Start work & release deposit",
       "starting": "Starting…",
       "markDone": "Mark work done",
       "marking": "Saving…",
@@ -325,6 +326,15 @@
       "refunding": "Refunding…",
       "approveConfirm": "Approve the work and release the balance to the tradesman?",
       "refundConfirm": "Refund the held deposit to the homeowner?"
+    },
+    "invoice": {
+      "download": "Download invoice",
+      "downloading": "Preparing…",
+      "email": "Email me a copy",
+      "emailing": "Sending…",
+      "emailedToast": "Invoice sent to {email}",
+      "emailSkipped": "Email isn't set up, so no copy was sent",
+      "error": "Couldn't generate the invoice. Please try again."
     },
     "methods": {
       "card": {
@@ -360,14 +370,15 @@
       }
     },
     "fund": {
-      "title": "Fund the materials deposit",
-      "subtitle": "Your tradesman asked for a materials deposit so they can buy parts and start. You pay Crafty Bass - not the tradesman - and we hold it in escrow.",
+      "title": "Fund the deposit to start",
+      "subtitle": "Pay the up-front deposit so your tradesman can get started. You pay Crafty Bass - not the tradesman - and we hold it in escrow.",
       "jobLabel": "Job",
       "protectionHeading": "How your money is protected",
       "protection1": "Crafty Bass holds the deposit - the tradesman can't touch it until you confirm work has started.",
       "protection2": "Fully refundable if the job never begins or you cancel before work starts.",
       "protection3": "If something goes wrong, our team mediates before any money is released.",
       "payNow": "Pay now",
+      "processingFee": "Processing fee",
       "method": "Payment method",
       "payCta": "Fund {amount} in escrow",
       "secured": "Secured by {processor} · funds held by Crafty Bass, not the tradesman",
@@ -375,7 +386,7 @@
       "notFound": "There's no deposit awaiting funding for this job.",
       "back": "Back to job"
     },
-    "startedToast": "Materials released - job in progress",
+    "startedToast": "Deposit released - job in progress",
     "doneToast": "Marked complete - awaiting approval",
     "approvedToast": "Approved - balance released",
     "refundedToast": "Deposit refunded"
@@ -485,6 +496,7 @@
     },
     "detail": {
       "postedBy": "Posted by",
+      "jobRef": "Job ID",
       "postedOn": "Posted on",
       "budget": "Budget",
       "noBudget": "Not specified",

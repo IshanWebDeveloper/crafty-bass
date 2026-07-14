@@ -550,11 +550,13 @@ describe('QuotesService.accept', () => {
     );
   });
 
-  it('creates no escrow when no deposit was requested', async () => {
+  it('falls back to the call-out fee when no deposit was requested', async () => {
     const { prisma, tx } = makePrisma({
       quote: {
         findUnique: vi.fn(() =>
-          Promise.resolve(pendingQuote({ depositRequested: null })),
+          Promise.resolve(
+            pendingQuote({ depositRequested: null, calloutFee: 500 }),
+          ),
         ),
       },
     });
@@ -562,7 +564,38 @@ describe('QuotesService.accept', () => {
       prisma as unknown as PrismaService,
       makeNotifications(),
     ).accept('owner', 'q1');
-    expect(tx.jobEscrow.create).not.toHaveBeenCalled();
+    expect(tx.jobEscrow.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          depositAmount: 500,
+          balanceAmount: 14840,
+        }),
+      }),
+    );
+  });
+
+  it('escrows the full total when there is no deposit or call-out fee', async () => {
+    const { prisma, tx } = makePrisma({
+      quote: {
+        findUnique: vi.fn(() =>
+          Promise.resolve(
+            pendingQuote({ depositRequested: null, calloutFee: null }),
+          ),
+        ),
+      },
+    });
+    await new QuotesService(
+      prisma as unknown as PrismaService,
+      makeNotifications(),
+    ).accept('owner', 'q1');
+    expect(tx.jobEscrow.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          depositAmount: 15340,
+          balanceAmount: 0,
+        }),
+      }),
+    );
   });
 });
 

@@ -130,6 +130,9 @@ export function FundDepositView({
                 <p className="mt-0.5 truncate text-base font-semibold">
                   {escrow.job.title}
                 </p>
+                <p className="mt-0.5 truncate font-mono text-xs text-muted-foreground">
+                  {t.jobRef}: {escrow.jobId}
+                </p>
               </div>
               <Badge variant="success" className="shrink-0">
                 {dict.quotes.accepted}
@@ -165,6 +168,10 @@ export function FundDepositView({
             <div className="space-y-2.5 text-sm">
               <Row label={t.amounts.deposit} value={formatLKR(deposit)} />
               <Row
+                label={tf.processingFee}
+                value={formatLKR(escrow.processingFee)}
+              />
+              <Row
                 label={t.amounts.balance}
                 value={formatLKR(escrow.balanceAmount)}
                 muted
@@ -177,7 +184,11 @@ export function FundDepositView({
                 />
               </div>
               <div className="border-t border-border pt-2.5">
-                <Row label={tf.payNow} value={formatLKR(deposit)} strong />
+                <Row
+                  label={tf.payNow}
+                  value={formatLKR(escrow.amountDue)}
+                  strong
+                />
               </div>
             </div>
 
@@ -191,7 +202,10 @@ export function FundDepositView({
             {method === 'card' ? (
               <StripeCardForm
                 escrowId={escrow.id}
-                submitLabel={tf.payCta.replace('{amount}', formatLKR(deposit))}
+                submitLabel={tf.payCta.replace(
+                  '{amount}',
+                  formatLKR(escrow.amountDue),
+                )}
                 submittingLabel={t.actions.funding}
                 onFunded={handleFunded}
               />
@@ -205,7 +219,7 @@ export function FundDepositView({
                 <Lock className="size-4 shrink-0" aria-hidden />
                 {mutation.isPending
                   ? t.actions.funding
-                  : tf.payCta.replace('{amount}', formatLKR(deposit))}
+                  : tf.payCta.replace('{amount}', formatLKR(escrow.amountDue))}
               </Button>
             )}
             <p className="flex items-center justify-center gap-1.5 text-center text-[11px] leading-relaxed text-muted-foreground">
