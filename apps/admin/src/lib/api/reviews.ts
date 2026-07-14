@@ -11,6 +11,7 @@ export type AdminReview = {
   title: string | null;
   comment: string | null;
   isPublic: boolean;
+  moderationReason: string | null;
   createdAt: string;
   updatedAt: string;
   reviewer: Party | null;
@@ -42,6 +43,8 @@ export type ModerateReviewInput = {
   rating?: number;
   title?: string | null;
   comment?: string | null;
+  // Required when hiding a review (isPublic:false) - shown to the author.
+  reason?: string;
 };
 
 export function moderateReview(id: string, input: ModerateReviewInput) {
@@ -51,8 +54,9 @@ export function moderateReview(id: string, input: ModerateReviewInput) {
   });
 }
 
-export function deleteReview(id: string) {
+export function deleteReview(id: string, reason: string) {
   return apiFetch<AdminReview>(`/admin/reviews/${id}`, {
     method: 'DELETE',
+    body: JSON.stringify({ reason }),
   });
 }

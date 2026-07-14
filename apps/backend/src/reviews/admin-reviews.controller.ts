@@ -10,7 +10,11 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ReviewsService } from './reviews.service.js';
 import { Roles } from '../common/decorators/roles.decorator.js';
-import { AdminReviewQueryDto, AdminModerateReviewDto } from './dto/index.js';
+import {
+  AdminReviewQueryDto,
+  AdminModerateReviewDto,
+  AdminDeleteReviewDto,
+} from './dto/index.js';
 
 // Admin moderation surface for reviews. The ReviewsService already had the
 // admin methods; this controller exposes them. Gated ADMIN-only to match the
@@ -41,8 +45,8 @@ export class AdminReviewsController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a review (Admin)' })
-  remove(@Param('id') id: string) {
-    return this.reviewsService.removeForAdmin(id);
+  @ApiOperation({ summary: 'Delete a review with a reason (Admin)' })
+  remove(@Param('id') id: string, @Body() dto: AdminDeleteReviewDto) {
+    return this.reviewsService.removeForAdmin(id, dto.reason);
   }
 }

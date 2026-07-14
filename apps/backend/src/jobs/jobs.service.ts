@@ -327,7 +327,7 @@ export class JobsService {
     });
   }
 
-  async cancel(userId: string, id: string) {
+  async cancel(userId: string, id: string, reason: string) {
     const job = await this.prisma.job.findUnique({
       where: { id },
       select: { id: true, homeownerId: true, status: true },
@@ -361,11 +361,15 @@ export class JobsService {
     }
     const cancelled = await this.prisma.job.update({
       where: { id },
-      data: { status: 'CANCELLED', cancelledAt: new Date() },
+      data: {
+        status: 'CANCELLED',
+        cancelledAt: new Date(),
+        cancellationReason: reason,
+      },
     });
-    // If a tradesman had been assigned, let them know it's off. Best-effort;
-    // no-ops for a still-open job with nobody assigned.
-    await this.notifications.notifyJobCancelled(id);
+    // If a tradesman had been assigned, let them know it's off (with the reason).
+    // Best-effort; no-ops for a still-open job with nobody assigned.
+    await this.notifications.notifyJobCancelled(id, reason);
     return cancelled;
   }
 }

@@ -41,6 +41,12 @@ const NOTIFICATION_META: Record<
   JOB_COMPLETED: { category: 'escrow', tint: 'green', icon: 'hand-coins' },
   JOB_CANCELLED: { category: 'job', tint: 'neutral', icon: 'circle-x' },
   JOB_EXPIRED: { category: 'job', tint: 'amber', icon: 'clock' },
+  MATERIAL_REQUEST_DECLINED: {
+    category: 'job',
+    tint: 'neutral',
+    icon: 'circle-x',
+  },
+  REVIEW_MODERATED: { category: 'account', tint: 'neutral', icon: 'circle-x' },
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;

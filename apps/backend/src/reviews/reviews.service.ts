@@ -5,6 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import type {
   CreateReviewDto,
@@ -26,7 +27,10 @@ const ADMIN_PARTY_SELECT = { id: true, name: true, email: true } as const;
  */
 @Injectable()
 export class ReviewsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async create(reviewerId: string, jobId: string, dto: CreateReviewDto) {
     const job = await this.prisma.job.findUnique({
@@ -168,20 +172,49 @@ export class ReviewsService {
   }
 
   async updateForAdmin(reviewId: string, dto: AdminModerateReviewDto) {
-    await this.findByIdForAdmin(reviewId);
-    return this.prisma.review.update({
+    const existing = await this.findByIdForAdmin(reviewId);
+    // When hiding a review a reason is required (validated in the DTO); store it
+    // so the author is told why. Re-publishing clears the reason.
+    const moderationReason =
+      dto.isPublic === false
+        ? { moderationReason: dto.reason ?? null }
+        : dto.isPublic === true
+          ? { moderationReason: null }
+          : {};
+    const updated = await this.prisma.review.update({
       where: { id: reviewId },
       data: {
         ...(dto.isPublic !== undefined ? { isPublic: dto.isPublic } : {}),
         ...(dto.rating !== undefined ? { rating: dto.rating } : {}),
         ...(dto.title !== undefined ? { title: dto.title } : {}),
         ...(dto.comment !== undefined ? { comment: dto.comment } : {}),
+        ...moderationReason,
       },
     });
+    // Newly hidden → tell the author why. Best-effort.
+    if (dto.isPublic === false && existing.isPublic && dto.reason) {
+      await this.notifications.notifyReviewModerated({
+        reviewerId: existing.reviewerId,
+        jobId: existing.jobId,
+        jobTitle: existing.job?.title ?? null,
+        action: 'hidden',
+        reason: dto.reason,
+      });
+    }
+    return updated;
   }
 
-  async removeForAdmin(reviewId: string) {
-    await this.findByIdForAdmin(reviewId);
+  async removeForAdmin(reviewId: string, reason: string) {
+    const existing = await this.findByIdForAdmin(reviewId);
+    // Notify the author before the row is gone (the notification keeps the jobId
+    // link, and the job itself isn't deleted). Best-effort.
+    await this.notifications.notifyReviewModerated({
+      reviewerId: existing.reviewerId,
+      jobId: existing.jobId,
+      jobTitle: existing.job?.title ?? null,
+      action: 'removed',
+      reason,
+    });
     return this.prisma.review.delete({ where: { id: reviewId } });
   }
 }

@@ -28,6 +28,17 @@ export class CategoriesController {
   }
 
   @Public()
+  @Get('tradesmen-counts')
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(300000)
+  @ApiOperation({
+    summary: 'Available tradesman counts per category (by slug)',
+  })
+  tradesmenCounts() {
+    return this.categoriesService.getTradesmanCounts();
+  }
+
+  @Public()
   @Get(':slug')
   @UseInterceptors(CacheInterceptor)
   @CacheTTL(300000)

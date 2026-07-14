@@ -66,12 +66,13 @@ export type StartConversationBody = {
   type: 'JOB_DIRECT' | 'DIRECT';
   jobId?: string;
   recipientId?: string;
-  body: string;
+  // Omit to just open (or reuse) the thread without sending an opening message.
+  body?: string;
   messageType?: MessageType;
 };
 
 export function startConversation(body: StartConversationBody) {
-  return apiFetch<{ conversation: Conversation; message: Message }>(
+  return apiFetch<{ conversation: Conversation; message: Message | null }>(
     `/conversations`,
     { method: 'POST', body: JSON.stringify(body) },
   );

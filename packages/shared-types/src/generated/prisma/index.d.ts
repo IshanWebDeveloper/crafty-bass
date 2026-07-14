@@ -338,6 +338,8 @@ export namespace $Enums {
     JOB_COMPLETED: 'JOB_COMPLETED';
     JOB_CANCELLED: 'JOB_CANCELLED';
     JOB_EXPIRED: 'JOB_EXPIRED';
+    MATERIAL_REQUEST_DECLINED: 'MATERIAL_REQUEST_DECLINED';
+    REVIEW_MODERATED: 'REVIEW_MODERATED';
   };
 
   export type NotificationType =
@@ -21077,6 +21079,7 @@ export namespace Prisma {
     expiryNoticeSentAt: Date | null;
     completedAt: Date | null;
     cancelledAt: Date | null;
+    cancellationReason: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
   };
@@ -21108,6 +21111,7 @@ export namespace Prisma {
     expiryNoticeSentAt: Date | null;
     completedAt: Date | null;
     cancelledAt: Date | null;
+    cancellationReason: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
   };
@@ -21140,6 +21144,7 @@ export namespace Prisma {
     expiryNoticeSentAt: number;
     completedAt: number;
     cancelledAt: number;
+    cancellationReason: number;
     createdAt: number;
     updatedAt: number;
     _all: number;
@@ -21188,6 +21193,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: true;
     completedAt?: true;
     cancelledAt?: true;
+    cancellationReason?: true;
     createdAt?: true;
     updatedAt?: true;
   };
@@ -21219,6 +21225,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: true;
     completedAt?: true;
     cancelledAt?: true;
+    cancellationReason?: true;
     createdAt?: true;
     updatedAt?: true;
   };
@@ -21251,6 +21258,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: true;
     completedAt?: true;
     cancelledAt?: true;
+    cancellationReason?: true;
     createdAt?: true;
     updatedAt?: true;
     _all?: true;
@@ -21371,6 +21379,7 @@ export namespace Prisma {
     expiryNoticeSentAt: Date | null;
     completedAt: Date | null;
     cancelledAt: Date | null;
+    cancellationReason: string | null;
     createdAt: Date;
     updatedAt: Date;
     _count: JobCountAggregateOutputType | null;
@@ -21423,6 +21432,7 @@ export namespace Prisma {
       expiryNoticeSentAt?: boolean;
       completedAt?: boolean;
       cancelledAt?: boolean;
+      cancellationReason?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
       homeowner?: boolean | UserDefaultArgs<ExtArgs>;
@@ -21475,6 +21485,7 @@ export namespace Prisma {
       expiryNoticeSentAt?: boolean;
       completedAt?: boolean;
       cancelledAt?: boolean;
+      cancellationReason?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
       homeowner?: boolean | UserDefaultArgs<ExtArgs>;
@@ -21517,6 +21528,7 @@ export namespace Prisma {
       expiryNoticeSentAt?: boolean;
       completedAt?: boolean;
       cancelledAt?: boolean;
+      cancellationReason?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
       homeowner?: boolean | UserDefaultArgs<ExtArgs>;
@@ -21556,6 +21568,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: boolean;
     completedAt?: boolean;
     cancelledAt?: boolean;
+    cancellationReason?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
   };
@@ -21590,6 +21603,7 @@ export namespace Prisma {
     | 'expiryNoticeSentAt'
     | 'completedAt'
     | 'cancelledAt'
+    | 'cancellationReason'
     | 'createdAt'
     | 'updatedAt',
     ExtArgs['result']['job']
@@ -21681,6 +21695,7 @@ export namespace Prisma {
         expiryNoticeSentAt: Date | null;
         completedAt: Date | null;
         cancelledAt: Date | null;
+        cancellationReason: string | null;
         createdAt: Date;
         updatedAt: Date;
       },
@@ -22462,6 +22477,7 @@ export namespace Prisma {
     readonly expiryNoticeSentAt: FieldRef<'Job', 'DateTime'>;
     readonly completedAt: FieldRef<'Job', 'DateTime'>;
     readonly cancelledAt: FieldRef<'Job', 'DateTime'>;
+    readonly cancellationReason: FieldRef<'Job', 'String'>;
     readonly createdAt: FieldRef<'Job', 'DateTime'>;
     readonly updatedAt: FieldRef<'Job', 'DateTime'>;
   }
@@ -24638,6 +24654,7 @@ export namespace Prisma {
     estimatedCompletion: Date | null;
     validUntil: Date | null;
     status: $Enums.QuoteStatus | null;
+    rejectionReason: string | null;
     respondedAt: Date | null;
     withdrawnAt: Date | null;
     createdAt: Date | null;
@@ -24660,6 +24677,7 @@ export namespace Prisma {
     estimatedCompletion: Date | null;
     validUntil: Date | null;
     status: $Enums.QuoteStatus | null;
+    rejectionReason: string | null;
     respondedAt: Date | null;
     withdrawnAt: Date | null;
     createdAt: Date | null;
@@ -24682,6 +24700,7 @@ export namespace Prisma {
     estimatedCompletion: number;
     validUntil: number;
     status: number;
+    rejectionReason: number;
     respondedAt: number;
     withdrawnAt: number;
     createdAt: number;
@@ -24723,6 +24742,7 @@ export namespace Prisma {
     estimatedCompletion?: true;
     validUntil?: true;
     status?: true;
+    rejectionReason?: true;
     respondedAt?: true;
     withdrawnAt?: true;
     createdAt?: true;
@@ -24745,6 +24765,7 @@ export namespace Prisma {
     estimatedCompletion?: true;
     validUntil?: true;
     status?: true;
+    rejectionReason?: true;
     respondedAt?: true;
     withdrawnAt?: true;
     createdAt?: true;
@@ -24767,6 +24788,7 @@ export namespace Prisma {
     estimatedCompletion?: true;
     validUntil?: true;
     status?: true;
+    rejectionReason?: true;
     respondedAt?: true;
     withdrawnAt?: true;
     createdAt?: true;
@@ -24879,6 +24901,7 @@ export namespace Prisma {
     estimatedCompletion: Date | null;
     validUntil: Date | null;
     status: $Enums.QuoteStatus;
+    rejectionReason: string | null;
     respondedAt: Date | null;
     withdrawnAt: Date | null;
     createdAt: Date;
@@ -24922,6 +24945,7 @@ export namespace Prisma {
       estimatedCompletion?: boolean;
       validUntil?: boolean;
       status?: boolean;
+      rejectionReason?: boolean;
       respondedAt?: boolean;
       withdrawnAt?: boolean;
       createdAt?: boolean;
@@ -24955,6 +24979,7 @@ export namespace Prisma {
       estimatedCompletion?: boolean;
       validUntil?: boolean;
       status?: boolean;
+      rejectionReason?: boolean;
       respondedAt?: boolean;
       withdrawnAt?: boolean;
       createdAt?: boolean;
@@ -24984,6 +25009,7 @@ export namespace Prisma {
       estimatedCompletion?: boolean;
       validUntil?: boolean;
       status?: boolean;
+      rejectionReason?: boolean;
       respondedAt?: boolean;
       withdrawnAt?: boolean;
       createdAt?: boolean;
@@ -25010,6 +25036,7 @@ export namespace Prisma {
     estimatedCompletion?: boolean;
     validUntil?: boolean;
     status?: boolean;
+    rejectionReason?: boolean;
     respondedAt?: boolean;
     withdrawnAt?: boolean;
     createdAt?: boolean;
@@ -25034,6 +25061,7 @@ export namespace Prisma {
     | 'estimatedCompletion'
     | 'validUntil'
     | 'status'
+    | 'rejectionReason'
     | 'respondedAt'
     | 'withdrawnAt'
     | 'createdAt'
@@ -25091,6 +25119,7 @@ export namespace Prisma {
         estimatedCompletion: Date | null;
         validUntil: Date | null;
         status: $Enums.QuoteStatus;
+        rejectionReason: string | null;
         respondedAt: Date | null;
         withdrawnAt: Date | null;
         createdAt: Date;
@@ -25761,6 +25790,7 @@ export namespace Prisma {
     readonly estimatedCompletion: FieldRef<'Quote', 'DateTime'>;
     readonly validUntil: FieldRef<'Quote', 'DateTime'>;
     readonly status: FieldRef<'Quote', 'QuoteStatus'>;
+    readonly rejectionReason: FieldRef<'Quote', 'String'>;
     readonly respondedAt: FieldRef<'Quote', 'DateTime'>;
     readonly withdrawnAt: FieldRef<'Quote', 'DateTime'>;
     readonly createdAt: FieldRef<'Quote', 'DateTime'>;
@@ -27712,6 +27742,7 @@ export namespace Prisma {
     estimatedCost: Decimal | null;
     currency: string | null;
     status: $Enums.MaterialRequestStatus | null;
+    declineReason: string | null;
     respondedAt: Date | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -27725,6 +27756,7 @@ export namespace Prisma {
     estimatedCost: Decimal | null;
     currency: string | null;
     status: $Enums.MaterialRequestStatus | null;
+    declineReason: string | null;
     respondedAt: Date | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -27738,6 +27770,7 @@ export namespace Prisma {
     estimatedCost: number;
     currency: number;
     status: number;
+    declineReason: number;
     respondedAt: number;
     createdAt: number;
     updatedAt: number;
@@ -27760,6 +27793,7 @@ export namespace Prisma {
     estimatedCost?: true;
     currency?: true;
     status?: true;
+    declineReason?: true;
     respondedAt?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -27773,6 +27807,7 @@ export namespace Prisma {
     estimatedCost?: true;
     currency?: true;
     status?: true;
+    declineReason?: true;
     respondedAt?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -27786,6 +27821,7 @@ export namespace Prisma {
     estimatedCost?: true;
     currency?: true;
     status?: true;
+    declineReason?: true;
     respondedAt?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -27895,6 +27931,7 @@ export namespace Prisma {
     estimatedCost: Decimal | null;
     currency: string;
     status: $Enums.MaterialRequestStatus;
+    declineReason: string | null;
     respondedAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
@@ -27930,6 +27967,7 @@ export namespace Prisma {
       estimatedCost?: boolean;
       currency?: boolean;
       status?: boolean;
+      declineReason?: boolean;
       respondedAt?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
@@ -27950,6 +27988,7 @@ export namespace Prisma {
       estimatedCost?: boolean;
       currency?: boolean;
       status?: boolean;
+      declineReason?: boolean;
       respondedAt?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
@@ -27970,6 +28009,7 @@ export namespace Prisma {
       estimatedCost?: boolean;
       currency?: boolean;
       status?: boolean;
+      declineReason?: boolean;
       respondedAt?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
@@ -27987,6 +28027,7 @@ export namespace Prisma {
     estimatedCost?: boolean;
     currency?: boolean;
     status?: boolean;
+    declineReason?: boolean;
     respondedAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -28002,6 +28043,7 @@ export namespace Prisma {
     | 'estimatedCost'
     | 'currency'
     | 'status'
+    | 'declineReason'
     | 'respondedAt'
     | 'createdAt'
     | 'updatedAt',
@@ -28043,6 +28085,7 @@ export namespace Prisma {
         estimatedCost: Prisma.Decimal | null;
         currency: string;
         status: $Enums.MaterialRequestStatus;
+        declineReason: string | null;
         respondedAt: Date | null;
         createdAt: Date;
         updatedAt: Date;
@@ -28671,6 +28714,7 @@ export namespace Prisma {
     readonly estimatedCost: FieldRef<'MaterialRequest', 'Decimal'>;
     readonly currency: FieldRef<'MaterialRequest', 'String'>;
     readonly status: FieldRef<'MaterialRequest', 'MaterialRequestStatus'>;
+    readonly declineReason: FieldRef<'MaterialRequest', 'String'>;
     readonly respondedAt: FieldRef<'MaterialRequest', 'DateTime'>;
     readonly createdAt: FieldRef<'MaterialRequest', 'DateTime'>;
     readonly updatedAt: FieldRef<'MaterialRequest', 'DateTime'>;
@@ -38436,6 +38480,7 @@ export namespace Prisma {
     title: string | null;
     comment: string | null;
     isPublic: boolean | null;
+    moderationReason: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
   };
@@ -38449,6 +38494,7 @@ export namespace Prisma {
     title: string | null;
     comment: string | null;
     isPublic: boolean | null;
+    moderationReason: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
   };
@@ -38462,6 +38508,7 @@ export namespace Prisma {
     title: number;
     comment: number;
     isPublic: number;
+    moderationReason: number;
     createdAt: number;
     updatedAt: number;
     _all: number;
@@ -38484,6 +38531,7 @@ export namespace Prisma {
     title?: true;
     comment?: true;
     isPublic?: true;
+    moderationReason?: true;
     createdAt?: true;
     updatedAt?: true;
   };
@@ -38497,6 +38545,7 @@ export namespace Prisma {
     title?: true;
     comment?: true;
     isPublic?: true;
+    moderationReason?: true;
     createdAt?: true;
     updatedAt?: true;
   };
@@ -38510,6 +38559,7 @@ export namespace Prisma {
     title?: true;
     comment?: true;
     isPublic?: true;
+    moderationReason?: true;
     createdAt?: true;
     updatedAt?: true;
     _all?: true;
@@ -38613,6 +38663,7 @@ export namespace Prisma {
     title: string | null;
     comment: string | null;
     isPublic: boolean;
+    moderationReason: string | null;
     createdAt: Date;
     updatedAt: Date;
     _count: ReviewCountAggregateOutputType | null;
@@ -38647,6 +38698,7 @@ export namespace Prisma {
       title?: boolean;
       comment?: boolean;
       isPublic?: boolean;
+      moderationReason?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
       job?: boolean | JobDefaultArgs<ExtArgs>;
@@ -38670,6 +38722,7 @@ export namespace Prisma {
       title?: boolean;
       comment?: boolean;
       isPublic?: boolean;
+      moderationReason?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
       job?: boolean | JobDefaultArgs<ExtArgs>;
@@ -38691,6 +38744,7 @@ export namespace Prisma {
       title?: boolean;
       comment?: boolean;
       isPublic?: boolean;
+      moderationReason?: boolean;
       createdAt?: boolean;
       updatedAt?: boolean;
       job?: boolean | JobDefaultArgs<ExtArgs>;
@@ -38709,6 +38763,7 @@ export namespace Prisma {
     title?: boolean;
     comment?: boolean;
     isPublic?: boolean;
+    moderationReason?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
   };
@@ -38724,6 +38779,7 @@ export namespace Prisma {
     | 'title'
     | 'comment'
     | 'isPublic'
+    | 'moderationReason'
     | 'createdAt'
     | 'updatedAt',
     ExtArgs['result']['review']
@@ -38772,6 +38828,7 @@ export namespace Prisma {
         title: string | null;
         comment: string | null;
         isPublic: boolean;
+        moderationReason: string | null;
         createdAt: Date;
         updatedAt: Date;
       },
@@ -39421,6 +39478,7 @@ export namespace Prisma {
     readonly title: FieldRef<'Review', 'String'>;
     readonly comment: FieldRef<'Review', 'String'>;
     readonly isPublic: FieldRef<'Review', 'Boolean'>;
+    readonly moderationReason: FieldRef<'Review', 'String'>;
     readonly createdAt: FieldRef<'Review', 'DateTime'>;
     readonly updatedAt: FieldRef<'Review', 'DateTime'>;
   }
@@ -47221,6 +47279,7 @@ export namespace Prisma {
     expiryNoticeSentAt: 'expiryNoticeSentAt';
     completedAt: 'completedAt';
     cancelledAt: 'cancelledAt';
+    cancellationReason: 'cancellationReason';
     createdAt: 'createdAt';
     updatedAt: 'updatedAt';
   };
@@ -47254,6 +47313,7 @@ export namespace Prisma {
     estimatedCompletion: 'estimatedCompletion';
     validUntil: 'validUntil';
     status: 'status';
+    rejectionReason: 'rejectionReason';
     respondedAt: 'respondedAt';
     withdrawnAt: 'withdrawnAt';
     createdAt: 'createdAt';
@@ -47285,6 +47345,7 @@ export namespace Prisma {
     estimatedCost: 'estimatedCost';
     currency: 'currency';
     status: 'status';
+    declineReason: 'declineReason';
     respondedAt: 'respondedAt';
     createdAt: 'createdAt';
     updatedAt: 'updatedAt';
@@ -47421,6 +47482,7 @@ export namespace Prisma {
     title: 'title';
     comment: 'comment';
     isPublic: 'isPublic';
+    moderationReason: 'moderationReason';
     createdAt: 'createdAt';
     updatedAt: 'updatedAt';
   };
@@ -49290,6 +49352,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     completedAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     cancelledAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
+    cancellationReason?: StringNullableFilter<'Job'> | string | null;
     createdAt?: DateTimeFilter<'Job'> | Date | string;
     updatedAt?: DateTimeFilter<'Job'> | Date | string;
     homeowner?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -49351,6 +49414,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: SortOrderInput | SortOrder;
     completedAt?: SortOrderInput | SortOrder;
     cancelledAt?: SortOrderInput | SortOrder;
+    cancellationReason?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     homeowner?: UserOrderByWithRelationInput;
@@ -49434,6 +49498,7 @@ export namespace Prisma {
       expiryNoticeSentAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
       completedAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
       cancelledAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
+      cancellationReason?: StringNullableFilter<'Job'> | string | null;
       createdAt?: DateTimeFilter<'Job'> | Date | string;
       updatedAt?: DateTimeFilter<'Job'> | Date | string;
       homeowner?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -49497,6 +49562,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: SortOrderInput | SortOrder;
     completedAt?: SortOrderInput | SortOrder;
     cancelledAt?: SortOrderInput | SortOrder;
+    cancellationReason?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     _count?: JobCountOrderByAggregateInput;
@@ -49600,6 +49666,10 @@ export namespace Prisma {
     cancelledAt?:
       | DateTimeNullableWithAggregatesFilter<'Job'>
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | StringNullableWithAggregatesFilter<'Job'>
       | string
       | null;
     createdAt?: DateTimeWithAggregatesFilter<'Job'> | Date | string;
@@ -49740,6 +49810,7 @@ export namespace Prisma {
       | null;
     validUntil?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     status?: EnumQuoteStatusFilter<'Quote'> | $Enums.QuoteStatus;
+    rejectionReason?: StringNullableFilter<'Quote'> | string | null;
     respondedAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     withdrawnAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     createdAt?: DateTimeFilter<'Quote'> | Date | string;
@@ -49770,6 +49841,7 @@ export namespace Prisma {
     estimatedCompletion?: SortOrderInput | SortOrder;
     validUntil?: SortOrderInput | SortOrder;
     status?: SortOrder;
+    rejectionReason?: SortOrderInput | SortOrder;
     respondedAt?: SortOrderInput | SortOrder;
     withdrawnAt?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
@@ -49841,6 +49913,7 @@ export namespace Prisma {
         | null;
       validUntil?: DateTimeNullableFilter<'Quote'> | Date | string | null;
       status?: EnumQuoteStatusFilter<'Quote'> | $Enums.QuoteStatus;
+      rejectionReason?: StringNullableFilter<'Quote'> | string | null;
       respondedAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
       withdrawnAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
       createdAt?: DateTimeFilter<'Quote'> | Date | string;
@@ -49876,6 +49949,7 @@ export namespace Prisma {
     estimatedCompletion?: SortOrderInput | SortOrder;
     validUntil?: SortOrderInput | SortOrder;
     status?: SortOrder;
+    rejectionReason?: SortOrderInput | SortOrder;
     respondedAt?: SortOrderInput | SortOrder;
     withdrawnAt?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
@@ -49957,6 +50031,10 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusWithAggregatesFilter<'Quote'> | $Enums.QuoteStatus;
+    rejectionReason?:
+      | StringNullableWithAggregatesFilter<'Quote'>
+      | string
+      | null;
     respondedAt?:
       | DateTimeNullableWithAggregatesFilter<'Quote'>
       | Date
@@ -50108,6 +50186,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFilter<'MaterialRequest'>
       | $Enums.MaterialRequestStatus;
+    declineReason?: StringNullableFilter<'MaterialRequest'> | string | null;
     respondedAt?:
       | DateTimeNullableFilter<'MaterialRequest'>
       | Date
@@ -50127,6 +50206,7 @@ export namespace Prisma {
     estimatedCost?: SortOrderInput | SortOrder;
     currency?: SortOrder;
     status?: SortOrder;
+    declineReason?: SortOrderInput | SortOrder;
     respondedAt?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
@@ -50154,6 +50234,7 @@ export namespace Prisma {
       status?:
         | EnumMaterialRequestStatusFilter<'MaterialRequest'>
         | $Enums.MaterialRequestStatus;
+      declineReason?: StringNullableFilter<'MaterialRequest'> | string | null;
       respondedAt?:
         | DateTimeNullableFilter<'MaterialRequest'>
         | Date
@@ -50175,6 +50256,7 @@ export namespace Prisma {
     estimatedCost?: SortOrderInput | SortOrder;
     currency?: SortOrder;
     status?: SortOrder;
+    declineReason?: SortOrderInput | SortOrder;
     respondedAt?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
@@ -50208,6 +50290,10 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusWithAggregatesFilter<'MaterialRequest'>
       | $Enums.MaterialRequestStatus;
+    declineReason?:
+      | StringNullableWithAggregatesFilter<'MaterialRequest'>
+      | string
+      | null;
     respondedAt?:
       | DateTimeNullableWithAggregatesFilter<'MaterialRequest'>
       | Date
@@ -51291,6 +51377,7 @@ export namespace Prisma {
     title?: StringNullableFilter<'Review'> | string | null;
     comment?: StringNullableFilter<'Review'> | string | null;
     isPublic?: BoolFilter<'Review'> | boolean;
+    moderationReason?: StringNullableFilter<'Review'> | string | null;
     createdAt?: DateTimeFilter<'Review'> | Date | string;
     updatedAt?: DateTimeFilter<'Review'> | Date | string;
     job?: XOR<JobScalarRelationFilter, JobWhereInput>;
@@ -51308,6 +51395,7 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder;
     comment?: SortOrderInput | SortOrder;
     isPublic?: SortOrder;
+    moderationReason?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     job?: JobOrderByWithRelationInput;
@@ -51330,6 +51418,7 @@ export namespace Prisma {
       title?: StringNullableFilter<'Review'> | string | null;
       comment?: StringNullableFilter<'Review'> | string | null;
       isPublic?: BoolFilter<'Review'> | boolean;
+      moderationReason?: StringNullableFilter<'Review'> | string | null;
       createdAt?: DateTimeFilter<'Review'> | Date | string;
       updatedAt?: DateTimeFilter<'Review'> | Date | string;
       job?: XOR<JobScalarRelationFilter, JobWhereInput>;
@@ -51349,6 +51438,7 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder;
     comment?: SortOrderInput | SortOrder;
     isPublic?: SortOrder;
+    moderationReason?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     _count?: ReviewCountOrderByAggregateInput;
@@ -51374,6 +51464,10 @@ export namespace Prisma {
     title?: StringNullableWithAggregatesFilter<'Review'> | string | null;
     comment?: StringNullableWithAggregatesFilter<'Review'> | string | null;
     isPublic?: BoolWithAggregatesFilter<'Review'> | boolean;
+    moderationReason?:
+      | StringNullableWithAggregatesFilter<'Review'>
+      | string
+      | null;
     createdAt?: DateTimeWithAggregatesFilter<'Review'> | Date | string;
     updatedAt?: DateTimeWithAggregatesFilter<'Review'> | Date | string;
   };
@@ -53296,6 +53390,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -53342,6 +53437,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -53434,6 +53530,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -53543,6 +53643,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
@@ -53584,6 +53688,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -53667,6 +53772,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -53762,6 +53871,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -53851,6 +53964,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -53878,6 +53992,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -53948,6 +54063,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54030,6 +54146,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54063,6 +54180,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -54130,6 +54248,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54207,6 +54326,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54355,6 +54475,7 @@ export namespace Prisma {
     estimatedCost?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     status?: $Enums.MaterialRequestStatus;
+    declineReason?: string | null;
     respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -54370,6 +54491,7 @@ export namespace Prisma {
     estimatedCost?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     status?: $Enums.MaterialRequestStatus;
+    declineReason?: string | null;
     respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -54389,6 +54511,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54416,6 +54539,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54433,6 +54557,7 @@ export namespace Prisma {
     estimatedCost?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     status?: $Enums.MaterialRequestStatus;
+    declineReason?: string | null;
     respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -54452,6 +54577,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -54477,6 +54603,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -55538,6 +55665,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     job: JobCreateNestedOneWithoutReviewsInput;
@@ -55555,6 +55683,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     reports?: ReportUncheckedCreateNestedManyWithoutReviewInput;
@@ -55566,6 +55695,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     job?: JobUpdateOneRequiredWithoutReviewsNestedInput;
@@ -55583,6 +55713,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     reports?: ReportUncheckedUpdateManyWithoutReviewNestedInput;
@@ -55597,6 +55728,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -55607,6 +55739,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -55620,6 +55753,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -57463,6 +57597,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: SortOrder;
     completedAt?: SortOrder;
     cancelledAt?: SortOrder;
+    cancellationReason?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -57502,6 +57637,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: SortOrder;
     completedAt?: SortOrder;
     cancelledAt?: SortOrder;
+    cancellationReason?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -57533,6 +57669,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: SortOrder;
     completedAt?: SortOrder;
     cancelledAt?: SortOrder;
+    cancellationReason?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -57736,6 +57873,7 @@ export namespace Prisma {
     estimatedCompletion?: SortOrder;
     validUntil?: SortOrder;
     status?: SortOrder;
+    rejectionReason?: SortOrder;
     respondedAt?: SortOrder;
     withdrawnAt?: SortOrder;
     createdAt?: SortOrder;
@@ -57767,6 +57905,7 @@ export namespace Prisma {
     estimatedCompletion?: SortOrder;
     validUntil?: SortOrder;
     status?: SortOrder;
+    rejectionReason?: SortOrder;
     respondedAt?: SortOrder;
     withdrawnAt?: SortOrder;
     createdAt?: SortOrder;
@@ -57789,6 +57928,7 @@ export namespace Prisma {
     estimatedCompletion?: SortOrder;
     validUntil?: SortOrder;
     status?: SortOrder;
+    rejectionReason?: SortOrder;
     respondedAt?: SortOrder;
     withdrawnAt?: SortOrder;
     createdAt?: SortOrder;
@@ -57923,6 +58063,7 @@ export namespace Prisma {
     estimatedCost?: SortOrder;
     currency?: SortOrder;
     status?: SortOrder;
+    declineReason?: SortOrder;
     respondedAt?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
@@ -57940,6 +58081,7 @@ export namespace Prisma {
     estimatedCost?: SortOrder;
     currency?: SortOrder;
     status?: SortOrder;
+    declineReason?: SortOrder;
     respondedAt?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
@@ -57953,6 +58095,7 @@ export namespace Prisma {
     estimatedCost?: SortOrder;
     currency?: SortOrder;
     status?: SortOrder;
+    declineReason?: SortOrder;
     respondedAt?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
@@ -58534,6 +58677,7 @@ export namespace Prisma {
     title?: SortOrder;
     comment?: SortOrder;
     isPublic?: SortOrder;
+    moderationReason?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -58551,6 +58695,7 @@ export namespace Prisma {
     title?: SortOrder;
     comment?: SortOrder;
     isPublic?: SortOrder;
+    moderationReason?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -58564,6 +58709,7 @@ export namespace Prisma {
     title?: SortOrder;
     comment?: SortOrder;
     isPublic?: SortOrder;
+    moderationReason?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -65785,6 +65931,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     category?: ServiceCategoryCreateNestedOneWithoutJobsInput;
@@ -65829,6 +65976,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -65878,6 +66026,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -65922,6 +66071,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -65964,6 +66114,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -65989,6 +66140,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -66017,6 +66169,7 @@ export namespace Prisma {
     estimatedCost?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     status?: $Enums.MaterialRequestStatus;
+    declineReason?: string | null;
     respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -66030,6 +66183,7 @@ export namespace Prisma {
     estimatedCost?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     status?: $Enums.MaterialRequestStatus;
+    declineReason?: string | null;
     respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -66138,6 +66292,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     job: JobCreateNestedOneWithoutReviewsInput;
@@ -66153,6 +66308,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     reports?: ReportUncheckedCreateNestedManyWithoutReviewInput;
@@ -66177,6 +66333,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     job: JobCreateNestedOneWithoutReviewsInput;
@@ -66192,6 +66349,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     reports?: ReportUncheckedCreateNestedManyWithoutReviewInput;
@@ -67128,6 +67286,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     completedAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
     cancelledAt?: DateTimeNullableFilter<'Job'> | Date | string | null;
+    cancellationReason?: StringNullableFilter<'Job'> | string | null;
     createdAt?: DateTimeFilter<'Job'> | Date | string;
     updatedAt?: DateTimeFilter<'Job'> | Date | string;
   };
@@ -67241,6 +67400,7 @@ export namespace Prisma {
       | null;
     validUntil?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     status?: EnumQuoteStatusFilter<'Quote'> | $Enums.QuoteStatus;
+    rejectionReason?: StringNullableFilter<'Quote'> | string | null;
     respondedAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     withdrawnAt?: DateTimeNullableFilter<'Quote'> | Date | string | null;
     createdAt?: DateTimeFilter<'Quote'> | Date | string;
@@ -67294,6 +67454,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFilter<'MaterialRequest'>
       | $Enums.MaterialRequestStatus;
+    declineReason?: StringNullableFilter<'MaterialRequest'> | string | null;
     respondedAt?:
       | DateTimeNullableFilter<'MaterialRequest'>
       | Date
@@ -67416,6 +67577,7 @@ export namespace Prisma {
     title?: StringNullableFilter<'Review'> | string | null;
     comment?: StringNullableFilter<'Review'> | string | null;
     isPublic?: BoolFilter<'Review'> | boolean;
+    moderationReason?: StringNullableFilter<'Review'> | string | null;
     createdAt?: DateTimeFilter<'Review'> | Date | string;
     updatedAt?: DateTimeFilter<'Review'> | Date | string;
   };
@@ -69425,6 +69587,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -69469,6 +69632,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -69518,6 +69682,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -69562,6 +69727,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -70581,6 +70747,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -70607,6 +70774,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -70637,6 +70805,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -70662,6 +70831,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -70748,6 +70918,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     reviewer: UserCreateNestedOneWithoutReviewsGivenInput;
@@ -70763,6 +70934,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     reports?: ReportUncheckedCreateNestedManyWithoutReviewInput;
@@ -70923,6 +71095,7 @@ export namespace Prisma {
     estimatedCost?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     status?: $Enums.MaterialRequestStatus;
+    declineReason?: string | null;
     respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -70936,6 +71109,7 @@ export namespace Prisma {
     estimatedCost?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     status?: $Enums.MaterialRequestStatus;
+    declineReason?: string | null;
     respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -71457,6 +71631,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -71538,6 +71713,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -71968,6 +72144,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -72013,6 +72190,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -72166,6 +72344,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -72272,6 +72454,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
@@ -72351,6 +72537,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -72396,6 +72583,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     skills?: JobSkillUncheckedCreateNestedManyWithoutJobInput;
@@ -72533,6 +72721,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -72577,6 +72766,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -72790,6 +72980,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -72894,6 +73088,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -73149,6 +73347,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -73252,6 +73454,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -73490,6 +73696,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -73516,6 +73723,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -73613,6 +73821,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -73694,6 +73903,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -73733,6 +73943,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -73778,6 +73989,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -73993,6 +74205,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -74097,6 +74313,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -74274,6 +74494,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -74319,6 +74540,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -74353,6 +74575,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -74379,6 +74602,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -74715,6 +74939,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -74821,6 +75049,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
@@ -74914,6 +75146,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -74995,6 +75228,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -76043,6 +76277,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -76088,6 +76323,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -76279,6 +76515,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -76383,6 +76623,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -77414,6 +77658,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -77459,6 +77704,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -77813,6 +78059,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -77917,6 +78167,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -78262,6 +78516,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -78307,6 +78562,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -78522,6 +78778,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -78626,6 +78886,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -78991,6 +79255,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -79036,6 +79301,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -79098,6 +79364,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     job: JobCreateNestedOneWithoutReviewsInput;
@@ -79114,6 +79381,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -79507,6 +79775,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -79613,6 +79885,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
@@ -79703,6 +79979,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     job?: JobUpdateOneRequiredWithoutReviewsNestedInput;
@@ -79719,6 +79996,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -79840,6 +80118,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     homeowner: UserCreateNestedOneWithoutPostedJobsInput;
@@ -79885,6 +80164,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     quotes?: QuoteUncheckedCreateNestedManyWithoutJobInput;
@@ -80146,6 +80426,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -80250,6 +80534,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -80562,6 +80850,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -80593,6 +80882,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -80612,6 +80902,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -80625,6 +80916,7 @@ export namespace Prisma {
     estimatedCost?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     status?: $Enums.MaterialRequestStatus;
+    declineReason?: string | null;
     respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -80664,6 +80956,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -80676,6 +80969,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -81059,6 +81353,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     category?: ServiceCategoryUpdateOneWithoutJobsNestedInput;
@@ -81164,6 +81462,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
@@ -81265,6 +81567,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -81348,6 +81654,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -81452,6 +81762,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
@@ -81550,6 +81864,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -81615,6 +81933,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -81695,6 +82014,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -81774,6 +82094,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -81802,6 +82123,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -81827,6 +82149,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -81851,6 +82174,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -81960,6 +82284,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     job?: JobUpdateOneRequiredWithoutReviewsNestedInput;
@@ -81975,6 +82300,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     reports?: ReportUncheckedUpdateManyWithoutReviewNestedInput;
@@ -81988,6 +82314,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -81998,6 +82325,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     job?: JobUpdateOneRequiredWithoutReviewsNestedInput;
@@ -82013,6 +82341,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     reports?: ReportUncheckedUpdateManyWithoutReviewNestedInput;
@@ -82026,6 +82355,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -82947,6 +83277,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -82978,6 +83309,7 @@ export namespace Prisma {
     expiryNoticeSentAt?: Date | string | null;
     completedAt?: Date | string | null;
     cancelledAt?: Date | string | null;
+    cancellationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -83117,6 +83449,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     homeowner?: UserUpdateOneRequiredWithoutPostedJobsNestedInput;
@@ -83222,6 +83558,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
@@ -83323,6 +83663,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -83406,6 +83750,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -83513,6 +83861,10 @@ export namespace Prisma {
       | Date
       | string
       | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quotes?: QuoteUncheckedUpdateManyWithoutJobNestedInput;
@@ -83612,6 +83964,10 @@ export namespace Prisma {
     cancelledAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
+      | string
+      | null;
+    cancellationReason?:
+      | NullableStringFieldUpdateOperationsInput
       | string
       | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -83737,6 +84093,7 @@ export namespace Prisma {
     estimatedCompletion?: Date | string | null;
     validUntil?: Date | string | null;
     status?: $Enums.QuoteStatus;
+    rejectionReason?: string | null;
     respondedAt?: Date | string | null;
     withdrawnAt?: Date | string | null;
     createdAt?: Date | string;
@@ -83765,6 +84122,7 @@ export namespace Prisma {
     title?: string | null;
     comment?: string | null;
     isPublic?: boolean;
+    moderationReason?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
   };
@@ -83802,6 +84160,7 @@ export namespace Prisma {
     estimatedCost?: Decimal | DecimalJsLike | number | string | null;
     currency?: string;
     status?: $Enums.MaterialRequestStatus;
+    declineReason?: string | null;
     respondedAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -83879,6 +84238,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -83959,6 +84319,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -84038,6 +84399,7 @@ export namespace Prisma {
       | string
       | null;
     status?: EnumQuoteStatusFieldUpdateOperationsInput | $Enums.QuoteStatus;
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -84140,6 +84502,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     reviewer?: UserUpdateOneRequiredWithoutReviewsGivenNestedInput;
@@ -84155,6 +84518,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     reports?: ReportUncheckedUpdateManyWithoutReviewNestedInput;
@@ -84168,6 +84532,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null;
     comment?: NullableStringFieldUpdateOperationsInput | string | null;
     isPublic?: BoolFieldUpdateOperationsInput | boolean;
+    moderationReason?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -84297,6 +84662,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -84322,6 +84688,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date
@@ -84346,6 +84713,7 @@ export namespace Prisma {
     status?:
       | EnumMaterialRequestStatusFieldUpdateOperationsInput
       | $Enums.MaterialRequestStatus;
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null;
     respondedAt?:
       | NullableDateTimeFieldUpdateOperationsInput
       | Date

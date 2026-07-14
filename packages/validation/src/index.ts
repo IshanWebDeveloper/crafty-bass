@@ -328,6 +328,21 @@ export const RejectVerificationSchema = z.object({
   reason: z.string().trim().min(3).max(1000),
 });
 
+// --- Shared "rejection reason" body ---
+// A required, human-entered explanation captured whenever a user rejects,
+// declines, cancels or moderates something. Mirrors RejectVerificationSchema so
+// every rejection flow validates its reason the same way.
+const rejectionReason = () => z.string().trim().min(3).max(1000);
+
+export const RejectQuoteSchema = z.object({ reason: rejectionReason() });
+export const DeclineMaterialRequestSchema = z.object({
+  reason: rejectionReason(),
+});
+export const CancelJobSchema = z.object({ reason: rejectionReason() });
+export const ModerateReviewReasonSchema = z.object({
+  reason: rejectionReason(),
+});
+
 // --- Reviews (marketplace, job-linked) ---
 // The job is identified by the /jobs/:jobId/reviews route param, so the body
 // carries only the review content itself.
@@ -352,7 +367,9 @@ export const StartConversationSchema = z
     type: z.enum(['JOB_DIRECT', 'DIRECT']).default('JOB_DIRECT'),
     jobId: id.optional(),
     recipientId: id.optional(),
-    body: z.string().trim().min(1).max(4000),
+    // Optional: when omitted the conversation is just opened (or reused) with no
+    // opening message, so callers can jump straight into an empty thread.
+    body: z.string().trim().min(1).max(4000).optional(),
     messageType: MessageTypeSchema.default('TEXT'),
   })
   .refine((v) => v.jobId !== undefined || v.recipientId !== undefined, {
@@ -378,7 +395,21 @@ export const UpdateReportSchema = z
     assigneeId: id.nullable(),
     resolutionNotes: z.string().trim().max(2000).nullable(),
   })
-  .partial();
+  .partial()
+  // Dismissing a report always needs a rationale so there's a record of why the
+  // reporter's concern was set aside, and it can be surfaced to them.
+  .superRefine((v, ctx) => {
+    if (
+      v.status === 'DISMISSED' &&
+      (v.resolutionNotes?.trim().length ?? 0) < 3
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A reason is required when dismissing a report',
+        path: ['resolutionNotes'],
+      });
+    }
+  });
 
 // Inferred types for reuse across apps + backend DTOs
 export type HomeownerProfileInput = z.infer<typeof HomeownerProfileSchema>;
