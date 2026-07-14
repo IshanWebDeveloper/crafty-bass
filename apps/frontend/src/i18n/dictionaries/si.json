@@ -492,7 +492,14 @@
       "empty": "ඔබ තවම කාර්යක් පළ කර නැත.",
       "postOne": "කාර්යයක් පළ කරන්න",
       "viewQuotes": "මිල ගණන් {count}ක්",
-      "viewQuotesOne": "මිල ගණන් {count}ක්"
+      "viewQuotesOne": "මිල ගණන් {count}ක්",
+      "searchPlaceholder": "ඔබේ කාර්ය සොයන්න",
+      "allStatuses": "ඕනෑම තත්ත්වයක්",
+      "allCategories": "සියලු කාණ්ඩ",
+      "noMatches": "ඔබේ සෙවීමට ගැළපෙන කාර්ය නැත.",
+      "clearFilters": "පෙරහන් ඉවත් කරන්න",
+      "resultCount": "කාර්ය {total}න් {count}ක්",
+      "resultCountOne": "කාර්ය {total}න් {count}ක්"
     },
     "detail": {
       "postedBy": "පළ කළේ",

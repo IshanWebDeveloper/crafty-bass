@@ -492,7 +492,14 @@
       "empty": "நீங்கள் இன்னும் எந்த வேலையையும் இடவில்லை.",
       "postOne": "ஒரு வேலையை இடுங்கள்",
       "viewQuotes": "{count} மதிப்பீடுகள்",
-      "viewQuotesOne": "{count} மதிப்பீடு"
+      "viewQuotesOne": "{count} மதிப்பீடு",
+      "searchPlaceholder": "உங்கள் வேலைகளைத் தேடுங்கள்",
+      "allStatuses": "எந்த நிலையும்",
+      "allCategories": "அனைத்து வகைகள்",
+      "noMatches": "உங்கள் தேடலுக்கு பொருந்தும் வேலைகள் இல்லை.",
+      "clearFilters": "வடிகட்டிகளை அழிக்கவும்",
+      "resultCount": "{total} இல் {count} வேலைகள்",
+      "resultCountOne": "{total} இல் {count} வேலை"
     },
     "detail": {
       "postedBy": "இடப்பட்டவர்",
