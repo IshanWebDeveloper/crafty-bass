@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  StreamableFile,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { EscrowService } from './escrow.service.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
@@ -64,5 +71,29 @@ export class EscrowController {
   @ApiOperation({ summary: 'Refund a funded deposit before work starts' })
   refund(@CurrentUser('id') userId: string, @Param('id') id: string) {
     return this.escrowService.refund(userId, id);
+  }
+
+  @Get('escrows/:id/invoice')
+  @Permissions('escrow', 'view')
+  @ApiOperation({ summary: 'Download the deposit-payment invoice as a PDF' })
+  async getInvoice(
+    @CurrentUser('id') userId: string,
+    @Param('id') id: string,
+  ): Promise<StreamableFile> {
+    const { pdf, filename } = await this.escrowService.getInvoice(userId, id);
+    return new StreamableFile(pdf, {
+      type: 'application/pdf',
+      disposition: `attachment; filename="${filename}"`,
+      length: pdf.length,
+    });
+  }
+
+  @Post('escrows/:id/invoice/email')
+  @Permissions('escrow', 'view')
+  @ApiOperation({
+    summary: 'Email the deposit invoice to the requesting party',
+  })
+  emailInvoice(@CurrentUser('id') userId: string, @Param('id') id: string) {
+    return this.escrowService.emailInvoice(userId, id);
   }
 }

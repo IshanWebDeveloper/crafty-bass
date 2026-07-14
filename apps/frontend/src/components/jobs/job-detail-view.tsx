@@ -122,10 +122,15 @@ export function JobDetailView({
               </Badge>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground">
-            {t.detail.postedBy} {job.homeowner.name} · {t.detail.postedOn}{' '}
-            {new Date(job.createdAt).toLocaleDateString(locale)}
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+            <span>
+              {t.detail.postedBy} {job.homeowner.name} · {t.detail.postedOn}{' '}
+              {new Date(job.createdAt).toLocaleDateString(locale)}
+            </span>
+            <span className="font-mono">
+              {t.detail.jobRef}: {job.id}
+            </span>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="whitespace-pre-line text-sm">{job.description}</p>
