@@ -1,4 +1,5 @@
 import { apiFetch } from '../api';
+import type { QuoteMaterial } from './quotes';
 
 export type JobUrgency = 'LOW' | 'MEDIUM' | 'HIGH' | 'EMERGENCY';
 export type JobStatus =
@@ -52,9 +53,13 @@ export type JobAgreement = {
     amount: number;
     currency: string;
     depositRequested: number | null;
+    calloutFee: number | null;
+    discount: number | null;
+    vatRate: number | null;
     estimatedStart: string | null;
     estimatedCompletion: string | null;
     message: string | null;
+    materials: QuoteMaterial[];
   } | null;
 };
 

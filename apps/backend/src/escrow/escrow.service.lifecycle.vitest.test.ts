@@ -8,8 +8,10 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { EscrowService } from './escrow.service.js';
+import { EscrowInvoiceService } from './escrow-invoice.service.js';
 import type { PrismaService } from '../common/prisma/prisma.service.js';
 import type { StripeService } from '../common/services/stripe.service.js';
+import type { EmailService } from '../common/services/email.service.js';
 import type { NotificationsService } from '../notifications/notifications.service.js';
 
 // No-op notifications: the service fires best-effort lifecycle notices we don't
@@ -67,7 +69,13 @@ function makeService(row: ReturnType<typeof escrowRow>) {
   } as unknown as PrismaService;
   const stripe = {} as unknown as StripeService;
   return {
-    service: new EscrowService(prisma, stripe, makeNotifications()),
+    service: new EscrowService(
+      prisma,
+      stripe,
+      makeNotifications(),
+      { send: vi.fn().mockResolvedValue(true) } as unknown as EmailService,
+      new EscrowInvoiceService(),
+    ),
     update,
   };
 }
@@ -141,7 +149,13 @@ function makeMediationService(
   } as unknown as PrismaService;
   const stripe = { createRefund } as unknown as StripeService;
   return {
-    service: new EscrowService(prisma, stripe, makeNotifications()),
+    service: new EscrowService(
+      prisma,
+      stripe,
+      makeNotifications(),
+      { send: vi.fn().mockResolvedValue(true) } as unknown as EmailService,
+      new EscrowInvoiceService(),
+    ),
     escrowUpdate,
     jobUpdate,
     reportUpdateMany,
