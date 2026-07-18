@@ -41,6 +41,7 @@ import { LegalModule } from './legal/legal.module.js';
 import { HealthModule } from './health/health.module.js';
 import { WebhooksModule } from './webhooks/webhooks.module.js';
 import { TranslationModule } from './translation/translation.module.js';
+import { ClassificationModule } from './classification/classification.module.js';
 import { NotificationsModule } from './notifications/notifications.module.js';
 import { DataRetentionCronService } from './common/cron/data-retention.cron.js';
 import { JobExpiryCronService } from './common/cron/job-expiry.cron.js';
@@ -156,6 +157,7 @@ import { QuoteExpiryCronService } from './common/cron/quote-expiry.cron.js';
     HealthModule,
     WebhooksModule,
     TranslationModule,
+    ClassificationModule,
     NotificationsModule,
   ],
   controllers: [AppController],

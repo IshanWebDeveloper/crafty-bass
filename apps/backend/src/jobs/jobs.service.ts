@@ -57,6 +57,15 @@ export class JobsService {
         description: dto.description,
         descriptionLanguage: dto.descriptionLanguage,
         categoryId: dto.categoryId ?? null,
+        // The classifier's prediction, recorded next to the homeowner's final
+        // choice for transparency/analytics (aiCategoryId may differ from
+        // categoryId if they overrode the suggestion). See ClassificationService.
+        aiCategoryId: dto.aiCategoryId ?? null,
+        aiConfidence: dto.aiConfidence ?? null,
+        aiSuggestedTags:
+          dto.aiSuggestedTags && dto.aiSuggestedTags.length > 0
+            ? dto.aiSuggestedTags
+            : undefined,
         urgency: dto.urgency,
         taskSize: dto.taskSize ?? null,
         vehicleRequirement: dto.vehicleRequirement ?? null,

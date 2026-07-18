@@ -86,6 +86,17 @@ export const CreateJobSchema = z
     descriptionLanguage: LanguageCodeSchema.default('EN'),
     categoryId: id.optional(),
     skillIds: z.array(id).max(20).optional(),
+    // The LLM classifier's prediction, recorded alongside the homeowner's final
+    // choice: aiCategoryId is what the model suggested (may differ from
+    // categoryId if the homeowner overrode it), aiConfidence is its 0-1 score,
+    // aiSuggestedTags are the skill slugs it proposed. All optional - the form
+    // only sends them when the classify endpoint returned a suggestion.
+    aiCategoryId: id.optional(),
+    aiConfidence: z.coerce.number().min(0).max(1).optional(),
+    aiSuggestedTags: z
+      .array(z.string().trim().min(1).max(80))
+      .max(20)
+      .optional(),
     locationText: optionalText(200),
     city: optionalText(80),
     district: optionalText(80),
