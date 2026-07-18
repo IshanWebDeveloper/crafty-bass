@@ -34,7 +34,8 @@ import {
   type TaskSize,
   type VehicleRequirement,
 } from '@/lib/api/jobs';
-import { listCategories, type ServiceCategory } from '@/lib/api/categories';
+import { listCategories } from '@/lib/api/categories';
+import { classifyJob } from '@/lib/api/classification';
 import { CategoryIcon } from '@/lib/categories';
 import { DISTRICT_OPTIONS } from '@/lib/districts';
 import { ApiError } from '@/lib/api';
@@ -82,99 +83,6 @@ const localeToLanguageCode: Record<Locale, LanguageCode> = {
   si: 'SI',
   ta: 'TA',
 };
-
-// Keyword cues per category slug - a lightweight stand-in for the LLM classifier
-// (the AI service) that keeps the "detect as you type" UX working client-side.
-const KEYWORDS: Record<string, string[]> = {
-  plumbing: [
-    'leak',
-    'tap',
-    'mixer',
-    'drain',
-    'pipe',
-    'water',
-    'boiler',
-    'sink',
-    'shower',
-    'toilet',
-  ],
-  electrical: [
-    'wir',
-    'socket',
-    'light',
-    'fan',
-    'power',
-    'rcd',
-    'fuse',
-    'switch',
-    'electric',
-  ],
-  carpentry: [
-    'door',
-    'wood',
-    'floor',
-    'cabinet',
-    'shelf',
-    'frame',
-    'timber',
-    'joinery',
-  ],
-  painting: [
-    'paint',
-    'repaint',
-    'wall',
-    'ceiling',
-    'primer',
-    'emulsion',
-    'finish',
-  ],
-  masonry: [
-    'wall',
-    'brick',
-    'tile',
-    'concrete',
-    'plaster',
-    'cement',
-    'render',
-    'waterproof',
-  ],
-};
-const SKILL_HINTS: Record<string, string[]> = {
-  plumbing: ['Leak repair', 'Taps & fittings'],
-  electrical: ['Wiring & rewiring', 'Sockets & switches'],
-  carpentry: ['Doors & frames', 'Flooring'],
-  painting: ['Interior', 'Crack filling'],
-  masonry: ['Tiling', 'Wall building'],
-};
-
-function classify(
-  text: string | undefined,
-  categories: ServiceCategory[] | undefined,
-): { categoryId: string; confidence: number; skills: string[] } | null {
-  const t = (text ?? '').toLowerCase();
-  if (t.trim().length < 12 || !categories?.length) return null;
-  let bestSlug: string | null = null;
-  let bestScore = 0;
-  for (const [slug, words] of Object.entries(KEYWORDS)) {
-    const score = words.reduce((n, w) => n + (t.includes(w) ? 1 : 0), 0);
-    if (score > bestScore) {
-      bestScore = score;
-      bestSlug = slug;
-    }
-  }
-  if (!bestSlug) return null;
-  const match = categories.find(
-    (c) =>
-      c.slug === bestSlug ||
-      c.nameEn.toLowerCase().includes(bestSlug as string),
-  );
-  if (!match) return null;
-  return {
-    categoryId: match.id,
-    confidence: Math.min(96, 60 + bestScore * 8),
-    skills: SKILL_HINTS[bestSlug] ?? [],
-  };
-}
 
 export function PostJobForm({
   locale,
@@ -226,25 +134,67 @@ export function PostJobForm({
     },
   });
 
-  // --- Local AI-style classifier (keyword match). Reads the description as the
-  // homeowner types and suggests the category + skills. The Job model already
-  // has ai* fields; wiring the real LLM classify endpoint is a follow-up.
+  // --- LLM job classifier. As the homeowner types the title/description, we
+  // debounce a call to the backend classify endpoint (which proxies to the AI
+  // service's LangGraph classifier) and suggest the category + skills. The
+  // prediction is also persisted on the Job (ai* fields) when the job is posted.
+  const title = watch('title');
   const description = watch('description');
+  const descriptionLanguage = watch('descriptionLanguage');
   const selectedCategoryId = watch('categoryId');
   const selectedUrgency = watch('urgency');
   const [detection, setDetection] = useState<{
     categoryId: string;
-    confidence: number;
-    skills: string[];
+    confidence: number; // 0..1 from the model
+    skills: { slug: string; nameEn: string }[];
   } | null>(null);
+  const [detecting, setDetecting] = useState(false);
+  // Guards against a slow earlier request landing after a newer keystroke.
+  const classifySeq = useRef(0);
   useEffect(() => {
-    const handle = setTimeout(() => {
-      const result = classify(description, categories);
-      setDetection(result);
-      if (result) setValue('categoryId', result.categoryId);
-    }, 400);
+    const draftTitle = (title ?? '').trim();
+    const draftDescription = (description ?? '').trim();
+    // Too little to classify yet (or not signed in) - drop any stale suggestion
+    // and don't call the authenticated endpoint.
+    if (!authzReady || draftTitle.length < 3 || draftDescription.length < 12) {
+      classifySeq.current += 1;
+      setDetection(null);
+      setDetecting(false);
+      return;
+    }
+    const seq = ++classifySeq.current;
+    setDetecting(true);
+    const handle = setTimeout(async () => {
+      try {
+        const result = await classifyJob({
+          title: draftTitle,
+          description: draftDescription,
+          language: descriptionLanguage,
+        });
+        if (seq !== classifySeq.current) return; // superseded
+        if (result.category) {
+          setDetection({
+            categoryId: result.category.id,
+            confidence: result.confidence,
+            skills: result.skills.map((s) => ({
+              slug: s.slug,
+              nameEn: s.nameEn,
+            })),
+          });
+          setValue('categoryId', result.category.id);
+        } else {
+          setDetection(null);
+        }
+      } catch {
+        // AI service unavailable or the draft was rejected - fail quiet; the
+        // homeowner can still pick a category manually.
+        if (seq === classifySeq.current) setDetection(null);
+      } finally {
+        if (seq === classifySeq.current) setDetecting(false);
+      }
+    }, 500);
     return () => clearTimeout(handle);
-  }, [description, categories, setValue]);
+  }, [title, description, descriptionLanguage, authzReady, setValue]);
 
   // --- Photo picker (local preview only - persistence needs image storage +
   // a Job.photos field, both follow-ups).
@@ -299,6 +249,13 @@ export function PostJobForm({
         descriptionLanguage: values.descriptionLanguage,
         urgency: values.urgency,
         categoryId: values.categoryId || undefined,
+        // Record the classifier's last prediction for this draft (the homeowner
+        // may have overridden categoryId above; aiCategoryId keeps the original).
+        aiCategoryId: detection?.categoryId,
+        aiConfidence: detection?.confidence,
+        aiSuggestedTags: detection?.skills.length
+          ? detection.skills.map((s) => s.slug)
+          : undefined,
         city: values.city || undefined,
         district: values.district || undefined,
         latitude: loc?.lat,
@@ -392,7 +349,12 @@ export function PostJobForm({
             {errors.description.message}
           </p>
         ) : null}
-        <p className="text-xs text-muted-foreground">{t.new.ai.hint}</p>
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          {detecting ? (
+            <Loader2 className="size-3 animate-spin" aria-hidden />
+          ) : null}
+          {t.new.ai.hint}
+        </p>
       </div>
 
       {detection ? (
@@ -414,12 +376,17 @@ export function PostJobForm({
               <>
                 {' · '}
                 {t.new.ai.suggested}{' '}
-                <strong>{detection.skills.join(', ')}</strong>
+                <strong>
+                  {detection.skills.map((s) => s.nameEn).join(', ')}
+                </strong>
               </>
             ) : null}
           </span>
           <Badge variant="soft" className="ml-auto shrink-0">
-            {t.new.ai.confidence.replace('{n}', String(detection.confidence))}
+            {t.new.ai.confidence.replace(
+              '{n}',
+              String(Math.round(detection.confidence * 100)),
+            )}
           </Badge>
           <p className="w-full text-xs text-accent-soft-foreground/80">
             {t.new.ai.disclaimer}
