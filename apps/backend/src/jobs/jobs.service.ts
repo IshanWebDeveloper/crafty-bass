@@ -52,16 +52,16 @@ export class JobsService {
 
     // Skills attached to the job come from two sources: the ones the homeowner
     // picked manually (source 'manual') and the ones the classifier suggested
-    // (source 'ai', carrying its confidence). The classifier hands us slugs, so
-    // resolve them to catalog ids; a manual pick wins over an AI one for the
-    // same skill (the composite [jobId, skillId] PK forbids duplicates).
+    // (source 'ai'). The classifier hands us slugs, so resolve them to catalog
+    // ids; a manual pick wins over an AI one for the same skill (the composite
+    // [jobId, skillId] PK forbids duplicates). JobSkill.confidence is left null
+    // for AI rows: the model returns one score for the whole classification,
+    // not a per-skill one, so copying it onto each skill would overstate it.
+    // The job-level score lives on Job.aiConfidence.
     const manualSkillIds = dto.skillIds ?? [];
     const manualSet = new Set(manualSkillIds);
-    const skillLinks: Array<{
-      skillId: string;
-      source: string;
-      confidence?: number;
-    }> = manualSkillIds.map((skillId) => ({ skillId, source: 'manual' }));
+    const skillLinks: Array<{ skillId: string; source: string }> =
+      manualSkillIds.map((skillId) => ({ skillId, source: 'manual' }));
 
     if (dto.aiSuggestedTags && dto.aiSuggestedTags.length > 0) {
       const aiSkills = await this.prisma.skill.findMany({
@@ -70,13 +70,7 @@ export class JobsService {
       });
       for (const skill of aiSkills) {
         if (manualSet.has(skill.id)) continue;
-        skillLinks.push({
-          skillId: skill.id,
-          source: 'ai',
-          ...(dto.aiConfidence !== undefined
-            ? { confidence: dto.aiConfidence }
-            : {}),
-        });
+        skillLinks.push({ skillId: skill.id, source: 'ai' });
       }
     }
 
