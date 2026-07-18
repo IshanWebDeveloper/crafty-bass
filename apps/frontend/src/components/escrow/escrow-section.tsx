@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Badge, Button, buttonVariants } from '@repo/ui';
+import { Download, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   Card,
@@ -14,6 +15,8 @@ import {
 import { ApiError } from '@/lib/api';
 import {
   approveEscrow,
+  downloadEscrowInvoice,
+  emailEscrowInvoice,
   escrowStripStep,
   getEscrowForJob,
   markWorkDone,
@@ -89,6 +92,18 @@ export function EscrowSection({
     },
     onError,
   });
+  const downloadInvoiceMutation = useMutation({
+    mutationFn: () => downloadEscrowInvoice(escrow!.id),
+    onError: () => toast.error(t.invoice.error),
+  });
+  const emailInvoiceMutation = useMutation({
+    mutationFn: () => emailEscrowInvoice(escrow!.id),
+    onSuccess: ({ sent, email }) =>
+      sent
+        ? toast.success(t.invoice.emailedToast.replace('{email}', email))
+        : toast.message(t.invoice.emailSkipped),
+    onError: () => toast.error(t.invoice.error),
+  });
 
   if (isLoading || !escrow) return null;
 
@@ -111,6 +126,9 @@ export function EscrowSection({
           <div>
             <CardTitle className="text-lg">{t.heading}</CardTitle>
             <CardDescription>{t.subtitle}</CardDescription>
+            <p className="mt-1 font-mono text-xs text-muted-foreground">
+              {t.jobRef}: {escrow.jobId}
+            </p>
           </div>
           <Badge variant={statusVariant(escrow)} className="shrink-0">
             {t.status[escrow.status]}
@@ -208,6 +226,35 @@ export function EscrowSection({
                 ? t.actions.approving
                 : t.actions.approve}
             </Button>
+          ) : null}
+
+          {/* The deposit invoice becomes available to the homeowner (the payer)
+              once the deposit has actually been funded. */}
+          {isHomeowner && escrow.fundedAt ? (
+            <>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => downloadInvoiceMutation.mutate()}
+                disabled={downloadInvoiceMutation.isPending}
+              >
+                <Download className="size-4 shrink-0" aria-hidden />
+                {downloadInvoiceMutation.isPending
+                  ? t.invoice.downloading
+                  : t.invoice.download}
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => emailInvoiceMutation.mutate()}
+                disabled={emailInvoiceMutation.isPending}
+              >
+                <Mail className="size-4 shrink-0" aria-hidden />
+                {emailInvoiceMutation.isPending
+                  ? t.invoice.emailing
+                  : t.invoice.email}
+              </Button>
+            </>
           ) : null}
         </div>
 

@@ -305,10 +305,19 @@ export class QuotesService {
       throw new ConflictException('Quote is not pending');
     }
 
-    // Snapshot the deposit amounts now so later edits can't move money.
-    const deposit = quote.depositRequested ? Number(quote.depositRequested) : 0;
+    // Snapshot the amounts now so later edits can't move money. Every accepted
+    // quote gets an escrow so the homeowner always has a pay-to-start step. The
+    // up-front amount is the tradesman's requested materials deposit if any;
+    // otherwise the call-out/visit fee; otherwise (pure labour, no visit fee) the
+    // whole total. Clamp to [0, total] so the balance is never negative.
     const total = Number(quote.amount);
     const materials = quote.materialsAmount ? Number(quote.materialsAmount) : 0;
+    const requestedDeposit = quote.depositRequested
+      ? Number(quote.depositRequested)
+      : 0;
+    const callout = quote.calloutFee ? Number(quote.calloutFee) : 0;
+    const deposit = Math.min(total, requestedDeposit || callout || total);
+    const balance = Math.max(0, total - deposit);
 
     const accepted = await this.prisma.$transaction(async (tx) => {
       const acceptedQuote = await tx.quote.update({
@@ -327,7 +336,7 @@ export class QuotesService {
           acceptedQuoteId: quoteId,
         },
       });
-      if (deposit > 0) {
+      if (total > 0) {
         await tx.jobEscrow.create({
           data: {
             jobId: quote.jobId,
@@ -338,7 +347,7 @@ export class QuotesService {
             quoteTotal: total,
             materialsAmount: materials,
             depositAmount: deposit,
-            balanceAmount: total - deposit,
+            balanceAmount: balance,
           },
         });
       }

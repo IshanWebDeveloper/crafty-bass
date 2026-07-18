@@ -8,8 +8,14 @@ import {
 import { Prisma } from '@repo/db';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { StripeService } from '../common/services/stripe.service.js';
+import { EmailService } from '../common/services/email.service.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
+import { escapeHtml } from '../common/utils/index.js';
+import {
+  EscrowInvoiceService,
+  type EscrowInvoiceData,
+} from './escrow-invoice.service.js';
 import type {
   EscrowListQueryDto,
   FundEscrowDto,
@@ -35,15 +41,40 @@ const dec = (v: Prisma.Decimal | number) => Number(v);
 // use) is 2-decimal, so this is a plain cents conversion.
 const toMinorUnits = (amount: number) => Math.round(amount * 100);
 
+// Round to the 2-decimal minor unit the schema guarantees.
+const round2 = (amount: number) => Math.round(amount * 100) / 100;
+
+// Payment processing is passed through to the homeowner as a transparent
+// cost-recovery fee on the amount actually charged on-platform (the funded
+// deposit). It is platform revenue - never part of the escrow-held funds nor the
+// tradesman's payout - and is non-refundable (the processing cost is already
+// incurred once the charge settles). Overridable via PLATFORM_PROCESSING_FEE_RATE;
+// defaults to 3%.
+const DEFAULT_PROCESSING_FEE_RATE = 0.03;
+const processingFeeRate = (): number => {
+  const raw = Number(process.env.PLATFORM_PROCESSING_FEE_RATE);
+  return Number.isFinite(raw) && raw >= 0 ? raw : DEFAULT_PROCESSING_FEE_RATE;
+};
+const processingFeeFor = (depositAmount: number): number =>
+  round2(depositAmount * processingFeeRate());
+const feeNote = (depositAmount: number): string => {
+  const fee = processingFeeFor(depositAmount);
+  return fee > 0 ? ` (incl. ${fee} processing fee)` : '';
+};
+
 @Injectable()
 export class EscrowService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly stripe: StripeService,
     private readonly notifications: NotificationsService,
+    private readonly email: EmailService,
+    private readonly invoices: EscrowInvoiceService,
   ) {}
 
   private serialize(e: EscrowWithRelations) {
+    const deposit = dec(e.depositAmount);
+    const processingFee = processingFeeFor(deposit);
     return {
       id: e.id,
       jobId: e.jobId,
@@ -52,8 +83,13 @@ export class EscrowService {
       currency: e.currency,
       quoteTotal: dec(e.quoteTotal),
       materialsAmount: dec(e.materialsAmount),
-      depositAmount: dec(e.depositAmount),
+      depositAmount: deposit,
       balanceAmount: dec(e.balanceAmount),
+      // The up-front processing fee and what the homeowner actually pays at
+      // funding (deposit + fee). Derived, not stored - it's platform revenue, not
+      // escrow-held money.
+      processingFee,
+      amountDue: round2(deposit + processingFee),
       paymentMethod: e.paymentMethod,
       fundedAt: e.fundedAt,
       materialsReleasedAt: e.materialsReleasedAt,
@@ -149,6 +185,95 @@ export class EscrowService {
     return this.serialize(await this.loadParty(escrow.id, userId));
   }
 
+  // --- Deposit invoice ---------------------------------------------------------
+  //
+  // Once the deposit has been funded, either party (or support) can obtain a PDF
+  // invoice for the payment that settled - the deposit plus the non-refundable
+  // processing fee. Available for any escrow that has been funded at least once
+  // (`fundedAt` set), including later states and post-refund, since the payment
+  // did happen. A still-REQUESTED escrow has no payment to invoice.
+
+  private async buildInvoiceData(
+    escrow: EscrowWithRelations,
+  ): Promise<EscrowInvoiceData> {
+    const deposit = dec(escrow.depositAmount);
+    const processingFee = processingFeeFor(deposit);
+    // Kept out of the shared ESCROW_INCLUDE so the serialized escrow never leaks
+    // the homeowner's email to the tradesman; the invoice needs it for "Billed to".
+    const homeowner = await this.prisma.user.findUnique({
+      where: { id: escrow.homeownerId },
+      select: { email: true },
+    });
+    const funded = escrow.fundedAt ?? escrow.createdAt;
+    return {
+      // Short, stable, human-referenceable: the escrow id's leading block, upper-cased.
+      invoiceNumber: escrow.id.split('-')[0]?.toUpperCase() ?? escrow.id,
+      issueDate: funded,
+      currency: escrow.currency,
+      jobId: escrow.jobId,
+      jobTitle: escrow.job.title,
+      homeownerName: escrow.homeowner.name,
+      homeownerEmail: homeowner?.email ?? '',
+      tradesmanName: escrow.tradesman.name,
+      paymentMethod: escrow.paymentMethod ?? 'card',
+      paymentRef: escrow.paymentRef,
+      depositAmount: deposit,
+      processingFee,
+      amountPaid: round2(deposit + processingFee),
+      balanceAmount: dec(escrow.balanceAmount),
+      quoteTotal: dec(escrow.quoteTotal),
+    };
+  }
+
+  // Loads the escrow (party/support only), asserts it has been funded, and
+  // returns the rendered PDF plus a download filename.
+  private async loadInvoice(userId: string, escrowId: string) {
+    const escrow = await this.loadParty(escrowId, userId);
+    if (!escrow.fundedAt) {
+      throw new ConflictException(
+        'No invoice yet - the deposit for this job has not been paid',
+      );
+    }
+    const data = await this.buildInvoiceData(escrow);
+    const pdf = await this.invoices.render(data);
+    return { escrow, pdf, filename: this.invoices.fileName(data) };
+  }
+
+  /** The funded deposit's invoice as a PDF buffer, for download. */
+  async getInvoice(userId: string, escrowId: string) {
+    const { pdf, filename } = await this.loadInvoice(userId, escrowId);
+    return { pdf, filename };
+  }
+
+  /**
+   * Emails the deposit invoice to the requesting party ("email me a copy").
+   * Best-effort like the rest of the mail path: returns whether it was sent
+   * (false when no mail provider is configured) rather than failing the request.
+   */
+  async emailInvoice(userId: string, escrowId: string) {
+    const { pdf, filename } = await this.loadInvoice(userId, escrowId);
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true, name: true },
+    });
+    if (!user?.email) {
+      throw new NotFoundException('No email address on file for your account');
+    }
+    const sent = await this.email.send({
+      to: user.email,
+      subject: 'Your Crafty Bass deposit invoice',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
+          <h2>Your deposit invoice</h2>
+          <p>Hi ${escapeHtml(user.name)},</p>
+          <p>Your deposit payment invoice is attached as a PDF. Thanks for using Crafty Bass.</p>
+        </div>
+      `,
+      attachments: [{ filename, content: pdf }],
+    });
+    return { sent, email: user.email };
+  }
+
   // Homeowner pays the deposit to Crafty Bass; it is now held in escrow.
   // `card` goes through real Stripe (collection only - see StripeService);
   // `paypal`/`local` remain stubbed (real integrations are Phase C) with a
@@ -177,7 +302,9 @@ export class EscrowService {
           create: {
             type: 'FUND',
             amount: escrow.depositAmount,
-            note: `Deposit funded via ${dto.paymentMethod}`,
+            note:
+              `Deposit funded via ${dto.paymentMethod}` +
+              feeNote(dec(escrow.depositAmount)),
           },
         },
       },
@@ -203,8 +330,11 @@ export class EscrowService {
       : null;
 
     if (!paymentIntent) {
+      // The homeowner is charged the deposit plus the processing fee; only the
+      // deposit is held in escrow (the fee is platform revenue).
+      const deposit = dec(escrow.depositAmount);
       paymentIntent = await this.stripe.createAndConfirmPaymentIntent({
-        amount: toMinorUnits(dec(escrow.depositAmount)),
+        amount: toMinorUnits(deposit + processingFeeFor(deposit)),
         currency: escrow.currency.toLowerCase(),
         paymentMethodId: dto.stripePaymentMethodId,
         metadata: { escrowId: escrow.id },
@@ -256,7 +386,9 @@ export class EscrowService {
           create: {
             type: 'FUND',
             amount: current.depositAmount,
-            note: 'Deposit funded via card (Stripe)',
+            note:
+              'Deposit funded via card (Stripe)' +
+              feeNote(dec(current.depositAmount)),
           },
         },
       },
@@ -394,9 +526,11 @@ export class EscrowService {
     const isCard =
       escrow.paymentMethod === 'card' && escrow.stripePaymentIntentId;
     if (isCard) {
-      // Let a Stripe error abort the request before any DB write.
+      // Let a Stripe error abort the request before any DB write. Refund only the
+      // held deposit - the processing fee is non-refundable (cost already incurred).
       await this.stripe.createRefund({
         paymentIntentId: escrow.stripePaymentIntentId!,
+        amount: toMinorUnits(dec(escrow.depositAmount)),
       });
     }
 

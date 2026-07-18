@@ -6,8 +6,10 @@ import {
 } from '@nestjs/common';
 import { depositTier, maxDeposit } from '@repo/validation';
 import { EscrowService } from './escrow.service.js';
+import { EscrowInvoiceService } from './escrow-invoice.service.js';
 import type { PrismaService } from '../common/prisma/prisma.service.js';
 import type { StripeService } from '../common/services/stripe.service.js';
+import type { EmailService } from '../common/services/email.service.js';
 import type { NotificationsService } from '../notifications/notifications.service.js';
 
 // No-op notifications: the service fires best-effort lifecycle notices we don't
@@ -19,6 +21,17 @@ function makeNotifications() {
     notifyWorkSubmitted: jest.fn(() => Promise.resolve()),
     notifyJobCompleted: jest.fn(() => Promise.resolve()),
   } as unknown as NotificationsService;
+}
+
+// No-op mailer and the real (pure, dependency-free) invoice renderer - neither
+// is exercised by the state-machine tests below.
+function makeEmail() {
+  return {
+    send: jest.fn(() => Promise.resolve(true)),
+  } as unknown as EmailService;
+}
+function makeInvoices() {
+  return new EscrowInvoiceService();
 }
 
 // A minimal escrow row shaped like the ESCROW_INCLUDE payload the service reads.
@@ -177,6 +190,8 @@ describe('EscrowService state machine', () => {
       prisma,
       makeStripe(),
       makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
     );
     await service.fund('home1', 'esc1', { paymentMethod: 'paypal' });
     expect(statusWrittenBy(update)).toBe('FUNDED');
@@ -185,7 +200,13 @@ describe('EscrowService state machine', () => {
   it('funds a requested deposit by the homeowner via a real Stripe card payment', async () => {
     const { prisma, update } = makePrisma(escrowRow({ status: 'REQUESTED' }));
     const stripe = makeStripe();
-    const service = new EscrowService(prisma, stripe, makeNotifications());
+    const service = new EscrowService(
+      prisma,
+      stripe,
+      makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
+    );
     await service.fund('home1', 'esc1', {
       paymentMethod: 'card',
       stripePaymentMethodId: 'pm_test123',
@@ -195,6 +216,8 @@ describe('EscrowService state machine', () => {
       expect.objectContaining({
         paymentMethodId: 'pm_test123',
         currency: 'lkr',
+        // Deposit 5760 + 3% processing fee (172.80) = 5932.80 → 593280 minor units.
+        amount: 593280,
       }),
     );
     expect(statusWrittenBy(update)).toBe('FUNDED');
@@ -212,7 +235,13 @@ describe('EscrowService state machine', () => {
           }),
       ),
     });
-    const service = new EscrowService(prisma, stripe, makeNotifications());
+    const service = new EscrowService(
+      prisma,
+      stripe,
+      makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
+    );
     const result = (await service.fund('home1', 'esc1', {
       paymentMethod: 'card',
       stripePaymentMethodId: 'pm_test123',
@@ -229,6 +258,8 @@ describe('EscrowService state machine', () => {
       prisma,
       makeStripe(),
       makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
     );
     await expect(
       service.fund('home1', 'esc1', { paymentMethod: 'card' }),
@@ -241,6 +272,8 @@ describe('EscrowService state machine', () => {
       prisma,
       makeStripe(),
       makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
     );
     await expect(
       service.fund('trade1', 'esc1', { paymentMethod: 'card' }),
@@ -253,6 +286,8 @@ describe('EscrowService state machine', () => {
       prisma,
       makeStripe(),
       makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
     );
     await expect(
       service.fund('home1', 'esc1', { paymentMethod: 'card' }),
@@ -265,6 +300,8 @@ describe('EscrowService state machine', () => {
       prisma,
       makeStripe(),
       makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
     );
     await service.releaseMaterials('trade1', 'esc1');
     expect(statusWrittenBy(update)).toBe('MATERIALS_RELEASED');
@@ -278,6 +315,8 @@ describe('EscrowService state machine', () => {
       prisma,
       makeStripe(),
       makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
     );
     await service.approve('home1', 'esc1');
     expect(statusWrittenBy(update)).toBe('RELEASED');
@@ -289,6 +328,8 @@ describe('EscrowService state machine', () => {
       prisma,
       makeStripe(),
       makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
     );
     await expect(service.refund('home1', 'esc1')).rejects.toBeInstanceOf(
       ConflictException,
@@ -304,13 +345,37 @@ describe('EscrowService state machine', () => {
       }),
     );
     const stripe = makeStripe();
-    const service = new EscrowService(prisma, stripe, makeNotifications());
+    const service = new EscrowService(
+      prisma,
+      stripe,
+      makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
+    );
     await service.refund('home1', 'esc1');
+    // Only the held deposit is refunded (5760 → 576000 minor units); the
+    // processing fee is non-refundable.
     // eslint-disable-next-line @typescript-eslint/unbound-method -- asserting on a jest mock method reference
     expect(stripe.createRefund).toHaveBeenCalledWith({
       paymentIntentId: 'pi_test123',
+      amount: 576000,
     });
     expect(statusWrittenBy(update)).toBe('REFUNDED');
+  });
+
+  it('exposes the processing fee and amount due on the deposit', async () => {
+    const { prisma } = makePrisma(escrowRow({ status: 'REQUESTED' }));
+    const service = new EscrowService(
+      prisma,
+      makeStripe(),
+      makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
+    );
+    const escrow = await service.getById('home1', 'esc1');
+    // Deposit 5760, 3% fee = 172.80, amount due = 5932.80.
+    expect(escrow.processingFee).toBeCloseTo(172.8);
+    expect(escrow.amountDue).toBeCloseTo(5932.8);
   });
 
   it('404s when the escrow does not exist', async () => {
@@ -322,6 +387,8 @@ describe('EscrowService state machine', () => {
       prisma,
       makeStripe(),
       makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
     );
     await expect(service.getById('home1', 'missing')).rejects.toBeInstanceOf(
       NotFoundException,
@@ -348,6 +415,8 @@ describe('EscrowService state machine', () => {
       prisma,
       makeStripe(),
       makeNotifications(),
+      makeEmail(),
+      makeInvoices(),
     );
     await service.confirmFundedByPaymentIntent('pi_abc');
     await service.confirmFundedByPaymentIntent('pi_abc');

@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage, Button } from '@repo/ui';
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJobAgreement, type Job } from '@/lib/api/jobs';
+import { QuoteMaterials } from '@/components/quotes/quote-materials';
 import { startConversation } from '@/lib/api/conversations';
 import { formatLKR } from '@/lib/currency';
 import type { Locale } from '@/i18n/config';
@@ -125,38 +126,49 @@ export function AgreedQuoteSummary({
         </div>
 
         {quote ? (
-          <dl className="grid gap-3 text-sm sm:grid-cols-3">
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                {t.agreedPrice}
-              </dt>
-              <dd className="mt-1 font-mono font-semibold">
-                {formatLKR(quote.amount, quote.currency)}
-              </dd>
-            </div>
-            {quote.estimatedStart ? (
+          <>
+            <dl className="grid gap-3 text-sm sm:grid-cols-3">
               <div>
                 <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                  {tq.estimatedStart}
+                  {t.agreedPrice}
                 </dt>
-                <dd className="mt-1">
-                  {new Date(quote.estimatedStart).toLocaleDateString(locale)}
+                <dd className="mt-1 font-mono font-semibold">
+                  {formatLKR(quote.amount, quote.currency)}
                 </dd>
               </div>
-            ) : null}
-            {quote.estimatedCompletion ? (
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                  {tq.estimatedCompletion}
-                </dt>
-                <dd className="mt-1">
-                  {new Date(quote.estimatedCompletion).toLocaleDateString(
-                    locale,
-                  )}
-                </dd>
-              </div>
-            ) : null}
-          </dl>
+              {quote.estimatedStart ? (
+                <div>
+                  <dt className="text-xs uppercase tracking-wide text-muted-foreground">
+                    {tq.estimatedStart}
+                  </dt>
+                  <dd className="mt-1">
+                    {new Date(quote.estimatedStart).toLocaleDateString(locale)}
+                  </dd>
+                </div>
+              ) : null}
+              {quote.estimatedCompletion ? (
+                <div>
+                  <dt className="text-xs uppercase tracking-wide text-muted-foreground">
+                    {tq.estimatedCompletion}
+                  </dt>
+                  <dd className="mt-1">
+                    {new Date(quote.estimatedCompletion).toLocaleDateString(
+                      locale,
+                    )}
+                  </dd>
+                </div>
+              ) : null}
+            </dl>
+            <QuoteMaterials
+              materials={quote.materials}
+              currency={quote.currency}
+              calloutFee={quote.calloutFee}
+              discount={quote.discount}
+              vatRate={quote.vatRate}
+              locale={locale}
+              dict={dict}
+            />
+          </>
         ) : null}
       </CardContent>
     </Card>

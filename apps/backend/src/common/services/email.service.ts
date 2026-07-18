@@ -1,10 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Resend } from 'resend';
 
+export interface EmailAttachment {
+  filename: string;
+  content: Buffer;
+}
+
 export interface SendEmailOptions {
   to: string | string[];
   subject: string;
   html: string;
+  attachments?: EmailAttachment[];
 }
 
 /**
@@ -40,7 +46,12 @@ export class EmailService {
    * (no API key) or the provider call failed - callers treat email as a
    * best-effort side channel and don't fail the request when it doesn't send.
    */
-  async send({ to, subject, html }: SendEmailOptions): Promise<boolean> {
+  async send({
+    to,
+    subject,
+    html,
+    attachments,
+  }: SendEmailOptions): Promise<boolean> {
     const recipients = Array.isArray(to) ? to.join(', ') : to;
 
     if (!this.resend) {
@@ -51,7 +62,20 @@ export class EmailService {
     }
 
     try {
-      await this.resend.emails.send({ from: this.from, to, subject, html });
+      await this.resend.emails.send({
+        from: this.from,
+        to,
+        subject,
+        html,
+        ...(attachments && attachments.length > 0
+          ? {
+              attachments: attachments.map((a) => ({
+                filename: a.filename,
+                content: a.content,
+              })),
+            }
+          : {}),
+      });
       return true;
     } catch (error) {
       this.logger.error(
