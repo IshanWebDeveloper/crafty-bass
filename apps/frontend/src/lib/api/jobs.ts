@@ -74,6 +74,10 @@ export type CreateJobBody = {
   descriptionLanguage: LanguageCode;
   categoryId?: string;
   skillIds?: string[];
+  // The LLM classifier's prediction, recorded alongside the final category.
+  aiCategoryId?: string;
+  aiConfidence?: number;
+  aiSuggestedTags?: string[];
   locationText?: string;
   city?: string;
   district?: string;
