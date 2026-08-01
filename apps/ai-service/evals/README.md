@@ -21,7 +21,7 @@ CI. The pure-unit tests for the classifier live in `tests/` and run in CI.
 ## Running
 
 From `apps/ai-service`, with the venv active and an LLM key set in `.env`
-(`GITHUB_TOKEN` or `OPENAI_API_KEY`, per `LLM_PROVIDER`):
+(`ANTHROPIC_API_KEY` or `OPENAI_API_KEY`, per `LLM_PROVIDER`):
 
 ```bash
 python -m evals.run_classification_eval            # full dataset
