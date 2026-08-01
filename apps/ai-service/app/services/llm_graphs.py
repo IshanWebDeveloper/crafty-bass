@@ -212,12 +212,12 @@ class LlmGraphService:
     def _active_model(self) -> str:
         if self.settings.llm_provider == "openai":
             return self.settings.openai_model
-        return self.settings.github_model_name
+        return self.settings.anthropic_model
 
     def _active_base_url(self) -> str | None:
         if self.settings.llm_provider == "openai":
             return self.settings.openai_base_url
-        return self.settings.github_inference_endpoint
+        return self.settings.anthropic_base_url
 
     @staticmethod
     def _message_to_text(message: BaseMessage) -> str:

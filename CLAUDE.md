@@ -13,7 +13,7 @@ Nx + pnpm monorepo with four apps:
 - `apps/frontend` - Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui - the homeowner/tradesman-facing marketplace, port `3000`
 - `apps/admin` - Next.js 16 (App Router) + React 19 + Tailwind v4 + shadcn/ui + TanStack Query/Table + Recharts - the internal admin/support console, port `3001`
 - `apps/backend` - NestJS 11 + Prisma (PostgreSQL) + better-auth + BullMQ + Stripe
-- `apps/ai-service` - Python FastAPI + LangChain/LangGraph (LLM provider is `github` or `openai`)
+- `apps/ai-service` - Python FastAPI + LangChain/LangGraph (LLM provider is `anthropic` or `openai`)
 
 …and seven workspace packages under `packages/`, all scoped `@repo/*`:
 
@@ -87,7 +87,7 @@ cd apps/ai-service
 py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install -e .[dev]
-Copy-Item .env.example .env       # set GITHUB_TOKEN or OPENAI_API_KEY
+Copy-Item .env.example .env       # set ANTHROPIC_API_KEY or OPENAI_API_KEY
 ```
 
 CI (`.github/workflows/ci.yml`) creates the venv on a self-hosted Windows runner.
@@ -140,7 +140,7 @@ Next.js 16 exposes an MCP endpoint per running dev server. To diagnose runtime/b
 
 - Entry: `apps/ai-service/app/main.py`. Routes mounted under `settings.api_v1_str` (`/api/v1`).
 - Layered layout: `api/v1/routes/` → `services/` → `graphs/<name>/{graph,nodes,state}.py` → `infrastructure/llm/` and `infrastructure/prompts/`. Domain logic (e.g. `domain/classification/`) is separate from graph wiring.
-- Settings (`app/core/config.py`) load from `apps/ai-service/.env` via pydantic-settings. `LLM_PROVIDER` selects `github` or `openai`; the post-init validator enforces that the matching API key is set.
+- Settings (`app/core/config.py`) load from `apps/ai-service/.env` via pydantic-settings. `LLM_PROVIDER` selects `anthropic` (default, `claude-haiku-4-5` via `langchain-anthropic`) or `openai`; the post-init validator enforces that the matching API key is set and non-blank. `LLM_MAX_TOKENS` (default `4096`) caps output, which matters for Anthropic because an unset cap truncates responses.
 - Endpoints: `POST /api/v1/assistant/chat`, `POST /api/v1/assistant/chat/stream`, `POST /api/v1/assistant/classify-job`, `POST /api/v1/assistant/classify-jobs/batch`, `GET /api/v1/assistant/info`, `GET /api/v1/health`.
 - JWT verification helpers live in `app/api/deps/auth.py` and `app/core/auth.py` (PyJWT).
 - Pytest specs under `apps/ai-service/tests/`. `pyproject.toml` sets `asyncio_mode = "auto"`.

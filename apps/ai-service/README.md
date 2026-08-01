@@ -1,6 +1,6 @@
 # Crafty Bass AI Service
 
-Python FastAPI application for running LangChain and LangGraph workflows against either GitHub Models or the OpenAI Platform inside this Nx monorepo.
+Python FastAPI application for running LangChain and LangGraph workflows against either the Anthropic Claude API or the OpenAI Platform inside this Nx monorepo.
 
 ## What It Includes
 
@@ -31,8 +31,11 @@ Python FastAPI application for running LangChain and LangGraph workflows against
    Copy-Item .env.example .env
    ```
 
-   - `LLM_PROVIDER=github`: set `GITHUB_TOKEN` and optionally `GITHUB_MODEL_NAME`.
+   - `LLM_PROVIDER=anthropic` (default): set `ANTHROPIC_API_KEY` and optionally `ANTHROPIC_MODEL` (defaults to `claude-haiku-4-5`).
    - `LLM_PROVIDER=openai`: set `OPENAI_API_KEY` and optionally `OPENAI_MODEL` / `OPENAI_BASE_URL`.
+
+   `LLM_MAX_TOKENS` (default `4096`) caps output on every request. Raise it if long
+   chat or translation replies come back truncated.
 
 4. Start the app through Nx from the workspace root:
 
