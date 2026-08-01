@@ -15,6 +15,11 @@ ClassificationNode = Callable[[ClassificationState], Any]
 LlmBuilder = Callable[[float], BaseChatModel]
 MessageToText = Callable[[BaseMessage], str]
 
+# langgraph annotates END as plain `str`, which does not satisfy the Literal
+# destinations Command is generic over. Cast once here rather than at every
+# `goto=` site; langgraph hardcodes the same "__end__" literal internally.
+END_NODE: Literal["__end__"] = cast(Literal["__end__"], END)
+
 
 def prepare_taxonomy_prompt_node(state: ClassificationState) -> dict[str, str]:
     categories = _format_taxonomy_lines(state["categories"])
@@ -38,10 +43,12 @@ def classify_with_model_node(
     message_to_text: MessageToText,
     prompt_template: str,
     temperature: float,
-) -> Command[Literal["parse_response", "__end__"]]:
+) -> Command[Literal["confidence_gate", "parse_response"]]:
     """Call the LLM with structured output. On success, skip parse_response and
-    go straight to END. On structured-output failure, fall through to
-    parse_response so the regex JSON salvage path can run.
+    hand straight to confidence_gate. On structured-output failure, fall through
+    to parse_response so the regex JSON salvage path can run before the gate.
+
+    This node never routes to END; the gate owns that decision.
     """
     llm = llm_builder(temperature)
     structured_llm = llm.with_structured_output(
@@ -131,13 +138,13 @@ def confidence_gate_node(
 
     if not isinstance(parsed, JobClassificationDraft):
         # Defensive - parse_response should always populate `parsed`.
-        return Command(goto=END)
+        return Command(goto=END_NODE)
 
     if attempts >= MAX_CLASSIFICATION_ATTEMPTS:
-        return Command(goto=END)
+        return Command(goto=END_NODE)
 
     if parsed.confidence >= CONFIDENCE_ACCEPT_THRESHOLD and parsed.category_slug:
-        return Command(goto=END)
+        return Command(goto=END_NODE)
 
     previous_slug = parsed.category_slug or "no category"
     retry_hint = (
