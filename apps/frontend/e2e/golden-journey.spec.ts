@@ -56,6 +56,18 @@ test.describe
       .fill(
         'The kitchen tap has been dripping for days and needs a new washer.',
       );
+
+    // The form debounces a call to the classifier (which proxies to the AI
+    // service) and renders the suggestion inline: a "Detected <category>" panel
+    // with a confidence badge. Assert it appears through the UI before
+    // submitting, so classification is exercised end-to-end from the form and
+    // not only via the direct API call below. Generous timeout: it waits on a
+    // live model round-trip.
+    await expect(page.getByText(/Detected/i).first()).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(page.getByText(/% confidence/i).first()).toBeVisible();
+
     await page.locator('button[type="submit"]').click();
 
     // The form redirects to the new job's detail page on success. The negative
