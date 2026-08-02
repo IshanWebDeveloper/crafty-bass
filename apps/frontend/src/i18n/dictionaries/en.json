@@ -532,6 +532,24 @@
       "disputeUnderReview": "You've reported this job and our team is reviewing it. It's paused while we look into it and decide on any cancellation or refund.",
       "editJob": "Edit job"
     },
+    "recommendations": {
+      "heading": "Recommended tradespeople",
+      "subtitle": "Ranked for this job by reputation, distance, reliability and response time.",
+      "empty": "No recommendations yet. As verified tradespeople in this trade join, they'll appear here.",
+      "refresh": "Refresh",
+      "refreshing": "Refreshing…",
+      "matchScore": "Match",
+      "viewProfile": "View profile",
+      "message": "Message",
+      "verified": "Verified",
+      "jobsCompleted": "{count} jobs completed",
+      "factors": {
+        "reputation": "Reputation",
+        "proximity": "Distance",
+        "completion": "Reliability",
+        "response": "Response"
+      }
+    },
     "edit": {
       "title": "Edit job",
       "subtitle": "Update the details of your posted job. Changes are visible to tradespeople straight away.",

@@ -32,6 +32,7 @@ import { startConversation } from '@/lib/api/conversations';
 import { QuoteMaterials } from '@/components/quotes/quote-materials';
 import { useSession } from '@/lib/auth-client';
 import { SubmitQuotePanel } from './submit-quote-panel';
+import { RecommendedTradesmen } from './recommended-tradesmen';
 import { MaterialRequestsPanel } from './material-requests-panel';
 import { JobExpiryBadge } from './job-expiry-badge';
 import { LeaveReviewPanel } from '@/components/reviews/leave-review-panel';
@@ -261,6 +262,10 @@ export function JobDetailView({
           locale={locale}
           dict={dict}
         />
+      ) : null}
+
+      {isOwner && job.status === 'OPEN' ? (
+        <RecommendedTradesmen jobId={job.id} locale={locale} dict={dict} />
       ) : null}
 
       {isOwner && job.status === 'OPEN' ? (
