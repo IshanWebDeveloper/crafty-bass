@@ -1,0 +1,33 @@
+{
+  "k": 5,
+  "relevanceThreshold": 1,
+  "jobCount": 6,
+  "candidateCount": 12,
+  "results": [
+    {
+      "strategy": "composite",
+      "precisionAtK": 0.19999999999999998,
+      "mrr": 0.7916666666666666,
+      "ndcgAtK": 0.8436010519408085
+    },
+    {
+      "strategy": "reputationOnly",
+      "precisionAtK": 0.19999999999999998,
+      "mrr": 0.875,
+      "ndcgAtK": 0.9051127596788988
+    },
+    {
+      "strategy": "proximityOnly",
+      "precisionAtK": 0.19999999999999998,
+      "mrr": 0.75,
+      "ndcgAtK": 0.8102255193577976
+    },
+    {
+      "strategy": "random",
+      "precisionAtK": 0.19999999999999998,
+      "mrr": 1,
+      "ndcgAtK": 1
+    }
+  ],
+  "generatedAt": "2026-07-25T02:02:13.734Z"
+}
