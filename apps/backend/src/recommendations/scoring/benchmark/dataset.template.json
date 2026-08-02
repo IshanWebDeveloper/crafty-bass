@@ -1,0 +1,77 @@
+{
+  "_comment": "TC-18 recommendation ranking benchmark dataset. Copy to dataset.json and replace the examples with REAL ground truth: for each job, the eligible tradesmen and a relevance grade (0 = irrelevant, 3 = ideal hire) assigned by a human or from historical accept/complete outcomes. Features mirror what generateForJob reads from the DB.",
+  "k": 5,
+  "relevanceThreshold": 1,
+  "jobs": [
+    {
+      "jobId": "EXAMPLE-J1",
+      "jobCoords": { "lat": 6.9271, "lng": 79.8612 },
+      "candidates": [
+        {
+          "tradesmanId": "T-A",
+          "relevance": 3,
+          "reviews": [
+            { "rating": 5, "ageDays": 10 },
+            { "rating": 4, "ageDays": 40 }
+          ],
+          "location": { "lat": 6.93, "lng": 79.86 },
+          "serviceRadiusKm": 20,
+          "jobsCompleted": 38,
+          "jobsCancelled": 2,
+          "responseTimeMinutes": 25,
+          "isVerified": true
+        },
+        {
+          "tradesmanId": "T-B",
+          "relevance": 1,
+          "reviews": [{ "rating": 3, "ageDays": 200 }],
+          "location": { "lat": 7.1, "lng": 79.95 },
+          "serviceRadiusKm": 15,
+          "jobsCompleted": 6,
+          "jobsCancelled": 4,
+          "responseTimeMinutes": 600,
+          "isVerified": false
+        },
+        {
+          "tradesmanId": "T-C",
+          "relevance": 0,
+          "reviews": [],
+          "location": null,
+          "serviceRadiusKm": 10,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": false
+        }
+      ]
+    },
+    {
+      "jobId": "EXAMPLE-J2",
+      "jobCoords": { "lat": 7.2906, "lng": 80.6337 },
+      "candidates": [
+        {
+          "tradesmanId": "T-D",
+          "relevance": 2,
+          "reviews": [{ "rating": 4, "ageDays": 15 }],
+          "location": { "lat": 7.3, "lng": 80.64 },
+          "serviceRadiusKm": 30,
+          "jobsCompleted": 20,
+          "jobsCancelled": 1,
+          "responseTimeMinutes": 60,
+          "isVerified": true
+        },
+        {
+          "tradesmanId": "T-E",
+          "relevance": 0,
+          "reviews": [{ "rating": 2, "ageDays": 5 }],
+          "location": { "lat": 6.9, "lng": 79.9 },
+          "serviceRadiusKm": 10,
+          "jobsCompleted": 3,
+          "jobsCancelled": 5,
+          "responseTimeMinutes": 900,
+          "isVerified": false
+        }
+      ]
+    }
+  ]
+}
