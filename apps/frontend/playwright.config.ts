@@ -24,6 +24,9 @@ export default defineConfig({
   use: {
     baseURL,
     trace: 'on-first-retry',
+    // Capture a screenshot at the end of every test that drives a page, so the
+    // HTML report doubles as visual evidence of the run.
+    screenshot: 'on',
   },
   // Boot the backend, frontend and AI service for the run; reuse if already up.
   // Probe on 127.0.0.1 (not localhost): the AI service binds IPv4 only, and on
