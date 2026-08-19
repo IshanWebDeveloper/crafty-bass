@@ -2,11 +2,26 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
+import { S3Service } from '../admin/s3.service.js';
 import { buildPaginationMeta } from '../common/dto/pagination.dto.js';
 import type { CreateJobDto, JobQueryDto, UpdateJobDto } from './dto/index.js';
+
+// Job photos live under "job-photos/<ownerId>/" (see CATEGORY_RULES in
+// UploadsService). The client echoes back keys it got from POST /uploads, so
+// the key is untrusted input: without this check a caller could attach any
+// object in the bucket - including another user's kyc/ document - and then read
+// it back through the presigned URLs findOne mints. Only the owner's own prefix
+// is accepted.
+function isOwnedJobPhotoKey(key: string, ownerId: string): boolean {
+  const prefix = `job-photos/${ownerId}/`;
+  // Reject traversal outright rather than relying on the storage layer to
+  // normalise it away.
+  return key.startsWith(prefix) && !key.includes('..');
+}
 
 const JOB_LIST_INCLUDE = {
   category: { select: { id: true, slug: true, nameEn: true } },
@@ -33,7 +48,25 @@ export class JobsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    // Provided globally by AdminModule (@Global) - used to mint short-lived
+    // presigned URLs for job photos on read.
+    private readonly s3: S3Service,
   ) {}
+
+  /**
+   * Replaces a job's stored photo keys with freshly presigned URLs. Keys are
+   * never returned to clients: they're an internal storage detail, and a
+   * presigned URL expires, so it has to be minted per read rather than stored.
+   */
+  private async withPhotoUrls<T extends { photoKeys: string[] }>(
+    job: T,
+  ): Promise<Omit<T, 'photoKeys'> & { photos: string[] }> {
+    const { photoKeys, ...rest } = job;
+    const photos = await Promise.all(
+      photoKeys.map((key) => this.s3.getPresignedDownloadUrl(key)),
+    );
+    return { ...rest, photos };
+  }
 
   async create(userId: string, dto: CreateJobDto) {
     const user = await this.prisma.user.findUnique({
@@ -74,6 +107,20 @@ export class JobsService {
       }
     }
 
+    // Photo keys are echoed back by the client from POST /uploads, so they are
+    // untrusted. Reject the whole request on a foreign key rather than silently
+    // dropping it - a caller sending someone else's key is either a bug worth
+    // surfacing or an attempt to read another user's objects.
+    const photoKeys = dto.photoKeys ?? [];
+    const foreignKey = photoKeys.find(
+      (key) => !isOwnedJobPhotoKey(key, userId),
+    );
+    if (foreignKey) {
+      throw new BadRequestException(
+        'photoKeys must reference photos you uploaded with category "job-photo"',
+      );
+    }
+
     return this.prisma.job.create({
       data: {
         homeownerId: userId,
@@ -90,6 +137,7 @@ export class JobsService {
           dto.aiSuggestedTags && dto.aiSuggestedTags.length > 0
             ? dto.aiSuggestedTags
             : undefined,
+        photoKeys,
         urgency: dto.urgency,
         taskSize: dto.taskSize ?? null,
         vehicleRequirement: dto.vehicleRequirement ?? null,
@@ -188,6 +236,10 @@ export class JobsService {
   async findOne(id: string) {
     const job = await this.prisma.job.findUnique({
       where: { id },
+      // Opt back in to the globally-omitted keys (see PrismaService) - this is
+      // the one reader that needs them, and withPhotoUrls swaps them for
+      // presigned URLs before the job leaves the service.
+      omit: { photoKeys: false },
       include: {
         category: { select: { id: true, slug: true, nameEn: true } },
         homeowner: { select: { id: true, name: true } },
@@ -196,7 +248,11 @@ export class JobsService {
       },
     });
     if (!job) throw new NotFoundException('Job not found');
-    return job;
+    // Swap stored keys for short-lived presigned URLs. Detail-only for now: the
+    // list endpoints would need one presign per row, so a thumbnail on the
+    // browse/my-jobs cards is a follow-up (S3Service caches by key, but the
+    // first page load would still fan out).
+    return this.withPhotoUrls(job);
   }
 
   // The agreed terms for an assigned job - the winning tradesman and the

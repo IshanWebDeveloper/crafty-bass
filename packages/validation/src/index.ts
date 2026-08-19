@@ -97,6 +97,14 @@ export const CreateJobSchema = z
       .array(z.string().trim().min(1).max(80))
       .max(20)
       .optional(),
+    // R2 object keys returned by POST /uploads with category "job-photo", in
+    // display order. The shape is validated here; ownership (the key must sit
+    // under the caller's own "job-photos/<userId>/" prefix) is enforced in
+    // JobsService, which is the only place that knows the authenticated user.
+    photoKeys: z
+      .array(z.string().trim().min(1).max(300))
+      .max(8)
+      .optional(),
     locationText: optionalText(200),
     city: optionalText(80),
     district: optionalText(80),

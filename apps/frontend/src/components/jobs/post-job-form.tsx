@@ -36,6 +36,7 @@ import {
 } from '@/lib/api/jobs';
 import { listCategories } from '@/lib/api/categories';
 import { classifyJob } from '@/lib/api/classification';
+import { uploadFile } from '@/lib/api/uploads';
 import { CategoryIcon } from '@/lib/categories';
 import { DISTRICT_OPTIONS } from '@/lib/districts';
 import { ApiError } from '@/lib/api';
@@ -196,26 +197,71 @@ export function PostJobForm({
     return () => clearTimeout(handle);
   }, [title, description, descriptionLanguage, authzReady, setValue]);
 
-  // --- Photo picker (local preview only - persistence needs image storage +
-  // a Job.photos field, both follow-ups).
-  const [photos, setPhotos] = useState<{ id: string; url: string }[]>([]);
+  // --- Photo picker. Each pick uploads straight to R2 via POST /uploads and
+  // keeps the returned object key; the job is created with those keys, and the
+  // job page renders them as freshly presigned URLs. The local blob URL is only
+  // the thumbnail shown while (and after) the upload runs, so the preview is
+  // instant and doesn't depend on the presigned preview URL that /uploads
+  // returns (that one expires in 10 minutes - too short for a long form).
+  type DraftPhoto = {
+    id: string;
+    url: string; // local blob: preview
+    key: string | null; // R2 object key, set once uploaded
+    status: 'uploading' | 'done' | 'error';
+  };
+  const [photos, setPhotos] = useState<DraftPhoto[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
-  const addPhotos = useCallback((files: FileList | null) => {
-    const images = Array.from(files ?? []).filter((f) =>
-      f.type.startsWith('image/'),
-    );
-    if (!images.length) return;
-    setPhotos((prev) =>
-      prev
-        .concat(
-          images.slice(0, Math.max(0, 8 - prev.length)).map((f) => ({
-            id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-            url: URL.createObjectURL(f),
-          })),
-        )
-        .slice(0, 8),
-    );
-  }, []);
+
+  const addPhotos = useCallback(
+    (files: FileList | null) => {
+      const images = Array.from(files ?? []).filter((f) =>
+        f.type.startsWith('image/'),
+      );
+      if (!images.length) return;
+
+      // Cap at 8 total, counting what's already staged.
+      const room = Math.max(0, 8 - photos.length);
+      const accepted = images.slice(0, room);
+      if (accepted.length < images.length) {
+        toast.error(t.new.photos.tooMany);
+      }
+
+      const drafts: DraftPhoto[] = accepted.map((f) => ({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        url: URL.createObjectURL(f),
+        key: null,
+        status: 'uploading',
+      }));
+      setPhotos((prev) => prev.concat(drafts));
+
+      // Upload in parallel; each result patches only its own row, so a slow or
+      // failed upload never blocks or clobbers the others.
+      drafts.forEach((draft, i) => {
+        uploadFile(accepted[i], 'job-photo')
+          .then(({ key }) => {
+            setPhotos((prev) =>
+              prev.map((p) =>
+                p.id === draft.id ? { ...p, key, status: 'done' } : p,
+              ),
+            );
+          })
+          .catch((err: unknown) => {
+            setPhotos((prev) =>
+              prev.map((p) =>
+                p.id === draft.id ? { ...p, status: 'error' } : p,
+              ),
+            );
+            toast.error(
+              err instanceof ApiError || err instanceof Error
+                ? err.message
+                : t.new.photos.uploadFailed,
+            );
+          });
+      });
+    },
+    [photos.length, t],
+  );
+
   const removePhoto = useCallback((id: string) => {
     setPhotos((prev) => {
       const gone = prev.find((p) => p.id === id);
@@ -223,6 +269,19 @@ export function PostJobForm({
       return prev.filter((p) => p.id !== id);
     });
   }, []);
+
+  // Revoke any object URLs still alive when the form unmounts, so abandoning
+  // the page doesn't leak them for the lifetime of the document.
+  useEffect(() => {
+    return () => {
+      setPhotos((prev) => {
+        prev.forEach((p) => URL.revokeObjectURL(p.url));
+        return prev;
+      });
+    };
+  }, []);
+
+  const photosUploading = photos.some((p) => p.status === 'uploading');
 
   // --- Optional GPS pin shared when posting.
   const [loc, setLoc] = useState<{ lat: number; lng: number } | null>(null);
@@ -256,6 +315,11 @@ export function PostJobForm({
         aiSuggestedTags: detection?.skills.length
           ? detection.skills.map((s) => s.slug)
           : undefined,
+        // Only successfully-uploaded photos have a key; failed rows are simply
+        // left out rather than blocking the post.
+        photoKeys: photos
+          .map((p) => p.key)
+          .filter((key): key is string => key !== null),
         city: values.city || undefined,
         district: values.district || undefined,
         latitude: loc?.lat,
@@ -403,7 +467,29 @@ export function PostJobForm({
               className="relative aspect-square overflow-hidden rounded-lg border border-border bg-muted"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.url} alt="" className="size-full object-cover" />
+              <img
+                src={p.url}
+                alt=""
+                className={cn(
+                  'size-full object-cover',
+                  // Dim until the bytes are actually in R2, so a photo that
+                  // silently failed to upload doesn't look like it's attached.
+                  p.status !== 'done' && 'opacity-40',
+                )}
+              />
+              {p.status === 'uploading' ? (
+                <span className="absolute inset-0 flex items-center justify-center">
+                  <Loader2
+                    className="size-5 animate-spin text-foreground"
+                    aria-label={t.new.photos.uploading}
+                  />
+                </span>
+              ) : null}
+              {p.status === 'error' ? (
+                <span className="absolute inset-x-0 bottom-0 bg-destructive/90 px-1 py-0.5 text-center text-[10px] font-semibold text-white">
+                  {t.new.photos.uploadFailed}
+                </span>
+              ) : null}
               <button
                 type="button"
                 onClick={() => removePhoto(p.id)}
@@ -637,7 +723,13 @@ export function PostJobForm({
       <p className="text-[0.7rem] leading-relaxed text-muted-foreground">
         {t.new.contactConsent}
       </p>
-      <Button type="submit" className="w-full" disabled={submitting}>
+      {/* Block submit while an upload is in flight: those photos have no key
+          yet, so posting now would drop them from the job silently. */}
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={submitting || photosUploading}
+      >
         {submitting ? t.new.submitting : t.new.submit}
       </Button>
     </form>

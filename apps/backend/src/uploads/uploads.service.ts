@@ -40,6 +40,14 @@ export const CATEGORY_RULES = {
     exactMimes: ['image/jpeg', 'image/png', 'image/webp'],
     maxBytes: 10 * MB,
   },
+  // Photos a homeowner attaches to a job so quoting tradesmen can assess the
+  // work. Same image rules as portfolio, but a separate prefix keeps the
+  // namespaces distinct - JobsService only accepts keys under "job-photos/".
+  'job-photo': {
+    prefix: 'job-photos',
+    exactMimes: ['image/jpeg', 'image/png', 'image/webp'],
+    maxBytes: 10 * MB,
+  },
   'voice-intro': {
     prefix: 'voice',
     exactMimes: [],

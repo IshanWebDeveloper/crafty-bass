@@ -136,6 +136,38 @@ export function JobDetailView({
         <CardContent className="space-y-4">
           <p className="whitespace-pre-line text-sm">{job.description}</p>
 
+          {job.photos.length > 0 ? (
+            <ul className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-2.5">
+              {job.photos.map((src, i) => (
+                <li
+                  key={src}
+                  className="aspect-square overflow-hidden rounded-lg border border-border bg-muted"
+                >
+                  {/* block + size-full: the anchor is the img's sizing parent,
+                      and an inline <a> has no height, which collapses the
+                      100%-height image to nothing. */}
+                  <a
+                    href={src}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block size-full"
+                  >
+                    {/* Presigned R2 URLs are single-use-ish and expire, so
+                        next/image's optimiser (which re-fetches server-side and
+                        caches by URL) is the wrong tool here - use a plain img. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt={t.detail.photoAlt.replace('{n}', String(i + 1))}
+                      loading="lazy"
+                      className="size-full object-cover transition-transform hover:scale-105"
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
           <dl className="grid gap-3 sm:grid-cols-3 text-sm">
             <Field label={t.fields.category}>
               <CategoryBadge

@@ -16,6 +16,15 @@ export class PrismaService
   constructor() {
     super({
       adapter: createDbAdapter(),
+      // Job.photoKeys holds raw R2 object keys. They're an internal storage
+      // detail - clients get presigned URLs instead (JobsService.withPhotoUrls)
+      // - and the job list endpoints select with `include`, which would return
+      // every scalar. Omitting globally means a new list query can't leak them
+      // by default; the one reader that needs them opts back in explicitly with
+      // `omit: { photoKeys: false }`.
+      omit: {
+        job: { photoKeys: true },
+      },
       log: [
         { emit: 'event', level: 'query' },
         { emit: 'stdout', level: 'warn' },
