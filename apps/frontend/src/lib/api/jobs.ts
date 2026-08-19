@@ -41,6 +41,10 @@ export type Job = JobListItem & {
     source: string;
     skill: { id: string; slug: string; nameEn: string };
   }>;
+  // Presigned R2 URLs for the homeowner's photos, in display order. Minted per
+  // request and short-lived, so treat them as render-once - don't cache or
+  // persist them client-side. Detail endpoint only; list rows have no photos.
+  photos: string[];
 };
 
 // Agreed terms for an assigned job (GET /jobs/:id/agreement). Party-only, so
@@ -78,6 +82,9 @@ export type CreateJobBody = {
   aiCategoryId?: string;
   aiConfidence?: number;
   aiSuggestedTags?: string[];
+  // R2 object keys from uploadFile(file, 'job-photo'), in display order. The
+  // backend rejects keys outside the caller's own job-photos/ prefix.
+  photoKeys?: string[];
   locationText?: string;
   city?: string;
   district?: string;

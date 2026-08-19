@@ -433,6 +433,12 @@ model Job {
   aiCategoryId        String?
   aiConfidence        Decimal?            @db.Decimal(5, 4)
   aiSuggestedTags     Json?
+  // R2 object keys for homeowner-supplied photos, in display order (max 8,
+  // enforced by CreateJobSchema). Keys only - never presigned URLs, which
+  // expire; JobsService mints a fresh URL per read. Writes are restricted to
+  // the "job-photos/<homeownerId>/" prefix so a caller cannot attach an object
+  // from another user's namespace (e.g. a kyc/ document) and read it back.
+  photoKeys           String[]
   locationText        String?
   city                String?
   district            String?
