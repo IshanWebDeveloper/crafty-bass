@@ -611,6 +611,10 @@ model JobEscrow {
   paymentMethod       String?
   paymentRef          String?
   stripePaymentIntentId String?    @unique
+  // Set when the homeowner starts a hosted Stripe Checkout for the deposit.
+  // Kept so a repeated "Fund" click reuses the open session instead of opening
+  // a second one, and so checkout.session.completed can find the escrow.
+  stripeCheckoutSessionId String?  @unique
   fundedAt            DateTime?
   materialsReleasedAt DateTime?
   workCompletedAt     DateTime?

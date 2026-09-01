@@ -56,6 +56,14 @@ export class StripeWebhookController {
 
     try {
       switch (event.type) {
+        case 'checkout.session.completed': {
+          // Hosted Checkout is the card funding path: this is what actually
+          // marks the deposit funded. The redirect back to the job page is
+          // cosmetic and is never trusted for this.
+          await this.escrow.confirmFundedByCheckoutSession(event.data.object);
+          await this.webhookEvents.mark(eventId, WebhookEventStatus.PROCESSED);
+          break;
+        }
         case 'payment_intent.succeeded': {
           const paymentIntent = event.data.object;
           await this.escrow.confirmFundedByPaymentIntent(paymentIntent.id);

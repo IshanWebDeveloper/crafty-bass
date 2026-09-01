@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ShieldCheck } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Avatar,
@@ -52,11 +53,35 @@ export function JobDetailView({
   jobId: string;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const qc = useQueryClient();
   const { data: session } = useSession();
   const t = dict.jobs;
   const tq = dict.quotes;
   const tc = dict.chat;
+
+  // Stripe Checkout returns the homeowner here with ?funded=1. That flag is
+  // only a hint to refresh and confirm - the deposit is marked funded by the
+  // checkout.session.completed webhook, which may land a moment later, so the
+  // escrow query is invalidated rather than trusted from the URL. Stripped
+  // afterwards so a refresh or a shared link doesn't replay the banner.
+  const fundedHandled = useRef(false);
+  // Captured once at mount rather than read live, so the banner survives the
+  // flag being stripped below. A toast is the wrong tool here: it would be
+  // raised during mount, before sonner's container subscribes, and be dropped.
+  const [showFundedBanner] = useState(() => searchParams.get('funded') === '1');
+
+  useEffect(() => {
+    if (searchParams.get('funded') !== '1' || fundedHandled.current) return;
+    fundedHandled.current = true;
+    void qc.invalidateQueries({ queryKey: ['escrow', jobId] });
+    void qc.invalidateQueries({ queryKey: ['jobs', jobId] });
+    // history.replaceState, not router.replace: dropping the flag is purely
+    // cosmetic, and a real navigation would remount this view and refetch the
+    // route for nothing.
+    window.history.replaceState(null, '', pathname);
+  }, [searchParams, qc, jobId, pathname]);
 
   const { data: job, isLoading } = useQuery({
     queryKey: ['jobs', jobId],
@@ -112,6 +137,18 @@ export function JobDetailView({
 
   return (
     <div className="space-y-6">
+      {showFundedBanner ? (
+        <div
+          role="status"
+          className="flex items-start gap-2.5 rounded-lg border border-success/30 bg-success/10 p-4 text-sm"
+        >
+          <ShieldCheck
+            className="mt-0.5 size-4 shrink-0 text-success"
+            aria-hidden
+          />
+          <p className="leading-relaxed">{dict.escrow.fund.success}</p>
+        </div>
+      ) : null}
       <Card>
         <CardHeader className="space-y-2">
           <div className="flex items-start justify-between gap-3">

@@ -319,49 +319,102 @@ export class EscrowService {
   // webhook (`confirmFundedByPaymentIntent`) is the authoritative fallback for
   // that path and a safety net against duplicate/late delivery either way.
   private async fundWithCard(escrow: EscrowWithRelations, dto: FundEscrowDto) {
-    if (!dto.stripePaymentMethodId) {
+    // Card deposits go through Stripe's hosted Checkout: this returns a
+    // Stripe-hosted URL and the browser leaves our origin, so no card data
+    // touches the app. Funding is confirmed by the checkout.session.completed
+    // webhook - never by the redirect back, which the homeowner can skip,
+    // replay, or hand-craft.
+    if (escrow.stripeCheckoutSessionId) {
+      const existing = await this.stripe.retrieveCheckoutSession(
+        escrow.stripeCheckoutSessionId,
+      );
+
+      // Already paid, but the webhook hasn't landed (or was missed): settle it
+      // here so the homeowner isn't stuck looking at an unfunded deposit.
+      if (existing.status === 'complete') {
+        const intentId =
+          typeof existing.payment_intent === 'string'
+            ? existing.payment_intent
+            : existing.payment_intent?.id;
+        if (intentId) {
+          return this.finalizeFunded(escrow.id, intentId);
+        }
+      }
+
+      // Still open - reuse it rather than stranding a second session.
+      if (existing.status === 'open' && existing.url) {
+        return { ...this.serialize(escrow), checkoutUrl: existing.url };
+      }
+    }
+
+    // The homeowner is charged the deposit plus the processing fee; only the
+    // deposit is held in escrow (the fee is platform revenue).
+    const deposit = dec(escrow.depositAmount);
+    const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:3000';
+    const jobUrl = `${frontendUrl}/${dto.locale ?? 'en'}/jobs/${escrow.jobId}`;
+
+    const session = await this.stripe.createCheckoutSession({
+      amount: toMinorUnits(deposit + processingFeeFor(deposit)),
+      currency: escrow.currency.toLowerCase(),
+      productName: `Deposit to start - ${escrow.job.title}`,
+      metadata: { escrowId: escrow.id },
+      successUrl: `${jobUrl}?funded=1`,
+      cancelUrl: `${jobUrl}/fund?cancelled=1`,
+    });
+
+    if (!session.url) {
       throw new BadRequestException(
-        'stripePaymentMethodId is required for card payments',
+        'Stripe did not return a Checkout URL - the deposit was not charged.',
       );
     }
 
-    let paymentIntent = escrow.stripePaymentIntentId
-      ? await this.stripe.retrievePaymentIntent(escrow.stripePaymentIntentId)
-      : null;
+    await this.prisma.jobEscrow.update({
+      where: { id: escrow.id },
+      data: {
+        stripeCheckoutSessionId: session.id,
+        paymentMethod: 'card',
+      },
+    });
 
-    if (!paymentIntent) {
-      // The homeowner is charged the deposit plus the processing fee; only the
-      // deposit is held in escrow (the fee is platform revenue).
-      const deposit = dec(escrow.depositAmount);
-      paymentIntent = await this.stripe.createAndConfirmPaymentIntent({
-        amount: toMinorUnits(deposit + processingFeeFor(deposit)),
-        currency: escrow.currency.toLowerCase(),
-        paymentMethodId: dto.stripePaymentMethodId,
-        metadata: { escrowId: escrow.id },
-      });
+    return { ...this.serialize(escrow), checkoutUrl: session.url };
+  }
+
+  /**
+   * checkout.session.completed handler. The session carries the escrow id in
+   * metadata (set at creation), so this works even when the PaymentIntent id
+   * has not been recorded against the escrow yet. Idempotent via
+   * finalizeFunded's REQUESTED guard.
+   */
+  async confirmFundedByCheckoutSession(session: {
+    id: string;
+    metadata: Record<string, string> | null;
+    payment_intent: string | { id: string } | null;
+  }): Promise<void> {
+    const escrowId = session.metadata?.escrowId;
+    if (!escrowId) return;
+
+    const intentId =
+      typeof session.payment_intent === 'string'
+        ? session.payment_intent
+        : session.payment_intent?.id;
+    if (!intentId) return;
+
+    const escrow = await this.prisma.jobEscrow.findUnique({
+      where: { id: escrowId },
+      select: { id: true, stripePaymentIntentId: true },
+    });
+    if (!escrow) return;
+
+    // Record the PaymentIntent so refunds and a late payment_intent.succeeded
+    // can both find this escrow.
+    if (escrow.stripePaymentIntentId !== intentId) {
       await this.prisma.jobEscrow.update({
-        where: { id: escrow.id },
-        data: {
-          stripePaymentIntentId: paymentIntent.id,
-          paymentMethod: 'card',
-        },
+        where: { id: escrowId },
+        data: { stripePaymentIntentId: intentId },
       });
     }
 
-    if (paymentIntent.status === 'succeeded') {
-      return this.finalizeFunded(escrow.id, paymentIntent.id);
-    }
-    if (paymentIntent.status === 'requires_action') {
-      return {
-        ...this.serialize(escrow),
-        requiresAction: true,
-        clientSecret: paymentIntent.client_secret,
-      };
-    }
-    throw new BadRequestException(
-      paymentIntent.last_payment_error?.message ??
-        `Payment could not be completed (status: ${paymentIntent.status})`,
-    );
+    await this.finalizeFunded(escrowId, intentId);
   }
 
   // Idempotent: no-ops if the escrow has already moved past REQUESTED (e.g.

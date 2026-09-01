@@ -45,6 +45,11 @@ const EnvSchema = z
     // Stripe
     STRIPE_SECRET_KEY: z.string().optional(),
     STRIPE_WEBHOOK_SECRET: z.string().optional(),
+    // Stripe payment method configuration (pmc_...) deciding which methods and
+    // wallets hosted Checkout offers. Ours turns Apple Pay off and Google Pay
+    // on; see StripeService.createCheckoutSession for why this is the only
+    // lever for that.
+    STRIPE_PAYMENT_METHOD_CONFIGURATION_ID: z.string().optional(),
   })
   .superRefine((env, ctx) => {
     // Secrets that are optional in dev/test but required in production.

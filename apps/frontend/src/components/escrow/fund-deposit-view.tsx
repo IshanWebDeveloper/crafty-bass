@@ -24,7 +24,6 @@ import {
 import { formatLKR } from '@/lib/currency';
 import { EscrowStrip } from './escrow-strip';
 import { PaymentMethods } from './payment-methods';
-import { StripeCardForm } from './stripe-card-form';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries';
 
@@ -56,7 +55,14 @@ export function FundDepositView({
   });
 
   function handleFunded(result: FundEscrowResult) {
-    if (result.requiresAction) return;
+    // Card payments hand back a Stripe-hosted Checkout URL: leave the app and
+    // let Stripe collect the payment. Funding is confirmed server-side by the
+    // checkout.session.completed webhook, so there is nothing to invalidate
+    // here - the job page picks up the funded state when the homeowner returns.
+    if (result.checkoutUrl) {
+      window.location.href = result.checkoutUrl;
+      return;
+    }
     toast.success(tf.success);
     void qc.invalidateQueries({ queryKey: ['escrow', jobId] });
     void qc.invalidateQueries({ queryKey: ['jobs', jobId] });
@@ -64,7 +70,7 @@ export function FundDepositView({
   }
 
   const mutation = useMutation({
-    mutationFn: () => fundEscrow(escrow!.id, method),
+    mutationFn: () => fundEscrow(escrow!.id, method, locale),
     onSuccess: handleFunded,
     onError: (err) =>
       toast.error(err instanceof Error ? err.message : 'Failed to fund'),
@@ -199,29 +205,17 @@ export function FundDepositView({
               <PaymentMethods value={method} onChange={setMethod} dict={dict} />
             </div>
 
-            {method === 'card' ? (
-              <StripeCardForm
-                escrowId={escrow.id}
-                submitLabel={tf.payCta.replace(
-                  '{amount}',
-                  formatLKR(escrow.amountDue),
-                )}
-                submittingLabel={t.actions.funding}
-                onFunded={handleFunded}
-              />
-            ) : (
-              <Button
-                size="lg"
-                className="h-auto w-full min-h-9 flex-wrap py-2 whitespace-normal"
-                onClick={() => mutation.mutate()}
-                disabled={mutation.isPending}
-              >
-                <Lock className="size-4 shrink-0" aria-hidden />
-                {mutation.isPending
-                  ? t.actions.funding
-                  : tf.payCta.replace('{amount}', formatLKR(escrow.amountDue))}
-              </Button>
-            )}
+            <Button
+              size="lg"
+              className="h-auto w-full min-h-9 flex-wrap py-2 whitespace-normal"
+              onClick={() => mutation.mutate()}
+              disabled={mutation.isPending}
+            >
+              <Lock className="size-4 shrink-0" aria-hidden />
+              {mutation.isPending
+                ? t.actions.funding
+                : tf.payCta.replace('{amount}', formatLKR(escrow.amountDue))}
+            </Button>
             <p className="flex items-center justify-center gap-1.5 text-center text-[11px] leading-relaxed text-muted-foreground">
               <Shield className="size-3 shrink-0" aria-hidden />
               {tf.secured.replace('{processor}', PROCESSOR[method])}
