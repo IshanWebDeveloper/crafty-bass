@@ -60,18 +60,23 @@ export function getEscrow(id: string) {
 }
 
 export type FundEscrowResult = Escrow & {
-  requiresAction?: boolean;
-  clientSecret?: string;
+  /**
+   * Present for `paymentMethod: 'card'` - a Stripe-hosted Checkout URL to send
+   * the browser to. The deposit is only funded once Stripe's
+   * checkout.session.completed webhook reaches the backend, so the escrow in
+   * this same response is still REQUESTED.
+   */
+  checkoutUrl?: string;
 };
 
 export function fundEscrow(
   id: string,
   paymentMethod: EscrowPaymentMethod,
-  stripePaymentMethodId?: string,
+  locale?: string,
 ) {
   return apiFetch<FundEscrowResult>(`/escrows/${id}/fund`, {
     method: 'POST',
-    body: JSON.stringify({ paymentMethod, stripePaymentMethodId }),
+    body: JSON.stringify({ paymentMethod, locale }),
   });
 }
 

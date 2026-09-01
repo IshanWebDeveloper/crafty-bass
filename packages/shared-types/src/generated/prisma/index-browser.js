@@ -373,6 +373,7 @@ exports.Prisma.JobEscrowScalarFieldEnum = {
   paymentMethod: 'paymentMethod',
   paymentRef: 'paymentRef',
   stripePaymentIntentId: 'stripePaymentIntentId',
+  stripeCheckoutSessionId: 'stripeCheckoutSessionId',
   fundedAt: 'fundedAt',
   materialsReleasedAt: 'materialsReleasedAt',
   workCompletedAt: 'workCompletedAt',

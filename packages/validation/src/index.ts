@@ -101,10 +101,7 @@ export const CreateJobSchema = z
     // display order. The shape is validated here; ownership (the key must sit
     // under the caller's own "job-photos/<userId>/" prefix) is enforced in
     // JobsService, which is the only place that knows the authenticated user.
-    photoKeys: z
-      .array(z.string().trim().min(1).max(300))
-      .max(8)
-      .optional(),
+    photoKeys: z.array(z.string().trim().min(1).max(300)).max(8).optional(),
     locationText: optionalText(200),
     city: optionalText(80),
     district: optionalText(80),
@@ -274,22 +271,17 @@ export function maxDeposit(
 }
 
 export const EscrowPaymentMethodSchema = z.enum(['card', 'paypal', 'local']);
-export const FundEscrowSchema = z
-  .object({
-    paymentMethod: EscrowPaymentMethodSchema.default('card'),
-    // Required for paymentMethod: 'card' - the Stripe PaymentMethod id created
-    // client-side via Elements. paypal/local are still simulated and don't use it.
-    stripePaymentMethodId: z.string().optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.paymentMethod === 'card' && !data.stripePaymentMethodId) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['stripePaymentMethodId'],
-        message: 'stripePaymentMethodId is required when paymentMethod is card',
-      });
-    }
-  });
+export const FundEscrowSchema = z.object({
+  paymentMethod: EscrowPaymentMethodSchema.default('card'),
+  // Card payments go through Stripe's hosted Checkout, so the browser never
+  // holds a PaymentMethod id - the funding response carries a redirect URL
+  // instead. paypal/local remain simulated in-app.
+  //
+  // Locale only picks which localised job page Stripe returns the homeowner to.
+  // It is an enum rather than a caller-supplied URL precisely so this can't be
+  // turned into an open redirect.
+  locale: z.enum(['en', 'si', 'ta']).optional(),
+});
 
 // Support/admin dispute mediation: cancel a disputed job and refund some (or
 // all) of the homeowner's deposit. `refundAmount` is capped at the deposit at

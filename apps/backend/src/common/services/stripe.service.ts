@@ -58,6 +58,59 @@ export class StripeService {
   }
 
   /**
+   * Creates a hosted Checkout Session for the deposit. The homeowner is
+   * redirected to `session.url` and card details never touch our origin.
+   *
+   * `escrowId` goes on both the session and the PaymentIntent it creates:
+   * checkout.session.completed reads the former, and the latter keeps the
+   * PaymentIntent traceable back to the escrow on its own (refunds, disputes).
+   */
+  async createCheckoutSession(input: {
+    amount: number;
+    currency: string;
+    productName: string;
+    metadata: Record<string, string>;
+    successUrl: string;
+    cancelUrl: string;
+    customerEmail?: string;
+  }): Promise<Stripe.Checkout.Session> {
+    // Wallets are not payment method types: Apple Pay and Google Pay both ride
+    // on `card` and have no API enum, and a Checkout Session's `wallet_options`
+    // only covers Link. Which wallet the page offers is therefore decided by
+    // the account's payment method configuration - ours has apple_pay off and
+    // google_pay on. Passing `payment_method_types` would pin the session to
+    // manual mode and that configuration would be ignored, so it is only used
+    // as the fallback when no configuration id is set.
+    const configurationId = process.env.STRIPE_PAYMENT_METHOD_CONFIGURATION_ID;
+
+    return this.requireClient().checkout.sessions.create({
+      mode: 'payment',
+      ...(configurationId
+        ? { payment_method_configuration: configurationId }
+        : { payment_method_types: ['card'] }),
+      line_items: [
+        {
+          quantity: 1,
+          price_data: {
+            currency: input.currency,
+            unit_amount: input.amount,
+            product_data: { name: input.productName },
+          },
+        },
+      ],
+      success_url: input.successUrl,
+      cancel_url: input.cancelUrl,
+      metadata: input.metadata,
+      payment_intent_data: { metadata: input.metadata },
+      ...(input.customerEmail ? { customer_email: input.customerEmail } : {}),
+    });
+  }
+
+  async retrieveCheckoutSession(id: string): Promise<Stripe.Checkout.Session> {
+    return this.requireClient().checkout.sessions.retrieve(id);
+  }
+
+  /**
    * Refunds a PaymentIntent. Omit `amount` for a full refund; pass it (in the
    * currency's minor unit) for a partial refund - used by support during dispute
    * mediation to return only part of the deposit.

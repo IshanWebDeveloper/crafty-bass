@@ -67,23 +67,33 @@ describe('CreateQuoteSchema', () => {
 });
 
 describe('FundEscrowSchema', () => {
-  it('requires stripePaymentMethodId when paymentMethod is card', () => {
-    const invalid = FundEscrowSchema.safeParse({
-      paymentMethod: 'card',
-    });
-    expect(invalid.success).toBe(false);
-    if (!invalid.success) {
-      expect(invalid.error.issues[0].path).toEqual(['stripePaymentMethodId']);
-    }
-
-    const valid = FundEscrowSchema.safeParse({
-      paymentMethod: 'card',
-      stripePaymentMethodId: 'pm_12345',
-    });
+  it('accepts a card payment with no client-side payment method', () => {
+    // Card deposits go through Stripe's hosted Checkout, so the browser never
+    // holds a PaymentMethod id - the funding response returns a redirect URL.
+    const valid = FundEscrowSchema.safeParse({ paymentMethod: 'card' });
     expect(valid.success).toBe(true);
   });
 
-  it('does not require stripePaymentMethodId for paypal or local', () => {
+  it('constrains locale to the supported set so it cannot become an open redirect', () => {
+    // locale only picks which localised job page Stripe returns the homeowner
+    // to; anything outside the enum must be rejected rather than interpolated.
+    const valid = FundEscrowSchema.safeParse({
+      paymentMethod: 'card',
+      locale: 'si',
+    });
+    expect(valid.success).toBe(true);
+
+    const invalid = FundEscrowSchema.safeParse({
+      paymentMethod: 'card',
+      locale: 'https://evil.example.com',
+    });
+    expect(invalid.success).toBe(false);
+    if (!invalid.success) {
+      expect(invalid.error.issues[0].path).toEqual(['locale']);
+    }
+  });
+
+  it('still accepts the simulated paypal and local methods', () => {
     const validPaypal = FundEscrowSchema.safeParse({
       paymentMethod: 'paypal',
     });

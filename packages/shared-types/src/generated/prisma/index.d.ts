@@ -24249,6 +24249,7 @@ export namespace Prisma {
     paymentMethod: string | null
     paymentRef: string | null
     stripePaymentIntentId: string | null
+    stripeCheckoutSessionId: string | null
     fundedAt: Date | null
     materialsReleasedAt: Date | null
     workCompletedAt: Date | null
@@ -24273,6 +24274,7 @@ export namespace Prisma {
     paymentMethod: string | null
     paymentRef: string | null
     stripePaymentIntentId: string | null
+    stripeCheckoutSessionId: string | null
     fundedAt: Date | null
     materialsReleasedAt: Date | null
     workCompletedAt: Date | null
@@ -24297,6 +24299,7 @@ export namespace Prisma {
     paymentMethod: number
     paymentRef: number
     stripePaymentIntentId: number
+    stripeCheckoutSessionId: number
     fundedAt: number
     materialsReleasedAt: number
     workCompletedAt: number
@@ -24337,6 +24340,7 @@ export namespace Prisma {
     paymentMethod?: true
     paymentRef?: true
     stripePaymentIntentId?: true
+    stripeCheckoutSessionId?: true
     fundedAt?: true
     materialsReleasedAt?: true
     workCompletedAt?: true
@@ -24361,6 +24365,7 @@ export namespace Prisma {
     paymentMethod?: true
     paymentRef?: true
     stripePaymentIntentId?: true
+    stripeCheckoutSessionId?: true
     fundedAt?: true
     materialsReleasedAt?: true
     workCompletedAt?: true
@@ -24385,6 +24390,7 @@ export namespace Prisma {
     paymentMethod?: true
     paymentRef?: true
     stripePaymentIntentId?: true
+    stripeCheckoutSessionId?: true
     fundedAt?: true
     materialsReleasedAt?: true
     workCompletedAt?: true
@@ -24496,6 +24502,7 @@ export namespace Prisma {
     paymentMethod: string | null
     paymentRef: string | null
     stripePaymentIntentId: string | null
+    stripeCheckoutSessionId: string | null
     fundedAt: Date | null
     materialsReleasedAt: Date | null
     workCompletedAt: Date | null
@@ -24539,6 +24546,7 @@ export namespace Prisma {
     paymentMethod?: boolean
     paymentRef?: boolean
     stripePaymentIntentId?: boolean
+    stripeCheckoutSessionId?: boolean
     fundedAt?: boolean
     materialsReleasedAt?: boolean
     workCompletedAt?: boolean
@@ -24569,6 +24577,7 @@ export namespace Prisma {
     paymentMethod?: boolean
     paymentRef?: boolean
     stripePaymentIntentId?: boolean
+    stripeCheckoutSessionId?: boolean
     fundedAt?: boolean
     materialsReleasedAt?: boolean
     workCompletedAt?: boolean
@@ -24597,6 +24606,7 @@ export namespace Prisma {
     paymentMethod?: boolean
     paymentRef?: boolean
     stripePaymentIntentId?: boolean
+    stripeCheckoutSessionId?: boolean
     fundedAt?: boolean
     materialsReleasedAt?: boolean
     workCompletedAt?: boolean
@@ -24625,6 +24635,7 @@ export namespace Prisma {
     paymentMethod?: boolean
     paymentRef?: boolean
     stripePaymentIntentId?: boolean
+    stripeCheckoutSessionId?: boolean
     fundedAt?: boolean
     materialsReleasedAt?: boolean
     workCompletedAt?: boolean
@@ -24634,7 +24645,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type JobEscrowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobId" | "quoteId" | "homeownerId" | "tradesmanId" | "currency" | "quoteTotal" | "materialsAmount" | "depositAmount" | "balanceAmount" | "status" | "paymentMethod" | "paymentRef" | "stripePaymentIntentId" | "fundedAt" | "materialsReleasedAt" | "workCompletedAt" | "releasedAt" | "refundedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["jobEscrow"]>
+  export type JobEscrowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobId" | "quoteId" | "homeownerId" | "tradesmanId" | "currency" | "quoteTotal" | "materialsAmount" | "depositAmount" | "balanceAmount" | "status" | "paymentMethod" | "paymentRef" | "stripePaymentIntentId" | "stripeCheckoutSessionId" | "fundedAt" | "materialsReleasedAt" | "workCompletedAt" | "releasedAt" | "refundedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["jobEscrow"]>
   export type JobEscrowInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     job?: boolean | JobDefaultArgs<ExtArgs>
     quote?: boolean | QuoteDefaultArgs<ExtArgs>
@@ -24680,6 +24691,7 @@ export namespace Prisma {
       paymentMethod: string | null
       paymentRef: string | null
       stripePaymentIntentId: string | null
+      stripeCheckoutSessionId: string | null
       fundedAt: Date | null
       materialsReleasedAt: Date | null
       workCompletedAt: Date | null
@@ -25129,6 +25141,7 @@ export namespace Prisma {
     readonly paymentMethod: FieldRef<"JobEscrow", 'String'>
     readonly paymentRef: FieldRef<"JobEscrow", 'String'>
     readonly stripePaymentIntentId: FieldRef<"JobEscrow", 'String'>
+    readonly stripeCheckoutSessionId: FieldRef<"JobEscrow", 'String'>
     readonly fundedAt: FieldRef<"JobEscrow", 'DateTime'>
     readonly materialsReleasedAt: FieldRef<"JobEscrow", 'DateTime'>
     readonly workCompletedAt: FieldRef<"JobEscrow", 'DateTime'>
@@ -39904,6 +39917,7 @@ export namespace Prisma {
     paymentMethod: 'paymentMethod',
     paymentRef: 'paymentRef',
     stripePaymentIntentId: 'stripePaymentIntentId',
+    stripeCheckoutSessionId: 'stripeCheckoutSessionId',
     fundedAt: 'fundedAt',
     materialsReleasedAt: 'materialsReleasedAt',
     workCompletedAt: 'workCompletedAt',
@@ -42137,6 +42151,7 @@ export namespace Prisma {
     paymentMethod?: StringNullableFilter<"JobEscrow"> | string | null
     paymentRef?: StringNullableFilter<"JobEscrow"> | string | null
     stripePaymentIntentId?: StringNullableFilter<"JobEscrow"> | string | null
+    stripeCheckoutSessionId?: StringNullableFilter<"JobEscrow"> | string | null
     fundedAt?: DateTimeNullableFilter<"JobEscrow"> | Date | string | null
     materialsReleasedAt?: DateTimeNullableFilter<"JobEscrow"> | Date | string | null
     workCompletedAt?: DateTimeNullableFilter<"JobEscrow"> | Date | string | null
@@ -42166,6 +42181,7 @@ export namespace Prisma {
     paymentMethod?: SortOrderInput | SortOrder
     paymentRef?: SortOrderInput | SortOrder
     stripePaymentIntentId?: SortOrderInput | SortOrder
+    stripeCheckoutSessionId?: SortOrderInput | SortOrder
     fundedAt?: SortOrderInput | SortOrder
     materialsReleasedAt?: SortOrderInput | SortOrder
     workCompletedAt?: SortOrderInput | SortOrder
@@ -42185,6 +42201,7 @@ export namespace Prisma {
     jobId?: string
     quoteId?: string
     stripePaymentIntentId?: string
+    stripeCheckoutSessionId?: string
     AND?: JobEscrowWhereInput | JobEscrowWhereInput[]
     OR?: JobEscrowWhereInput[]
     NOT?: JobEscrowWhereInput | JobEscrowWhereInput[]
@@ -42210,7 +42227,7 @@ export namespace Prisma {
     homeowner?: XOR<UserScalarRelationFilter, UserWhereInput>
     tradesman?: XOR<UserScalarRelationFilter, UserWhereInput>
     transactions?: EscrowTransactionListRelationFilter
-  }, "id" | "jobId" | "quoteId" | "stripePaymentIntentId">
+  }, "id" | "jobId" | "quoteId" | "stripePaymentIntentId" | "stripeCheckoutSessionId">
 
   export type JobEscrowOrderByWithAggregationInput = {
     id?: SortOrder
@@ -42227,6 +42244,7 @@ export namespace Prisma {
     paymentMethod?: SortOrderInput | SortOrder
     paymentRef?: SortOrderInput | SortOrder
     stripePaymentIntentId?: SortOrderInput | SortOrder
+    stripeCheckoutSessionId?: SortOrderInput | SortOrder
     fundedAt?: SortOrderInput | SortOrder
     materialsReleasedAt?: SortOrderInput | SortOrder
     workCompletedAt?: SortOrderInput | SortOrder
@@ -42259,6 +42277,7 @@ export namespace Prisma {
     paymentMethod?: StringNullableWithAggregatesFilter<"JobEscrow"> | string | null
     paymentRef?: StringNullableWithAggregatesFilter<"JobEscrow"> | string | null
     stripePaymentIntentId?: StringNullableWithAggregatesFilter<"JobEscrow"> | string | null
+    stripeCheckoutSessionId?: StringNullableWithAggregatesFilter<"JobEscrow"> | string | null
     fundedAt?: DateTimeNullableWithAggregatesFilter<"JobEscrow"> | Date | string | null
     materialsReleasedAt?: DateTimeNullableWithAggregatesFilter<"JobEscrow"> | Date | string | null
     workCompletedAt?: DateTimeNullableWithAggregatesFilter<"JobEscrow"> | Date | string | null
@@ -45141,6 +45160,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -45170,6 +45190,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -45191,6 +45212,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -45220,6 +45242,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -45245,6 +45268,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -45265,6 +45289,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -45289,6 +45314,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -48025,6 +48051,7 @@ export namespace Prisma {
     paymentMethod?: SortOrder
     paymentRef?: SortOrder
     stripePaymentIntentId?: SortOrder
+    stripeCheckoutSessionId?: SortOrder
     fundedAt?: SortOrder
     materialsReleasedAt?: SortOrder
     workCompletedAt?: SortOrder
@@ -48056,6 +48083,7 @@ export namespace Prisma {
     paymentMethod?: SortOrder
     paymentRef?: SortOrder
     stripePaymentIntentId?: SortOrder
+    stripeCheckoutSessionId?: SortOrder
     fundedAt?: SortOrder
     materialsReleasedAt?: SortOrder
     workCompletedAt?: SortOrder
@@ -48080,6 +48108,7 @@ export namespace Prisma {
     paymentMethod?: SortOrder
     paymentRef?: SortOrder
     stripePaymentIntentId?: SortOrder
+    stripeCheckoutSessionId?: SortOrder
     fundedAt?: SortOrder
     materialsReleasedAt?: SortOrder
     workCompletedAt?: SortOrder
@@ -53046,6 +53075,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -53073,6 +53103,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -53104,6 +53135,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -53131,6 +53163,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -53953,6 +53986,7 @@ export namespace Prisma {
     paymentMethod?: StringNullableFilter<"JobEscrow"> | string | null
     paymentRef?: StringNullableFilter<"JobEscrow"> | string | null
     stripePaymentIntentId?: StringNullableFilter<"JobEscrow"> | string | null
+    stripeCheckoutSessionId?: StringNullableFilter<"JobEscrow"> | string | null
     fundedAt?: DateTimeNullableFilter<"JobEscrow"> | Date | string | null
     materialsReleasedAt?: DateTimeNullableFilter<"JobEscrow"> | Date | string | null
     workCompletedAt?: DateTimeNullableFilter<"JobEscrow"> | Date | string | null
@@ -56509,6 +56543,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -56536,6 +56571,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -57090,6 +57126,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57117,6 +57154,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57687,6 +57725,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -57714,6 +57753,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -58068,6 +58108,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58095,6 +58136,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59364,6 +59406,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -59392,6 +59435,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -59428,6 +59472,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59456,6 +59501,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63357,6 +63403,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -63380,6 +63427,7 @@ export namespace Prisma {
     paymentMethod?: string | null
     paymentRef?: string | null
     stripePaymentIntentId?: string | null
+    stripeCheckoutSessionId?: string | null
     fundedAt?: Date | string | null
     materialsReleasedAt?: Date | string | null
     workCompletedAt?: Date | string | null
@@ -64221,6 +64269,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64248,6 +64297,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64272,6 +64322,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64292,6 +64343,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64319,6 +64371,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64343,6 +64396,7 @@ export namespace Prisma {
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     fundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     materialsReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
