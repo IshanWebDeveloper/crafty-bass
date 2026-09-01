@@ -177,7 +177,7 @@ describe('QuotesService.create', () => {
     ).rejects.toBeInstanceOf(ForbiddenException);
   });
 
-  it('promotes a null userType to TRADESMAN before creating', async () => {
+  it('promotes a null userType to TRADESMAN, then gates on verification', async () => {
     build({
       job: {
         findUnique: vi.fn(() =>
@@ -190,7 +190,11 @@ describe('QuotesService.create', () => {
         ),
       },
     });
-    await service.create('u1', 'job1', quoteDto({ depositRequested: 0 }));
+    // The promotion still happens, but a freshly promoted account has no
+    // verified profile yet, so the quote itself is refused.
+    await expect(
+      service.create('u1', 'job1', quoteDto({ depositRequested: 0 })),
+    ).rejects.toBeInstanceOf(ForbiddenException);
     expect(prismaBits.prisma.user.update).toHaveBeenCalledWith(
       expect.objectContaining({ data: { userType: 'TRADESMAN' } }),
     );
@@ -232,7 +236,7 @@ describe('QuotesService.create', () => {
     );
   });
 
-  it('rejects a deposit above an unverified tradesman’s zero cap', async () => {
+  it('forbids an unverified tradesman from quoting at all', async () => {
     build({
       job: {
         findUnique: vi.fn(() =>
@@ -253,9 +257,12 @@ describe('QuotesService.create', () => {
         ),
       },
     });
+    // Verification gates the whole quote, not just the deposit: the browse-jobs
+    // UI hides the form, and this makes a direct API call fail the same way.
     await expect(
       service.create('u1', 'job1', quoteDto({ depositRequested: 1 })),
-    ).rejects.toBeInstanceOf(BadRequestException);
+    ).rejects.toBeInstanceOf(ForbiddenException);
+    expect(prismaBits.prisma.quote.create).not.toHaveBeenCalled();
   });
 
   it('rejects a deposit above a verified tradesman’s cap', async () => {
