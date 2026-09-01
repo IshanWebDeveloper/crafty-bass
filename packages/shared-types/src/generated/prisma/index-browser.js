@@ -535,6 +535,16 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.LegalDocumentScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  title: 'title',
+  version: 'version',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -732,7 +742,8 @@ exports.Prisma.ModelName = {
   Report: 'Report',
   Notification: 'Notification',
   WebhookEvent: 'WebhookEvent',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  LegalDocument: 'LegalDocument'
 };
 
 /**
