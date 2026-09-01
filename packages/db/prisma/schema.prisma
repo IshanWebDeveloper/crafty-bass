@@ -900,3 +900,19 @@ model AuditLog {
   @@index([entity, entityId])
   @@index([createdAt])
 }
+
+// Versioned legal copy (currently just the privacy policy) edited from the
+// admin console and served publicly at GET /api/v1/legal/privacy-policy. One
+// row per `key`; LegalService seeds a default on first read, so the table is
+// expected to be empty on a fresh database.
+model LegalDocument {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  title     String
+  version   String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("legal_document")
+}

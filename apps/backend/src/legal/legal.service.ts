@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import type { UpdatePrivacyPolicyDto } from './dto/index.js';
 
@@ -41,91 +40,46 @@ You may request access, correction, deletion, restriction, portability, and obje
 For privacy requests, contact support through Crafty Bass. You may also complain to the UK Information Commissioner's Office (ICO).
 `;
 
-type LegalDocumentRecord = {
-  id: string;
-  key: string;
-  title: string;
-  version: string;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 @Injectable()
 export class LegalService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getPrivacyPolicy() {
-    const existing = await this.prisma.$queryRaw<LegalDocumentRecord[]>`
-      SELECT
-        id,
-        key,
-        title,
-        version,
-        content,
-        "createdAt",
-        "updatedAt"
-      FROM legal_document
-      WHERE key = ${PRIVACY_POLICY_KEY}
-      LIMIT 1
-    `;
+    const existing = await this.prisma.legalDocument.findUnique({
+      where: { key: PRIVACY_POLICY_KEY },
+    });
 
-    if (existing.length > 0) {
-      return existing[0];
+    if (existing) {
+      return existing;
     }
 
-    const created = await this.prisma.$queryRaw<LegalDocumentRecord[]>`
-      INSERT INTO legal_document (id, key, title, version, content, "createdAt", "updatedAt")
-      VALUES (
-        ${randomUUID()},
-        ${PRIVACY_POLICY_KEY},
-        ${'Privacy Policy'},
-        ${DEFAULT_PRIVACY_POLICY_VERSION},
-        ${DEFAULT_PRIVACY_POLICY_CONTENT},
-        NOW(),
-        NOW()
-      )
-      RETURNING
-        id,
-        key,
-        title,
-        version,
-        content,
-        "createdAt",
-        "updatedAt"
-    `;
-
-    return created[0];
+    // Seed the shipped default on first read so a fresh database still serves a
+    // policy. Two concurrent first reads would race, so treat a lost race as a
+    // hit rather than a 500.
+    return this.prisma.legalDocument.upsert({
+      where: { key: PRIVACY_POLICY_KEY },
+      update: {},
+      create: {
+        key: PRIVACY_POLICY_KEY,
+        title: 'Privacy Policy',
+        version: DEFAULT_PRIVACY_POLICY_VERSION,
+        content: DEFAULT_PRIVACY_POLICY_CONTENT,
+      },
+    });
   }
 
   async updatePrivacyPolicy(dto: UpdatePrivacyPolicyDto) {
-    const updated = await this.prisma.$queryRaw<LegalDocumentRecord[]>`
-      INSERT INTO legal_document (id, key, title, version, content, "createdAt", "updatedAt")
-      VALUES (
-        ${randomUUID()},
-        ${PRIVACY_POLICY_KEY},
-        ${dto.title ?? 'Privacy Policy'},
-        ${dto.version},
-        ${dto.content},
-        NOW(),
-        NOW()
-      )
-      ON CONFLICT (key)
-      DO UPDATE SET
-        title = EXCLUDED.title,
-        version = EXCLUDED.version,
-        content = EXCLUDED.content,
-        "updatedAt" = NOW()
-      RETURNING
-        id,
-        key,
-        title,
-        version,
-        content,
-        "createdAt",
-        "updatedAt"
-    `;
+    const title = dto.title ?? 'Privacy Policy';
 
-    return updated[0];
+    return this.prisma.legalDocument.upsert({
+      where: { key: PRIVACY_POLICY_KEY },
+      update: { title, version: dto.version, content: dto.content },
+      create: {
+        key: PRIVACY_POLICY_KEY,
+        title,
+        version: dto.version,
+        content: dto.content,
+      },
+    });
   }
 }
