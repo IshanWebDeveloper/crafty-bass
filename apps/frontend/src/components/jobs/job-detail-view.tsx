@@ -454,8 +454,13 @@ function QuoteRow({
         <div className="space-y-1">
           <p className="flex items-center gap-1.5 text-sm font-medium">
             {quote.tradesman.name}
-            {/* Quoting is gated on verification, so every quoter is verified. */}
-            <VerifiedBadge size={15} title={tq.verifiedTradesman} />
+            {/* Quoting is gated on verification server-side, but never render
+                the seal off that assumption - show it only when the profile
+                actually says so, so a lapsed or bypassed check can't present an
+                unverified tradesman as verified. */}
+            {profile?.isVerified ? (
+              <VerifiedBadge size={15} title={tq.verifiedTradesman} />
+            ) : null}
           </p>
           {profile ? (
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
