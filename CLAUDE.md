@@ -45,6 +45,25 @@ Per-app: `pnpm nx run <frontend|admin|backend|ai-service>:<dev|build|lint|test>`
 
 Ports: frontend `3000`, admin `3001`, backend `3005` (override with `PORT`), ai-service `8006`. CORS defaults to `http://localhost:3000,http://admin.localhost:3001,http://localhost:3001,http://localhost:5173` (override with `CORS_ORIGINS`, see `apps/backend/.env.example`). Note admin is opened at `http://admin.localhost:3001` (see Admin section for why).
 
+### Local database (Docker)
+
+Postgres runs locally via `docker-compose.yml` (Postgres 17, matching the Neon instance it replaced). Redis is **not** in compose - run your own container on `6379`.
+
+```bash
+docker compose up -d        # start postgres on 5432
+docker compose down         # stop; data survives in the named volume
+docker compose down -v      # stop and wipe (forces a re-seed next time)
+```
+
+Two databases are created on first boot: `craftybass_dev` (used by `apps/backend/.env`) and `craftybass_test` (used by `apps/backend/.env.test`), the second via `scripts/postgres/init-test-db.sh`. That init script only runs on an **empty** data directory, so `down -v` is what you need to recreate them. After a fresh `up -d`, apply the schema and seed:
+
+```bash
+pnpm --filter @repo/db exec dotenv -e ../../apps/backend/.env -- prisma migrate deploy
+pnpm --filter @repo/db db:seed && pnpm --filter @repo/db db:seed:users
+```
+
+The previous Neon URLs are preserved as comments in both env files - swap the two `DATABASE_URL` lines to switch back.
+
 ### Prisma
 
 The schema and migration/seed scripts live in **`@repo/db`** (`packages/db/package.json`): e.g. `pnpm --filter @repo/db db:migrate:dev`, `db:migrate:reset`, `db:seed`, `db:seed:users` - all load `apps/backend/.env` (or `.env.test`) via dotenv. The two scripts that matter at the workspace level (root `package.json`):

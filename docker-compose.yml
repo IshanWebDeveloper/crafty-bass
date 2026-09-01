@@ -1,0 +1,37 @@
+# Local development infrastructure.
+#
+# Postgres 17 to match the Neon instance this replaces (17.11), so anything
+# version-sensitive behaves the same locally as it does on Neon.
+#
+#   docker compose up -d      start
+#   docker compose down       stop (data survives in the named volume)
+#   docker compose down -v    stop and wipe the data
+#
+# The connection strings that go with this live in apps/backend/.env and
+# apps/backend/.env.test.
+services:
+  postgres:
+    image: postgres:17
+    container_name: crafty-bass-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: crafty
+      POSTGRES_PASSWORD: crafty
+      POSTGRES_DB: craftybass_dev
+    ports:
+      - '5432:5432'
+    volumes:
+      - crafty-bass-pgdata:/var/lib/postgresql/data
+      # Creates the second (test) database on first boot - Postgres only runs
+      # this on an empty data directory, so it is a no-op on later starts.
+      - ./scripts/postgres/init-test-db.sh:/docker-entrypoint-initdb.d/init-test-db.sh:ro
+    healthcheck:
+      # The -d/-U flags matter: bare pg_isready reports ready before the
+      # init scripts above have finished, which loses the race with migrations.
+      test: ['CMD-SHELL', 'pg_isready -U crafty -d craftybass_dev']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  crafty-bass-pgdata:
