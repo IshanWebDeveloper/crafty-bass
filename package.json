@@ -5,7 +5,10 @@
   "scripts": {
     "build": "nx run-many -t build --all",
     "dev:all": "docker compose up -d --wait && pnpm --filter @repo/db db:migrate:deploy && concurrently -k -n stripe,apps -c magenta,cyan \"pnpm stripe:listen\" \"pnpm dev\"",
+    "dev:all:terminals": "node scripts/dev/dev-terminals.mjs",
+    "dev:terminals": "node scripts/dev/dev-terminals.mjs --no-prep",
     "dev": "nx run-many -t dev --projects=frontend,admin,backend,ai-service --parallel=4",
+    "backend:dev": "nx run backend:dev",
     "dev:admin": "nx run admin:dev",
     "dev:ai": "nx run ai-service:dev",
     "dev:ai:uvicorn": "uvicorn --app-dir apps/ai-service app.main:app --reload --host 127.0.0.1 --port 8006",
