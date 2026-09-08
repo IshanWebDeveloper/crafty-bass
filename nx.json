@@ -37,6 +37,8 @@
       "cache": true
     },
     "dev": {
+      "//": "Dev servers consume the workspace packages from their built dist/ (and, for @repo/db, its generated Prisma client), so building dependencies first is what keeps a dev run from typechecking against a stale dist. Cached builds make this a no-op when nothing changed.",
+      "dependsOn": ["^build"],
       "cache": false
     }
   },
