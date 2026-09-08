@@ -8,3 +8,8 @@
 # never hand-edited - formatting it just fights the generator on every run.
 /packages/shared-types/src/generated
 /packages/db/src/generated
+
+# pnpm's lockfile. pnpm rewrites it in its own compact style on every install,
+# so formatting it here just produces a huge unrelated diff the next time
+# anyone adds a dependency.
+pnpm-lock.yaml
