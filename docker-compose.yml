@@ -1,14 +1,17 @@
 # Local development infrastructure.
 #
 # Postgres 17 to match the Neon instance this replaces (17.11), so anything
-# version-sensitive behaves the same locally as it does on Neon.
+# version-sensitive behaves the same locally as it does on Neon, plus the
+# Redis that BullMQ needs (apps/backend/.env points REDIS_URL at localhost:6379).
 #
 #   docker compose up -d      start
 #   docker compose down       stop (data survives in the named volume)
 #   docker compose down -v    stop and wipe the data
 #
 # The connection strings that go with this live in apps/backend/.env and
-# apps/backend/.env.test.
+# apps/backend/.env.test. `pnpm dev:all` brings this stack up before starting
+# the dev servers, so both services carry a healthcheck and
+# `docker compose up --wait` blocks until they are actually usable.
 services:
   postgres:
     image: postgres:17
@@ -33,5 +36,20 @@ services:
       timeout: 5s
       retries: 10
 
+  redis:
+    image: redis:7-alpine
+    container_name: crafty-bass-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - crafty-bass-redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
 volumes:
   crafty-bass-pgdata:
+  crafty-bass-redisdata:
