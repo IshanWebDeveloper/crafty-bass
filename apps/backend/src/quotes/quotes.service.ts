@@ -17,7 +17,12 @@ const QUOTE_INCLUDE = {
       name: true,
       image: true,
       tradesmanProfile: {
-        select: { avgRating: true, ratingCount: true, jobsCompleted: true },
+        select: {
+          avgRating: true,
+          ratingCount: true,
+          jobsCompleted: true,
+          isVerified: true,
+        },
       },
     },
   },
@@ -66,6 +71,16 @@ export class QuotesService {
         where: { id: userId },
         data: { userType: 'TRADESMAN' },
       });
+    }
+
+    // Only verified tradesmen may quote. The browse-jobs UI hides the quote
+    // form for unverified accounts, but that is presentation only - without
+    // this check a direct API call still lands a quote, and the homeowner's
+    // quote list renders every quoter with a "verified" badge.
+    if (!user?.tradesmanProfile?.isVerified) {
+      throw new ForbiddenException(
+        'Your tradesman account must be verified before you can quote on jobs',
+      );
     }
 
     const existing = await this.prisma.quote.findUnique({

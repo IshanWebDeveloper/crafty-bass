@@ -89,10 +89,26 @@ function makePrisma(row: ReturnType<typeof escrowRow>) {
   };
 }
 
-// A card payment defaults to an immediate Stripe success - override methods
-// per test for requires_action / retry scenarios.
+// A card payment opens a hosted Stripe Checkout session by default - override
+// methods per test for the resume / already-paid scenarios.
 function makeStripe(overrides: Record<string, unknown> = {}) {
   return {
+    createCheckoutSession: jest.fn(
+      (): Promise<unknown> =>
+        Promise.resolve({
+          id: 'cs_test123',
+          status: 'open',
+          url: 'https://checkout.stripe.com/c/pay/cs_test123',
+        }),
+    ),
+    retrieveCheckoutSession: jest.fn(
+      (): Promise<unknown> =>
+        Promise.resolve({
+          id: 'cs_test123',
+          status: 'open',
+          url: 'https://checkout.stripe.com/c/pay/cs_test123',
+        }),
+    ),
     createAndConfirmPaymentIntent: jest.fn(
       (): Promise<unknown> =>
         Promise.resolve({
@@ -197,7 +213,7 @@ describe('EscrowService state machine', () => {
     expect(statusWrittenBy(update)).toBe('FUNDED');
   });
 
-  it('funds a requested deposit by the homeowner via a real Stripe card payment', async () => {
+  it('opens a hosted Stripe Checkout session for a card deposit', async () => {
     const { prisma, update } = makePrisma(escrowRow({ status: 'REQUESTED' }));
     const stripe = makeStripe();
     const service = new EscrowService(
@@ -207,31 +223,39 @@ describe('EscrowService state machine', () => {
       makeEmail(),
       makeInvoices(),
     );
-    await service.fund('home1', 'esc1', {
+    const result = (await service.fund('home1', 'esc1', {
       paymentMethod: 'card',
-      stripePaymentMethodId: 'pm_test123',
-    });
+      locale: 'en',
+    })) as { checkoutUrl?: string };
+
     // eslint-disable-next-line @typescript-eslint/unbound-method -- asserting on a jest mock method reference
-    expect(stripe.createAndConfirmPaymentIntent).toHaveBeenCalledWith(
+    expect(stripe.createCheckoutSession).toHaveBeenCalledWith(
       expect.objectContaining({
-        paymentMethodId: 'pm_test123',
         currency: 'lkr',
         // Deposit 5760 + 3% processing fee (172.80) = 5932.80 → 593280 minor units.
         amount: 593280,
+        metadata: { escrowId: 'esc1' },
       }),
     );
-    expect(statusWrittenBy(update)).toBe('FUNDED');
+    expect(result.checkoutUrl).toBe(
+      'https://checkout.stripe.com/c/pay/cs_test123',
+    );
+    // The homeowner has not paid yet - only the session-id bookkeeping ran.
+    // checkout.session.completed is what marks it FUNDED.
+    expect(statusWrittenBy(update)).not.toBe('FUNDED');
   });
 
-  it('returns requiresAction when Stripe requires additional authentication', async () => {
-    const { prisma, update } = makePrisma(escrowRow({ status: 'REQUESTED' }));
+  it('reuses an open Checkout session instead of creating a second one', async () => {
+    const { prisma } = makePrisma(
+      escrowRow({ status: 'REQUESTED', stripeCheckoutSessionId: 'cs_open' }),
+    );
     const stripe = makeStripe({
-      createAndConfirmPaymentIntent: jest.fn(
+      retrieveCheckoutSession: jest.fn(
         (): Promise<unknown> =>
           Promise.resolve({
-            id: 'pi_action',
-            status: 'requires_action',
-            client_secret: 'secret_action',
+            id: 'cs_open',
+            status: 'open',
+            url: 'https://checkout.stripe.com/c/pay/cs_open',
           }),
       ),
     });
@@ -244,26 +268,42 @@ describe('EscrowService state machine', () => {
     );
     const result = (await service.fund('home1', 'esc1', {
       paymentMethod: 'card',
-      stripePaymentMethodId: 'pm_test123',
-    })) as { requiresAction?: boolean; clientSecret?: string };
-    expect(result.requiresAction).toBe(true);
-    expect(result.clientSecret).toBe('secret_action');
-    // Not finalized yet - only the PaymentIntent-id bookkeeping update ran.
-    expect(statusWrittenBy(update)).not.toBe('FUNDED');
+      locale: 'en',
+    })) as { checkoutUrl?: string };
+
+    expect(result.checkoutUrl).toBe(
+      'https://checkout.stripe.com/c/pay/cs_open',
+    );
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- asserting on a jest mock method reference
+    expect(stripe.createCheckoutSession).not.toHaveBeenCalled();
   });
 
-  it('rejects card funding without a stripePaymentMethodId', async () => {
-    const { prisma } = makePrisma(escrowRow({ status: 'REQUESTED' }));
+  it('settles a completed Checkout session if the webhook was missed', async () => {
+    const { prisma, update } = makePrisma(
+      escrowRow({ status: 'REQUESTED', stripeCheckoutSessionId: 'cs_done' }),
+    );
+    const stripe = makeStripe({
+      retrieveCheckoutSession: jest.fn(
+        (): Promise<unknown> =>
+          Promise.resolve({
+            id: 'cs_done',
+            status: 'complete',
+            payment_intent: 'pi_done',
+          }),
+      ),
+    });
     const service = new EscrowService(
       prisma,
-      makeStripe(),
+      stripe,
       makeNotifications(),
       makeEmail(),
       makeInvoices(),
     );
-    await expect(
-      service.fund('home1', 'esc1', { paymentMethod: 'card' }),
-    ).rejects.toThrow('stripePaymentMethodId is required for card payments');
+    await service.fund('home1', 'esc1', {
+      paymentMethod: 'card',
+      locale: 'en',
+    });
+    expect(statusWrittenBy(update)).toBe('FUNDED');
   });
 
   it('rejects funding by a non-homeowner', async () => {

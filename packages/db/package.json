@@ -15,6 +15,7 @@
     "build": "tsc -p tsconfig.lib.json && node scripts/copy-prisma-assets.mjs",
     "lint": "eslint .",
     "db:generate": "prisma generate",
+    "db:migrate:deploy": "dotenv -e ../../apps/backend/.env -- prisma migrate deploy",
     "db:migrate:dev": "dotenv -e ../../apps/backend/.env -- prisma migrate dev",
     "db:migrate:dev:test": "dotenv -e ../../apps/backend/.env.test -- prisma migrate dev --skip-seed",
     "db:migrate:reset": "dotenv -e ../../apps/backend/.env -- prisma migrate reset",

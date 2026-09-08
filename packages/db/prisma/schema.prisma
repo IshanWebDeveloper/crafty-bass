@@ -433,6 +433,12 @@ model Job {
   aiCategoryId        String?
   aiConfidence        Decimal?     @db.Decimal(5, 4)
   aiSuggestedTags     Json?
+  // R2 object keys for homeowner-supplied photos, in display order (max 8,
+  // enforced by CreateJobSchema). Keys only - never presigned URLs, which
+  // expire; JobsService mints a fresh URL per read. Writes are restricted to
+  // the "job-photos/<homeownerId>/" prefix so a caller cannot attach an object
+  // from another user's namespace (e.g. a kyc/ document) and read it back.
+  photoKeys           String[]
   locationText        String?
   city                String?
   district            String?
@@ -605,6 +611,10 @@ model JobEscrow {
   paymentMethod       String?
   paymentRef          String?
   stripePaymentIntentId String?    @unique
+  // Set when the homeowner starts a hosted Stripe Checkout for the deposit.
+  // Kept so a repeated "Fund" click reuses the open session instead of opening
+  // a second one, and so checkout.session.completed can find the escrow.
+  stripeCheckoutSessionId String?  @unique
   fundedAt            DateTime?
   materialsReleasedAt DateTime?
   workCompletedAt     DateTime?
@@ -893,4 +903,20 @@ model AuditLog {
   @@index([actorId, createdAt])
   @@index([entity, entityId])
   @@index([createdAt])
+}
+
+// Versioned legal copy (currently just the privacy policy) edited from the
+// admin console and served publicly at GET /api/v1/legal/privacy-policy. One
+// row per `key`; LegalService seeds a default on first read, so the table is
+// expected to be empty on a fresh database.
+model LegalDocument {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  title     String
+  version   String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("legal_document")
 }

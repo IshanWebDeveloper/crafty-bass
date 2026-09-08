@@ -12,6 +12,11 @@ const tradesmanState = path.join(authDir, 'tradesman.json');
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 
+// Seeded staff account (packages/db/prisma/seed-users.ts) used to approve the
+// fixture tradesman's verification.
+const ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL || 'admin@example.com';
+const ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD || 'Password123!';
+
 // A signed-in API context for one of the fixture accounts. Most steps drive the
 // backend directly (via the Next proxy) to avoid juggling two browser sessions;
 // the UI assertions run in the default homeowner page context (test.use below).
@@ -40,6 +45,48 @@ test.describe
   // — safe to re-run against the reused fixture account.
   test.beforeAll(async () => {
     const tradesman = await ctxFor(tradesmanState);
+
+    // Quoting is gated on an approved verification (QuotesService.create), so
+    // the fixture tradesman has to clear it before the quote step below. Both
+    // submit and approve 409 once approved, so this only runs on the first pass
+    // against a fresh account - afterwards the account is already APPROVED.
+    const mine = await tradesman.get('/api/v1/verification/me');
+    const status = mine.ok()
+      ? ((await mine.json()) as { status?: string } | null)?.status
+      : undefined;
+
+    if (status !== 'APPROVED') {
+      const submitted = await tradesman.post('/api/v1/verification', {
+        data: {
+          fullName: 'E2E Tradesman',
+          nicNumber: '990000000V',
+          city: 'Colombo',
+          district: 'Colombo',
+          primaryTrade: 'Plumbing',
+          yearsExperience: 6,
+        },
+      });
+      expect(submitted.ok()).toBeTruthy();
+      const submissionId = ((await submitted.json()) as { id: string }).id;
+
+      // Approval is a reviewer action, so it needs a staff session. The seeded
+      // admin signs in with email + password (better-auth core).
+      const admin = await request.newContext({ baseURL: BASE_URL });
+      const signedIn = await admin.post('/api/auth/sign-in/email', {
+        data: { email: ADMIN_EMAIL, password: ADMIN_PASSWORD },
+      });
+      expect(
+        signedIn.ok(),
+        `admin sign-in failed - is the dev database seeded (pnpm --filter @repo/db db:seed:users)?`,
+      ).toBeTruthy();
+
+      const approved = await admin.post(
+        `/api/v1/verification/${submissionId}/approve`,
+      );
+      expect(approved.ok()).toBeTruthy();
+      await admin.dispose();
+    }
+
     const res = await tradesman.put('/api/v1/profiles/me/tradesman', {
       data: { yearsExperience: 6, city: 'Colombo', district: 'Colombo' },
     });
@@ -56,6 +103,18 @@ test.describe
       .fill(
         'The kitchen tap has been dripping for days and needs a new washer.',
       );
+
+    // The form debounces a call to the classifier (which proxies to the AI
+    // service) and renders the suggestion inline: a "Detected <category>" panel
+    // with a confidence badge. Assert it appears through the UI before
+    // submitting, so classification is exercised end-to-end from the form and
+    // not only via the direct API call below. Generous timeout: it waits on a
+    // live model round-trip.
+    await expect(page.getByText(/Detected/i).first()).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(page.getByText(/% confidence/i).first()).toBeVisible();
+
     await page.locator('button[type="submit"]').click();
 
     // The form redirects to the new job's detail page on success. The negative

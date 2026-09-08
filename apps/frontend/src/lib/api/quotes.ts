@@ -48,6 +48,7 @@ export type Quote = {
       avgRating: number;
       ratingCount: number;
       jobsCompleted: number;
+      isVerified: boolean;
     } | null;
   };
 };

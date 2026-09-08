@@ -439,7 +439,10 @@
         "label": "Photos",
         "add": "Add photo",
         "remove": "Remove photo",
-        "hint": "Add up to 8 photos so tradespeople can assess the work and quote accurately."
+        "hint": "Add up to 8 photos so tradespeople can assess the work and quote accurately.",
+        "uploading": "Uploading…",
+        "uploadFailed": "Couldn't upload that photo. Remove it and try again.",
+        "tooMany": "You can add up to 8 photos - the extra ones weren't added."
       },
       "location": {
         "label": "Location pin",
@@ -530,7 +533,8 @@
       },
       "cancelUnavailableInProgress": "Work has started and the materials deposit has been released to the tradesperson, so this job can no longer be cancelled directly. If something's wrong, file a report and our team will review it and arrange any refund.",
       "disputeUnderReview": "You've reported this job and our team is reviewing it. It's paused while we look into it and decide on any cancellation or refund.",
-      "editJob": "Edit job"
+      "editJob": "Edit job",
+      "photoAlt": "Job photo {n}"
     },
     "recommendations": {
       "heading": "Recommended tradespeople",

@@ -21,14 +21,14 @@ Crafty Bass is a tradesman/homeowner marketplace built as an Nx monorepo contain
 - Package manager: pnpm
 - Frontend: Next.js 16 + React 19 + Tailwind v4 + TypeScript
 - Backend: NestJS 11 + Prisma (PostgreSQL) + better-auth + BullMQ + Stripe
-- AI service: FastAPI + LangChain + LangGraph (LLM provider is `github` or `openai`)
+- AI service: FastAPI + LangChain + LangGraph (LLM provider is `anthropic` or `openai`)
 
 ## Prerequisites
 
 - Node.js 20+
 - pnpm 10+
 - Python 3.11 for `apps/ai-service`
-- A GitHub token or OpenAI API key for the AI service (`LLM_PROVIDER=github` or `openai`)
+- An Anthropic or OpenAI API key for the AI service (`LLM_PROVIDER=anthropic` or `openai`)
 
 ## Getting Started
 
@@ -113,7 +113,7 @@ pnpm stripe:listen
 ## Notes
 
 - Backend defaults to port `3005` (configurable via `PORT`).
-- AI service defaults to port `8006` and reads local config from `apps/ai-service/.env` (set `GITHUB_TOKEN` or `OPENAI_API_KEY`).
+- AI service defaults to port `8006` and reads local config from `apps/ai-service/.env` (set `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`).
 - CORS defaults to `http://localhost:3000,http://localhost:3001,http://localhost:5173` when `CORS_ORIGINS` is not set.
 - Backend Prisma scripts expect environment files such as `.env` and `.env.test` in `apps/backend`.
 - AI service expects a local virtual environment at `apps/ai-service/.venv` for Nx targets such as `ai-service:dev`.

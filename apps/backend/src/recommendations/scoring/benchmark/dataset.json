@@ -1,0 +1,204 @@
+{
+  "provenance": {
+    "source": "derived from the application database (implicit relevance)",
+    "relevanceScale": "3 = assigned and completed, 2 = assigned, 1 = quoted, 0 = eligible but did not quote",
+    "generatedAt": "2026-07-25T02:02:04.046Z",
+    "jobs": 6,
+    "candidates": 12
+  },
+  "k": 5,
+  "relevanceThreshold": 1,
+  "jobs": [
+    {
+      "jobId": "cmrw0bl7p000rh8xsdxve0q96",
+      "jobCoords": null,
+      "candidates": [
+        {
+          "tradesmanId": "lUK2Uxgr2njIhHyJ43NkfkRdsau0LlyN",
+          "relevance": 0,
+          "reviews": [
+            {
+              "rating": 5,
+              "ageDays": 10.111178969907407
+            }
+          ],
+          "location": null,
+          "serviceRadiusKm": 25,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": true
+        },
+        {
+          "tradesmanId": "6y1zDbkyC2hcEgbGdnjPh4sVarXUnDy6",
+          "relevance": 0,
+          "reviews": [],
+          "location": null,
+          "serviceRadiusKm": 30,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": false
+        },
+        {
+          "tradesmanId": "VY5bF9x1OaaPU2VwEPFbcmNkJty9PyHb",
+          "relevance": 0,
+          "reviews": [],
+          "location": null,
+          "serviceRadiusKm": 40,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": false
+        },
+        {
+          "tradesmanId": "oS2bmUoH3gPPq5CgzYm9M6BUbXQfx33p",
+          "relevance": 3,
+          "reviews": [
+            {
+              "rating": 5,
+              "ageDays": 0.00034971064814814815
+            }
+          ],
+          "location": null,
+          "serviceRadiusKm": 15,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": false
+        }
+      ]
+    },
+    {
+      "jobId": "cmrw0alid0004h8xs7tbg4d2g",
+      "jobCoords": null,
+      "candidates": [
+        {
+          "tradesmanId": "lUK2Uxgr2njIhHyJ43NkfkRdsau0LlyN",
+          "relevance": 0,
+          "reviews": [
+            {
+              "rating": 5,
+              "ageDays": 10.110643414351852
+            }
+          ],
+          "location": null,
+          "serviceRadiusKm": 25,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": true
+        },
+        {
+          "tradesmanId": "6y1zDbkyC2hcEgbGdnjPh4sVarXUnDy6",
+          "relevance": 0,
+          "reviews": [],
+          "location": null,
+          "serviceRadiusKm": 30,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": false
+        },
+        {
+          "tradesmanId": "VY5bF9x1OaaPU2VwEPFbcmNkJty9PyHb",
+          "relevance": 0,
+          "reviews": [],
+          "location": null,
+          "serviceRadiusKm": 40,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": false
+        },
+        {
+          "tradesmanId": "oS2bmUoH3gPPq5CgzYm9M6BUbXQfx33p",
+          "relevance": 3,
+          "reviews": [],
+          "location": null,
+          "serviceRadiusKm": 15,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": false
+        }
+      ]
+    },
+    {
+      "jobId": "cmriulkhn0000woxsq21jq9t0",
+      "jobCoords": null,
+      "candidates": [
+        {
+          "tradesmanId": "lUK2Uxgr2njIhHyJ43NkfkRdsau0LlyN",
+          "relevance": 2,
+          "reviews": [
+            {
+              "rating": 5,
+              "ageDays": 0.9020081134259259
+            }
+          ],
+          "location": null,
+          "serviceRadiusKm": 25,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": true
+        }
+      ]
+    },
+    {
+      "jobId": "cmrh20zyk0000o8xs4xxe28mc",
+      "jobCoords": {
+        "lat": 7.080791,
+        "lng": 80.007448
+      },
+      "candidates": [
+        {
+          "tradesmanId": "lUK2Uxgr2njIhHyJ43NkfkRdsau0LlyN",
+          "relevance": 1,
+          "reviews": [],
+          "location": null,
+          "serviceRadiusKm": 25,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": true
+        }
+      ]
+    },
+    {
+      "jobId": "seed-job-ben-rewire",
+      "jobCoords": null,
+      "candidates": [
+        {
+          "tradesmanId": "6y1zDbkyC2hcEgbGdnjPh4sVarXUnDy6",
+          "relevance": 2,
+          "reviews": [],
+          "location": null,
+          "serviceRadiusKm": 30,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": false
+        }
+      ]
+    },
+    {
+      "jobId": "seed-job-anna-tap",
+      "jobCoords": null,
+      "candidates": [
+        {
+          "tradesmanId": "lUK2Uxgr2njIhHyJ43NkfkRdsau0LlyN",
+          "relevance": 2,
+          "reviews": [],
+          "location": null,
+          "serviceRadiusKm": 25,
+          "jobsCompleted": 0,
+          "jobsCancelled": 0,
+          "responseTimeMinutes": null,
+          "isVerified": true
+        }
+      ]
+    }
+  ]
+}

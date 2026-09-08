@@ -2,7 +2,12 @@ import { apiFetch } from '../api';
 
 // Categories accepted by the backend POST /uploads endpoint. Each maps to a
 // storage prefix + allowed MIME/size on the server.
-export type UploadCategory = 'kyc' | 'avatar' | 'portfolio' | 'voice-intro';
+export type UploadCategory =
+  | 'kyc'
+  | 'avatar'
+  | 'portfolio'
+  | 'voice-intro'
+  | 'job-photo';
 
 export type UploadResult = {
   // Object key stored in R2; persist this (e.g. as a verification document key).
