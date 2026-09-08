@@ -24,6 +24,7 @@
     "auth:generate": "cross-env PRISMA_USE_DIRECT_URL=1 better-auth generate --config src/index.ts"
   },
   "dependencies": {
+    "@better-auth/core": "1.6.0",
     "@better-auth/stripe": "^1.4.19",
     "@repo/db": "workspace:^",
     "better-auth": "^1.4.19",
