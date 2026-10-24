@@ -168,3 +168,28 @@ describe('composite', () => {
     expect(compositeScore(input)).toEqual(compositeScore(input));
   });
 });
+
+describe('composite weights override', () => {
+  const input = {
+    reputation: 1,
+    proximity: 0,
+    completion: 0,
+    response: 0,
+    verified: false,
+  };
+  it('uses the production weights by default', () => {
+    expect(compositeScore(input).score).toBeCloseTo(
+      SCORING_CONFIG.weights.reputation,
+      10,
+    );
+  });
+  it('accepts explicit weights (used only by the benchmark sweep)', () => {
+    const w = {
+      reputation: 0.5,
+      proximity: 0.2,
+      completion: 0.2,
+      response: 0.1,
+    };
+    expect(compositeScore(input, w).score).toBeCloseTo(0.5, 10);
+  });
+});
