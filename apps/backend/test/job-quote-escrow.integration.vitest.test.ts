@@ -162,7 +162,8 @@ describe('Job → Quote → Escrow lifecycle (integration)', () => {
     expect((asOwner.body as unknown[]).length).toBe(1);
   });
 
-  it('rejects a deposit from an unverified tradesman', async () => {
+  // Unverified tradesmen are refused before the deposit cap is evaluated.
+  it('refuses a quote from an unverified tradesman', async () => {
     const res = await request(app.getHttpServer())
       .post(`/api/v1/jobs/${jobId}/quotes`)
       .set('Cookie', unverifiedCookie)
@@ -177,7 +178,7 @@ describe('Job → Quote → Escrow lifecycle (integration)', () => {
         ],
         depositRequested: 1000,
       });
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(403);
   });
 
   it('owner accepts the quote → job ASSIGNED, escrow REQUESTED', async () => {
