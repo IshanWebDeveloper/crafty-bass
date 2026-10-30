@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T08:10:37.684Z",
+  "generatedAt": "2026-10-30T19:54:47.693Z",
   "method": "latent-truth simulation (see simulate.ts); NOT real user behaviour",
   "seeds": {
     "main": 2026,
@@ -186,7 +186,7 @@
           }
         ]
       },
-      "generatedAt": "2026-10-23T08:09:54.290Z"
+      "generatedAt": "2026-10-30T19:54:23.781Z"
     },
     {
       "profile": "quality-first",
@@ -288,7 +288,7 @@
           }
         ]
       },
-      "generatedAt": "2026-10-23T08:09:54.500Z"
+      "generatedAt": "2026-10-30T19:54:23.921Z"
     },
     {
       "profile": "convenience-first",
@@ -390,7 +390,7 @@
           }
         ]
       },
-      "generatedAt": "2026-10-23T08:09:54.790Z"
+      "generatedAt": "2026-10-30T19:54:24.066Z"
     },
     {
       "profile": "reliability-first",
@@ -492,7 +492,7 @@
           }
         ]
       },
-      "generatedAt": "2026-10-23T08:09:55.078Z"
+      "generatedAt": "2026-10-30T19:54:24.186Z"
     },
     {
       "profile": "equal",
@@ -594,7 +594,7 @@
           }
         ]
       },
-      "generatedAt": "2026-10-23T08:09:55.300Z"
+      "generatedAt": "2026-10-30T19:54:24.306Z"
     }
   ],
   "replication": [

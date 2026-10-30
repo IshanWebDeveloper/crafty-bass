@@ -31,6 +31,7 @@ import type {
   BenchmarkJob,
 } from './benchmark.js';
 import { haversineKm, type Coords } from '../proximity.js';
+import type { WeightedReview } from '../reputation.js';
 import {
   mulberry32,
   normal,
@@ -185,7 +186,7 @@ function makeTradesman(rng: Rng, id: string, hub: number): Tradesman {
   for (let i = 0; i < pastJobs; i++) if (rng() < reliability) completed++;
   const cancelled = pastJobs - completed;
 
-  const reviews = [];
+  const reviews: WeightedReview[] = [];
   for (let i = 0; i < completed; i++) {
     if (rng() >= A.reviewRate) continue;
     const stars = Math.round(1 + 4 * quality + normal(rng, 0, A.ratingNoiseSd));
