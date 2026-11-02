@@ -8,4 +8,5 @@ export {
   type CompositeInput,
   type CompositeResult,
   type ScoreBreakdown,
+  type ScoreWeights,
 } from './composite.js';

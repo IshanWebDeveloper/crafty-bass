@@ -9,6 +9,14 @@ export interface CompositeInput {
   verified: boolean;
 }
 
+/** Per-factor weights; production uses SCORING_CONFIG.weights. */
+export interface ScoreWeights {
+  reputation: number;
+  proximity: number;
+  completion: number;
+  response: number;
+}
+
 /** Weighted contribution of each factor to the final score. */
 export interface ScoreBreakdown {
   reputation: number;
@@ -30,9 +38,15 @@ export interface CompositeResult {
  *
  * The breakdown is each factor's weighted contribution (it sums to the score
  * when no boost is applied and the cap doesn't bite).
+ *
+ * `weights` defaults to the production config; the benchmark's weight sweep is
+ * the only caller that overrides it.
  */
-export function compositeScore(input: CompositeInput): CompositeResult {
-  const w = SCORING_CONFIG.weights;
+export function compositeScore(
+  input: CompositeInput,
+  weights: ScoreWeights = SCORING_CONFIG.weights,
+): CompositeResult {
+  const w = weights;
   const breakdown: ScoreBreakdown = {
     reputation: w.reputation * input.reputation,
     proximity: w.proximity * input.proximity,
