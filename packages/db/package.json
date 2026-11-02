@@ -21,6 +21,7 @@
     "db:migrate:reset": "dotenv -e ../../apps/backend/.env -- prisma migrate reset",
     "db:seed": "dotenv -e ../../apps/backend/.env -- prisma db seed",
     "db:seed:users": "dotenv -e ../../apps/backend/.env -- tsx prisma/seed-users.ts",
+    "db:seed:sus": "dotenv -e ../../apps/backend/.env -- tsx prisma/seed-sus.ts",
     "db:backfill:escrows": "dotenv -e ../../apps/backend/.env -- tsx prisma/backfill-escrows.ts"
   },
   "dependencies": {
