@@ -1,9 +1,10 @@
+import json
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, SecretStr, field_validator, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 def _is_blank(secret: SecretStr | None) -> bool:
@@ -22,7 +23,10 @@ class Settings(BaseSettings):
     host: str = "127.0.0.1"
     port: int = 8006
     llm_provider: Literal["anthropic", "openai"] = "anthropic"
-    cors_origins: list[str] = Field(
+    # NoDecode: without it pydantic-settings JSON-decodes list fields before the
+    # validator below runs, so the comma-separated form in .env.example crashed
+    # startup with a SettingsError.
+    cors_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: [
             "http://localhost:3000", "http://127.0.0.1:3000"]
     )
@@ -50,9 +54,16 @@ class Settings(BaseSettings):
     @field_validator("cors_origins", mode="before")
     @classmethod
     def parse_cors_origins(cls, value: str | list[str]) -> list[str]:
+        """Accept a JSON array or a comma-separated string."""
         if isinstance(value, list):
             return value
-        return [item.strip() for item in value.split(",") if item.strip()]
+        text = value.strip()
+        if text.startswith("["):
+            parsed = json.loads(text)
+            if not isinstance(parsed, list) or not all(isinstance(x, str) for x in parsed):
+                raise ValueError("CORS_ORIGINS JSON must be an array of strings")
+            return [x.strip() for x in parsed if x.strip()]
+        return [item.strip() for item in text.split(",") if item.strip()]
 
     @model_validator(mode="after")
     def validate_llm_provider(self) -> "Settings":
