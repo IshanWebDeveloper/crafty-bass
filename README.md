@@ -213,10 +213,10 @@ Deliverable: usable tri-lingual web app across homeowner and tradesman journeys.
 
 - Backend tests: unit + integration for auth, jobs, quotes, AI classification, and recommendation scoring.
 - Frontend tests: core journey e2e tests (post job, receive quote, accept quote, review tradesman).
-- Run SUS-based usability evaluation with participants and compute average SUS score.
+- Run SUS-based usability evaluation with participants and compute average SUS score. ✅
 - Compare results against informal baseline process (time to hire, confidence, transparency).
 
-Deliverable: validated project outcomes aligned with dissertation/report requirements. **In progress**: backend Jest unit/e2e and Vitest integration suites (job-quote-escrow lifecycle, recommendations authz) and the Playwright golden-journey e2e are in place; the SUS study seed (`db:seed:sus`) prepares participant accounts; the usability study and baseline comparison remain.
+Deliverable: validated project outcomes aligned with dissertation/report requirements. **In progress**: backend Jest unit/e2e and Vitest integration suites (job-quote-escrow lifecycle, recommendations authz) and the Playwright golden-journey e2e are in place; the SUS usability study is complete (participant accounts seeded via `db:seed:sus`); the baseline comparison remains.
 
 ## Current Repository Status
 
