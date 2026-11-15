@@ -1,0 +1,7 @@
+# Caddy gets and renews a free Let's Encrypt certificate for API_DOMAIN
+# automatically (ports 80 and 443 must be open on the VM and in the Oracle
+# security list). Only the backend is exposed; the AI service is not.
+{$API_DOMAIN} {
+	encode gzip
+	reverse_proxy backend:3005
+}

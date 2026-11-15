@@ -1,43 +1,39 @@
-FROM node:20-alpine AS base
-RUN apk update && apk add --no-cache libc6-compat openssl curl python3 make g++
+# Backend image for the NestJS API (build context: repo root).
+#
+#   docker build -f apps/backend/Dockerfile -t crafty-bass-backend .
+#
+# Builds the backend plus the workspace packages it depends on (@repo/db,
+# @repo/auth, @repo/shared-types, @repo/validation). Works on amd64 and arm64
+# (Oracle Ampere): Prisma 7 talks to Postgres through the node-postgres driver
+# adapter, so there is no native query engine to match to the CPU.
+FROM node:22-bookworm-slim AS build
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends python3 make g++ openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+RUN corepack enable
+WORKDIR /repo
 
-FROM base AS builder
-WORKDIR /app
-RUN npm install -g pnpm@9.0.0 turbo@^2.8.11
 COPY . .
-RUN turbo prune backend --docker
+RUN pnpm install --frozen-lockfile --filter "backend..."
 
-FROM base AS installer
-WORKDIR /app
+# prisma.config.ts reads the URL even for `generate`; nothing connects here.
+ENV DATABASE_URL="postgresql://build:build@localhost:5432/build"
+RUN pnpm --filter @repo/db db:generate
+RUN pnpm --filter "backend^..." build \
+  && pnpm --filter backend build
 
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-COPY --from=builder /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
-
-RUN npm install -g pnpm@9.0.0 turbo@^2.8.11
-RUN pnpm install --frozen-lockfile
-
-COPY --from=builder /app/out/full/ .
-COPY turbo.json turbo.json
-
-# Generate Prisma client before TypeScript build so @prisma/client exports are available.
-RUN pnpm --filter backend exec prisma generate
-
-RUN turbo run build --filter=backend...
-
-FROM base AS runner
-WORKDIR /app
-RUN npm install -g pnpm@9.0.0
-
-# Copy all the monorepo over for the backend to run properly with hoisted modules
-# since it doesn't have a standalone output like Next.js
-COPY --from=installer /app/ .
-
-WORKDIR /app/apps/backend
+FROM node:22-bookworm-slim AS runner
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends openssl ca-certificates curl \
+  && rm -rf /var/lib/apt/lists/*
+RUN corepack enable
+ENV NODE_ENV=production
+WORKDIR /repo
+COPY --from=build /repo /repo
+WORKDIR /repo/apps/backend
 
 EXPOSE 3005
-
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:3005/api/v1 || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -fsS http://localhost:3005/health || exit 1
 
 CMD ["node", "dist/main.js"]

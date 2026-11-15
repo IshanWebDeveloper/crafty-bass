@@ -1,0 +1,124 @@
+# Production stack for one Oracle Cloud Always Free VM.
+#
+#   cd deploy/oracle
+#   cp .env.example .env      # then fill it in
+#   docker compose up -d --build
+#
+# Only Caddy publishes ports (80/443). Postgres, Redis and the AI service have
+# NO published ports: they are reachable only on the private `internal` Docker
+# network, so the AI service cannot be called from the internet even with a
+# valid token. The backend is reachable only through Caddy (HTTPS).
+name: crafty-bass
+
+services:
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [internal]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - redisdata:/data
+    networks: [internal]
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # One-shot: applies Prisma migrations, then exits. The backend waits for it.
+  migrate:
+    image: crafty-bass-backend
+    build:
+      context: ../..
+      dockerfile: apps/backend/Dockerfile
+    environment:
+      DATABASE_URL: &database_url postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    working_dir: /repo/packages/db
+    command: ['pnpm', 'exec', 'prisma', 'migrate', 'deploy']
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [internal]
+    restart: 'no'
+
+  backend:
+    image: crafty-bass-backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: '3005'
+      DATABASE_URL: *database_url
+      DIRECT_URL: *database_url
+      REDIS_URL: redis://redis:6379
+      BETTER_AUTH_URL: https://${API_DOMAIN}
+      JWT_ISSUER: https://${API_DOMAIN}
+      AI_SERVICE_URL: http://ai-service:8006
+      AI_SERVICE_JWT_AUDIENCE: ai-service-internal
+      CORS_ORIGINS: https://${FRONTEND_DOMAIN},https://${ADMIN_DOMAIN}
+      FRONTEND_URL: https://${FRONTEND_DOMAIN}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    networks: [internal]
+
+  ai-service:
+    build:
+      context: ../../apps/ai-service
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-haiku-4-5}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      LLM_MAX_TOKENS: ${LLM_MAX_TOKENS:-4096}
+      # JWKS is fetched over the private network; the issuer stays the public
+      # URL because that is what the backend stamps into every token.
+      BETTER_AUTH_URL: http://backend:3005
+      JWT_ISSUER: https://${API_DOMAIN}
+      JWT_AUDIENCE: ai-service-internal
+      CORS_ORIGINS: '[]'
+    networks: [internal]
+    # No `ports:` on purpose. Do not add one.
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      API_DOMAIN: ${API_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [backend]
+    networks: [internal]
+
+networks:
+  internal:
+
+volumes:
+  pgdata:
+  redisdata:
+  caddy_data:
+  caddy_config:
