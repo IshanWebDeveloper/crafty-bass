@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { fromNodeHeaders } from 'better-auth/node';
 import type { IncomingHttpHeaders } from 'node:http';
 
-import { auth } from '@repo/auth';
+import { mintAiServiceToken } from '@repo/auth';
 import { TranslateDto, TranslateResponseDto } from './dto/index.js';
 
 // The locale the UI sends → the language name the model translates into.
@@ -31,7 +31,7 @@ export class TranslationService {
     dto: TranslateDto,
     headers: IncomingHttpHeaders,
   ): Promise<TranslateResponseDto> {
-    // Mint the signed-in user's JWT (aud: ai-service) so the AI service can
+    // Mint a short-lived, server-only JWT for the signed-in user so the AI service can
     // verify the call via the better-auth JWKS - the AI service is never
     // exposed to the browser directly.
     const token = await this.getServiceToken(headers);
@@ -81,10 +81,7 @@ export class TranslationService {
   }
 
   private async getServiceToken(headers: IncomingHttpHeaders): Promise<string> {
-    const result = await auth.api.getToken({
-      headers: fromNodeHeaders(headers),
-    });
-    const token = (result as { token?: string } | null)?.token;
+    const token = await mintAiServiceToken(fromNodeHeaders(headers));
     if (!token) {
       throw new ServiceUnavailableException('Could not authorize translation');
     }

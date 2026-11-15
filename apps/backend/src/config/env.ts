@@ -37,6 +37,9 @@ const EnvSchema = z
     // AI service (FastAPI). Optional - translation/assist features degrade
     // gracefully when unset; defaults to the local dev port.
     AI_SERVICE_URL: z.url().optional(),
+    // Audience on the server-only JWTs the backend mints for the AI service.
+    // Must differ from JWT_AUDIENCE (the public /api/auth/token audience).
+    AI_SERVICE_JWT_AUDIENCE: z.string().optional(),
 
     // Email (Resend)
     RESEND_API_KEY: z.string().optional(),

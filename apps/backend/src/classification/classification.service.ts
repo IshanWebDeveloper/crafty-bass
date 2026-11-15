@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { fromNodeHeaders } from 'better-auth/node';
 import type { IncomingHttpHeaders } from 'node:http';
 
-import { auth } from '@repo/auth';
+import { mintAiServiceToken } from '@repo/auth';
 import { PrismaService } from '../common/prisma/prisma.service.js';
 import { ClassifyJobDto, ClassifyJobResponseDto } from './dto/index.js';
 
@@ -68,7 +68,7 @@ export class ClassificationService {
       };
     }
 
-    // Mint the signed-in user's JWT (aud: ai-service) so the AI service can
+    // Mint a short-lived, server-only JWT for the signed-in user so the AI service can
     // verify the call via the better-auth JWKS - the AI service is never
     // exposed to the browser directly. Mirrors TranslationService.
     const token = await this.getServiceToken(headers);
@@ -147,10 +147,7 @@ export class ClassificationService {
   }
 
   private async getServiceToken(headers: IncomingHttpHeaders): Promise<string> {
-    const result = await auth.api.getToken({
-      headers: fromNodeHeaders(headers),
-    });
-    const token = (result as { token?: string } | null)?.token;
+    const token = await mintAiServiceToken(fromNodeHeaders(headers));
     if (!token) {
       throw new ServiceUnavailableException(
         'Could not authorize classification',
