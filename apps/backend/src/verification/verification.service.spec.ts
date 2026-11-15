@@ -62,7 +62,7 @@ describe('VerificationService.approve', () => {
       id: 'v1',
       userId: 'u1',
       status: 'PENDING',
-      policeClearanceKey: 'docs/police-u1.pdf',
+      policeClearanceKey: 'verification/police-u1.pdf',
       yearsExperience: 3,
       serviceRadiusKm: 15,
       city: 'Colombo',

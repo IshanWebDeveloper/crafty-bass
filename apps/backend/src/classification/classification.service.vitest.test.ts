@@ -8,9 +8,7 @@ import type { PrismaService } from '../common/prisma/prisma.service.js';
 // The service mints a service JWT via @repo/auth and normalises headers via
 // better-auth/node - neither needs to do real work in a unit test.
 vi.mock('@repo/auth', () => ({
-  auth: {
-    api: { getToken: vi.fn(() => Promise.resolve({ token: 'jwt-123' })) },
-  },
+  mintAiServiceToken: vi.fn(() => Promise.resolve('jwt-123')),
 }));
 vi.mock('better-auth/node', () => ({
   fromNodeHeaders: (h: IncomingHttpHeaders) => h,

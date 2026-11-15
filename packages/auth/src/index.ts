@@ -77,7 +77,25 @@ const adminSessionExpiresIn = parseSeconds(
 const PRIVACY_POLICY_VERSION = '2026-03-31';
 
 const jwtIssuer = process.env.JWT_ISSUER ?? baseURL;
-const jwtAudience = process.env.JWT_AUDIENCE ?? 'ai-service';
+// Audience on tokens from the public `/api/auth/token` endpoint. Any signed-in
+// user can fetch one of these, so it must NEVER be an audience a backend-only
+// service (the AI service) accepts. It defaults to the auth server itself.
+const jwtAudience = process.env.JWT_AUDIENCE ?? baseURL;
+
+// Audience the AI service accepts. Tokens with it are only minted server-side
+// by `mintAiServiceToken` (via the server-only `signJWT` endpoint, which has no
+// HTTP route), so a user cannot obtain one and call the AI service directly,
+// bypassing the backend's rate limits, sanitisation and permission checks.
+const aiServiceAudience =
+  process.env.AI_SERVICE_JWT_AUDIENCE ?? 'ai-service-internal';
+const AI_SERVICE_TOKEN_TTL_SECONDS = 60;
+
+if (aiServiceAudience === jwtAudience) {
+  throw new Error(
+    'AI_SERVICE_JWT_AUDIENCE must differ from JWT_AUDIENCE: otherwise any ' +
+      'signed-in user can fetch an AI-service token from /api/auth/token.',
+  );
+}
 
 const plugins = [
   admin({
@@ -549,3 +567,29 @@ export const auth = betterAuth({
 
   plugins,
 });
+
+/**
+ * Mint a short-lived JWT the backend uses to call the AI service on behalf of
+ * the signed-in user. Unlike `/api/auth/token`, this goes through the
+ * server-only `signJWT` endpoint and carries the AI-service audience, so the
+ * browser can never obtain an equivalent token. Returns null when the request
+ * has no valid session.
+ */
+export async function mintAiServiceToken(
+  headers: Headers,
+): Promise<string | null> {
+  const session = await auth.api.getSession({ headers });
+  if (!session) return null;
+
+  const { token } = await auth.api.signJWT({
+    body: {
+      payload: {
+        sub: session.user.id,
+        email: session.user.email,
+        aud: aiServiceAudience,
+        exp: Math.floor(Date.now() / 1000) + AI_SERVICE_TOKEN_TTL_SECONDS,
+      },
+    },
+  });
+  return token;
+}
